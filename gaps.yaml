@@ -1,0 +1,46 @@
+# Common tech terms that are NOT in skills.yaml, so JD gaps are visible (SPEC §5).
+# Same entry format as skills.yaml. Move a term to skills.yaml once you have it.
+terms:
+  - {name: Java, aliases: [Java]}
+  - {name: Go, aliases: [Golang, Go/Golang, Go programming]}
+  - {name: Kotlin, aliases: [Kotlin]}
+  - {name: Scala, aliases: [Scala]}
+  - {name: Swift, aliases: [Swift], cs: true}
+  - {name: Ruby, aliases: [Ruby, Ruby on Rails, Rails], cs: true}
+  - {name: PHP, aliases: [PHP]}
+  - {name: Angular, aliases: [Angular, AngularJS]}
+  - {name: Vue, aliases: [Vue, Vue.js, VueJS]}
+  - {name: Django, aliases: [Django]}
+  - {name: Spring, aliases: [Spring Boot, Spring Framework]}
+  - {name: MySQL, aliases: [MySQL]}
+  - {name: Oracle, aliases: [Oracle], cs: true}
+  - {name: Redis, aliases: [Redis]}
+  - {name: Elasticsearch, aliases: [Elasticsearch, OpenSearch]}
+  - {name: DynamoDB, aliases: [DynamoDB]}
+  - {name: Cassandra, aliases: [Cassandra]}
+  - {name: GCP, aliases: [GCP, Google Cloud]}
+  - {name: microservices, aliases: [microservices, microservice]}
+  - {name: distributed systems, aliases: [distributed systems, distributed system]}
+  - {name: Kafka, aliases: [Kafka]}
+  - {name: RabbitMQ, aliases: [RabbitMQ]}
+  - {name: gRPC, aliases: [gRPC]}
+  - {name: GraphQL, aliases: [GraphQL]}
+  - {name: Airflow, aliases: [Airflow]}
+  - {name: dbt, aliases: [dbt]}
+  - {name: Snowflake, aliases: [Snowflake], cs: true}
+  - {name: Redshift, aliases: [Redshift]}
+  - {name: BigQuery, aliases: [BigQuery]}
+  - {name: Hadoop, aliases: [Hadoop]}
+  - {name: Tableau, aliases: [Tableau]}
+  - {name: Looker, aliases: [Looker]}
+  - {name: Jenkins, aliases: [Jenkins]}
+  - {name: Ansible, aliases: [Ansible]}
+  - {name: Prometheus, aliases: [Prometheus]}
+  - {name: Grafana, aliases: [Grafana]}
+  - {name: Datadog, aliases: [Datadog]}
+  - {name: Splunk, aliases: [Splunk]}
+  - {name: Selenium, aliases: [Selenium]}
+  - {name: Cypress, aliases: [Cypress]}
+  - {name: JUnit, aliases: [JUnit]}
+  - {name: unit testing, aliases: [unit testing, unit tests, unit test]}
+  - {name: SAS, aliases: [SAS], cs: true}
