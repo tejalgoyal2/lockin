@@ -26,16 +26,36 @@ def test_multi_location_returns_first_canadian_part(filters):
 
 @pytest.mark.parametrize("title", [
     "Software Engineer", "Backend Developer", "Data Analyst", "Machine Learning Engineer",
-    "AI Engineer", "DevOps Engineer", "QA Analyst", "Cloud Platform Engineer",
-    "Software Engineering Graduate", "Security Analyst", "BI Developer",
+    "AI Engineer", "DevOps Engineer", "Cloud Platform Engineer", "Frontend Developer",
+    "Software Engineering Graduate", "Security Analyst", "BI Developer", "SRE",
+    "Automation Specialist", "Cyber Security Analyst", "Database Administrator",
+    "Full-Stack Engineer", "Analytics Engineer",
 ])
-def test_tech_titles_match(filters, title):
-    assert filters.title_included(title)
+def test_strong_titles(filters, title):
+    assert filters.title_tier(title) == "strong"
 
 
-@pytest.mark.parametrize("title", ["Barista", "Retail Associate", "Accountant", "Paint Technician"])
+@pytest.mark.parametrize("title", [
+    "Engineer", "Applications Engineer", "Business Analyst", "Technical Specialist",
+    "Test Specialist", "QA Tester", "Integration Engineer", "Research Scientist",
+    "Technical Consultant",
+])
+def test_weak_titles(filters, title):
+    assert filters.title_tier(title) == "weak"
+
+
+@pytest.mark.parametrize("title", ["Barista", "Retail Associate", "Accountant", "Paint Worker"])
 def test_non_tech_titles_do_not_match(filters, title):
-    assert not filters.title_included(title)
+    assert filters.title_tier(title) is None
+
+
+@pytest.mark.parametrize("title", [
+    "Facilities Engineer", "Engineering Project Coordinator", "Marketing Specialist - AI",
+    "Production Supervisor", "Superviseur de production", "Production Team Leader",
+    "Administrative Assistant, Data Entry", "Technical Recruiter",
+])
+def test_hard_excludes(filters, title):
+    assert not filters.title_not_excluded(title)
 
 
 @pytest.mark.parametrize("title", [

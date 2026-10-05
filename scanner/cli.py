@@ -7,7 +7,8 @@ from pathlib import Path
 from scanner import report
 from scanner.config import load_config
 from scanner.filters import Filters
-from scanner.pipeline import dedupe, run_stream
+from scanner.dedupe import dedupe
+from scanner.pipeline import run_stream
 from scanner.sources import feashliaa, simplify
 
 
@@ -28,7 +29,7 @@ def run(args: argparse.Namespace) -> int:
         age = feashliaa.check_freshness(meta, src["feashliaa"]["stale_after_hours"], now)
         print(f"Feashliaa last_updated={meta['last_updated']} ({age:.1f} h old), "
               f"total_jobs={meta['total_jobs']:,}")
-        found, stages = run_stream(
+        found, stages, _held = run_stream(
             feashliaa.iter_raw(data_dir), feashliaa.raw_fields, filters, now, since)
         jobs += found
         blocks["Feashliaa"] = stages
@@ -37,14 +38,15 @@ def run(args: argparse.Namespace) -> int:
         listings = (simplify.load_file(Path(args.simplify_file)) if args.simplify_file
                     else simplify.fetch(src["simplify"]))
         cats = src["simplify"]["categories"]
-        found, stages = run_stream(
+        found, stages, _held = run_stream(
             simplify.iter_raw(listings), simplify.raw_fields, filters, now, since,
             pre_stages=(("active_category", lambda r: simplify.is_listed(r, cats)),))
         jobs += found
         blocks["Simplify"] = stages
 
-    deduped = dedupe(jobs)
-    blocks["Combined"] = [("before dedupe", len(jobs)), ("after dedupe", len(deduped))]
+    deduped, merges = dedupe(jobs)
+    blocks["Combined"] = [("before dedupe", len(jobs)), ("merged_url", merges["url"]),
+                          ("merged_fuzzy", merges["fuzzy"]), ("after dedupe", len(deduped))]
 
     for name, stages in blocks.items():
         print(report.format_counts(name, stages))

@@ -3,9 +3,9 @@ from collections import Counter
 from collections.abc import Iterable
 from datetime import datetime, timedelta
 
+from scanner.dedupe import dedupe  # noqa: F401  (re-exported)
 from scanner.filters import Filters
 from scanner.models import Job
-from scanner.normalize import job_key
 
 
 def run_stream(
@@ -15,18 +15,21 @@ def run_stream(
     now: datetime,
     since_days: float,
     pre_stages: tuple = (),
-) -> tuple[list[Job], list[tuple[str, int]]]:
+) -> tuple[list[Job], list[tuple[str, int]], list[Job]]:
     """Push each raw record through the stages in order.
 
-    Returns surviving Jobs (not yet deduped) and ordered [(stage, count_after_stage)].
+    Returns (kept Jobs not yet deduped, ordered [(stage, count_after_stage)], student_held).
     A record is counted at stage N only if it passed every earlier stage.
     `pre_stages` are (name, predicate(raw_record)) pairs applied before normalisation.
+    `student_held` are jobs that cleared every stage except the student-only title
+    filter; phase 2 may rescue them from their JD text.
     """
     cutoff = now - timedelta(days=since_days)
     names = ["raw", *[n for n, _ in pre_stages], "fresh", "location", "company",
              "language", "title_match", "title_not_senior", "not_student_only"]
     counts: Counter = Counter()
     kept: list[Job] = []
+    held: list[Job] = []
 
     for rec in records:
         counts["raw"] += 1
@@ -46,21 +49,28 @@ def run_stream(
         if not filters.language_ok(f["title"]):
             continue
         counts["language"] += 1
-        if not filters.title_included(f["title"]):
+        tier = filters.title_tier(f["title"])
+        if tier is None:
             continue
         counts["title_match"] += 1
         if not filters.title_not_excluded(f["title"]):
             continue
         counts["title_not_senior"] += 1
-        if not filters.not_student_only(f["title"]):
-            continue
-        counts["not_student_only"] += 1
-        kept.append(Job(
+        job = Job(
             company=f["company"], title=f["title"], location=loc, url=f["url"],
             source=f["source"], first_seen=f["first_seen"], sources={f["source"]},
-            new_grad=f["source"] == "Simplify",
-        ))
-    return kept, [(n, counts[n]) for n in names]
+            new_grad=f["source"] == "Simplify", weak_title=tier == "weak",
+        )
+        if not filters.not_student_only(f["title"]):
+            held.append(job)
+            continue
+        counts["not_student_only"] += 1
+        if job.weak_title:
+            counts["weak_title"] += 1
+        kept.append(job)
+    stages = [(n, counts[n]) for n in names]
+    stages.append(("weak_title", counts["weak_title"]))
+    return kept, stages, held
 
 
 def _count_pre(rec, pre_stages, counts) -> bool:
@@ -70,24 +80,3 @@ def _count_pre(rec, pre_stages, counts) -> bool:
             return False
         counts[name] += 1
     return True
-
-
-def dedupe(jobs: Iterable[Job]) -> list[Job]:
-    """Merge duplicates by Job Key (SPEC §7).
-
-    Simplify contributes the new-grad flag; the Feashliaa/ATS row supplies the URL
-    and source name, and the earliest first_seen wins.
-    """
-    merged: dict[str, Job] = {}
-    for job in jobs:
-        job.key = job_key(job.company, job.title, job.location)
-        cur = merged.get(job.key)
-        if cur is None:
-            merged[job.key] = job
-            continue
-        cur.sources |= job.sources
-        cur.new_grad = cur.new_grad or job.new_grad
-        cur.first_seen = min(cur.first_seen, job.first_seen)
-        if cur.source == "Simplify" and job.source != "Simplify":
-            cur.source, cur.url = job.source, job.url
-    return sorted(merged.values(), key=lambda j: j.first_seen, reverse=True)

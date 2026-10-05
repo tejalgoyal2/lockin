@@ -30,7 +30,8 @@ class Filters:
     loc_include: list
     loc_exclude: list
     loc_split: re.Pattern
-    title_include: list
+    title_strong: list
+    title_weak: list
     title_exclude: list
     student: list
     blocklist: list
@@ -46,7 +47,8 @@ class Filters:
             loc_include=_compile(loc["include"]) + _compile(loc.get("include_cs"), 0),
             loc_exclude=_compile(loc.get("exclude")) + _compile(loc.get("exclude_cs"), 0),
             loc_split=re.compile(loc.get("split_on", "[;|]")),
-            title_include=_prefix(title["include"]) + _words(title.get("include_words")),
+            title_strong=_prefix(title["strong"]) + _words(title.get("strong_words")),
+            title_weak=_prefix(title["weak"]) + _words(title.get("weak_words")),
             title_exclude=(
                 _prefix(title["exclude"])
                 + _words(title.get("exclude_words"))
@@ -85,8 +87,11 @@ class Filters:
             return True
         return _any(self.english_roles, title)
 
-    def title_included(self, title: str) -> bool:
-        return _any(self.title_include, title)
+    def title_tier(self, title: str) -> str | None:
+        """'strong' passes outright, 'weak' matches only generic words, None is no match."""
+        if _any(self.title_strong, title):
+            return "strong"
+        return "weak" if _any(self.title_weak, title) else None
 
     def title_not_excluded(self, title: str) -> bool:
         return not _any(self.title_exclude, title)
