@@ -1,0 +1,71 @@
+import argparse
+import logging
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+from scanner import report
+from scanner.config import load_config
+from scanner.filters import Filters
+from scanner.pipeline import dedupe, run_stream
+from scanner.sources import feashliaa, simplify
+
+
+def run(args: argparse.Namespace) -> int:
+    started = time.monotonic()
+    cfg = load_config(args.config)
+    filters = Filters.from_config(cfg)
+    now = datetime.now(timezone.utc)
+    since = args.since if args.since is not None else cfg["freshness"]["default_days"]
+    src = cfg["sources"]
+
+    jobs, blocks, meta = [], {}, None
+
+    if src["feashliaa"]["enabled"]:
+        data_dir = (Path(args.feashliaa_dir) if args.feashliaa_dir
+                    else feashliaa.fetch(src["feashliaa"]))
+        meta = feashliaa.read_metadata(data_dir)
+        age = feashliaa.check_freshness(meta, src["feashliaa"]["stale_after_hours"], now)
+        print(f"Feashliaa last_updated={meta['last_updated']} ({age:.1f} h old), "
+              f"total_jobs={meta['total_jobs']:,}")
+        found, stages = run_stream(
+            feashliaa.iter_raw(data_dir), feashliaa.raw_fields, filters, now, since)
+        jobs += found
+        blocks["Feashliaa"] = stages
+
+    if src["simplify"]["enabled"]:
+        listings = (simplify.load_file(Path(args.simplify_file)) if args.simplify_file
+                    else simplify.fetch(src["simplify"]))
+        cats = src["simplify"]["categories"]
+        found, stages = run_stream(
+            simplify.iter_raw(listings), simplify.raw_fields, filters, now, since,
+            pre_stages=(("active_category", lambda r: simplify.is_listed(r, cats)),))
+        jobs += found
+        blocks["Simplify"] = stages
+
+    deduped = dedupe(jobs)
+    blocks["Combined"] = [("before dedupe", len(jobs)), ("after dedupe", len(deduped))]
+
+    for name, stages in blocks.items():
+        print(report.format_counts(name, stages))
+    text = report.render(deduped, since, now, meta, blocks, len(deduped))
+    report.write(args.out or cfg["report"]["path"], text)
+    print(f"\nWrote {args.out or cfg['report']['path']} ({len(deduped)} candidates) "
+          f"in {time.monotonic() - started:.0f}s")
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(prog="scanner")
+    sub = parser.add_subparsers(dest="cmd", required=True)
+    p = sub.add_parser("run", help="scan sources and write the candidate report")
+    p.add_argument("--since", type=float, help="only jobs first seen in the last N days")
+    p.add_argument("--dry-run", action="store_true",
+                   help="no external writes (phase 1 has none; flag reserved for Notion)")
+    p.add_argument("--config", help="path to config.yaml")
+    p.add_argument("--out", help="report path (default from config)")
+    p.add_argument("--feashliaa-dir", help="use this local job-board-data clone as-is (no git sync)")
+    p.add_argument("--simplify-file", help="use a local listings.json instead of downloading")
+    args = parser.parse_args(argv)
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+    return run(args)
