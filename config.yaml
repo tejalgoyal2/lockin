@@ -152,3 +152,23 @@ language:
 
 report:
   path: reports/latest.md
+
+jd:
+  enabled: true
+  workers: 8                 # thread pool; the client still enforces per-host/per-ATS limits
+  request_delay: 0.3         # seconds between requests to one host
+  max_per_ats: 5
+  cache_dir: .cache/jd       # successful fetches are cached by URL
+  cache_ttl_days: 7
+  max_experience_years: 3    # drop when the minimum required experience is >= this
+  rescue_student_titles: true  # fetch JDs of student-titled jobs; keep those that welcome recent grads
+
+scoring:
+  weak_title_min_fit: 20     # a weak_title job is dropped if Fit % is below this or no skill matches
+  boost:
+    new_grad: 15             # JD/title has "new grad" or "recent graduate"
+    simplify: 10             # listed by the Simplify new-grad feed
+    bc_or_remote: 5
+  penalty:
+    no_jd: 10
+  bc_or_remote_pattern: '\bBC\b|British Columbia|Vancouver|Burnaby|Victoria|Richmond|Surrey|\bremote\b'
