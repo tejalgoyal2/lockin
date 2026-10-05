@@ -26,7 +26,7 @@ GitHub Actions (daily cron, UTC)
   └─ reports/latest.md  full candidate list (also the public output)
 ```
 
-Stack: Python 3.12, `requests`, `pyyaml`, stdlib only otherwise. `pytest` for tests. No database server.
+Stack: Python 3.11+ (3.12 in CI; nothing depends on 3.12), `requests`, `pyyaml`, stdlib only otherwise. `pytest` for tests. No database server.
 
 ## 3. Data sources (verified 2026-10-04)
 
@@ -43,7 +43,7 @@ Stack: Python 3.12, `requests`, `pyyaml`, stdlib only otherwise. `pytest` for te
 ### 3b. SimplifyJobs New-Grad-Positions (phase 1, secondary)
 - Repo: `https://github.com/SimplifyJobs/New-Grad-Positions`, file `.github/scripts/listings.json` (~13 MB).
 - Fields: `company_name, title, locations[], url, date_posted (unix), active, is_visible, category (Software | AI/ML/Data | Hardware | Quant | Product), sponsorship, degrees`.
-- Keep `active && is_visible`, Canadian locations, category in {Software, AI/ML/Data}. ~11 new Canadian rows/week (all are new-grad-labelled, so give a scoring boost).
+- Keep `active && is_visible`, Canadian locations, category in {Software, AI/ML/Data}. The file also uses the spellings `Software Engineering` and `Data Science, AI & Machine Learning` for the same buckets; all four are accepted (`sources.simplify.categories` in `config.yaml`). ~11 new Canadian rows/week (all are new-grad-labelled, so give a scoring boost).
 
 ### 3c. Direct ATS endpoints (phase 2 = JD fetch; phase 4 = own scraping)
 Reference implementations to read before coding (do not copy blindly; check shapes): `Feashliaa/job-board-aggregator/scripts/scraper.py` (MIT) and `career-ops-hq/career-ops/providers/{greenhouse,lever,ashby,workday,bamboohr}.mjs` (MIT).
@@ -56,14 +56,18 @@ Reference implementations to read before coding (do not copy blindly; check shap
 
 ## 4. Filters (all in `config.yaml`, not hard-coded)
 
-Location include (case-insensitive regex): Canada, provinces, major cities (Toronto, Vancouver, Montréal/Montreal, Ottawa, Waterloo, Kitchener, Calgary, Edmonton, Victoria, Burnaby, Richmond BC, Surrey, Mississauga, Markham, Kanata, Gatineau, Halifax, Winnipeg, Regina, Saskatoon, Hamilton, London ON, Oakville), suffixes `, ON|BC|AB|QC|MB|SK|NS|NB`, "Remote (Canada)", "Remote in Canada", "Canada - Remote".
-Location exclude (known false positives): `Vancouver, Washington`, `, WA`, `Ottawa, Illinois`, `United States`, `USA` unless the same string also lists a Canadian location.
+Location include (case-insensitive regex): Canada, provinces, major cities (Toronto, Vancouver, Montréal/Montreal, Ottawa, Waterloo, Kitchener, Calgary, Edmonton, Burnaby, Mississauga, Markham, Kanata, Gatineau, Winnipeg, Regina, Saskatoon, Oakville match on their own; **ambiguous names Victoria, Richmond, Surrey, Hamilton, London, Halifax only match with a province qualifier**, e.g. `Victoria, BC`, `London, ON`, because they also name places in the UK, Australia, NZ and the US), suffixes `, ON|BC|AB|QC|MB|SK|NS|NB`, "Remote (Canada)", "Remote in Canada", "Canada - Remote".
+Location exclude (known false positives): `Vancouver, Washington`, `, WA`, `Ottawa, Illinois`, `Waterloo|Markham|Edmonton` + a US state, `United States`, `USA` unless the same string also lists a Canadian location. Implementation: multi-location strings are split on `;`/`|`, false-positive spans are removed, then the include test runs, so `Seattle, WA; Toronto, ON` passes and `Vancouver, WA` does not.
 
-Title include: software, developer, engineer, programmer, data, analytics, machine learning, ML, AI, scientist, devops, SRE, platform, cloud, backend, full stack, frontend, automation, QA, test, security, cyber, database, BI, integration.
-Title exclude: senior, sr, staff, principal, lead, manager, director, head of, architect, chief, VP, II, III, IV, intermediate, plus non-software engineering (mechanical, electrical engineer, civil, structural, chemical, process, manufacturing, HVAC, field service, technician, sales).
+Title tiers (two-tier include, see `title.strong` / `title.weak` in `config.yaml`):
+- **Strong** (pass outright): software, developer, programmer, data, machine learning / ML, AI, cloud, devops, SRE, platform, backend, frontend, full stack, security, cyber, database, BI, analytics, automation.
+- **Weak** (generic words only: engineer, analyst, specialist, test, technical, scientist, integration, QA): kept but tagged `weak_title`. Phase 2 drops a `weak_title` job if its JD matches zero skills or Fit % < 20. A weak job with no JD text is kept (absence of a JD is not evidence of low fit) and takes the no-JD penalty.
+- A title with any strong term is strong even if it also has a weak term.
+
+Title exclude: senior, sr, staff, principal, lead, manager, director, head of, architect, chief, VP, II, III, IV, intermediate, plus non-software engineering (mechanical, electrical engineer, civil, structural, chemical, process engineer, manufacturing, HVAC, field service, technician, sales) and non-tech roles seen in the data (security guard, clerk, facilities, coordinator, marketing, supervisor, superviseur, team leader, administrative, recruiter).
 Student-only exclude (title): intern, internship, co-op, coop, student, PEY, "summer 20xx", "winter 20xx", "fall 20xx" — unless phase-2 JD text says recent graduates are eligible (`recent graduate|new grad|graduated within`).
 Company blocklist (aggregators/spam seen in data): jobgether, usasurveyjob, globalhr, tsmg (extendable).
-Language: drop French-only titles by default (`analyste|ingénieur|développeur|conseiller|scientifique|spécialiste`), config toggle.
+Language: drop French-only titles by default (`analyste|ingénieur|développeur|conseiller|scientifique|spécialiste`), config toggle. A title that also contains an English role word (engineer, developer, analyst, ...) is treated as bilingual and kept.
 
 JD rules (phase 2, on fetched text):
 - Drop if minimum required experience ≥ 3 years (`(\d+)\s*\+?\s*(?:-|to)?\s*\d*\s*years?` near "experience"; take the smallest number in a range; ignore "years" in company boilerplate like "over 100 years").
@@ -122,7 +126,11 @@ Owner's main DB ("data_jobs_fall26"): `Company` (title), `Link` (url), `Status` 
 
 ## 7. Dedupe
 
-Job Key = `sha1(normalized company + "|" + normalized title + "|" + normalized first location)`; also store the URL. Normalize: lowercase, strip punctuation/whitespace, drop req IDs in parentheses. A job seen from both Feashliaa and Simplify is one job (prefer Simplify for the new-grad signal, Feashliaa/ATS for URL). `state/seen.json` maps key → first_seen date; prune keys older than 90 days. The workflow commits `state/` and `reports/` back to the repo (this also keeps the scheduled workflow from being auto-disabled after 60 days of inactivity in a public repo).
+Job Key = `sha1(normalized company + "|" + normalized title + "|" + normalized first location)`; also store the URL. Normalize: lowercase, strip punctuation/whitespace, drop req IDs in parentheses; location is reduced to its city (text before the first comma). Within a run, duplicates are merged in two passes (`scanner/dedupe.py`):
+1. **Canonical URL**: lowercase host, drop fragment, trailing slash and query string, **except job-identifying params** (`gh_jid`, `jid`, `job_id`, `reqid`, ...). Dropping every query param merged distinct jobs on real data (e.g. pinterestcareers.com serves every Greenhouse job from `/jobs/?gh_jid=<id>`).
+2. **Fuzzy**: same city AND company names match (one normalized name is a prefix of the other with the shorter ≥ 3 chars, or `difflib` ratio ≥ 0.85) AND title-token Jaccard ≥ 0.8. The same-city condition keeps the original §7 location component, so one role posted in two cities stays two rows.
+
+A job seen from both Feashliaa and Simplify is one job (prefer Simplify for the new-grad signal, Feashliaa/ATS for URL and source). Known limitation: aliased titles ("Model Context Protocol/AI Developer" vs "MCP/AI Developer") fall below the Jaccard threshold and are not merged. `state/seen.json` maps key → first_seen date; prune keys older than 90 days. The workflow commits `state/` and `reports/` back to the repo (this also keeps the scheduled workflow from being auto-disabled after 60 days of inactivity in a public repo).
 
 ## 8. GitHub Actions
 
@@ -155,3 +163,15 @@ Accept: with Feashliaa disabled by config, a run still produces candidates; runt
 - No personal data in the repo beyond the skills list (no resume, email, phone).
 - Keep functions small and tested; network calls behind thin clients so tests use fixtures.
 - After each phase: run it, paste the stage counts and 10 sample rows, then stop for review.
+
+## 11. Decisions log (deviations from the original draft)
+
+| # | Decision | Why |
+|---|---|---|
+| 1 | Python 3.11+ instead of 3.12 | Dev environment ships 3.11; nothing needs 3.12 |
+| 2 | Simplify accepts four category spellings | The file uses `Software Engineering` and `Data Science, AI & Machine Learning` alongside the two in §3b |
+| 3 | Ambiguous city names require a province qualifier; Waterloo/Markham/Edmonton US-state exclusions | `Halifax, UK`, `Victoria, Australia`, `Waterloo, Wisconsin` etc. leaked through |
+| 4 | Two-tier title match (strong/weak) + extra hard excludes | Generic words (`engineer`, `test`) let Facilities/Controls/Marketing roles through; weak titles are decided by JD fit in phase 2 |
+| 5 | Two-pass dedupe; URL pass keeps job-id query params; fuzzy pass stays within a city | See §7. Plain query stripping merged distinct Pinterest/Stripe jobs on real data |
+| 6 | Student-titled jobs are held aside in phase 1 instead of discarded | §4 lets phase 2 rescue them when the JD says recent graduates are eligible |
+| 7 | `reports/latest.md` is committed from phase 1 on | It is the public output (§2) |
