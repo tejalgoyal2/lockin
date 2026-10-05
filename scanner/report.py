@@ -13,6 +13,10 @@ STAGE_LABELS = {
     "title_match": "title matches tech roles",
     "title_not_senior": "not senior / non-software",
     "not_student_only": "not student-only",
+    "weak_title": "  of which weak_title",
+    "before dedupe": "before dedupe",
+    "merged_url": "  merged by canonical URL",
+    "merged_fuzzy": "  merged by fuzzy company+title",
 }
 
 
@@ -36,13 +40,13 @@ def render(jobs: list[Job], since_days: float, now: datetime, meta: dict | None,
         f"- Feashliaa dataset last updated: {meta['last_updated'] if meta else 'n/a'}",
         f"- Candidates after dedupe: **{total_deduped}**",
         "",
-        "| First Seen | Company | Role | Location | Source | URL |",
-        "|---|---|---|---|---|---|",
+        "| First Seen | Company | Role | Location | Source | Tier | URL |",
+        "|---|---|---|---|---|---|---|",
     ]
     for j in jobs:
         out.append(
             f"| {j.first_seen:%Y-%m-%d} | {_cell(j.company)} | {_cell(j.title)} | "
-            f"{_cell(j.location)} | {j.source_label()} | {j.url} |"
+            f"{_cell(j.location)} | {j.source_label()} | {'weak' if j.weak_title else 'strong'} | {j.url} |"
         )
     out += ["", "## Stage counts", ""]
     for name, stages in stage_blocks.items():

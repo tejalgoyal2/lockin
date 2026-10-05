@@ -46,38 +46,44 @@ location:
   split_on: '[;|]'   # multi-location strings are split on this; first Canadian part is used
 
 title:
-  include:
+  # Two tiers. "strong" terms pass outright; "weak" terms are generic words that
+  # are kept but tagged weak_title (phase 2 drops them if the JD shows no skill fit).
+  strong:
     - software
     - developer
-    - engineer
     - programmer
     - data
-    - analytics
     - machine learning
-    - scientist
+    - cloud
     - devops
     - platform
-    - cloud
     - backend
     - back end
+    - frontend
+    - front end
     - full stack
     - full-stack
     - fullstack
-    - frontend
-    - front end
-    - automation
-    - test
     - security
     - cyber
     - database
-    - integration
-  # Short acronyms are matched as whole words, case-insensitive.
-  include_words:
+    - analytics
+    - automation
+  strong_words:          # short acronyms: whole-word match, case-insensitive
     - ML
     - AI
     - SRE
-    - QA
     - BI
+  weak:
+    - engineer
+    - analyst
+    - specialist
+    - test
+    - technical
+    - scientist
+    - integration
+  weak_words:
+    - QA
   exclude:
     - senior
     - staff
@@ -100,13 +106,21 @@ title:
     - sales
     - security guard
     - clerk
+    - facilities
+    - coordinator
+    - marketing
+    - supervisor
+    - superviseur
+    - team leader
+    - administrative
+    - recruiter
   exclude_words:
     - sr
     - VP
     - lead
     - architect
     - architects
-  exclude_words_cs:      # roman-numeral levels; case-sensitive so "Engineer ii" typos don't matter
+  exclude_words_cs:      # roman-numeral levels, case-sensitive
     - II
     - III
     - IV
