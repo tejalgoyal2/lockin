@@ -1,3 +1,4 @@
+import random
 from datetime import datetime
 from pathlib import Path
 
@@ -30,8 +31,28 @@ def format_counts(name: str, stages: list[tuple[str, int]]) -> str:
     return "\n".join(lines)
 
 
+def sample_rows(jobs: list[Job], n: int, seed: int | None = None) -> list[Job]:
+    rng = random.Random(seed)
+    return rng.sample(jobs, min(n, len(jobs)))
+
+
+def format_sample(jobs: list[Job]) -> str:
+    lines = []
+    for j in jobs:
+        fit = "n/a" if j.fit_pct is None else f"{j.fit_pct:g}%"
+        lines.append(
+            f"- {j.company} | {j.title} | {j.location} | {j.source_label()}\n"
+            f"    Fit {fit} | Cluster {j.cluster or 'n/a'} | Score {j.score:g} | "
+            f"Signals: {', '.join(j.signals) or '-'}\n"
+            f"    Matched: {', '.join(j.matched[:8]) or '-'}\n"
+            f"    Gaps: {', '.join(j.gaps[:8]) or '-'}")
+    return "\n".join(lines)
+
+
 def render(jobs: list[Job], since_days: float, now: datetime, meta: dict | None,
-           stage_blocks: dict[str, list[tuple[str, int]]], total_deduped: int) -> str:
+           stage_blocks: dict[str, list[tuple[str, int]]], total_deduped: int,
+           phase2: dict | None = None) -> str:
+    """`phase2` (optional): {"drops": Counter, "fetch": Counter, "fit_dist": [...], "held": int, "rescued": int}."""
     out = [
         "# Canadian entry-level tech jobs: candidates",
         "",
@@ -39,19 +60,33 @@ def render(jobs: list[Job], since_days: float, now: datetime, meta: dict | None,
         f"- Window: first seen in the last {since_days:g} day(s)",
         f"- Feashliaa dataset last updated: {meta['last_updated'] if meta else 'n/a'}",
         f"- Candidates after dedupe: **{total_deduped}**",
-        "",
-        "| First Seen | Company | Role | Location | Source | Tier | URL |",
-        "|---|---|---|---|---|---|---|",
     ]
+    if phase2:
+        out.append(f"- Remaining after JD rules: **{len(jobs)}** (ranked by Score)")
+    out += ["", "| First Seen | Company | Role | Location | Source | Tier | Fit % | Cluster | Signals | Gaps | URL |"
+            if phase2 else "| First Seen | Company | Role | Location | Source | Tier | URL |",
+            "|---|---|---|---|---|---|---|---|---|---|---|" if phase2 else "|---|---|---|---|---|---|---|"]
     for j in jobs:
-        out.append(
-            f"| {j.first_seen:%Y-%m-%d} | {_cell(j.company)} | {_cell(j.title)} | "
-            f"{_cell(j.location)} | {j.source_label()} | {'weak' if j.weak_title else 'strong'} | {j.url} |"
-        )
+        row = (f"| {j.first_seen:%Y-%m-%d} | {_cell(j.company)} | {_cell(j.title)} | "
+               f"{_cell(j.location)} | {j.source_label()} | {'weak' if j.weak_title else 'strong'} | ")
+        if phase2:
+            fit = "n/a" if j.fit_pct is None else f"{j.fit_pct:g}"
+            row += (f"{fit} | {j.cluster or ''} | {', '.join(j.signals)} | "
+                    f"{_cell(', '.join(j.gaps[:6]))} | ")
+        out.append(row + f"{j.url} |")
     out += ["", "## Stage counts", ""]
     for name, stages in stage_blocks.items():
         out += [f"**{name}**", "", "| Stage | Remaining |", "|---|---:|"]
         out += [f"| {STAGE_LABELS.get(k, k)} | {v:,} |" for k, v in stages]
+        out.append("")
+    if phase2:
+        out += ["## JD rules", "", "**Drop reasons**", "", "| Reason | Jobs |", "|---|---:|"]
+        out += [f"| {k} | {v} |" for k, v in sorted(phase2["drops"].items(), key=lambda kv: -kv[1])] or ["| none | 0 |"]
+        out += ["", f"Student-titled jobs held for JD check: {phase2['held']}; rescued: {phase2['rescued']}.",
+                "", "**JD fetch status** (source:status)", "", "| Source:status | Jobs |", "|---|---:|"]
+        out += [f"| {k} | {v} |" for k, v in sorted(phase2["fetch"].items())]
+        out += ["", "**Fit % distribution (kept jobs)**", "", "| Fit % | Jobs |", "|---|---:|"]
+        out += [f"| {k} | {v} |" for k, v in phase2["fit_dist"]]
         out.append("")
     return "\n".join(out) + "\n"
 
