@@ -71,7 +71,7 @@ Language: drop French-only titles by default (`analyste|ingénieur|développeur|
 
 JD rules (phase 2, on fetched text):
 - Drop if minimum required experience ≥ 3 years (`(\d+)\s*\+?\s*(?:-|to)?\s*\d*\s*years?` near "experience"; take the smallest number in a range; ignore "years" in company boilerplate like "over 100 years").
-- Drop if text requires current enrollment (`currently enrolled|returning to (school|studies)|must be a (current )?student|enrolled in a co-?op program`).
+- Drop if text requires current enrollment (`currently enrolled|returning to (school|studies)|must be a (current )?student|enrolled in a co-?op program|enrolled in .{0,60}(degree|program|university|college|diploma)|(2nd|second|3rd|third) year or (later|above)|currently pursuing|must be returning`). The `enrolled in ...` pattern is skipped for benefits/HR boilerplate ("enrolled in our benefits plan", pension, wellness, onboarding, CPA/PEP programs).
 - Drop if `security clearance` required, or `US citizen`/`authorized to work in the United States` without Canadian location.
 - Boost signals → `Signals` multi-select: `new grad`, `recent graduate`, `0-2 years`, `entry level`, `junior`.
 
@@ -184,3 +184,4 @@ Accept: with Feashliaa disabled by config, a run still produces candidates; runt
 | 14 | `skills.yaml` includes Spark ("Spark (if listed)" in §5). Words that are also plain English (React, REST, Spark, Flask, Rust, JS) match case-sensitively | Avoids "react quickly", "the rest of the team" |
 | 15 | JD fetches are cached on disk by URL for 7 days (`.cache/jd`, gitignored) | Politeness on re-runs |
 | 16 | Title excludes add `vice president`, `vice-president`, `AVP`, `assistant vice` | "Assistant Vice-President, Data & AI" (BDC) passed the title filter in the first live run; `VP` alone does not match it |
+| 17 | Enrollment rule also matches `enrolled in .{0,60}(degree\|program\|university\|college\|diploma)`, `(2nd\|second\|3rd\|third) year or (later\|above)`, `currently pursuing`, `must be returning`; the `enrolled in` pattern ignores benefits/HR boilerplate (our/your/the company, benefits, plan, pension, insurance, wellness, stock, onboarding, training, CPA/CFA/PEP, and "will be / automatically / get enrolled") | Sun Life's "Enrolled in 2nd year or later of a university ... degree program" co-op was rescued as a student role. Checked against the 427 cached JDs: 18 newly matched, 16 genuine student requirements, 2 were CPA-designation boilerplate (now excluded) |

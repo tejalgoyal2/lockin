@@ -40,6 +40,16 @@ def test_parse_experience_keeps_ranges():
     "must be a student at an accredited university",
     "Applicants must be enrolled in a co-op program",
     "enrolled in a coop program",
+    # added after the first live run
+    "Enrolled in 2nd year or later of a university computer science degree program",
+    "You are enrolled in a degree program at an accredited university",
+    "Must be enrolled in an accredited college or university",
+    "currently enrolled in a diploma program",
+    "Candidates should be in their second year or above",
+    "third year or later of an undergraduate degree",
+    "Must be currently pursuing a Bachelor's degree",
+    "You must be returning to your studies in January",
+    "must be returning in the Fall",
 ])
 def test_enrollment_detected(text):
     assert r.requires_enrollment(text)
@@ -51,6 +61,21 @@ def test_enrollment_detected(text):
     "Student loans repayment benefit",
 ])
 def test_enrollment_not_detected(text):
+    assert not r.requires_enrollment(text)
+
+
+@pytest.mark.parametrize("text", [
+    "You will be enrolled in our benefits plan on day one",
+    "Employees are automatically enrolled in our group benefits program",
+    "enrolled in our benefits plan after 90 days",
+    "New hires get enrolled in the company pension program",
+    "Eligible to be enrolled in our employee stock purchase program",
+    "You'll be enrolled in our onboarding program",
+    "enrolled in the health and wellness program",
+    "Enrolled in RRSP matching program",
+    "Enrolled in the CPA Professional Education Program (PEP)",   # professional designation, seen in real data
+])
+def test_enrollment_ignores_benefits_boilerplate(text):
     assert not r.requires_enrollment(text)
 
 
