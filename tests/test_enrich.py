@@ -93,12 +93,20 @@ def test_strong_title_is_not_dropped_for_low_fit():
     assert len(res.kept) == 1 and res.kept[0].fit_pct == 0.0
 
 
-def test_missing_jd_is_kept_with_penalty_and_weak_titles_survive():
+def test_missing_jd_strong_titles_kept_with_penalty_weak_titles_dropped():
     res = run([job(url="https://recruiting.paylocity.com/recruiting/Jobs/Details/1", source="Paylocity"),
-               gh(2, weak_title=True)], jds={"2": http_error(500)})
-    assert len(res.kept) == 2 and all(j.score == -10.0 for j in res.kept)
-    assert res.fetch == {"Paylocity:unsupported": 1, "Greenhouse:error": 1}
-    assert all(j.fit_pct is None for j in res.kept)
+               gh(2, weak_title=True), gh(3, weak_title=True), gh(4, title="Data Analyst")],
+              jds={"2": http_error(500), "3": http_error(404), "4": http_error(500)})
+    assert sorted(j.title for j in res.kept) == ["Data Analyst", "Software Engineer"]
+    assert all(j.score == -10.0 and j.fit_pct is None for j in res.kept)
+    assert res.drops == {E.R_WEAK_NO_JD: 2}
+    assert res.fetch == {"Paylocity:unsupported": 1, "Greenhouse:error": 2, "Greenhouse:not_found": 1}
+
+
+def test_weak_title_on_unsupported_ats_is_dropped_too():
+    res = run([job(url="https://recruiting.paylocity.com/recruiting/Jobs/Details/1", source="Paylocity",
+                   weak_title=True)])
+    assert res.kept == [] and res.drops == {E.R_WEAK_NO_JD: 1}
 
 
 def test_404_is_not_found_and_other_errors_are_error():

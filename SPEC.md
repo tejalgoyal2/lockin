@@ -61,7 +61,7 @@ Location exclude (known false positives): `Vancouver, Washington`, `, WA`, `Otta
 
 Title tiers (two-tier include, see `title.strong` / `title.weak` in `config.yaml`):
 - **Strong** (pass outright): software, developer, programmer, data, machine learning / ML, AI, cloud, devops, SRE, platform, backend, frontend, full stack, security, cyber, database, BI, analytics, automation.
-- **Weak** (generic words only: engineer, analyst, specialist, test, technical, scientist, integration, QA): kept but tagged `weak_title`. Phase 2 drops a `weak_title` job if its JD matches zero skills or Fit % < 20. A weak job with no JD text is kept (absence of a JD is not evidence of low fit) and takes the no-JD penalty.
+- **Weak** (generic words only: engineer, analyst, specialist, test, technical, scientist, integration, QA): kept but tagged `weak_title`. Phase 2 drops a `weak_title` job if its JD matches zero skills or Fit % < 20, or if no JD could be fetched (see §11 #13). Strong-title jobs without a JD stay with the no-JD penalty.
 - A title with any strong term is strong even if it also has a weak term.
 
 Title exclude: senior, sr, staff, principal, lead, manager, director, head of, architect, chief, VP, II, III, IV, intermediate, plus non-software engineering (mechanical, electrical engineer, civil, structural, chemical, process engineer, manufacturing, HVAC, field service, technician, sales) and non-tech roles seen in the data (security guard, clerk, facilities, coordinator, marketing, supervisor, superviseur, team leader, administrative, recruiter).
@@ -180,7 +180,7 @@ Accept: with Feashliaa disabled by config, a run still produces candidates; runt
 | 10 | Clearance: drop only when "security clearance" is not negated and its sentence has a requirement word (required, must, obtain, hold, ...). "No clearance required" / "is an asset" are kept | Avoids dropping jobs that merely mention clearance |
 | 11 | The US-work-authorization drop only fires when the job has no Canadian location | Literal reading of §4. Every phase-1 candidate has one, so it is currently a safety net |
 | 12 | Student-titled jobs held by phase 1 get their JD fetched; they are kept (and flagged `recent graduate`) only if the JD matches `recent graduate|new grad|graduated within` and no enrollment requirement | Implements the §4 "unless the JD says recent graduates are eligible" clause |
-| 13 | `weak_title` jobs with no JD (unsupported ATS or fetch failure) are kept with the penalty | No JD is not evidence of low fit |
+| 13 | `weak_title` jobs with no JD (unsupported ATS, fetch failure, or 404) are **dropped** (`weak_title_no_jd`); strong-title jobs with no JD are kept with the −10 penalty. Supersedes the earlier "keep weak titles with the penalty" choice | A generic title alone ("Specialist", "Engineer") is too weak to justify a row; nothing else can vouch for it. |
 | 14 | `skills.yaml` includes Spark ("Spark (if listed)" in §5). Words that are also plain English (React, REST, Spark, Flask, Rust, JS) match case-sensitively | Avoids "react quickly", "the rest of the team" |
 | 15 | JD fetches are cached on disk by URL for 7 days (`.cache/jd`, gitignored) | Politeness on re-runs |
 

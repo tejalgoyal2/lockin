@@ -26,6 +26,7 @@ R_CLEARANCE = "security_clearance"
 R_US_AUTH = "us_work_authorization"
 R_EXPERIENCE = "experience_3plus"
 R_WEAK = "weak_title_low_fit"
+R_WEAK_NO_JD = "weak_title_no_jd"
 R_STUDENT_NO_JD = "student_title_no_jd"
 R_STUDENT = "student_title_not_rescued"
 
@@ -136,6 +137,9 @@ def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer) -> str | 
         if job.weak_title and (not job.matched or (job.fit_pct or 0) < cfg["scoring"]["weak_title_min_fit"]):
             return R_WEAK
     else:
+        # No JD: a strong title stays (with the penalty); a weak one has nothing to vouch for it.
+        if job.weak_title:
+            return R_WEAK_NO_JD
         job.signals = jd_rules.detect_signals(job.title, "", jd_rules.Experience(None))
     return None
 
