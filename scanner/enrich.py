@@ -12,6 +12,7 @@ from pathlib import Path
 import requests
 
 from scanner import jd_rules
+from scanner.cluster import ClusterResolver
 from scanner.filters import Filters
 from scanner.models import Job
 from scanner.score import Scorer
@@ -118,13 +119,17 @@ def _score(job: Job, cfg: dict, boost_re: re.Pattern) -> float:
     return round(total, 1)
 
 
-def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer) -> str | None:
+def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer,
+                clusters: ClusterResolver | None = None) -> str | None:
     """Fill phase-2 fields on `job`; return a drop reason, or None to keep it."""
+    clusters = clusters or ClusterResolver(cfg)
+    job.cluster = clusters.resolve(job.title, None)   # overwritten below when a JD adds terms
     if job.jd_status == "ok":
         jd = job.jd
         exp = jd_rules.parse_experience(jd)
         fit = scorer.evaluate(jd, cfg["scoring"]["min_terms_for_fit"])
-        job.fit_pct, job.cluster, job.matched, job.gaps = fit.fit_pct, fit.cluster, fit.matched, fit.gaps
+        job.fit_pct, job.matched, job.gaps = fit.fit_pct, fit.matched, fit.gaps
+        job.cluster = clusters.resolve(job.title, fit.cluster)
         job.signals = jd_rules.detect_signals(job.title, jd, exp)
         if fit.fit_pct is None:
             job.signals.append(jd_rules.LOW_SIGNAL)
@@ -156,6 +161,7 @@ def enrich(candidates: list[Job], held: list[Job], cfg: dict, filters: Filters, 
     held = held if jdcfg.get("rescue_student_titles", True) else []
     res = EnrichResult(held_total=len(held))
     boost_re = re.compile(cfg["scoring"]["bc_or_remote_pattern"], re.IGNORECASE)
+    clusters = ClusterResolver(cfg)
 
     progress(f"fetching JDs for {len(candidates)} candidates + {len(held)} student-titled jobs")
     fetch_all(candidates + held, client, cache, jdcfg["workers"])
@@ -163,7 +169,7 @@ def enrich(candidates: list[Job], held: list[Job], cfg: dict, filters: Filters, 
         res.fetch[f"{job.source}:{job.jd_status}"] += 1
 
     for job in candidates:
-        reason = apply_rules(job, cfg, filters, scorer)
+        reason = apply_rules(job, cfg, filters, scorer, clusters)
         if reason:
             res.drops[reason] += 1
             continue
@@ -180,7 +186,7 @@ def enrich(candidates: list[Job], held: list[Job], cfg: dict, filters: Filters, 
         if not jd_rules.mentions_recent_grad(job.jd):
             res.drops[R_STUDENT] += 1
             continue
-        reason = apply_rules(job, cfg, filters, scorer)
+        reason = apply_rules(job, cfg, filters, scorer, clusters)
         if reason:
             res.drops[reason] += 1
             continue
