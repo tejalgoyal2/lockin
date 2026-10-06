@@ -16,9 +16,20 @@ _UPPER_BOUND_LEAD = re.compile(r"(?:less than|fewer than|up to|under|maximum of|
 _WINDOW = 100          # characters either side of "N years" searched for the word "experience"
 _BOILERPLATE_MIN = 20  # "over 100 years in business", "25 years of history": never a job requirement
 
-ENROLLMENT = re.compile(
+_ENROLLMENT_FIXED = re.compile(
     r"currently\s+enrolled|returning\s+to\s+(?:school|studies)|must\s+be\s+a\s+(?:current\s+)?student"
-    r"|enrolled\s+in\s+a\s+co-?op\s+program", re.IGNORECASE)
+    r"|enrolled\s+in\s+a\s+co-?op\s+program"
+    r"|\b(?:2nd|second|3rd|third)\s+year\s+or\s+(?:later|above)"
+    r"|currently\s+pursuing|must\s+be\s+returning", re.IGNORECASE)
+_ENROLLED_IN = re.compile(
+    r"enrolled\s+in\s+(?P<span>.{0,60}?(?:degree|program|university|college|diploma))", re.IGNORECASE)
+# "enrolled in our benefits plan", "automatically enrolled in the pension program" is HR
+# boilerplate about the employee, not a requirement that the applicant be a student.
+_NOT_A_STUDY_PROGRAM = re.compile(
+    r"\b(?:our|your|its|the\s+company|benefits?|plans?|pension|insurance|rrsp|tfsa|retirement|401\s*k|"
+    r"health|dental|vision|wellness|stock|share|savings|onboarding|orientation|training|mentorship|"
+    r"payroll|perks?|cpa|cfa|cma|cia|pep)\b", re.IGNORECASE)
+_EMPLOYEE_LEAD = re.compile(r"\b(?:will\s+be|automatically|get|be\s+eligible\s+to\s+be|become)\s+$", re.IGNORECASE)
 _CLEARANCE = re.compile(r"security\s+clearance", re.IGNORECASE)
 _CLEARANCE_REQUIRED = re.compile(r"requir|must|need|obtain|maintain|hold|eligib|active|valid|able to|ability", re.IGNORECASE)
 _NEGATION = re.compile(r"\b(?:no|not|without|neither|nor)\b[^.\n]{0,15}$", re.IGNORECASE)
@@ -64,7 +75,17 @@ def parse_experience(text: str) -> Experience:
 
 
 def requires_enrollment(text: str) -> bool:
-    return bool(ENROLLMENT.search(text or ""))
+    """Current-enrollment requirement (SPEC §4), without tripping on benefits boilerplate."""
+    text = text or ""
+    if _ENROLLMENT_FIXED.search(text):
+        return True
+    for m in _ENROLLED_IN.finditer(text):
+        if _NOT_A_STUDY_PROGRAM.search(m.group("span")):
+            continue
+        if _EMPLOYEE_LEAD.search(text[max(0, m.start() - 25):m.start()]):
+            continue
+        return True
+    return False
 
 
 def requires_clearance(text: str) -> bool:
