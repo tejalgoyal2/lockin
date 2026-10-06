@@ -73,7 +73,7 @@ JD rules (phase 2, on fetched text):
 - Drop if minimum required experience ≥ 3 years (`(\d+)\s*\+?\s*(?:-|to)?\s*\d*\s*years?` near "experience"; take the smallest number in a range; ignore "years" in company boilerplate like "over 100 years").
 - Drop if text requires current enrollment (`currently enrolled|returning to (school|studies)|must be a (current )?student|enrolled in a co-?op program|enrolled in .{0,60}(degree|program|university|college|diploma)|(2nd|second|3rd|third) year or (later|above)|currently pursuing|must be returning`). The `enrolled in ...` pattern is skipped for benefits/HR boilerplate ("enrolled in our benefits plan", pension, wellness, onboarding, CPA/PEP programs).
 - Drop if `security clearance` required, or `US citizen`/`authorized to work in the United States` without Canadian location.
-- Boost signals → `Signals` multi-select: `new grad`, `recent graduate`, `0-2 years`, `entry level`, `junior`.
+- Boost signals → `Signals` multi-select: `new grad`, `recent graduate`, `0-2 years`, `entry level`, `junior`. Two data-quality values share the field: `low signal` (JD found but < 4 tech terms, so Fit % is n/a) and `jd unavailable` (no JD text could be fetched).
 
 Freshness: only jobs first seen in the last 3 days on a normal run (`--since` CLI flag to override; first run uses 14 days).
 
@@ -103,7 +103,7 @@ Two databases exist/will exist in the owner's workspace. **The scanner only ever
 | First Seen | date | |
 | Fit % | number (percent) | |
 | Cluster | select | software, data, ml, security |
-| Signals | multi-select | new grad, recent graduate, 0-2 years, entry level, junior |
+| Signals | multi-select | new grad, recent graduate, 0-2 years, entry level, junior, low signal, jd unavailable |
 | Matched | text | top matched skills |
 | Gaps | text | JD terms not in skills.yaml |
 | Job Key | text | dedupe key (see §7) |
@@ -188,3 +188,4 @@ Accept: with Feashliaa disabled by config, a run still produces candidates; runt
 | 18 | `gaps.yaml` expanded: everything you listed (Java ... SAP; all but Salesforce and SAP were already there) plus ~30 more technologies (ServiceNow, MATLAB, Perl, Flutter, Laravel, FastAPI, Maven/Gradle, Hive, Trino, Flink, Informatica, SSIS, GitLab, Helm, Nginx, ...). Concepts the owner arguably has (ETL, data modeling) are deliberately not gaps. A test enforces that no gap duplicates a skill | More gap terms make Fit % mean "overlap with what the JD actually asks for" instead of "100% of the 2 terms we recognised" |
 | 19 | Fit % needs >= 4 distinct terms (matched + gaps), else `n/a` + `low signal` signal; a weak-title job is still dropped for zero matches, but sparse (n/a) Fit is not treated as < 20. Score adds +2 per matched skill, capped at 10 skills | "100%" from two recognised terms is noise (many sample rows read 100% with 1-2 matches). Matched count separates a 2-skill match from an 8-skill one |
 | 20 | Cluster comes from the title first (security > ml > data by precedence, so "Data Scientist" is ml); JD terms only when the title has no keyword; otherwise `software`. A plain "Software Engineer" title has no keyword, so its cluster follows the JD terms (e.g. a PostgreSQL/SQL-heavy JD gives `data`) | Cluster by JD term count alone labelled a Tailscale networking SWE role `data` from two SQL mentions. Reading of "everything else → software": it is the final fallback, not an override of JD terms. If you want every software-ish title (software/developer/engineer/devops/cloud/platform/backend/frontend) to be `software` outright, that is a one-line addition to `cluster.title_keywords` |
+| 21 | A strong-title job whose JD cannot be fetched (HTTP 403/5xx, 404, unsupported ATS) is kept with the −10 penalty and the `jd unavailable` signal; the run summary and report list the hosts that answered HTTP 403 (Workday tenants return `permission denied` for some postings regardless of User-Agent). The Notion `Signals` select therefore needs the options `low signal` and `jd unavailable` (phase 3) | Makes missing data visible in the feed instead of an unexplained blank Fit % |

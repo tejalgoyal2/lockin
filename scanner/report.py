@@ -85,6 +85,9 @@ def render(jobs: list[Job], since_days: float, now: datetime, meta: dict | None,
         out += ["", f"Student-titled jobs held for JD check: {phase2['held']}; rescued: {phase2['rescued']}.",
                 "", "**JD fetch status** (source:status)", "", "| Source:status | Jobs |", "|---|---:|"]
         out += [f"| {k} | {v} |" for k, v in sorted(phase2["fetch"].items())]
+        if phase2.get("forbidden"):
+            out += ["", "**JD fetch HTTP 403 (permission denied) by host**", "", "| Host | Jobs |", "|---|---:|"]
+            out += [f"| {h} | {n} |" for h, n in phase2["forbidden"].most_common()]
         out += ["", "**Fit % distribution (kept jobs)**", "", "| Fit % | Jobs |", "|---|---:|"]
         out += [f"| {k} | {v} |" for k, v in phase2["fit_dist"]]
         out.append("")

@@ -62,7 +62,7 @@ def run(args: argparse.Namespace) -> int:
         client = PoliteClient(delay=jdcfg["request_delay"], per_ats=jdcfg["max_per_ats"])
         result = enrich(deduped, held_deduped, cfg, filters, Scorer.load(), client,
                         progress=lambda m: print(m, flush=True))
-        phase2 = {"drops": result.drops, "fetch": result.fetch, "held": result.held_total,
+        phase2 = {"drops": result.drops, "fetch": result.fetch, "forbidden": result.forbidden, "held": result.held_total,
                   "rescued": result.rescued, "fit_dist": fit_distribution(result.kept)}
         final = result.kept
     else:
@@ -79,6 +79,10 @@ def run(args: argparse.Namespace) -> int:
             print(f"    {reason:<30}{n:>8,}")
         print(f"  remaining                        {len(final):>10,}")
         print("  JD fetch (source:status):", dict(sorted(result.fetch.items())))
+        if result.forbidden:
+            print(f"  HTTP 403 tenants ({sum(result.forbidden.values())} jobs, kept without JD if strong title):")
+            for host, n in result.forbidden.most_common():
+                print(f"    {host:<44}{n:>4}")
         print("  Fit % distribution:")
         for label, n in phase2["fit_dist"]:
             print(f"    {label:<30}{n:>8,}")
