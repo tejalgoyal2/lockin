@@ -17,6 +17,7 @@ class Job:
     # phase 2 (filled by scanner.enrich)
     jd: str = ""
     jd_status: str = ""            # "ok" | "unsupported" | "not_found" | "error" | "" (not fetched)
+    jd_error: str = ""             # detail for non-ok fetches, e.g. "http 403"
     fit_pct: float | None = None
     cluster: str | None = None
     matched: list[str] = field(default_factory=list)

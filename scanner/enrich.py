@@ -8,6 +8,7 @@ from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from pathlib import Path
+from urllib.parse import urlsplit
 
 import requests
 
@@ -37,6 +38,7 @@ class EnrichResult:
     kept: list[Job] = field(default_factory=list)
     drops: Counter = field(default_factory=Counter)        # reason -> count (candidates + held)
     fetch: Counter = field(default_factory=Counter)        # "<ATS>:<status>" -> count
+    forbidden: Counter = field(default_factory=Counter)    # host -> jobs whose JD fetch got HTTP 403
     held_total: int = 0
     rescued: int = 0
 
@@ -73,33 +75,36 @@ def _log_failure(ats_name: str, url: str, exc: Exception) -> None:
                     ats_name, type(exc).__name__, str(exc)[:160], ats_name)
 
 
-def fetch_one(job: Job, client, cache: JDCache) -> tuple[str, str]:
-    """Return (status, text). Never raises: failures become a status."""
+def fetch_one(job: Job, client, cache: JDCache) -> tuple[str, str, str]:
+    """Return (status, text, detail). Never raises: failures become a status plus detail like 'http 403'."""
     ref = ats.locate(job)
     if ref is None:
-        return "unsupported", ""
+        return "unsupported", "", "unsupported ATS"
     cached = cache.get(job.url)
     if cached is not None:
-        return "ok", cached
+        return "ok", cached, ""
     try:
         text = ats.fetch_jd(ref, client)
-    except (ats.NotFound, requests.HTTPError) as exc:
-        if isinstance(exc, requests.HTTPError) and (exc.response is None or exc.response.status_code != 404):
-            _log_failure(ref.ats, job.url, exc)
-            return "error", ""
-        return "not_found", ""
+    except ats.NotFound:
+        return "not_found", "", "not found"
+    except requests.HTTPError as exc:
+        code = exc.response.status_code if exc.response is not None else 0
+        if code == 404:
+            return "not_found", "", "http 404"
+        _log_failure(ref.ats, job.url, exc)
+        return "error", "", f"http {code}"
     except Exception as exc:  # network, JSON shape, ... must not abort the run
         _log_failure(ref.ats, job.url, exc)
-        return "error", ""
+        return "error", "", type(exc).__name__
     if not text.strip():
-        return "error", ""
+        return "error", "", "empty description"
     cache.put(job.url, text)
-    return "ok", text
+    return "ok", text, ""
 
 
 def fetch_all(jobs: list[Job], client, cache: JDCache, workers: int) -> None:
     def work(job: Job):
-        job.jd_status, job.jd = fetch_one(job, client, cache)
+        job.jd_status, job.jd, job.jd_error = fetch_one(job, client, cache)
 
     with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
         list(pool.map(work, jobs))
@@ -150,6 +155,7 @@ def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer,
         if job.weak_title:
             return R_WEAK_NO_JD
         job.signals = jd_rules.detect_signals(job.title, "", jd_rules.Experience(None))
+        job.signals.append(jd_rules.JD_UNAVAILABLE)
     return None
 
 
@@ -167,6 +173,8 @@ def enrich(candidates: list[Job], held: list[Job], cfg: dict, filters: Filters, 
     fetch_all(candidates + held, client, cache, jdcfg["workers"])
     for job in candidates + held:
         res.fetch[f"{job.source}:{job.jd_status}"] += 1
+        if job.jd_error == "http 403":
+            res.forbidden[urlsplit(job.url).netloc] += 1
 
     for job in candidates:
         reason = apply_rules(job, cfg, filters, scorer, clusters)

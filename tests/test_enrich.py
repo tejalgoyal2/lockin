@@ -137,6 +137,7 @@ def test_missing_jd_strong_titles_kept_with_penalty_weak_titles_dropped():
               jds={"2": http_error(500), "3": http_error(404), "4": http_error(500)})
     assert sorted(j.title for j in res.kept) == ["Data Analyst", "Software Engineer"]
     assert all(j.score == -10.0 and j.fit_pct is None for j in res.kept)
+    assert all(j.signals == ["jd unavailable"] for j in res.kept)
     assert res.drops == {E.R_WEAK_NO_JD: 2}
     assert res.fetch == {"Paylocity:unsupported": 1, "Greenhouse:error": 2, "Greenhouse:not_found": 1}
 
@@ -185,8 +186,8 @@ def test_cache_roundtrip(tmp_path):
     cache = E.JDCache(tmp_path, ttl_days=1)
     client = FakeClient({"1": "Python and SQL."})
     j = gh(1)
-    assert E.fetch_one(j, client, cache) == ("ok", "Python and SQL.")
-    assert E.fetch_one(j, FakeClient({}), cache) == ("ok", "Python and SQL.")   # served from cache, no network
+    assert E.fetch_one(j, client, cache) == ("ok", "Python and SQL.", "")
+    assert E.fetch_one(j, FakeClient({}), cache) == ("ok", "Python and SQL.", "")   # served from cache, no network
 
 
 def test_fit_distribution_buckets():
@@ -205,3 +206,31 @@ def test_cluster_title_first_then_jd_terms_then_software():
     clusters = {j.url[-1]: j.cluster for j in res.kept}
     # 3: no title keyword and no JD terms -> default; 4: no JD at all -> default
     assert clusters == {"1": "data", "2": "ml", "3": "software", "4": "software"}
+
+
+def test_http_403_tenants_are_listed_and_strong_titles_kept():
+    wd = [job(url=f"https://{t}.wd3.myworkdayjobs.com/site/job/Toronto/Dev_R{i}", source="Workday",
+              title="Software Developer") for i, t in enumerate(["bmo", "bmo", "equifax"])]
+
+    class Forbidden:
+        def get_json(self, url, ats_name, **kw):
+            resp = requests.Response()
+            resp.status_code = 403
+            raise requests.HTTPError(response=resp)
+
+    res = E.enrich(wd + [job(source="Workday", url="https://acme.wd3.myworkdayjobs.com/s/job/T/X_1",
+                             title="Technical Specialist", weak_title=True)],
+                   [], CFG, FILTERS, SCORER, Forbidden(), cache=NOCACHE)
+    assert len(res.kept) == 3 and all("jd unavailable" in j.signals for j in res.kept)
+    assert res.forbidden == {"bmo.wd3.myworkdayjobs.com": 2, "equifax.wd3.myworkdayjobs.com": 1,
+                             "acme.wd3.myworkdayjobs.com": 1}
+    assert res.drops == {E.R_WEAK_NO_JD: 1}
+    assert {j.jd_error for j in res.kept} == {"http 403"}
+
+
+def test_fetch_error_details():
+    j = gh(1)
+    assert E.fetch_one(j, FakeClient({"1": http_error(500)}), NOCACHE)[::2] == ("error", "http 500")
+    assert E.fetch_one(j, FakeClient({"1": http_error(404)}), NOCACHE)[::2] == ("not_found", "http 404")
+    assert E.fetch_one(j, FakeClient({"1": RuntimeError("x")}), NOCACHE)[::2] == ("error", "RuntimeError")
+    assert E.fetch_one(job(url="https://recruiting.paylocity.com/x"), FakeClient({}), NOCACHE)[0] == "unsupported"
