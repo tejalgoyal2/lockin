@@ -77,3 +77,11 @@ def test_cluster_is_the_one_with_most_matches(scorer):
     assert scorer.evaluate("PyTorch, TensorFlow, LLM, pandas").cluster == "ml"
     assert scorer.evaluate("Docker, AWS, React, Git").cluster == "software"
     assert scorer.evaluate("CrowdStrike").cluster == "security"
+
+
+def test_min_terms_gate(scorer):
+    jd = "Python, SQL and Docker."
+    assert scorer.evaluate(jd).fit_pct == 100.0                    # default: no gate
+    low = scorer.evaluate(jd, min_terms=4)
+    assert low.fit_pct is None and low.n_terms == 3 and low.matched == ["Docker", "Python", "SQL"]
+    assert scorer.evaluate(jd + " Java.", min_terms=4).fit_pct == 75.0   # 3 matched + 1 gap = 4 terms

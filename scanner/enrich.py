@@ -106,7 +106,7 @@ def fetch_all(jobs: list[Job], client, cache: JDCache, workers: int) -> None:
 
 def _score(job: Job, cfg: dict, boost_re: re.Pattern) -> float:
     sc = cfg["scoring"]
-    total = job.fit_pct or 0.0
+    total = (job.fit_pct or 0.0) + min(len(job.matched), sc["matched_bonus_cap"]) * sc["matched_bonus_per_skill"]
     if "new grad" in job.signals or "recent graduate" in job.signals:
         total += sc["boost"]["new_grad"]
     if job.new_grad or "Simplify" in job.sources:
@@ -123,9 +123,11 @@ def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer) -> str | 
     if job.jd_status == "ok":
         jd = job.jd
         exp = jd_rules.parse_experience(jd)
-        fit = scorer.evaluate(jd)
+        fit = scorer.evaluate(jd, cfg["scoring"]["min_terms_for_fit"])
         job.fit_pct, job.cluster, job.matched, job.gaps = fit.fit_pct, fit.cluster, fit.matched, fit.gaps
         job.signals = jd_rules.detect_signals(job.title, jd, exp)
+        if fit.fit_pct is None:
+            job.signals.append(jd_rules.LOW_SIGNAL)
         if jd_rules.requires_enrollment(jd):
             return R_ENROLLMENT
         if jd_rules.requires_clearance(jd):
@@ -134,7 +136,9 @@ def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer) -> str | 
             return R_US_AUTH
         if exp.min_years is not None and exp.min_years >= cfg["jd"]["max_experience_years"]:
             return R_EXPERIENCE
-        if job.weak_title and (not job.matched or (job.fit_pct or 0) < cfg["scoring"]["weak_title_min_fit"]):
+        if job.weak_title and (
+                not job.matched
+                or (job.fit_pct is not None and job.fit_pct < cfg["scoring"]["weak_title_min_fit"])):
             return R_WEAK
     else:
         # No JD: a strong title stays (with the penalty); a weak one has nothing to vouch for it.

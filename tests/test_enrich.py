@@ -47,15 +47,16 @@ def http_error(code):
     return requests.HTTPError(response=resp)
 
 
-GOOD = "Requirements:\nPython and SQL. 0-2 years of experience. Recent graduates welcome."
+GOOD = "Requirements:\nPython, SQL, Docker and Git. 0-2 years of experience. Recent graduates welcome."
 
 
 def test_good_job_is_scored_with_fit_cluster_and_signals():
     res = run([gh(1, title="Junior Data Analyst")], jds={"1": GOOD})
     (j,) = res.kept
     assert j.jd_status == "ok" and j.fit_pct == 100.0 and j.cluster in {"software", "data"}
-    assert j.signals == ["recent graduate", "0-2 years", "junior"] and j.matched == ["Python", "SQL"]
-    assert j.score == 115.0   # 100 + new-grad boost 15 (recent graduate), Toronto: no BC/remote
+    assert j.signals == ["recent graduate", "0-2 years", "junior"]
+    assert j.matched == ["Docker", "Git", "Python", "SQL"]
+    assert j.score == 123.0   # Fit 100 + 4 matched x 2 + new-grad boost 15 (recent graduate)
 
 
 @pytest.mark.parametrize("jd,reason", [
@@ -86,6 +87,43 @@ def test_weak_title_dropped_when_no_skill_match_or_low_fit():
               jds={"2": "Python. Java, Kafka, Go, Kotlin, Scala, Spring Boot, Redis."})
     ok = run([gh(3, title="Technical Specialist", weak_title=True)], jds={"3": "Python, SQL, Docker."})
     assert none.drops == {E.R_WEAK: 1} and low.drops == {E.R_WEAK: 1} and len(ok.kept) == 1
+
+
+def test_fit_needs_four_terms_else_na_and_low_signal():
+    three = run([gh(1)], jds={"1": "Python, SQL and Docker."}).kept[0]
+    four = run([gh(2)], jds={"2": "Python, SQL, Docker and Git."}).kept[0]
+    assert three.fit_pct is None and "low signal" in three.signals
+    assert three.matched == ["Docker", "Python", "SQL"]            # terms are still listed
+    assert three.score == 6.0                                      # no Fit, but 3 matched x 2
+    assert four.fit_pct == 100.0 and "low signal" not in four.signals
+
+
+def test_gap_terms_count_toward_the_four_term_minimum():
+    j = run([gh(1)], jds={"1": "Python and SQL. Java and Kafka are a plus."}).kept[0]
+    assert j.fit_pct == 50.0 and "low signal" not in j.signals
+
+
+def test_low_signal_applies_when_jd_has_no_terms_at_all():
+    j = run([gh(1)], jds={"1": "Greet customers."}).kept[0]
+    assert j.fit_pct is None and j.signals == ["low signal"] and j.score == 0.0
+
+
+def test_matched_count_breaks_fit_ties_and_is_capped():
+    few = gh(1); many = gh(2); lots = gh(3)
+    jds = {"1": "Python, SQL, Docker, Git.",
+           "2": "Python, SQL, Docker, Git, AWS, Linux, React, Azure.",
+           "3": "Python SQL Docker Git AWS Linux React Azure Terraform Kubernetes Flask Playwright Rust Bash"}
+    res = run([few, many, lots], jds=jds)
+    scores = {j.url[-1]: j.score for j in res.kept}
+    assert scores == {"1": 108.0, "2": 116.0, "3": 120.0}   # cap: at most 10 matched skills count
+    assert [j.url[-1] for j in res.kept] == ["3", "2", "1"]
+
+
+def test_weak_title_with_sparse_jd_is_kept_only_if_something_matches():
+    sparse = run([gh(1, title="Technical Specialist", weak_title=True)], jds={"1": "Python and SQL."})
+    none = run([gh(2, title="Technical Specialist", weak_title=True)], jds={"2": "Java, Kafka and Go."})
+    assert len(sparse.kept) == 1 and sparse.kept[0].fit_pct is None
+    assert none.drops == {E.R_WEAK: 1}
 
 
 def test_strong_title_is_not_dropped_for_low_fit():
@@ -137,9 +175,9 @@ def test_scoring_boosts_and_ranking():
     plain = gh(1, title="Software Engineer", loc="Toronto, ON")
     bc = gh(2, title="Software Engineer", loc="Vancouver, BC")
     simp = gh(3, title="Software Engineer", loc="Toronto, ON", new_grad=True)
-    jd = "Python and Docker."
+    jd = "Python, SQL, Docker and Git."   # 4 terms: Fit 100 + 4 matched x 2 = 108
     res = run([plain, bc, simp], jds={"1": jd, "2": jd, "3": jd})
-    assert {j.url[-1]: j.score for j in res.kept} == {"1": 100.0, "2": 105.0, "3": 110.0}
+    assert {j.url[-1]: j.score for j in res.kept} == {"1": 108.0, "2": 113.0, "3": 118.0}
     assert [j.url[-1] for j in res.kept] == ["3", "2", "1"]
 
 
