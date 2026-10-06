@@ -119,6 +119,8 @@ _SIGNAL_JUNIOR = re.compile(r"\bjunior\b|\bjr\b\.?", re.IGNORECASE)
 _SIGNAL_NO_EXP = re.compile(r"no\s+(?:prior\s+|previous\s+)?(?:work\s+)?experience\s+(?:is\s+)?(?:required|necessary|needed)", re.IGNORECASE)
 
 SIGNAL_ORDER = ("new grad", "recent graduate", "0-2 years", "entry level", "junior")
+LOW_SIGNAL = "low signal"            # JD found, but too few tech terms to trust Fit %
+JD_UNAVAILABLE = "jd unavailable"    # no JD text could be fetched
 
 
 def detect_signals(title: str, jd: str, exp: Experience) -> list[str]:

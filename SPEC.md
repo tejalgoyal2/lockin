@@ -83,9 +83,9 @@ Freshness: only jobs first seen in the last 3 days on a normal run (`--since` CL
 
 - Extract JD terms = all `skills.yaml` aliases found in the JD (word-boundary match; handle `C++`, `C#`, `.NET`, `Node.js`, `CI/CD`).
 - Also extract a small list of common tech terms NOT in the owner's skills (`gaps.yaml`: Java, Go/Golang, Kotlin, Scala, MySQL, GCP, microservices, distributed systems, Kafka, Airflow, dbt, Snowflake, unit testing, …) so gaps are visible.
-- `Fit % = matched / (matched + gaps)`, requirements section weighted ×2 if detectable ("Requirements|Qualifications|What you'll need|Must have").
+- `Fit % = matched / (matched + gaps)`, requirements section weighted ×2 if detectable ("Requirements|Qualifications|What you'll need|Must have"). **Fit % is only reported when at least 4 distinct terms (matched + gaps) are found** (`scoring.min_terms_for_fit`); otherwise Fit is `n/a` and the job gets the `low signal` signal. Matched/gap terms are still listed.
 - `Cluster` = cluster with most matched terms.
-- `Score` (for ranking only) = Fit % + signal boosts (new grad +15, Simplify source +10, BC/remote +5) − penalties (no JD text −10).
+- `Score` (for ranking only) = Fit % (0 when n/a) + matched skills × 2 (counting at most 10) + signal boosts (new grad +15, Simplify source +10, BC/remote +5) − penalties (no JD text −10).
 
 ## 6. Notion
 
@@ -186,3 +186,4 @@ Accept: with Feashliaa disabled by config, a run still produces candidates; runt
 | 16 | Title excludes add `vice president`, `vice-president`, `AVP`, `assistant vice` | "Assistant Vice-President, Data & AI" (BDC) passed the title filter in the first live run; `VP` alone does not match it |
 | 17 | Enrollment rule also matches `enrolled in .{0,60}(degree\|program\|university\|college\|diploma)`, `(2nd\|second\|3rd\|third) year or (later\|above)`, `currently pursuing`, `must be returning`; the `enrolled in` pattern ignores benefits/HR boilerplate (our/your/the company, benefits, plan, pension, insurance, wellness, stock, onboarding, training, CPA/CFA/PEP, and "will be / automatically / get enrolled") | Sun Life's "Enrolled in 2nd year or later of a university ... degree program" co-op was rescued as a student role. Checked against the 427 cached JDs: 18 newly matched, 16 genuine student requirements, 2 were CPA-designation boilerplate (now excluded) |
 | 18 | `gaps.yaml` expanded: everything you listed (Java ... SAP; all but Salesforce and SAP were already there) plus ~30 more technologies (ServiceNow, MATLAB, Perl, Flutter, Laravel, FastAPI, Maven/Gradle, Hive, Trino, Flink, Informatica, SSIS, GitLab, Helm, Nginx, ...). Concepts the owner arguably has (ETL, data modeling) are deliberately not gaps. A test enforces that no gap duplicates a skill | More gap terms make Fit % mean "overlap with what the JD actually asks for" instead of "100% of the 2 terms we recognised" |
+| 19 | Fit % needs >= 4 distinct terms (matched + gaps), else `n/a` + `low signal` signal; a weak-title job is still dropped for zero matches, but sparse (n/a) Fit is not treated as < 20. Score adds +2 per matched skill, capped at 10 skills | "100%" from two recognised terms is noise (many sample rows read 100% with 1-2 matches). Matched count separates a 2-skill match from an 8-skill one |
