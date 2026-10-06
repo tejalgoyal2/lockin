@@ -179,3 +179,13 @@ scoring:
   penalty:
     no_jd: 10
   bc_or_remote_pattern: '\bBC\b|British Columbia|Vancouver|Burnaby|Victoria|Richmond|Surrey|\bremote\b'
+
+cluster:
+  # The title decides the cluster; JD terms are used only when the title has no keyword.
+  # Clusters are checked in this order and the first hit wins, so "Data Scientist" is ml
+  # and "AI Security Analyst" is security. No keyword and no JD terms -> `default`.
+  title_keywords:
+    security: {terms: [security, cyber]}
+    ml: {terms: [machine learning, scientist], words: [ML, AI]}
+    data: {terms: [data, analytics], words: [BI]}
+  default: software

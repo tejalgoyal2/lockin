@@ -53,7 +53,7 @@ GOOD = "Requirements:\nPython, SQL, Docker and Git. 0-2 years of experience. Rec
 def test_good_job_is_scored_with_fit_cluster_and_signals():
     res = run([gh(1, title="Junior Data Analyst")], jds={"1": GOOD})
     (j,) = res.kept
-    assert j.jd_status == "ok" and j.fit_pct == 100.0 and j.cluster in {"software", "data"}
+    assert j.jd_status == "ok" and j.fit_pct == 100.0 and j.cluster == "data"   # title says data
     assert j.signals == ["recent graduate", "0-2 years", "junior"]
     assert j.matched == ["Docker", "Git", "Python", "SQL"]
     assert j.score == 123.0   # Fit 100 + 4 matched x 2 + new-grad boost 15 (recent graduate)
@@ -195,3 +195,13 @@ def test_fit_distribution_buckets():
         j = gh(1); j.fit_pct = fit; jobs.append(j)
     assert dict(E.fit_distribution(jobs)) == {
         "0-19": 2, "20-39": 1, "40-59": 1, "60-79": 1, "80-100": 1, "n/a (no JD or no tech terms)": 1}
+
+
+def test_cluster_title_first_then_jd_terms_then_software():
+    jd_data = "SQL, Power BI, Databricks and Spark."
+    res = run([gh(1, title="Software Engineer"), gh(2, title="Machine Learning Engineer"),
+               gh(3, title="Software Programmer"), gh(4, title="Software Developer")],
+              jds={"1": jd_data, "2": jd_data, "3": "Greet customers.", "4": http_error(404)})
+    clusters = {j.url[-1]: j.cluster for j in res.kept}
+    # 3: no title keyword and no JD terms -> default; 4: no JD at all -> default
+    assert clusters == {"1": "data", "2": "ml", "3": "software", "4": "software"}
