@@ -53,6 +53,8 @@ def test_non_tech_titles_do_not_match(filters, title):
     "Facilities Engineer", "Engineering Project Coordinator", "Marketing Specialist - AI",
     "Production Supervisor", "Superviseur de production", "Production Team Leader",
     "Administrative Assistant, Data Entry", "Technical Recruiter",
+    "ASSISTANT VICE-PRESIDENT, DATA & AI", "Vice President, Engineering", "Vice-President Data Science",
+    "AVP, Analytics", "Assistant Vice President - Technology", "Assistant Vice-President",
 ])
 def test_hard_excludes(filters, title):
     assert not filters.title_not_excluded(title)
@@ -67,6 +69,11 @@ def test_hard_excludes(filters, title):
 ])
 def test_senior_and_non_software_titles_excluded(filters, title):
     assert not filters.title_not_excluded(title)
+
+
+def test_vice_president_excludes_do_not_hit_lookalikes(filters):
+    for title in ("Service Engineer", "Advice Analyst Developer", "Software Developer"):
+        assert filters.title_not_excluded(title)
 
 
 @pytest.mark.parametrize("title", [
