@@ -44,3 +44,34 @@ terms:
   - {name: JUnit, aliases: [JUnit]}
   - {name: unit testing, aliases: [unit testing, unit tests, unit test]}
   - {name: SAS, aliases: [SAS], cs: true}
+  # --- added after the first live run ---
+  - {name: Salesforce, aliases: [Salesforce, Apex]}
+  - {name: SAP, aliases: [SAP], cs: true}
+  - {name: ServiceNow, aliases: [ServiceNow]}
+  - {name: MATLAB, aliases: [MATLAB]}
+  - {name: Perl, aliases: [Perl], cs: true}
+  - {name: Objective-C, aliases: [Objective-C]}
+  - {name: Dart, aliases: [Dart, Flutter], cs: true}
+  - {name: React Native, aliases: [React Native], cs: true}
+  - {name: jQuery, aliases: [jQuery]}
+  - {name: NestJS, aliases: [NestJS, Nest.js]}
+  - {name: Laravel, aliases: [Laravel]}
+  - {name: FastAPI, aliases: [FastAPI]}
+  - {name: Hibernate, aliases: [Hibernate]}
+  - {name: Maven, aliases: [Maven, Gradle]}
+  - {name: Hive, aliases: [Hive], cs: true}
+  - {name: Trino, aliases: [Trino, Presto]}
+  - {name: Flink, aliases: [Flink]}
+  - {name: Informatica, aliases: [Informatica]}
+  - {name: Talend, aliases: [Talend]}
+  - {name: SSIS, aliases: [SSIS, SSRS]}
+  - {name: Puppet, aliases: [Puppet], cs: true}
+  - {name: GitLab, aliases: [GitLab]}
+  - {name: CircleCI, aliases: [CircleCI]}
+  - {name: Helm, aliases: [Helm], cs: true}
+  - {name: OpenShift, aliases: [OpenShift]}
+  - {name: Nginx, aliases: [Nginx]}
+  - {name: New Relic, aliases: [New Relic, Sentry]}
+  - {name: Elixir, aliases: [Elixir, Erlang, Haskell, Clojure], cs: true}
+  - {name: Postman, aliases: [Postman]}
+  - {name: Appium, aliases: [Appium, TestNG]}
