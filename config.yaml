@@ -118,8 +118,15 @@ title:
     - vice-president
     - avp
     - assistant vice
+    - concierge
+    - attendant
+    - parking
+    - security officer
+    - custodian
+    - teacher
   exclude_words:
     - sr
+    - guard
     - VP
     - lead
     - architect
