@@ -112,3 +112,12 @@ def test_known_miss_title_aliases_not_merged():
 def test_merge_weak_title_only_if_both_weak_and_keys_assigned():
     jobs, _ = dedupe([job(url="https://x/1", weak_title=True), job(url="https://x/1?q=1", weak_title=False)])
     assert jobs[0].weak_title is False and len(jobs[0].key) == 40
+
+
+def test_merge_keeps_the_readable_company_name_from_simplify():
+    simp = job(company="Motorola", company_name="Motorola", title="Junior Software Engineer - Emergency Call Handling",
+               location="Gatineau, QC, Canada", url="https://s/1", source="Simplify")
+    ats = job(company="motorolasolutions", title="Junior Software Engineer, Emergency Call Handling",
+              location="Gatineau, Canada", url="https://a/1", source="Workday")
+    (merged,), _ = dedupe([simp, ats])
+    assert merged.company == "motorolasolutions" and merged.company_name == "Motorola"

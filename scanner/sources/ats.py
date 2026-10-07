@@ -151,14 +151,24 @@ def _ashby_text(ref: AtsRef, client, cache: dict | None = None) -> str:
     raise NotFound(ref.job_id)
 
 
-def fetch_jd(ref: AtsRef, client) -> str:
-    """Fetch one job's description as plain text. Raises NotFound on 404 / missing job."""
+def fetch_details(ref: AtsRef, client) -> tuple[str, str]:
+    """Fetch one job: (description as plain text, readable company name or '').
+
+    Only Greenhouse reports a clean brand name (`company_name`); Workday's hiringOrganization is
+    often a legal entity ("Autodesk Canada Co.") and the others give none. Raises NotFound on 404.
+    """
     if ref.ats == "Ashby":
-        return _ashby_text(ref, client)
+        return _ashby_text(ref, client), ""
     data = client.get_json(ref.api_url, ref.ats)
-    return {
+    text = {
         "Greenhouse": _greenhouse_text,
         "Lever": _lever_text,
         "Workday": _workday_text,
         "BambooHR": _bamboo_text,
     }[ref.ats](data)
+    return text, (data.get("company_name") or "").strip() if ref.ats == "Greenhouse" else ""
+
+
+def fetch_jd(ref: AtsRef, client) -> str:
+    """Description text only (see fetch_details)."""
+    return fetch_details(ref, client)[0]

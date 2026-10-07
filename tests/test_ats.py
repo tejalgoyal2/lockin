@@ -101,3 +101,14 @@ def test_ashby_board_fetched_once_per_company_and_job_picked_by_id():
     assert len(client.calls) == 1
     with pytest.raises(ats.NotFound):
         ats._ashby_text(ats.locate(job("https://jobs.ashbyhq.com/vasco/zzz")), client, cache)
+
+
+def test_greenhouse_reports_company_name_others_do_not():
+    gh = ats.locate(job("https://boards.greenhouse.io/heygen/jobs/1"))
+    text, name = ats.fetch_details(gh, FakeClient({gh.api_url: {"content": "&lt;p&gt;Hi&lt;/p&gt;", "company_name": " HeyGen "}}))
+    assert (text, name) == ("Hi", "HeyGen")
+    lv = ats.locate(job("https://jobs.lever.co/acme/1"))
+    assert ats.fetch_details(lv, FakeClient({lv.api_url: {"descriptionPlain": "Hi", "company_name": "Nope"}})) == ("Hi", "")
+    wd = ats.locate(job("https://a.wd1.myworkdayjobs.com/S/job/T/X_1"))
+    resp = {"jobPostingInfo": {"jobDescription": "<p>Hi</p>"}, "hiringOrganization": {"name": "Autodesk Canada Co."}}
+    assert ats.fetch_details(wd, FakeClient({wd.api_url: resp})) == ("Hi", "")     # legal entity: not used
