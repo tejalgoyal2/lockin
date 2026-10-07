@@ -38,7 +38,7 @@ to triage. It runs on GitHub Actions. Design: [SPEC.md](SPEC.md).
    with read, update and insert content capabilities. Copy its secret.
 3. **Share the Feed database with the integration** (database menu `...` > Connections). Share nothing else:
    the scanner never needs your main database.
-4. **Get the data source ID** of the Feed (database menu `...` > Manage data sources > copy the data source ID).
+4. **Get the data source ID** of the Feed (database menu `...` > Manage data sources > copy the data source ID). It is not the ID in the database's URL.
 5. **Add two repository secrets** (Settings > Secrets and variables > Actions):
    `NOTION_TOKEN` (the integration secret) and `NOTION_FEED_DATA_SOURCE_ID`.
 6. **Run it once by hand**: Actions > scan > Run workflow. Leave `dry_run` ticked first (it validates the Feed
