@@ -111,6 +111,13 @@ def notion_step(cfg, args, client, feed, final, seen, overrides, now):
         print(f"Notion: Feed has {len(rows)} rows; {'would trash' if args.dry_run else 'trashed'} {done} "
               f"older than {ncfg['feed_ttl_days']} days with Interested and Apply both unticked")
     candidates = sorted(final, key=lambda j: -j.score)[:args.top] if args.top else final
+    if not args.dry_run:
+        remembered = [j for j in notion_feed.already_in_feed(candidates, feed_links) if j.key not in seen.seen]
+        for job in remembered:
+            seen.add(job.key, today)
+        if remembered:
+            seen.save()
+            print(f"Notion: {len(remembered)} jobs already in the Feed recorded in seen.json")
     to_write, skipped = notion_feed.select_new(candidates, seen.seen, feed_links, cap)
     print(f"Notion: {len(to_write)} to write (cap {cap}); skipped {skipped or 'none'}")
 
