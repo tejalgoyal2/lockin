@@ -172,4 +172,24 @@ def test_link_check_alone_blocks_a_rerun_when_seen_json_is_lost(env, capsys):
     capsys.readouterr()
     cli.notion_step(CFG, args(top=2, max_rows=2), client, feed, jobs(5), SeenStore(seen.path.parent / "gone.json"), {}, NOW)
     out = capsys.readouterr().out
-    assert len(notion.pages) == 2 and "0 to write" in out and "'link_in_feed': 2" in out
+    # the Link check finds both rows and records them in the (new) seen.json, so they count as seen
+    assert len(notion.pages) == 2 and "0 to write" in out and "2 jobs already in the Feed recorded" in out
+
+
+def test_jobs_already_in_the_feed_are_remembered_so_they_cannot_return_later(env, capsys):
+    notion, client, feed, seen = env
+    notion.add_row("https://jobs.example.com/1?utm=other", NOW.isoformat())
+    cli.notion_step(CFG, args(top=1, max_rows=1), client, feed, jobs(3), seen, {}, NOW)
+    assert "recorded in seen.json" in capsys.readouterr().out
+    assert set(SeenStore(seen.path).seen) == {"key1"} and len(notion.pages) == 1       # nothing was written
+    for p in notion.pages.values():           # the owner's automation moves the row out of the Feed
+        p["in_trash"] = True
+    cli.notion_step(CFG, args(top=1, max_rows=1), client, feed, jobs(3), SeenStore(seen.path), {}, NOW)
+    assert len(notion.pages) == 1             # still not re-created
+
+
+def test_dry_run_does_not_touch_seen_json_for_feed_matches(env):
+    notion, client, feed, seen = env
+    notion.add_row("https://jobs.example.com/1?utm=other", NOW.isoformat())
+    cli.notion_step(CFG, args(dry_run=True), client, feed, jobs(2), seen, {}, NOW)
+    assert not seen.path.exists()

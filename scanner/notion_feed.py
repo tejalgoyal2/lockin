@@ -306,6 +306,13 @@ def select_new(jobs: list[Job], seen: dict[str, str], feed_links: set[str], cap:
     return out, skipped
 
 
+def already_in_feed(jobs: list[Job], feed_links: set[str]) -> list[Job]:
+    """Jobs whose Link is already a Feed row. Remembered in seen.json so that, once the owner's
+    automation moves the row out of the Feed, the job does not come back."""
+    canon = {canonical_url(link) for link in feed_links}
+    return [j for j in jobs if canonical_url(j.url) in canon]
+
+
 def stale_rows(rows: list[FeedRow], now: datetime, ttl_days: int) -> list[FeedRow]:
     """Rows created more than `ttl_days` ago where BOTH checkboxes are known and unticked.
 
