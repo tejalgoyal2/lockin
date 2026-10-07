@@ -71,6 +71,26 @@ def test_senior_and_non_software_titles_excluded(filters, title):
     assert not filters.title_not_excluded(title)
 
 
+@pytest.mark.parametrize("title", [
+    "Security Concierge (Part Time Overnights) - Hamilton", "Security Parking Attendant - London",
+    "Parking Enforcement Officer", "Security Guard", "Night Guard", "Armed Guard - Security",
+    "Security Officer", "Information Security Officer", "Custodian", "Building Custodian, Data Centre",
+    "AI Fluency & Innovation Teacher (Grades 11/12)", "Computer Science Teacher", "Lot Attendant",
+    "Service Attendant - Software Retail",
+])
+def test_non_tech_service_roles_are_excluded(filters, title):
+    assert not filters.title_not_excluded(title)
+
+
+@pytest.mark.parametrize("title", [
+    "AI Guardrails Engineer", "Guardian Platform Developer", "Security Engineer", "Cyber Security Analyst",
+    "Security Operations Analyst", "Software Engineer, Payments Platform Integrations",
+    "Teaching Platform Developer", "Application Security Engineer",
+])
+def test_the_new_excludes_do_not_hit_real_tech_titles(filters, title):
+    assert filters.title_not_excluded(title)
+
+
 def test_vice_president_excludes_do_not_hit_lookalikes(filters):
     for title in ("Service Engineer", "Advice Analyst Developer", "Software Developer"):
         assert filters.title_not_excluded(title)
