@@ -110,7 +110,8 @@ def notion_step(cfg, args, client, feed, final, seen, overrides, now):
         done = notion_feed.trash_rows(client, stale, dry_run=args.dry_run)
         print(f"Notion: Feed has {len(rows)} rows; {'would trash' if args.dry_run else 'trashed'} {done} "
               f"older than {ncfg['feed_ttl_days']} days with Interested and Apply both unticked")
-    to_write, skipped = notion_feed.select_new(final, seen.seen, feed_links, cap)
+    candidates = sorted(final, key=lambda j: -j.score)[:args.top] if args.top else final
+    to_write, skipped = notion_feed.select_new(candidates, seen.seen, feed_links, cap)
     print(f"Notion: {len(to_write)} to write (cap {cap}); skipped {skipped or 'none'}")
 
     if args.dry_run:
@@ -222,6 +223,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--dry-run", action="store_true",
                    help="no Notion writes or trashing, no seen.json update; print what would be written")
     p.add_argument("--max-rows", type=int, help="rows to write this run (default notion.daily_cap)")
+    p.add_argument("--top", type=int,
+                   help="testing aid: only consider the N highest-scoring jobs (so a rerun repeats the same set)")
     p.add_argument("--show-payloads", type=int, default=5, help="dry run: print the first N Notion payloads")
     p.add_argument("--no-notion", action="store_true", help="scan and report only; skip Notion entirely")
     p.add_argument("--skip-notion", action="store_true",
