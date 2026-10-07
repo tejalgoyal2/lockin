@@ -1,0 +1,58 @@
+# Owner's skills, grouped by cluster (SPEC §5). The owner maintains this file.
+# Each skill: a display name and the aliases that count as a match in a JD.
+#   - Matching is case-insensitive and word-bounded ("Java" never matches "JavaScript").
+#   - `cs: true` makes a skill's aliases case-sensitive (for words that are also plain English:
+#     Rust, React, REST, Spark, Flask, JS).
+# Seeded from SPEC §5; "Spark" is included on the reading of "Spark (if listed)".
+clusters:
+  software:
+    - {name: Python, aliases: [Python]}
+    - {name: JavaScript, aliases: [JavaScript, ECMAScript]}
+    - {name: JS, aliases: [JS], cs: true}
+    - {name: TypeScript, aliases: [TypeScript]}
+    - {name: C#, aliases: ["C#", CSharp]}
+    - {name: Rust, aliases: [Rust], cs: true}
+    - {name: PowerShell, aliases: [PowerShell]}
+    - {name: Bash, aliases: [Bash, shell scripting]}
+    - {name: C/C++, aliases: ["C/C++", "C++", "C or C++"]}
+    - {name: React, aliases: [React, React.js, ReactJS], cs: true}
+    - {name: Next.js, aliases: [Next.js, NextJS]}
+    - {name: Node.js, aliases: [Node.js, NodeJS]}
+    - {name: .NET, aliases: [.NET, ASP.NET, dotnet, ".NET Core"]}
+    - {name: Flask, aliases: [Flask], cs: true}
+    - {name: REST APIs, aliases: [REST, RESTful, REST API, REST APIs], cs: true}
+    - {name: MCP, aliases: [MCP, Model Context Protocol]}
+    - {name: Docker, aliases: [Docker]}
+    - {name: Kubernetes, aliases: [Kubernetes, K8s]}
+    - {name: Terraform, aliases: [Terraform]}
+    - {name: AWS, aliases: [AWS, Amazon Web Services]}
+    - {name: Azure, aliases: [Azure]}
+    - {name: Cloudflare Workers, aliases: [Cloudflare Workers, Cloudflare]}
+    - {name: Git, aliases: [Git, GitHub]}
+    - {name: CI/CD, aliases: [CI/CD, CICD, continuous integration, continuous delivery, continuous deployment]}
+    - {name: Playwright, aliases: [Playwright]}
+    - {name: Linux, aliases: [Linux]}
+  data:
+    - {name: SQL, aliases: [SQL, T-SQL]}
+    - {name: PostgreSQL, aliases: [PostgreSQL, Postgres, Supabase]}
+    - {name: SQL Server, aliases: [SQL Server, MSSQL]}
+    - {name: MongoDB, aliases: [MongoDB, Mongo]}
+    - {name: Azure Data Factory, aliases: [Azure Data Factory, ADF]}
+    - {name: Azure SQL MI, aliases: [Azure SQL Managed Instance, Azure SQL MI, SQL MI]}
+    - {name: Entra ID, aliases: [Entra ID, Azure AD, Azure Active Directory]}
+    - {name: Databricks, aliases: [Databricks]}
+    - {name: Unity Catalog, aliases: [Unity Catalog]}
+    - {name: Spark, aliases: [Spark, PySpark, Apache Spark], cs: true}
+    - {name: Power BI, aliases: [Power BI, PowerBI]}
+    - {name: Power Apps, aliases: [Power Apps, PowerApps]}
+    - {name: Power Automate, aliases: [Power Automate]}
+    - {name: pandas, aliases: [pandas]}
+    - {name: NumPy, aliases: [NumPy]}
+  ml:
+    - {name: PyTorch, aliases: [PyTorch]}
+    - {name: TensorFlow, aliases: [TensorFlow]}
+    - {name: scikit-learn, aliases: [scikit-learn, scikit learn, sklearn]}
+    - {name: LLM, aliases: [LLM, LLMs, large language model, large language models, Anthropic, Claude API]}
+    - {name: Gemini API, aliases: [Gemini API, Gemini]}
+  security:
+    - {name: CrowdStrike, aliases: [CrowdStrike, LogScale]}
