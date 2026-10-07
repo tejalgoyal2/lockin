@@ -75,7 +75,7 @@ JD rules (phase 2, on fetched text):
 - Drop if `security clearance` required, or `US citizen`/`authorized to work in the United States` without Canadian location.
 - Boost signals → `Signals` multi-select: `new grad`, `recent graduate`, `0-2 years`, `entry level`, `junior`. Two data-quality values share the field: `low signal` (JD found but < 4 tech terms, so Fit % is n/a) and `jd unavailable` (no JD text could be fetched).
 
-Freshness: only jobs first seen in the last 3 days on a normal run (`--since` CLI flag to override; first run uses 14 days).
+Freshness: only jobs first seen in the last 3 days on a normal run (`--since` CLI flag to override). The first run, defined as one where `state/seen.json` does not exist yet, uses 14 days (`freshness.first_run_days`).
 
 ## 5. Scoring
 
@@ -92,34 +92,37 @@ Freshness: only jobs first seen in the last 3 days on a normal run (`--since` CL
 Two databases exist/will exist in the owner's workspace. **The scanner only ever writes to the Job Feed database.** Never touch the main application database.
 
 ### 6a. Job Feed database (create once; owner shares it with the integration)
-| Property | Type | Notes |
+The Feed has exactly these properties; no others exist. Matched, Gaps, Cluster and Score stay in `reports/latest.md`.
+
+| Property | Type | Value written by the scanner |
 |---|---|---|
-| Name | title | `Company — Role` |
-| Company | text | |
-| Role | text | |
-| Link | url | application URL |
-| Location | text | |
-| Source | select | Workday, Greenhouse, Lever, Ashby, BambooHR, Paylocity, Simplify, Watchlist |
-| First Seen | date | |
-| Fit % | number (percent) | |
-| Cluster | select | software, data, ml, security |
-| Signals | multi-select | new grad, recent graduate, 0-2 years, entry level, junior, low signal, jd unavailable |
-| Matched | text | top matched skills |
-| Gaps | text | JD terms not in skills.yaml |
-| Job Key | text | dedupe key (see §7) |
-| JD | text | **full job description text** (see below) |
-| Apply | checkbox | owner's action; read-only for the scanner |
+| Name | title | The job role as listed, e.g. `Software Engineer I` |
+| Company | text | `<Company> · <date>`, e.g. `RBC · oct6`, `Clio · sept20`. The date is the job's first-seen date (UTC): lowercase month + day, no space, no leading zero; months `jan feb mar apr may jun jul aug sept oct nov dec` |
+| Link | url | Application URL |
+| Source | select | Workday, Greenhouse, Lever, Ashby, BambooHR, Paylocity, Simplify, Watchlist. A source outside these options is left empty (never creates a new option) |
+| Fit % | number, percent format | A fraction (`0.7` = 70%); empty when Fit is n/a |
+| Signals | multi-select | new grad, recent graduate, 0-2 years, entry level, junior, low signal, jd unavailable (options already exist) |
+| JD | text | Full plain-text JD |
+| Interested | checkbox | The owner's. Never written, never read for anything but cleanup |
+| Apply | checkbox | The owner's. Never written, never read for anything but cleanup |
 
-The JD goes in the `JD` text property, NOT the page body, because the owner's Notion automation copies properties (not body content) into the main database. Write it as a rich_text array split into ≤2000-character items (Notion API limit per item; keep the array ≤100 items, so truncate beyond ~190k chars with a `[truncated]` marker). Normalize HTML to plain text with paragraph breaks preserved (`\n\n`). Page body stays empty.
+**Company name.** Resolved as: `company_names.yaml` override (owner-curated, e.g. `rbc: RBC`, `generalmotors: General Motors`) > readable name from Simplify (`company_name`) or the Greenhouse response (`company_name`) > the slug prettified (`periodic-labs` -> `Periodic Labs`).
 
-All Notion property names live in `config.yaml` (`notion.properties.<field>: "<Notion name>"`), because the owner creates the databases by hand. On startup, fetch the Feed schema and fail with a clear message listing any missing/mistyped property before writing anything.
+**JD.** The JD goes in the `JD` text property, NOT the page body, because the owner's Notion automation copies properties (not body content) into the main database. It is written as a rich_text array split into items of at most 2000 characters (UTF-16 units, never splitting a code point); the array is kept to 95 items, so a JD beyond ~190k characters is truncated with a `[truncated]` marker. HTML is normalised to plain text with paragraph breaks preserved (`\n\n`). The page body stays empty.
+
+**Schema check.** All property names live in `config.yaml` (`notion.properties`). Before the slow scan and before anything is written, the scanner retrieves the Feed data source and fails (exit 2) with a message listing every missing property, wrong type, non-percent `Fit %` format and missing select/multi-select option.
 
 ### 6b. Writing rules
-- Write at most `daily_cap` (default 40) highest-Score new jobs per run; everything else goes only to `reports/latest.md`.
-- Never write a job whose Job Key already exists in `state/seen.json` or in the Feed.
-- Archive (move to trash via API) Feed rows older than `feed_ttl_days` (default 14) where `Apply` is unchecked.
-- Notion API: use the current API version and data-source parent as documented at developers.notion.com; read `NOTION_TOKEN` and `NOTION_FEED_DATA_SOURCE_ID` from env (GitHub Actions secrets). Rate limit ≤3 req/s; on 429 sleep `Retry-After`.
-- `--dry-run` flag: no Notion writes, print what would be written.
+- Write at most `notion.daily_cap` (default 40) highest-Score new jobs per run (`--max-rows` overrides); everything else stays in `reports/latest.md`.
+- Skip a job whose Job Key is in `state/seen.json`, or whose Link (canonical URL: tracking params ignored, job-id params kept) matches any Feed row. The owner's Notion automation copies a ticked row to his main database and then deletes it from the Feed, so `seen.json` is what stops it coming back. A key is added to `seen.json` the moment its row is created, and the file is saved after every row.
+- Cleanup: trash (`in_trash: true`) Feed rows whose Notion created time is older than `notion.feed_ttl_days` (default 14) and where **both** `Interested` and `Apply` are unticked. A row with either box ticked, or with a checkbox missing from the response, is never touched.
+- API: `Notion-Version: 2026-03-11` (`notion.api_version`), pages created under `parent: {type: data_source_id}`, data source queried with `filter_properties`. Requests are paced to at most 3 per second. 429 and 529 are retried after `Retry-After` (not `public_api_request_blocked`); 500/502/503/504 and network errors are retried only for reads, never for page creation (it may have succeeded; the Link check prevents a duplicate next run). Three consecutive failed writes abort the write step.
+- `--dry-run`: no Notion writes or trashing and no `seen.json` update; prints the first 5 payloads (JD shortened for display). With credentials it still reads the Feed (schema check, Link dedupe, what would be trashed); `--skip-notion` avoids contacting Notion at all.
+- After a real run the scanner reads one written JD back through the paginated property-item endpoint and compares it with what it sent (prefers one over 4,000 characters); a mismatch exits 1.
+- `NOTION_TOKEN` and `NOTION_FEED_DATA_SOURCE_ID` come from the environment (GitHub Actions secrets). The token is never printed or logged.
+
+### 6d. Gaps report (no Notion)
+Each run records, in `state/gaps.json`, the gap terms (`gaps.yaml`) of every job whose JD was fetched, including jobs the filters later dropped, once per job key; entries older than 90 days are pruned. On Mondays (UTC) the run overwrites `reports/gaps.md` with two tables: the top 25 gap terms of the last 7 days and of the last 30 days (term, job count, three example titles). `--gaps-report always|never|auto` overrides the Monday rule.
 
 ### 6c. Moving to the main database (not this repo's job, documented for context)
 Owner's main DB ("data_jobs_fall26"): `Company` (title), `Link` (url), `Status` (select: Queued, Ready, Applied, Canceled, Rejected), `Cover Letter` (checkbox), `Batch Tag` (text), `Added` (created time), plus a `JD` text property added by the owner. A Notion automation built by the owner copies a Feed row into the main DB as `Queued` when he chooses to apply. This repo never reads or writes the main DB, and the integration is shared with the Feed DB only.
@@ -134,7 +137,7 @@ A job seen from both Feashliaa and Simplify is one job (prefer Simplify for the 
 
 ## 8. GitHub Actions
 
-`.github/workflows/scan.yml`: `schedule: cron "0 16 * * *"` (UTC) + `workflow_dispatch` with inputs `since_days`, `dry_run`. Steps: checkout → setup-python 3.12 → pip install → run `python -m scanner run` → commit `state/` and `reports/` with `[skip ci]`. `permissions: contents: write`. Timeout 60 min. Secrets: `NOTION_TOKEN`, `NOTION_FEED_DATA_SOURCE_ID`. Secrets are not available to forks' PRs, so the public repo is safe; never print the token.
+`.github/workflows/scan.yml`: `schedule: cron "0 16 * * *"` (UTC) + `workflow_dispatch` with inputs `dry_run` (default true), `max_rows`, `since_days`. Scheduled runs always write. Steps: checkout → setup-python 3.12 → pip install → run `python -m scanner run` → commit `state/` and `reports/` with `[skip ci]` (also when the run failed part-way, so rows already written stay in `seen.json`). Runs are serialised with a `concurrency` group. `permissions: contents: write`. Timeout 60 min. Secrets: `NOTION_TOKEN`, `NOTION_FEED_DATA_SOURCE_ID`. Secrets are not available to forks' PRs, so the public repo is safe; never print the token.
 
 ## 9. Phases and acceptance checks
 
@@ -193,3 +196,13 @@ Accept: with Feashliaa disabled by config, a run still produces candidates; runt
 | 23 | Student-title rescue needs explicit eligibility wording (`open to ... recent graduates`, `recent graduates are welcome/eligible`, `we welcome ... new grads`, `graduated within`). Branding or award text no longer rescues. Supersedes the `recent graduate\|new grad\|graduated within` match in #12 | Sun Life's "Best Employers for Recent Graduates" line rescued a student role |
 | 24 | A graduation date after the current year ("graduation date of April 2027 or later", "2027 or later graduation date") is an enrollment requirement; years up to the current one are not. The year is read from the clock at run time | The Sun Life student role asked for "a August 2027 or later graduation date", which no earlier pattern matched |
 | 25 | Cluster is **not written to Notion**. The `Cluster` column stays in `reports/latest.md` only; no further cluster work. Supersedes the `Cluster` property in §6a | Owner's decision |
+| 26 | Notion API version `2026-03-11` (current per developers.notion.com on 2026-10-07): pages are created with `parent.type = data_source_id`, the Feed is read with `POST /v1/data_sources/{id}/query` (+ `filter_properties`), rows are trashed with `in_trash: true` (`archived` was removed in this version), long text is read back with the paginated property-item endpoint | §6b said "use the current version as documented" |
+| 27 | The Feed schema is the nine properties in §6a (Name, Company, Link, Source, Fit %, Signals, JD, Interested, Apply). Role, Location, First Seen, Job Key, Cluster, Matched, Gaps and Score are not Notion properties; `Name` is the plain role and the date moved into `Company` | Owner's decision. Supersedes the §6a draft and #25 (cluster) |
+| 28 | `Company` = `<name> · <first-seen date, UTC>`. Name precedence: `company_names.yaml` > Simplify `company_name` or Greenhouse `company_name` > prettified slug. Workday's `hiringOrganization` is ignored (it is often a legal entity such as "Autodesk Canada Co.") and Lever, Ashby and BambooHR give no name. `company_names.yaml` is seeded from the 14-day report of 2026-10-07; a few entries are guesses to check (`myview` = Loblaw, `cw`, `isc`, `fccfac`) | Owner's format. The override map wins so legal names can be shortened |
+| 29 | The schema check also verifies that `Fit %` has number format `percent` and that every Source and Signals option the scanner can write exists. A Source outside the Feed's options (e.g. iCIMS) is left empty instead of silently creating a new option | "Schema is exactly ..." |
+| 30 | `seen.json` holds the keys of rows actually written (key -> date written) and is saved after every row; jobs skipped by the cap or by JD rules are re-evaluated next run. Because the cap truncates, a rerun with the same cap writes the next-best jobs, never the same ones | Keeps a row the owner moved to the main DB from returning, and survives a killed run |
+| 31 | Cleanup never touches a row where either checkbox is ticked or where a checkbox value is missing from the response. It runs before writing, and in dry runs it only reports | "Never touch a row with either box ticked" |
+| 32 | Page creation is never retried after a 5xx or network error; 3 consecutive failed writes abort the write step; the exit code is 1 if any row failed or the read-back differs | Notion's guidance: a write that returns 5xx may have succeeded. The Link check makes the next run safe |
+| 33 | Gaps are recorded for every job whose JD was fetched, student-titled held jobs included, once per job key (the first time it is seen, by run date). Window counts use that recording date. Dry runs still record gaps | "Counting each job once" |
+| 34 | `workflow_dispatch` input `dry_run` defaults to **true** (scheduled runs always write); extra inputs `max_rows` and `since_days` | A manual click should not write by accident |
+
