@@ -1,0 +1,191 @@
+# Everything tunable for the scanner lives here (SPEC §4, §10).
+# Regexes are Python `re` syntax. Patterns under `*_cs` are case-sensitive;
+# all others are case-insensitive.
+
+freshness:
+  default_days: 3        # normal run: only jobs first seen in the last N days
+  first_run_days: 14     # reserved for the first run once state/seen.json exists (phase 3)
+
+sources:
+  feashliaa:
+    enabled: true
+    repo_url: https://github.com/Feashliaa/job-board-data
+    cache_dir: .cache/job-board-data
+    stale_after_hours: 36   # warn (and continue) if metadata last_updated is older
+  simplify:
+    enabled: true
+    listings_url: https://raw.githubusercontent.com/SimplifyJobs/New-Grad-Positions/dev/.github/scripts/listings.json
+    categories:             # Simplify has used a few spellings for the same buckets
+      - Software
+      - Software Engineering
+      - AI/ML/Data
+      - Data Science, AI & Machine Learning
+
+location:
+  # Names that are unambiguous on their own.
+  include:
+    - '\bCanada\b'
+    - '\b(Ontario|British Columbia|Alberta|Quebec|Québec|Manitoba|Saskatchewan|Nova Scotia|New Brunswick|Newfoundland|Prince Edward Island)\b'
+    - '\b(Toronto|Vancouver|Montr[ée]al|Ottawa|Waterloo|Kitchener|Calgary|Edmonton|Burnaby|Mississauga|Markham|Kanata|Gatineau|Winnipeg|Regina|Saskatoon|Oakville)\b'
+    # Names shared with places outside Canada: require a province qualifier.
+    - '\b(Victoria|Richmond|Surrey|Hamilton|London|Halifax),?\s+(BC|ON|NS|British Columbia|Ontario|Nova Scotia)\b'
+    - 'Remote\s*\(?\s*Canada'
+    - 'Canada\s*[-–]\s*Remote'
+  # Province suffixes, case-sensitive so ", on" in prose does not match.
+  include_cs:
+    - ',\s*(ON|BC|AB|QC|MB|SK|NS|NB)\b'
+  # Known false positives. Matching spans are removed from the string BEFORE the
+  # include test, so "Seattle, WA; Toronto, ON" still passes but "Vancouver, WA" does not.
+  # "United States"/"USA" need no entry: a string with no Canadian location left is dropped.
+  exclude:
+    - 'Vancouver,?\s+(Washington|WA)\b'
+    - 'Ottawa,?\s+(Illinois|IL)\b'
+    - '\b(Waterloo|Markham|Edmonton),?\s+(Wisconsin|WI|Iowa|IA|Illinois|IL|Kentucky|KY|Nebraska|NE)\b'
+  exclude_cs:
+    - ',\s*WA\b'
+  split_on: '[;|]'   # multi-location strings are split on this; first Canadian part is used
+
+title:
+  # Two tiers. "strong" terms pass outright; "weak" terms are generic words that
+  # are kept but tagged weak_title (phase 2 drops them if the JD shows no skill fit).
+  strong:
+    - software
+    - developer
+    - programmer
+    - data
+    - machine learning
+    - cloud
+    - devops
+    - platform
+    - backend
+    - back end
+    - frontend
+    - front end
+    - full stack
+    - full-stack
+    - fullstack
+    - security
+    - cyber
+    - database
+    - analytics
+    - automation
+  strong_words:          # short acronyms: whole-word match, case-insensitive
+    - ML
+    - AI
+    - SRE
+    - BI
+  weak:
+    - engineer
+    - analyst
+    - specialist
+    - test
+    - technical
+    - scientist
+    - integration
+  weak_words:
+    - QA
+  exclude:
+    - senior
+    - staff
+    - principal
+    - manager
+    - director
+    - head of
+    - chief
+    - intermediate
+    - mechanical
+    - electrical engineer
+    - civil
+    - structural
+    - chemical
+    - process engineer
+    - manufacturing
+    - HVAC
+    - field service
+    - technician
+    - sales
+    - security guard
+    - clerk
+    - facilities
+    - coordinator
+    - marketing
+    - supervisor
+    - superviseur
+    - team leader
+    - administrative
+    - recruiter
+    - vice president
+    - vice-president
+    - avp
+    - assistant vice
+  exclude_words:
+    - sr
+    - VP
+    - lead
+    - architect
+    - architects
+  exclude_words_cs:      # roman-numeral levels, case-sensitive
+    - II
+    - III
+    - IV
+  # Student-only roles. Phase 2 may rescue these when the JD says recent grads are eligible.
+  student:
+    - intern
+    - internship
+    - interns
+    - co-op
+    - coop
+    - student
+    - students
+    - PEY
+  student_regex:
+    - '\b(summer|winter|fall)\s+20\d\d\b'
+
+company:
+  blocklist:             # normalised (lowercase, alphanumeric) substring match
+    - jobgether
+    - usasurveyjob
+    - globalhr
+    - tsmg
+
+language:
+  drop_french_titles: true
+  french_pattern: 'analyste|ing[ée]nieur|d[ée]veloppeur|conseill|scientifique|sp[ée]cialiste'
+  # A title that also has one of these English role words is bilingual, not French-only.
+  english_role_words: [engineer, developer, analyst, scientist, specialist, consultant, programmer, architect]
+
+report:
+  path: reports/latest.md
+
+jd:
+  enabled: true
+  workers: 8                 # thread pool; the client still enforces per-host/per-ATS limits
+  request_delay: 0.3         # seconds between requests to one host
+  max_per_ats: 5
+  cache_dir: .cache/jd       # successful fetches are cached by URL
+  cache_ttl_days: 7
+  max_experience_years: 3    # drop when the minimum required experience is >= this
+  rescue_student_titles: true  # fetch JDs of student-titled jobs; keep those that welcome recent grads
+
+scoring:
+  weak_title_min_fit: 20     # a weak_title job is dropped if Fit % is below this or no skill matches
+  min_terms_for_fit: 4       # Fit % needs this many distinct terms (matched + gaps); fewer -> n/a + `low signal`
+  matched_bonus_per_skill: 2 # ranking Score += this per matched skill ...
+  matched_bonus_cap: 10      # ... counting at most this many skills
+  boost:
+    new_grad: 15             # JD/title has "new grad" or "recent graduate"
+    simplify: 10             # listed by the Simplify new-grad feed
+    bc_or_remote: 5
+  penalty:
+    no_jd: 10
+  bc_or_remote_pattern: '\bBC\b|British Columbia|Vancouver|Burnaby|Victoria|Richmond|Surrey|\bremote\b'
+
+cluster:
+  # The title decides the cluster; JD terms are used only when the title has no keyword.
+  # Clusters are checked in this order and the first hit wins, so "Data Scientist" is ml
+  # and "AI Security Analyst" is security. No keyword and no JD terms -> `default`.
+  title_keywords:
+    security: {terms: [security, cyber]}
+    ml: {terms: [machine learning, scientist], words: [ML, AI]}
+    data: {terms: [data, analytics], words: [BI]}
+  default: software
