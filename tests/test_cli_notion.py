@@ -15,7 +15,7 @@ CFG = load_config()
 
 
 def args(**kw):
-    base = dict(dry_run=False, max_rows=None, show_payloads=5, skip_notion=False)
+    base = dict(dry_run=False, max_rows=None, show_payloads=5, skip_notion=False, top=None)
     base.update(kw)
     return argparse.Namespace(**base)
 
@@ -154,3 +154,22 @@ def test_schema_problem_exits_2_with_the_list_and_writes_nothing(monkeypatch, ca
     err = capsys.readouterr().err
     assert "missing property 'Apply'" in err and "'Link' has type 'title'" in err
     assert not [r for r in notion.requests if r["method"] in ("POST", "PATCH")]
+
+
+def test_top_makes_a_rerun_an_exact_repeat_with_zero_new_rows(env, capsys):
+    notion, client, feed, seen = env
+    cli.notion_step(CFG, args(top=2, max_rows=2), client, feed, jobs(5), seen, {}, NOW)
+    assert len(notion.pages) == 2
+    capsys.readouterr()
+    cli.notion_step(CFG, args(top=2, max_rows=2), client, feed, jobs(5), SeenStore(seen.path), {}, NOW)
+    out = capsys.readouterr().out
+    assert len(notion.pages) == 2 and "0 to write" in out and "'seen': 2" in out
+
+
+def test_link_check_alone_blocks_a_rerun_when_seen_json_is_lost(env, capsys):
+    notion, client, feed, seen = env
+    cli.notion_step(CFG, args(top=2, max_rows=2), client, feed, jobs(5), seen, {}, NOW)
+    capsys.readouterr()
+    cli.notion_step(CFG, args(top=2, max_rows=2), client, feed, jobs(5), SeenStore(seen.path.parent / "gone.json"), {}, NOW)
+    out = capsys.readouterr().out
+    assert len(notion.pages) == 2 and "0 to write" in out and "'link_in_feed': 2" in out
