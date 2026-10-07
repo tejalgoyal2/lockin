@@ -43,6 +43,7 @@ def raw_fields(rec: dict) -> dict:
     """Map a raw record to the fields the pipeline needs."""
     return {
         "company": rec.get("company") or "",
+        "company_name": "",   # the dataset only has the ATS slug
         "title": clean_title(rec.get("title", "")),
         "location": rec.get("location") or "",
         "url": rec.get("url") or "",

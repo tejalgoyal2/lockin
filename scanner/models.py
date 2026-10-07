@@ -4,7 +4,7 @@ from datetime import datetime
 
 @dataclass
 class Job:
-    company: str
+    company: str            # as the source reports it (an ATS slug for Feashliaa rows)
     title: str
     location: str          # the Canadian location chosen for display / dedupe
     url: str
@@ -12,6 +12,7 @@ class Job:
     first_seen: datetime   # tz-aware UTC
     sources: set[str] = field(default_factory=set)  # every feed that listed this job
     new_grad: bool = False  # listed by Simplify's new-grad feed
+    company_name: str = ""   # readable name when a source gives one (Simplify, Greenhouse)
     weak_title: bool = False  # matched only generic title words (e.g. "Engineer")
     key: str = ""
     # phase 2 (filled by scanner.enrich)

@@ -256,3 +256,25 @@ def test_student_job_with_future_graduation_date_is_not_rescued():
     jd = "Open to recent graduates. Available to students with an August 2027 or later graduation date."
     res = run([], [gh(1, title="Student, Data Centre")], {"1": jd})
     assert res.kept == [] and res.drops == {E.R_ENROLLMENT: 1}
+
+
+def test_greenhouse_company_name_is_kept_and_cached(tmp_path):
+    class GH:
+        def get_json(self, url, ats_name, **kw):
+            return {"content": "&lt;p&gt;Python, SQL, Docker, Git.&lt;/p&gt;", "company_name": "Acme Corp"}
+    cache = E.JDCache(tmp_path, 1)
+    j = gh(1)
+    res = E.enrich([j], [], CFG, FILTERS, SCORER, GH(), cache=cache)
+    assert res.kept[0].company_name == "Acme Corp"
+    j2 = gh(1)                                           # second run: served from the cache, name preserved
+    E.enrich([j2], [], CFG, FILTERS, SCORER, FakeClient({}), cache=cache)
+    assert j2.company_name == "Acme Corp"
+
+
+def test_simplify_name_wins_over_the_ats_name():
+    class GH:
+        def get_json(self, url, ats_name, **kw):
+            return {"content": "Python, SQL, Docker, Git.", "company_name": "ATS Name"}
+    j = gh(1, company_name="Simplify Name")
+    E.enrich([j], [], CFG, FILTERS, SCORER, GH(), cache=NOCACHE)
+    assert j.company_name == "Simplify Name"

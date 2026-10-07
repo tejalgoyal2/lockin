@@ -1,0 +1,123 @@
+# Display names for the Notion `Company` column. Key = the company slug as it appears in the data
+# (case, spaces and punctuation are ignored when matching). Anything not listed here is shown as the
+# readable name from Simplify / the Greenhouse response, else the slug title-cased.
+# This map wins over both, so use it to shorten legal names ("Royal Bank of Canada" -> RBC).
+# Seeded from the 14-day report of 2026-10-07; extend freely.
+2k: 2K
+alayacare: AlayaCare
+albertamotorassociation: Alberta Motor Association
+altera: Altera
+appnovation: Appnovation
+autodesk: Autodesk
+avisonyoung: Avison Young
+aviva: Aviva
+aylo: Aylo
+binsentry: BinSentry
+block64: Block64
+bmo: BMO
+broadridge: Broadridge
+brookfield: Brookfield
+canadianfiberoptics: Canadian Fiber Optics
+canadiantirecorp: Canadian Tire
+canadiantirecorporation: Canadian Tire
+capitalone: Capital One
+cbcrc: CBC/Radio-Canada
+chainguard: Chainguard
+cibc: CIBC
+ciena: Ciena
+cisco: Cisco
+clinchoice: ClinChoice
+clio: Clio
+cw: CW
+desjardins: Desjardins
+dropbox: Dropbox
+ecolab: Ecolab
+eqbank: EQ Bank
+equifax: Equifax
+evenup: EvenUp
+expediagroup: Expedia Group
+fanshawec: Fanshawe College
+fccfac: FCC
+fil: Fidelity Canada
+finning: Finning
+fnz: FNZ
+generalmotors: General Motors
+geotab: Geotab
+gitlab: GitLab
+harborglobal: Harbor Global
+healthemployersassociationofbc: Health Employers Association of BC
+hellofresh: HelloFresh
+heygen: HeyGen
+hitachi: Hitachi
+hpe: HPE
+instacart: Instacart
+interac: Interac
+internationalbusinessuniversity: International Business University
+investpsp: PSP Investments
+isc: ISC
+kaskocattle: Kasko Cattle
+konradgroup: Konrad Group
+levio: Levio
+loblaw: Loblaw
+ludia: Ludia
+lyft: Lyft
+magnetforensics: Magnet Forensics
+manulife: Manulife
+manulifefinancial: Manulife
+mastercard: Mastercard
+medcan: Medcan
+miovision: Miovision
+mmc: Marsh McLennan
+motorola: Motorola Solutions
+motorolasolutions: Motorola Solutions
+mozilla: Mozilla
+myview: Loblaw
+nationgraph: NationGraph
+nureva: Nureva
+opalrt: OPAL-RT
+openlane: OPENLANE
+opslevel: OpsLevel
+orioninnovation: Orion Innovation
+pelmorex: Pelmorex
+peoplecorporation: People Corporation
+pinterest: Pinterest
+pointclickcare: PointClickCare
+policyme: PolicyMe
+powerdigitalmarketing: Power Digital Marketing
+pwc: PwC
+quadbridge: QuadBridge
+rbc: RBC
+remarcable-inc: Remarcable
+resmed: ResMed
+rethinkcanada: Rethink Canada
+roche: Roche
+scotiabank: Scotiabank
+shakepayfr: Shakepay
+shopify: Shopify
+sidefx: SideFX
+slice: Slice
+sophos: Sophos
+soti: SOTI
+stackadapt: StackAdapt
+stripe: Stripe
+swimmingcanada: Swimming Canada
+tailscale: Tailscale
+td: TD Bank
+tdbank: TD Bank
+telesat: Telesat
+telus: TELUS
+theturnlab: The Turn Lab
+tmx: TMX Group
+towerresearchcapital: Tower Research Capital
+twr: TWR
+ubc: UBC
+vanderlande: Vanderlande
+vanguard: Vanguard
+vasco: Vasco
+veeva: Veeva
+wcbalberta: WCB Alberta
+wealthsimple: Wealthsimple
+wmg: Warner Music Group
+workday: Workday
+workos: WorkOS
+xero: Xero
