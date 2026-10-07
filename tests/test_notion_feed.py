@@ -69,7 +69,7 @@ def test_unreadable_data_source_gives_a_sharing_hint(client, notion):
     notion.scripted = [Resp(404, {"code": "object_not_found", "message": "Could not find data source"})]
     with pytest.raises(nf.SchemaError) as e:
         nf.load_feed(client, "ds-1", NAMES)
-    assert "shared with the integration" in str(e.value)
+    assert "data source ID, not the database ID" in str(e.value) and "shared with the integration" in str(e.value)
     assert "secret-token" not in str(e.value)
 
 

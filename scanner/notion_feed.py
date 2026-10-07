@@ -147,7 +147,8 @@ def load_feed(client: NotionClient, data_source_id: str, names: dict[str, str]) 
     try:
         schema = client.request("GET", f"/v1/data_sources/{data_source_id}")
     except NotionError as exc:
-        hint = (" (is the data source shared with the integration?)" if exc.status in (403, 404) else "")
+        hint = (" (check that NOTION_FEED_DATA_SOURCE_ID is the data source ID, not the database ID, "
+                "and that the Feed is shared with the integration)" if exc.status in (400, 403, 404) else "")
         raise SchemaError(f"cannot read the Feed data source {data_source_id}: {exc}{hint}") from None
     problems = validate_schema(schema, names)
     if problems:
