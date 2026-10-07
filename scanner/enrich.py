@@ -29,6 +29,7 @@ R_US_AUTH = "us_work_authorization"
 R_EXPERIENCE = "experience_3plus"
 R_WEAK = "weak_title_low_fit"
 R_WEAK_NO_JD = "weak_title_no_jd"
+R_WEAK_FEW_TERMS = "weak_title_few_terms"
 R_STUDENT_NO_JD = "student_title_no_jd"
 R_STUDENT = "student_title_not_rescued"
 
@@ -146,10 +147,12 @@ def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer,
             return R_US_AUTH
         if exp.min_years is not None and exp.min_years >= cfg["jd"]["max_experience_years"]:
             return R_EXPERIENCE
-        if job.weak_title and (
-                not job.matched
-                or (job.fit_pct is not None and job.fit_pct < cfg["scoring"]["weak_title_min_fit"])):
-            return R_WEAK
+        if job.weak_title:
+            # A generic title must be vouched for by the JD: >= min_terms distinct terms, and a real fit.
+            if fit.n_terms < cfg["scoring"]["min_terms_for_fit"]:
+                return R_WEAK_FEW_TERMS
+            if not job.matched or (job.fit_pct or 0) < cfg["scoring"]["weak_title_min_fit"]:
+                return R_WEAK
     else:
         # No JD: a strong title stays (with the penalty); a weak one has nothing to vouch for it.
         if job.weak_title:
@@ -191,7 +194,7 @@ def enrich(candidates: list[Job], held: list[Job], cfg: dict, filters: Filters, 
         if jd_rules.requires_enrollment(job.jd):
             res.drops[R_ENROLLMENT] += 1
             continue
-        if not jd_rules.mentions_recent_grad(job.jd):
+        if not jd_rules.welcomes_recent_grads(job.jd):
             res.drops[R_STUDENT] += 1
             continue
         reason = apply_rules(job, cfg, filters, scorer, clusters)

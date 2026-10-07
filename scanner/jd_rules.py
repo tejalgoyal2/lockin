@@ -1,6 +1,7 @@
 """Rules applied to fetched JD text (SPEC §4 'JD rules')."""
 import re
 from dataclasses import dataclass
+from datetime import datetime, timezone
 
 _WORDS = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7,
           "eight": 8, "nine": 9, "ten": 10}
@@ -37,8 +38,21 @@ US_AUTH = re.compile(
     r"\bU\.?S\.?\s+citizen(?:ship)?|\bUnited\s+States\s+citizen(?:ship)?"
     r"|(?:authori[sz]ed|eligible|legally\s+(?:able|entitled))\s+to\s+work\s+in\s+the\s+(?:United\s+States|U\.?S\.?A?\.?)\b",
     re.IGNORECASE)
-RECENT_GRAD = re.compile(
-    r"recent(?:ly)?\s+graduat\w*|new[\s-]?grads?\b|new\s+graduates?|graduated\s+within", re.IGNORECASE)
+# A student-titled job is rescued only by explicit eligibility wording ("open to recent graduates",
+# "recent graduates are welcome"). Award / employer-branding text ("Best Employers for Recent
+# Graduates", "our student and new graduate programs") must not rescue it.
+_GRAD = r"(?:recent(?:ly)?\s+graduat\w*|new[\s-]?grad\w*)"
+RESCUE_ELIGIBILITY = re.compile(
+    rf"open\s+to\s+(?:[\w,'’/&-]+\s+){{0,4}}?{_GRAD}"
+    rf"|{_GRAD}(?:\s+(?:and|or)\s+\w+)?\s+(?:are\s+|is\s+)?(?:welcome|eligible|encouraged|invited)"
+    rf"|(?:welcome|encourage|invite)s?\s+(?:applications?\s+from\s+)?(?:[\w,'’/&-]+\s+){{0,3}}?{_GRAD}"
+    r"|graduated\s+within",
+    re.IGNORECASE)
+# "graduation date of April 2027 or later" / "2027 or later graduation date": a future graduation
+# date means the candidate is still a student, so it is an enrollment requirement. Years up to and
+# including the current one ("graduated 2020 or later") are not.
+_GRAD_DATE_FORWARD = re.compile(r"graduat\w*[^.\n]{0,50}?\b(20\d\d)\s+or\s+(?:later|after)", re.IGNORECASE)
+_GRAD_DATE_BACKWARD = re.compile(r"\b(20\d\d)\s+or\s+(?:later|after)\s+graduat\w*", re.IGNORECASE)
 
 
 @dataclass(frozen=True)
@@ -74,10 +88,16 @@ def parse_experience(text: str) -> Experience:
     return Experience(min((lo for lo, _ in ranges), default=None), tuple(ranges))
 
 
-def requires_enrollment(text: str) -> bool:
+def _future_graduation_date(text: str, current_year: int) -> bool:
+    return any(int(m.group(1)) > current_year
+               for pat in (_GRAD_DATE_FORWARD, _GRAD_DATE_BACKWARD) for m in pat.finditer(text))
+
+
+def requires_enrollment(text: str, current_year: int | None = None) -> bool:
     """Current-enrollment requirement (SPEC §4), without tripping on benefits boilerplate."""
     text = text or ""
-    if _ENROLLMENT_FIXED.search(text):
+    current_year = current_year or datetime.now(timezone.utc).year
+    if _ENROLLMENT_FIXED.search(text) or _future_graduation_date(text, current_year):
         return True
     for m in _ENROLLED_IN.finditer(text):
         if _NOT_A_STUDY_PROGRAM.search(m.group("span")):
@@ -107,8 +127,9 @@ def requires_us_authorization(text: str) -> bool:
     return bool(US_AUTH.search(text or ""))
 
 
-def mentions_recent_grad(text: str) -> bool:
-    return bool(RECENT_GRAD.search(text or ""))
+def welcomes_recent_grads(text: str) -> bool:
+    """Explicit eligibility wording that rescues a student-titled job (not employer branding)."""
+    return bool(RESCUE_ELIGIBILITY.search(text or ""))
 
 
 # --- Notion "Signals" multi-select ------------------------------------------
