@@ -70,7 +70,7 @@ def test_unreadable_data_source_gives_a_sharing_hint(client, notion):
     with pytest.raises(nf.SchemaError) as e:
         nf.load_feed(client, "ds-1", NAMES)
     assert "data source ID, not the database ID" in str(e.value) and "shared with the integration" in str(e.value)
-    assert "secret-token" not in str(e.value)
+    assert "secret-token" not in str(e.value) and "ds-1" not in str(e.value)
 
 
 # --- payload --------------------------------------------------------------------------
@@ -329,3 +329,37 @@ def test_preview_shortens_the_jd(feed):
     text = json.dumps(shown)
     assert "3 items, 5000 chars total" in text and len(text) < 2500
     assert len(page["properties"]["JD"]["rich_text"]) == 3        # the real payload is untouched
+
+
+# --- secrets and ids never reach output ----------------------------------------------
+
+REAL_LOOKING_ID = "ae49313a-01cd-4f8e-bd1e-2bf377f44383"
+
+
+def test_error_text_hides_notion_ids():
+    err = nf.NotionError(404, "object_not_found", "x", "GET", f"/v1/data_sources/{REAL_LOOKING_ID}")
+    assert REAL_LOOKING_ID not in str(err) and "/v1/data_sources/<id>" in str(err)
+    assert nf.redact("/v1/pages/ae49313a01cd4f8ebd1e2bf377f44383/properties/p") == "/v1/pages/<id>/properties/p"
+
+
+def test_unreadable_feed_error_does_not_contain_the_data_source_id(notion):
+    client = nf.NotionClient("tok", "v", session=notion, sleep=lambda s: None, min_interval=0)
+    notion.scripted = [Resp(404, {"code": "object_not_found", "message": "nope"})]
+    with pytest.raises(nf.SchemaError) as e:
+        nf.load_feed(client, REAL_LOOKING_ID, NAMES)
+    assert REAL_LOOKING_ID not in str(e.value) and "tok" not in str(e.value).split()
+
+
+def test_retry_warning_hides_ids_and_never_logs_the_token(notion, caplog):
+    c = nf.NotionClient("secret-token", "v", session=notion, sleep=lambda s: None, min_interval=0)
+    notion.scripted = [Resp(429, {"code": "rate_limited", "message": "x"}, {"Retry-After": "1"})]
+    with caplog.at_level("DEBUG"):
+        c.request("GET", f"/v1/data_sources/{REAL_LOOKING_ID}")
+    assert "retrying" in caplog.text
+    assert REAL_LOOKING_ID not in caplog.text and "secret-token" not in caplog.text
+
+
+def test_preview_hides_the_data_source_id(feed):
+    page, _ = nf.build_page(make_job(), feed, OVERRIDES)
+    assert nf.preview_page(page, "JD")["parent"]["data_source_id"] == "<hidden>"
+    assert page["parent"]["data_source_id"] == "ds-1"        # the real payload is untouched
