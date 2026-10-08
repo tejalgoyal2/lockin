@@ -90,7 +90,7 @@ def test_dry_run_prints_payloads_and_writes_nothing(env, capsys):
     code = cli.notion_step(CFG, args(dry_run=True, show_payloads=2), client, feed, jobs(5), seen, {}, NOW)
     out = capsys.readouterr().out
     assert code == 0
-    assert out.count("--- payload") == 2 and '"data_source_id": "ds-1"' in out and "Dry run: nothing written" in out
+    assert out.count("--- payload") == 2 and '"data_source_id": "<hidden>"' in out and "Dry run: nothing written" in out
     assert not [r for r in notion.requests if r["method"] in ("PATCH",) or r["path"] == "/v1/pages"]
     assert not notion.pages[victim]["in_trash"] and not seen.path.exists()
 
@@ -100,7 +100,7 @@ def test_offline_dry_run_uses_a_virtual_feed(capsys):
     code = cli.notion_step(CFG, args(dry_run=True, show_payloads=1), None, feed, jobs(2), SeenStore("/nonexistent/s.json"),
                            {"rbc": "RBC"}, NOW)
     out = capsys.readouterr().out
-    assert code == 0 and "RBC · oct6" in out and "<NOTION_FEED_DATA_SOURCE_ID>" in out
+    assert code == 0 and "RBC · oct6" in out and "<hidden>" in out
 
 
 def test_failed_rows_are_not_marked_seen(env):

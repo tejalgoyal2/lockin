@@ -5,6 +5,7 @@ checkboxes and never touches a row where either is ticked.
 """
 import logging
 import random
+import re
 import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
@@ -35,9 +36,17 @@ SIGNAL_OPTIONS = ("new grad", "recent graduate", "0-2 years", "entry level", "ju
                   "jd unavailable")
 
 
+_UUID = re.compile(r"[0-9a-fA-F]{8}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{12}")
+
+
+def redact(text: str) -> str:
+    """Hide Notion ids (data source, page, property) so they never reach logs or error output."""
+    return _UUID.sub("<id>", text)
+
+
 class NotionError(Exception):
     def __init__(self, status: int, code: str, message: str, method: str = "", path: str = ""):
-        super().__init__(f"Notion API {method} {path} -> HTTP {status} {code}: {message}".strip())
+        super().__init__(redact(f"Notion API {method} {path} -> HTTP {status} {code}: {message}").strip())
         self.status, self.code, self.message = status, code, message
 
 
@@ -93,7 +102,7 @@ class NotionClient:
                 raise NotionError(resp.status_code, code, message, method, path)
             retry_after = resp.headers.get("Retry-After")
             delay = float(retry_after) if retry_after else min(2 ** attempt, 30)
-            log.warning("Notion %s %s -> %s; retrying in %.1fs", method, path, resp.status_code, delay)
+            log.warning("Notion %s %s -> %s; retrying in %.1fs", method, redact(path), resp.status_code, delay)
             self._sleep(delay + random.uniform(0, 0.25))
         raise AssertionError("unreachable")
 
@@ -149,7 +158,7 @@ def load_feed(client: NotionClient, data_source_id: str, names: dict[str, str]) 
     except NotionError as exc:
         hint = (" (check that NOTION_FEED_DATA_SOURCE_ID is the data source ID, not the database ID, "
                 "and that the Feed is shared with the integration)" if exc.status in (400, 403, 404) else "")
-        raise SchemaError(f"cannot read the Feed data source {data_source_id}: {exc}{hint}") from None
+        raise SchemaError(f"cannot read the Feed data source: {str(exc).replace(data_source_id, '<id>')}{hint}") from None
     problems = validate_schema(schema, names)
     if problems:
         raise SchemaError("Notion Feed schema does not match:\n  - " + "\n  - ".join(problems))
@@ -411,4 +420,5 @@ def preview_page(page: dict, jd_prop: str) -> dict:
     if len(items) > 1:
         shown.append({"_": f"+{len(items) - 1} more rich_text items"})
     props[jd_prop] = {"rich_text": shown, "_summary": f"{len(items)} items, {total} chars total"}
-    return {**page, "properties": props}
+    parent = {**page["parent"], "data_source_id": "<hidden>"}       # never print the real id
+    return {**page, "parent": parent, "properties": props}
