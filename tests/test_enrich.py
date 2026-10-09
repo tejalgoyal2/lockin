@@ -81,12 +81,14 @@ def test_us_authorization_only_drops_without_canadian_location():
     assert res.drops == {E.R_US_AUTH: 1}
 
 
-def test_weak_title_dropped_when_no_skill_match_or_low_fit():
+def test_weak_title_dropped_when_few_terms_no_match_or_low_fit():
     none = run([gh(1, title="Technical Specialist", weak_title=True)], jds={"1": "Greet customers."})
     low = run([gh(2, title="Technical Specialist", weak_title=True)],
-              jds={"2": "Python. Java, Kafka, Go, Kotlin, Scala, Spring Boot, Redis."})
-    ok = run([gh(3, title="Technical Specialist", weak_title=True)], jds={"3": "Python, SQL, Docker."})
-    assert none.drops == {E.R_WEAK: 1} and low.drops == {E.R_WEAK: 1} and len(ok.kept) == 1
+              jds={"2": "Python. Java, Kafka, Golang, Kotlin, Scala, Spring Boot, Redis."})
+    ok = run([gh(3, title="Technical Specialist", weak_title=True)], jds={"3": "Python, SQL, Docker, Git."})
+    assert none.drops == {E.R_WEAK_FEW_TERMS: 1}      # no terms at all
+    assert low.drops == {E.R_WEAK: 1}                 # 8 terms, Fit 12.5 < 20
+    assert len(ok.kept) == 1
 
 
 def test_fit_needs_four_terms_else_na_and_low_signal():
@@ -119,11 +121,11 @@ def test_matched_count_breaks_fit_ties_and_is_capped():
     assert [j.url[-1] for j in res.kept] == ["3", "2", "1"]
 
 
-def test_weak_title_with_sparse_jd_is_kept_only_if_something_matches():
+def test_weak_title_with_sparse_or_unmatched_jd_is_dropped():
     sparse = run([gh(1, title="Technical Specialist", weak_title=True)], jds={"1": "Python and SQL."})
-    none = run([gh(2, title="Technical Specialist", weak_title=True)], jds={"2": "Java, Kafka and Go."})
-    assert len(sparse.kept) == 1 and sparse.kept[0].fit_pct is None
-    assert none.drops == {E.R_WEAK: 1}
+    none = run([gh(2, title="Technical Specialist", weak_title=True)], jds={"2": "Java, Kafka, Golang, Kotlin and Scala."})
+    assert sparse.drops == {E.R_WEAK_FEW_TERMS: 1}
+    assert none.drops == {E.R_WEAK: 1}      # 4 terms but nothing matched
 
 
 def test_strong_title_is_not_dropped_for_low_fit():
@@ -158,7 +160,7 @@ def test_student_titled_jobs_rescued_only_when_jd_welcomes_recent_grads():
             gh(3, title="Data Intern"), gh(4, title="Dev Intern")]
     jds = {"1": "Python. Recent graduates are welcome to apply.",
            "2": "Python. Must be enrolled in a co-op program.",
-           "3": "Python. Summer role for students.",
+           "3": "Python. Summer role for students. Best Employers for Recent Graduates 2025.",
            "4": http_error(500)}
     res = run([], held, jds)
     assert [j.title for j in res.kept] == ["Software Engineer Intern"]
@@ -234,3 +236,45 @@ def test_fetch_error_details():
     assert E.fetch_one(j, FakeClient({"1": http_error(404)}), NOCACHE)[::2] == ("not_found", "http 404")
     assert E.fetch_one(j, FakeClient({"1": RuntimeError("x")}), NOCACHE)[::2] == ("error", "RuntimeError")
     assert E.fetch_one(job(url="https://recruiting.paylocity.com/x"), FakeClient({}), NOCACHE)[0] == "unsupported"
+
+
+def test_weak_title_needs_four_terms_even_when_it_has_a_match():
+    few = run([gh(1, title="Technical Specialist", weak_title=True)], jds={"1": "Python, SQL and Docker."})
+    enough = run([gh(2, title="Technical Specialist", weak_title=True)], jds={"2": "Python, SQL, Docker and Git."})
+    gap_terms_count = run([gh(3, title="Technical Specialist", weak_title=True)],
+                          jds={"3": "Python and SQL. Java and Kafka."})
+    assert few.kept == [] and few.drops == {E.R_WEAK_FEW_TERMS: 1}
+    assert len(enough.kept) == 1 and gap_terms_count.kept[0].fit_pct == 50.0
+
+
+def test_strong_title_with_few_terms_still_kept():
+    res = run([gh(1, title="Data Analyst")], jds={"1": "Python and SQL."})
+    assert len(res.kept) == 1 and "low signal" in res.kept[0].signals
+
+
+def test_student_job_with_future_graduation_date_is_not_rescued():
+    jd = "Open to recent graduates. Available to students with an August 2027 or later graduation date."
+    res = run([], [gh(1, title="Student, Data Centre")], {"1": jd})
+    assert res.kept == [] and res.drops == {E.R_ENROLLMENT: 1}
+
+
+def test_greenhouse_company_name_is_kept_and_cached(tmp_path):
+    class GH:
+        def get_json(self, url, ats_name, **kw):
+            return {"content": "&lt;p&gt;Python, SQL, Docker, Git.&lt;/p&gt;", "company_name": "Acme Corp"}
+    cache = E.JDCache(tmp_path, 1)
+    j = gh(1)
+    res = E.enrich([j], [], CFG, FILTERS, SCORER, GH(), cache=cache)
+    assert res.kept[0].company_name == "Acme Corp"
+    j2 = gh(1)                                           # second run: served from the cache, name preserved
+    E.enrich([j2], [], CFG, FILTERS, SCORER, FakeClient({}), cache=cache)
+    assert j2.company_name == "Acme Corp"
+
+
+def test_simplify_name_wins_over_the_ats_name():
+    class GH:
+        def get_json(self, url, ats_name, **kw):
+            return {"content": "Python, SQL, Docker, Git.", "company_name": "ATS Name"}
+    j = gh(1, company_name="Simplify Name")
+    E.enrich([j], [], CFG, FILTERS, SCORER, GH(), cache=NOCACHE)
+    assert j.company_name == "Simplify Name"

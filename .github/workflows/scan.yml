@@ -1,0 +1,74 @@
+name: scan
+
+on:
+  schedule:
+    - cron: "0 16 * * *"        # 16:00 UTC, after Feashliaa's daily dataset finishes
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run: scan and report, write nothing to Notion"
+        type: boolean
+        default: true
+      max_rows:
+        description: "Rows to write this run (blank = notion.daily_cap in config.yaml)"
+        type: string
+        required: false
+      since_days:
+        description: "Only jobs first seen in the last N days (blank = default)"
+        type: string
+        required: false
+
+permissions:
+  contents: write                # commit state/ and reports/ back
+
+concurrency:
+  group: scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Scan and write to the Notion Feed
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_FEED_DATA_SOURCE_ID: ${{ secrets.NOTION_FEED_DATA_SOURCE_ID }}
+          # Inputs go through env vars, never straight into the script.
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
+          MAX_ROWS: ${{ inputs.max_rows }}
+          SINCE_DAYS: ${{ inputs.since_days }}
+        run: |
+          args=()
+          [ "$DRY_RUN" = "true" ] && args+=(--dry-run)
+          [ -n "$MAX_ROWS" ] && args+=(--max-rows "$MAX_ROWS")
+          [ -n "$SINCE_DAYS" ] && args+=(--since "$SINCE_DAYS")
+          python -m scanner run "${args[@]}"
+
+      - name: Commit state and reports
+        if: always()             # rows already written must reach seen.json even if the run failed later
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add state reports
+          if git diff --cached --quiet; then
+            echo "nothing to commit"
+          else
+            git commit -m "scan: update state and reports [skip ci]"
+            # GitHub occasionally answers a push with a transient 5xx: retry with backoff.
+            for i in 1 2 3 4 5; do
+              git pull --rebase --autostash origin "${GITHUB_REF_NAME}" \
+                && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+              echo "push failed (attempt $i); retrying"; sleep $((i * 5))
+            done
+            exit 1
+          fi

@@ -105,11 +105,53 @@ def test_us_authorization(text, expected):
 
 
 @pytest.mark.parametrize("text", [
-    "Open to recent graduates", "new grad program", "New-Grad role", "graduated within the last 12 months",
-    "recently graduated from a university",
+    "Open to recent graduates", "This role is open to students and recent graduates",
+    "open to new grads", "Recent graduates are welcome to apply", "recent graduates are eligible",
+    "New grads welcome", "We welcome recent graduates", "We welcome applications from recent graduates",
+    "We encourage new grads to apply", "graduated within the last 12 months",
 ])
-def test_recent_grad_detected(text):
-    assert r.mentions_recent_grad(text)
+def test_rescue_only_on_explicit_eligibility(text):
+    assert r.welcomes_recent_grads(text)
+
+
+@pytest.mark.parametrize("text", [
+    "We are honored to be recognized as Canada's Best Employers for Recent Graduates",
+    "Our student and new graduate programs offer a chance to explore Sun Life from the inside.",
+    "Ranked a top employer for new grads in 2025",
+    "Campus Graduate programs",
+    "Your student journey is just the beginning",
+    "Transition into permanent roles after graduation",
+    "",
+])
+def test_rescue_ignores_award_and_branding_text(text):
+    assert not r.welcomes_recent_grads(text)
+
+
+@pytest.mark.parametrize("text", [
+    "This opportunity is available to students with a August 2027 or later graduation date",
+    "Enrolled with a graduation date of April 2027 or later",
+    "Expected graduation date: December 2028 or later",
+    "graduating in 2027 or later",
+    "2028 or later graduation date",
+])
+def test_future_graduation_date_is_an_enrollment_requirement(text):
+    assert r.requires_enrollment(text, current_year=2026)
+
+
+@pytest.mark.parametrize("text", [
+    "Graduated in 2020 or later",              # past years describe a recent grad, not a student
+    "graduation date of 2026 or later",        # the current year is not "after" it
+    "Founded in 1998; we have grown since 2015 or later",
+    "Programs run in 2027 or later",           # no graduation wording
+])
+def test_past_or_current_graduation_year_is_not(text):
+    assert not r.requires_enrollment(text, current_year=2026)
+
+
+def test_graduation_year_rule_moves_with_the_calendar():
+    text = "graduation date of 2027 or later"
+    assert r.requires_enrollment(text, current_year=2026)
+    assert not r.requires_enrollment(text, current_year=2027)
 
 
 def test_signals():

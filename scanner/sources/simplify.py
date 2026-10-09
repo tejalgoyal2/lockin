@@ -28,6 +28,7 @@ def raw_fields(rec: dict) -> dict:
     # Multi-location rows: the filter picks the first Canadian one from this joined string.
     return {
         "company": rec.get("company_name") or "",
+        "company_name": rec.get("company_name") or "",
         "title": clean_title(rec.get("title", "")),
         "location": " ; ".join(rec.get("locations") or []),
         "url": rec.get("url") or "",

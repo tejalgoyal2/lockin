@@ -1,5 +1,6 @@
 """Phase 2: fetch JD text, apply JD rules, score (SPEC §4, §5, §9)."""
 import hashlib
+import json
 import logging
 import re
 import time
@@ -29,6 +30,7 @@ R_US_AUTH = "us_work_authorization"
 R_EXPERIENCE = "experience_3plus"
 R_WEAK = "weak_title_low_fit"
 R_WEAK_NO_JD = "weak_title_no_jd"
+R_WEAK_FEW_TERMS = "weak_title_few_terms"
 R_STUDENT_NO_JD = "student_title_no_jd"
 R_STUDENT = "student_title_not_rescued"
 
@@ -44,27 +46,39 @@ class EnrichResult:
 
 
 class JDCache:
-    """On-disk cache of successfully fetched JD text, keyed by URL."""
+    """On-disk cache of successful fetches (JD text + readable company name), keyed by URL."""
 
     def __init__(self, directory: str | Path | None, ttl_days: float):
         self.dir = Path(directory) if directory else None
         self.ttl = ttl_days * 86400
 
     def _path(self, url: str) -> Path:
-        return self.dir / (hashlib.sha1(url.encode()).hexdigest() + ".txt")
+        return self.dir / (hashlib.sha1(url.encode()).hexdigest() + ".json")
 
-    def get(self, url: str) -> str | None:
+    def get(self, url: str) -> tuple[str, str] | None:
         if not self.dir:
             return None
         p = self._path(url)
         if p.is_file() and time.time() - p.stat().st_mtime < self.ttl:
-            return p.read_text(encoding="utf-8")
+            try:
+                data = json.loads(p.read_text(encoding="utf-8"))
+                return data["text"], data.get("company", "")
+            except (ValueError, KeyError):
+                return None
         return None
 
-    def put(self, url: str, text: str) -> None:
+    def put(self, url: str, text: str, company: str = "") -> None:
         if self.dir and text:
             self.dir.mkdir(parents=True, exist_ok=True)
-            self._path(url).write_text(text, encoding="utf-8")
+            self._path(url).write_text(json.dumps({"text": text, "company": company}), encoding="utf-8")
+
+
+@dataclass
+class FetchResult:
+    status: str            # "ok" | "unsupported" | "not_found" | "error"
+    text: str = ""
+    detail: str = ""       # e.g. "http 403"
+    company_name: str = ""
 
 
 def _log_failure(ats_name: str, url: str, exc: Exception) -> None:
@@ -75,36 +89,44 @@ def _log_failure(ats_name: str, url: str, exc: Exception) -> None:
                     ats_name, type(exc).__name__, str(exc)[:160], ats_name)
 
 
-def fetch_one(job: Job, client, cache: JDCache) -> tuple[str, str, str]:
-    """Return (status, text, detail). Never raises: failures become a status plus detail like 'http 403'."""
+def fetch_job(job: Job, client, cache: JDCache) -> FetchResult:
+    """Fetch one job's JD. Never raises: failures become a status plus detail like 'http 403'."""
     ref = ats.locate(job)
     if ref is None:
-        return "unsupported", "", "unsupported ATS"
+        return FetchResult("unsupported", detail="unsupported ATS")
     cached = cache.get(job.url)
     if cached is not None:
-        return "ok", cached, ""
+        return FetchResult("ok", cached[0], company_name=cached[1])
     try:
-        text = ats.fetch_jd(ref, client)
+        text, company = ats.fetch_details(ref, client)
     except ats.NotFound:
-        return "not_found", "", "not found"
+        return FetchResult("not_found", detail="not found")
     except requests.HTTPError as exc:
         code = exc.response.status_code if exc.response is not None else 0
         if code == 404:
-            return "not_found", "", "http 404"
+            return FetchResult("not_found", detail="http 404")
         _log_failure(ref.ats, job.url, exc)
-        return "error", "", f"http {code}"
+        return FetchResult("error", detail=f"http {code}")
     except Exception as exc:  # network, JSON shape, ... must not abort the run
         _log_failure(ref.ats, job.url, exc)
-        return "error", "", type(exc).__name__
+        return FetchResult("error", detail=type(exc).__name__)
     if not text.strip():
-        return "error", "", "empty description"
-    cache.put(job.url, text)
-    return "ok", text, ""
+        return FetchResult("error", detail="empty description")
+    cache.put(job.url, text, company)
+    return FetchResult("ok", text, company_name=company)
+
+
+def fetch_one(job: Job, client, cache: JDCache) -> tuple[str, str, str]:
+    """(status, text, detail) view of fetch_job."""
+    r = fetch_job(job, client, cache)
+    return r.status, r.text, r.detail
 
 
 def fetch_all(jobs: list[Job], client, cache: JDCache, workers: int) -> None:
     def work(job: Job):
-        job.jd_status, job.jd, job.jd_error = fetch_one(job, client, cache)
+        r = fetch_job(job, client, cache)
+        job.jd_status, job.jd, job.jd_error = r.status, r.text, r.detail
+        job.company_name = job.company_name or r.company_name
 
     with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
         list(pool.map(work, jobs))
@@ -146,10 +168,12 @@ def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer,
             return R_US_AUTH
         if exp.min_years is not None and exp.min_years >= cfg["jd"]["max_experience_years"]:
             return R_EXPERIENCE
-        if job.weak_title and (
-                not job.matched
-                or (job.fit_pct is not None and job.fit_pct < cfg["scoring"]["weak_title_min_fit"])):
-            return R_WEAK
+        if job.weak_title:
+            # A generic title must be vouched for by the JD: >= min_terms distinct terms, and a real fit.
+            if fit.n_terms < cfg["scoring"]["min_terms_for_fit"]:
+                return R_WEAK_FEW_TERMS
+            if not job.matched or (job.fit_pct or 0) < cfg["scoring"]["weak_title_min_fit"]:
+                return R_WEAK
     else:
         # No JD: a strong title stays (with the penalty); a weak one has nothing to vouch for it.
         if job.weak_title:
@@ -191,7 +215,7 @@ def enrich(candidates: list[Job], held: list[Job], cfg: dict, filters: Filters, 
         if jd_rules.requires_enrollment(job.jd):
             res.drops[R_ENROLLMENT] += 1
             continue
-        if not jd_rules.mentions_recent_grad(job.jd):
+        if not jd_rules.welcomes_recent_grads(job.jd):
             res.drops[R_STUDENT] += 1
             continue
         reason = apply_rules(job, cfg, filters, scorer, clusters)

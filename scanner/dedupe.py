@@ -60,6 +60,7 @@ def _merge(a: Job, b: Job) -> Job:
     primary.sources |= other.sources
     primary.new_grad = primary.new_grad or other.new_grad
     primary.weak_title = primary.weak_title and other.weak_title
+    primary.company_name = primary.company_name or other.company_name
     primary.first_seen = min(primary.first_seen, other.first_seen)
     return primary
 

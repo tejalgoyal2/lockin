@@ -4,7 +4,7 @@
 
 freshness:
   default_days: 3        # normal run: only jobs first seen in the last N days
-  first_run_days: 14     # reserved for the first run once state/seen.json exists (phase 3)
+  first_run_days: 14     # used instead when state/seen.json does not exist yet (the first run)
 
 sources:
   feashliaa:
@@ -118,8 +118,15 @@ title:
     - vice-president
     - avp
     - assistant vice
+    - concierge
+    - attendant
+    - parking
+    - security officer
+    - custodian
+    - teacher
   exclude_words:
     - sr
+    - guard
     - VP
     - lead
     - architect
@@ -189,3 +196,27 @@ cluster:
     ml: {terms: [machine learning, scientist], words: [ML, AI]}
     data: {terms: [data, analytics], words: [BI]}
   default: software
+
+notion:
+  api_version: "2026-03-11"   # Notion-Version header; 2026-03-11 renamed `archived` to `in_trash`
+  daily_cap: 40               # at most this many rows written per run, highest Score first
+  feed_ttl_days: 14           # trash Feed rows older than this when Interested and Apply are both unticked
+  verify_readback_min_chars: 4000   # after writing, read back a JD at least this long and compare lengths
+  # Property names exactly as they appear in the Feed. The scanner never writes `interested` / `apply`.
+  properties:
+    name: Name
+    company: Company
+    link: Link
+    source: Source
+    fit: "Fit %"
+    signals: Signals
+    jd: JD
+    interested: Interested
+    apply: Apply
+
+state:
+  dir: state                  # seen.json (rows already written) and gaps.json
+  prune_days: 90
+
+gaps:
+  report_path: reports/gaps.md   # rewritten every Monday (UTC)

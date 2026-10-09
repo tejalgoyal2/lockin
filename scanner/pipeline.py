@@ -57,7 +57,7 @@ def run_stream(
             continue
         counts["title_not_senior"] += 1
         job = Job(
-            company=f["company"], title=f["title"], location=loc, url=f["url"],
+            company=f["company"], company_name=f.get("company_name", ""), title=f["title"], location=loc, url=f["url"],
             source=f["source"], first_seen=f["first_seen"], sources={f["source"]},
             new_grad=f["source"] == "Simplify", weak_title=tier == "weak",
         )
