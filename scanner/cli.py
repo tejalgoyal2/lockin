@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from scanner import gaps_report, notion_feed, report
-from scanner.applied import AppliedSet
+from scanner.applied import AppliedKeyError, AppliedSet
 from scanner.company_names import load_overrides
 from scanner.config import load_config
 from scanner.dedupe import dedupe
@@ -180,7 +180,10 @@ def run(args: argparse.Namespace) -> int:
     blocks["Combined"] = [("before dedupe", len(jobs)), ("merged_url", merges["url"]),
                           ("merged_fuzzy", merges["fuzzy"]), ("after dedupe", len(deduped))]
 
-    applied = AppliedSet.load(cfg["applied"]["path"], overrides)
+    try:
+        applied = AppliedSet.load_encrypted(cfg["applied"]["path"], os.environ.get("APPLIED_KEY", ""), overrides)
+    except AppliedKeyError as exc:
+        raise UsageError(str(exc)) from None
     result = phase2 = None
     final, applied_skipped = applied.filter(deduped)
     if use_jd:

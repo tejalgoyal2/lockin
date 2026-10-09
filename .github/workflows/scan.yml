@@ -43,6 +43,7 @@ jobs:
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_FEED_DATA_SOURCE_ID: ${{ secrets.NOTION_FEED_DATA_SOURCE_ID }}
+          APPLIED_KEY: ${{ secrets.APPLIED_KEY }}     # decrypts state/applied.json.enc in memory; optional
           # Inputs go through env vars, never straight into the script.
           DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
           MAX_ROWS: ${{ inputs.max_rows }}

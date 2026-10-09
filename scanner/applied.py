@@ -1,7 +1,9 @@
 """Jobs the owner has already applied to: never write them to the Feed again.
 
-`state/applied.json` holds one entry per row of the owner's private application tracker:
-the row title (usually "Role (Company)") and the canonical job link. A candidate is skipped when
+The list is private, so the repo only holds `state/applied.json.enc`, a Fernet-encrypted JSON file.
+It is decrypted in memory with the key in the APPLIED_KEY environment variable (a repo secret);
+plaintext is never written to disk. Each entry is a row title (usually "Role (Company)") and a
+canonical job link. A candidate is skipped when
 
   1. its canonical URL equals an applied link, or
   2. its company matches the applied company (same matching as dedupe, plus company_names.yaml)
@@ -9,9 +11,12 @@ the row title (usually "Role (Company)") and the canonical job link. A candidate
 """
 import json
 import re
+import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 from urllib.parse import urlsplit
+
+from cryptography.fernet import Fernet, InvalidToken
 
 from scanner.company_names import display_company
 from scanner.dedupe import TITLE_JACCARD, canonical_url, company_match, title_jaccard
@@ -96,12 +101,27 @@ class AppliedSet:
         self._links = {e.link for e in entries if e.link}
 
     @classmethod
-    def load(cls, path: str | Path, overrides: dict[str, str]) -> "AppliedSet":
-        try:
-            raw = json.loads(Path(path).read_text(encoding="utf-8")).get("applied", [])
-        except (FileNotFoundError, ValueError):
-            raw = []
+    def from_rows(cls, raw: list[dict], overrides: dict[str, str]) -> "AppliedSet":
         return cls([AppliedJob.from_entry(e["title"], e.get("link", ""), overrides) for e in raw], overrides)
+
+    @classmethod
+    def load_encrypted(cls, path: str | Path, key: str, overrides: dict[str, str]) -> "AppliedSet":
+        """Decrypt `path` in memory. No key or no file: warn and return an empty set (the check is skipped).
+        A key that cannot decrypt the file is a configuration error and raises AppliedKeyError."""
+        key = (key or "").strip()
+        if not key:
+            print("WARNING: APPLIED_KEY is not set; skipping the already-applied check", file=sys.stderr)
+            return cls([], overrides)
+        try:
+            token = Path(path).read_bytes()
+        except FileNotFoundError:
+            print(f"WARNING: {path} not found; skipping the already-applied check", file=sys.stderr)
+            return cls([], overrides)
+        try:
+            raw = json.loads(Fernet(key.encode()).decrypt(token)).get("applied", [])
+        except (InvalidToken, ValueError):          # bad key / corrupt file / key not valid Fernet base64
+            raise AppliedKeyError(f"APPLIED_KEY cannot decrypt {path}; fix the secret or re-encrypt the file") from None
+        return cls.from_rows(raw, overrides)
 
     def __len__(self) -> int:
         return len(self.entries)
@@ -137,10 +157,14 @@ class AppliedSet:
         return keep, skipped
 
 
-def save(path: str | Path, rows: list[tuple[str, str]]) -> None:
-    """Write [(title, raw link)] as state/applied.json with canonical links."""
+class AppliedKeyError(Exception):
+    pass
+
+
+def encrypt_rows(path: str | Path, rows: list[tuple[str, str]], key: bytes) -> None:
+    """Write [(title, raw link)] as a Fernet-encrypted file with canonical links. Only ciphertext touches disk."""
     data = {"version": 1, "applied": [
         {"title": re.sub(r"\s+", " ", t).strip(), "link": canonical_link(link)} for t, link in rows]}
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(json.dumps(data, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+    p.write_bytes(Fernet(key).encrypt(json.dumps(data, ensure_ascii=False).encode("utf-8")))

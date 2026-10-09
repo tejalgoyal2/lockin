@@ -3,3 +3,5 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .venv/
+# the application list is private: only the encrypted copy is committed
+state/applied.json
