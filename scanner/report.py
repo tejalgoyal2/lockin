@@ -63,6 +63,10 @@ def render(jobs: list[Job], since_days: float, now: datetime, meta: dict | None,
     ]
     if phase2:
         out.append(f"- Remaining after JD rules: **{len(jobs)}** (ranked by Score)")
+        applied = phase2.get("applied") or {}
+        if sum(applied.values()):
+            out.append(f"- Skipped as already applied to: {sum(applied.values())} "
+                       f"(by link {applied['url']}, by company + title {applied['company+title']})")
     out += ["", "| First Seen | Company | Role | Location | Source | Tier | Fit % | Cluster | Signals | Gaps | URL |"
             if phase2 else "| First Seen | Company | Role | Location | Source | Tier | URL |",
             "|---|---|---|---|---|---|---|---|---|---|---|" if phase2 else "|---|---|---|---|---|---|---|"]

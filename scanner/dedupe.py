@@ -12,7 +12,10 @@ TITLE_JACCARD = 0.8
 # Query params that identify the posting itself. Greenhouse-embedded career sites serve every
 # job from one path (e.g. pinterestcareers.com/jobs/?gh_jid=123), so dropping these merges
 # distinct jobs. Everything else (utm_*, gh_src, t, ...) is tracking noise and is stripped.
-JOB_ID_PARAMS = frozenset({"gh_jid", "jid", "jobid", "job_id", "reqid", "req_id", "requisitionid"})
+JOB_ID_PARAMS = frozenset({
+    "gh_jid", "jid", "jobid", "job_id", "reqid", "req_id", "requisitionid",
+    "pid", "opportunityid", "offerid", "jobopeningid", "career_job_req_id",
+})
 MIN_PREFIX_LEN = 3   # a company name must be at least this long to count as a prefix of another
 
 

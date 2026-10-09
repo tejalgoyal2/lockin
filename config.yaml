@@ -220,3 +220,7 @@ state:
 
 gaps:
   report_path: reports/gaps.md   # rewritten every Monday (UTC)
+
+applied:
+  path: state/applied.json    # rows of the owner's private application tracker (title + canonical link)
+

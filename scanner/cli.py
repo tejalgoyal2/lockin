@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from scanner import gaps_report, notion_feed, report
+from scanner.applied import AppliedSet
 from scanner.company_names import load_overrides
 from scanner.config import load_config
 from scanner.dedupe import dedupe
@@ -59,6 +60,9 @@ def print_phase2(result, n_candidates, final, phase2):
     print("  drop reasons:")
     for reason, n in sorted(result.drops.items(), key=lambda kv: -kv[1]):
         print(f"    {reason:<30}{n:>8,}")
+    if phase2.get("applied"):
+        a = phase2["applied"]
+        print(f"  skipped, already applied to      {sum(a.values()):>10,} (link {a['url']}, company+title {a['company+title']})")
     print(f"  remaining                        {len(final):>10,}")
     print("  JD fetch (source:status):", dict(sorted(result.fetch.items())))
     if result.forbidden:
@@ -176,8 +180,9 @@ def run(args: argparse.Namespace) -> int:
     blocks["Combined"] = [("before dedupe", len(jobs)), ("merged_url", merges["url"]),
                           ("merged_fuzzy", merges["fuzzy"]), ("after dedupe", len(deduped))]
 
+    applied = AppliedSet.load(cfg["applied"]["path"], overrides)
     result = phase2 = None
-    final = deduped
+    final, applied_skipped = applied.filter(deduped)
     if use_jd:
         held_deduped, _ = dedupe(held)
         keys = {d.key for d in deduped}
@@ -187,9 +192,10 @@ def run(args: argparse.Namespace) -> int:
         scorer = Scorer.load()
         result = enrich(deduped, held_deduped, cfg, filters, scorer, client_jd,
                         progress=lambda m: print(m, flush=True))
+        final, applied_skipped = applied.filter(result.kept)
         phase2 = {"drops": result.drops, "fetch": result.fetch, "forbidden": result.forbidden,
-                  "held": result.held_total, "rescued": result.rescued, "fit_dist": fit_distribution(result.kept)}
-        final = result.kept
+                  "held": result.held_total, "rescued": result.rescued, "fit_dist": fit_distribution(final),
+                  "applied": {k: len(v) for k, v in applied_skipped.items()}}
 
         # Gaps: every job whose JD was fetched, kept or dropped, once per job.
         added = gaps_report.record_gaps(gaps, deduped + held_deduped, scorer, today, overrides)
