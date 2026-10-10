@@ -7,17 +7,18 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-from scanner import gaps_report, notion_feed, report
+from scanner import feed_clean, gaps_report, notion_feed, report
 from scanner.applied import AppliedKeyError, AppliedSet
-from scanner.company_names import load_overrides
+from scanner.company_names import display_company, load_overrides, slug_names
 from scanner.config import load_config
-from scanner.dedupe import dedupe
+from scanner.dedupe import canonical_url, dedupe
 from scanner.enrich import enrich, fit_distribution
 from scanner.filters import Filters
+from scanner.models import Job
 from scanner.net import PoliteClient
 from scanner.pipeline import run_stream
 from scanner.score import Scorer
-from scanner.sources import feashliaa, simplify
+from scanner.sources import ats, feashliaa, simplify
 from scanner.state import GapsStore, SeenStore
 
 log = logging.getLogger("scanner")
@@ -64,6 +65,10 @@ def print_phase2(result, n_candidates, final, phase2):
         a = phase2["applied"]
         print(f"  skipped, already applied to      {sum(a.values()):>10,} (link {a['url']}, company+title {a['company+title']})")
     print(f"  remaining                        {len(final):>10,}")
+    if phase2.get("unresolved_locations"):
+        print(f"  kept with an unresolved Workday location {len(phase2['unresolved_locations']):>4,} (listed in the report)")
+    if phase2.get("slug_names"):
+        print(f"  company names that look like raw slugs {len(phase2['slug_names']):>6,} (listed in the report)")
     print("  JD fetch (source:status):", dict(sorted(result.fetch.items())))
     if result.forbidden:
         print(f"  HTTP 403 tenants ({sum(result.forbidden.values())} jobs, kept without JD if strong title):")
@@ -196,9 +201,15 @@ def run(args: argparse.Namespace) -> int:
         result = enrich(deduped, held_deduped, cfg, filters, scorer, client_jd,
                         progress=lambda m: print(m, flush=True))
         final, applied_skipped = applied.filter(result.kept)
+        final_ids = {id(j) for j in final}      # identity: Job has field-wise __eq__
         phase2 = {"drops": result.drops, "fetch": result.fetch, "forbidden": result.forbidden,
                   "held": result.held_total, "rescued": result.rescued, "fit_dist": fit_distribution(final),
-                  "applied": {k: len(v) for k, v in applied_skipped.items()}}
+                  "applied": {k: len(v) for k, v in applied_skipped.items()},
+                  "forbidden_jobs": [(display_company(j, overrides), j.title, j.url) for j in result.forbidden_jobs
+                                     if id(j) in final_ids],
+                  "unresolved_locations": [(display_company(j, overrides), j.title, j.url) for j in final
+                                           if j.location_unresolved],
+                  "slug_names": slug_names(final, overrides)}
 
         # Gaps: every job whose JD was fetched, kept or dropped, once per job.
         added = gaps_report.record_gaps(gaps, deduped + held_deduped, scorer, today, overrides)
@@ -230,6 +241,45 @@ def run(args: argparse.Namespace) -> int:
     return code
 
 
+def run_clean_feed(args: argparse.Namespace) -> int:
+    """Apply the current rules to the rows already in the Feed (see scanner.feed_clean)."""
+    cfg = load_config(args.config)
+    filters = Filters.from_config(cfg)
+    token = os.environ.get("NOTION_TOKEN", "").strip()
+    ds_id = os.environ.get("NOTION_FEED_DATA_SOURCE_ID", "").strip()
+    if not (token and ds_id):
+        raise UsageError("NOTION_TOKEN and NOTION_FEED_DATA_SOURCE_ID must be set to read the Feed")
+    client = notion_feed.NotionClient(token, cfg["notion"]["api_version"])
+    try:
+        feed = notion_feed.load_feed(client, ds_id, cfg["notion"]["properties"])
+    except notion_feed.SchemaError as exc:
+        raise UsageError(str(exc)) from None
+    items = feed_clean.list_items(client, feed)
+    print(f"Feed: {len(items)} rows read", flush=True)
+    locations = feed_clean.find_locations({i.link for i in items}, cfg, args.feashliaa_dir)
+    print(f"Locations found in the source data for {len(locations)} of {len(items)} rows", flush=True)
+
+    # Workday "N Locations": read the real list from the job detail, as a new job would be.
+    jd_locations: dict[str, list[str]] = {}
+    pending = [i for i in items if filters.location_status(locations.get(canonical_url(i.link), ""))[0] == "unresolved"]
+    if pending:
+        http = PoliteClient(delay=cfg["jd"]["request_delay"], per_ats=cfg["jd"]["max_per_ats"])
+        for item in pending:
+            probe = Job(company=item.company, title=item.title, location="", url=item.link, source=item.source,
+                        first_seen=datetime.now(timezone.utc))
+            ref = ats.locate(probe)
+            try:
+                jd_locations[canonical_url(item.link)] = ats.fetch_full(ref, http).locations if ref else []
+            except Exception as exc:                      # unresolved rows are kept, not guessed
+                log.debug("location lookup failed: %s", exc)
+    rep = feed_clean.clean(items, locations, cfg, filters, Scorer.load(), jd_locations)
+    print(feed_clean.render(rep, dry_run=args.dry_run))
+    if not args.dry_run:
+        done = feed_clean.trash(client, rep, dry_run=False)
+        print(f"Trashed {done} rows")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="scanner")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -255,10 +305,15 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--sample", type=int, default=0, help="print N random result rows")
     p.add_argument("--seed", type=int, default=None, help="seed for --sample")
     p.add_argument("--simplify-file", help="use a local listings.json instead of downloading")
+    c = sub.add_parser("clean-feed", help="apply the current rules to the rows already in the Notion Feed "
+                                         "and trash the ones that fail (never a row with Interested / Apply ticked)")
+    c.add_argument("--dry-run", action="store_true", help="report what would be trashed; trash nothing")
+    c.add_argument("--config", help="path to config.yaml")
+    c.add_argument("--feashliaa-dir", help="use this local job-board-data clone as-is (no git sync)")
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     try:
-        return run(args)
+        return run_clean_feed(args) if args.cmd == "clean-feed" else run(args)
     except UsageError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
