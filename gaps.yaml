@@ -2,7 +2,11 @@
 # Same entry format as skills.yaml. Move a term to skills.yaml once you have it.
 terms:
   - {name: Java, aliases: [Java]}
-  - {name: Go, aliases: [Golang, Go/Golang, Go programming]}
+  # Plain "Go" is also an English word, so it only counts in a language list ("such as Go, Python, or Java").
+  - name: Go
+    aliases: [Golang, Go/Golang, Go programming]
+    regex: ['\b(?:such as|like|including|and|or|in|with)\s+Go(?=\s*(?:[,;/)]|\.|\band\b|\bor\b|$))',
+            '[,/(]\s*Go(?![A-Za-z])(?!\s+(?:to|beyond|ahead|live|above|the|for)\b)']
   - {name: Kotlin, aliases: [Kotlin]}
   - {name: Scala, aliases: [Scala]}
   - {name: Swift, aliases: [Swift], cs: true}
@@ -75,3 +79,37 @@ terms:
   - {name: Elixir, aliases: [Elixir, Erlang, Haskell, Clojure], cs: true}
   - {name: Postman, aliases: [Postman]}
   - {name: Appium, aliases: [Appium, TestNG]}
+
+# Generic engineering vocabulary. These terms show a JD is technical, so they count towards the "at
+# least N distinct terms" threshold for reporting Fit % (see scoring.min_terms_for_fit), but they are
+# not skills or gaps: they never change Fit % and never appear in the gaps report.
+context:
+  - {name: backend, aliases: [backend, back-end, back end]}
+  - {name: frontend, aliases: [frontend, front-end, front end]}
+  - {name: full-stack, aliases: [full-stack, full stack, fullstack]}
+  - {name: DevOps, aliases: [DevOps]}
+  - {name: automated testing, aliases: [automated testing, test automation, automated tests, unit testing, unit tests, integration testing]}
+  - {name: system design, aliases: [system design, systems design, software architecture]}
+  - {name: data modeling, aliases: [data modeling, data modelling, data model, data models]}
+  - {name: algorithms, aliases: [algorithms, data structures]}
+  - {name: object-oriented, aliases: [object-oriented, object oriented, OOP]}
+  - {name: API, aliases: [API, APIs], cs: true}
+  - {name: database, aliases: [database, databases]}
+  - {name: data pipelines, aliases: [data pipeline, data pipelines, ETL, ELT, data warehouse, data warehousing, data lake]}
+  - {name: Excel, aliases: [Excel, VBA]}
+  - {name: machine learning, aliases: [machine learning, deep learning, neural network, neural networks, NLP, natural language processing, computer vision]}
+  - {name: statistics, aliases: [statistics, statistical analysis, statistical modeling, regression]}
+  - {name: cloud, aliases: [cloud-native, cloud native, cloud computing, serverless]}
+  - {name: blockchain, aliases: [blockchain, smart contract, smart contracts, EVM, Solidity, DeFi]}
+  - {name: embedded, aliases: [embedded, firmware, RTOS, microcontroller, microcontrollers, FPGA]}
+  - {name: operating systems, aliases: [operating system, operating systems, kernel, kernels, device drivers]}
+  - {name: compilers, aliases: [compiler, compilers, LLVM, assembly language]}
+  - {name: computer architecture, aliases: [computer architecture, RISC-V, instruction set, hardware architecture]}
+  - {name: ISA, aliases: [ISA, ARM architecture], cs: true}
+  - {name: low-level, aliases: [low-level, low level, systems programming]}
+  - {name: performance, aliases: [performance optimization, performance engineering, performance analysis, profiling, benchmarking]}
+  - {name: networking, aliases: [networking, TCP/IP, network protocols]}
+  - {name: debugging, aliases: [debugging, troubleshooting, root cause analysis]}
+  - {name: agile, aliases: [agile, scrum, kanban, sprint, sprints]}
+  - {name: tooling, aliases: [Jira, Confluence, version control, source control]}
+  - {name: SDLC, aliases: [SDLC, software development life cycle, software development lifecycle]}

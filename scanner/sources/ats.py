@@ -6,7 +6,9 @@ Endpoint shapes follow Feashliaa/job-board-aggregator and career-ops providers.
 """
 import re
 import threading
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
+import requests
 from urllib.parse import parse_qs, quote, unquote, urlsplit
 
 from scanner.models import Job
@@ -116,6 +118,37 @@ def _greenhouse_text(data: dict) -> str:
     return html_to_text(data.get("content", ""), unescape_first=True)  # content is HTML-escaped
 
 
+def _greenhouse_locations(data: dict) -> list[str]:
+    names = [(data.get("location") or {}).get("name", ""), *((o or {}).get("name", "") for o in data.get("offices") or [])]
+    return _dedupe_locations(names)
+
+
+def _lever_locations(data: dict) -> list[str]:
+    cats = data.get("categories") or {}
+    return _dedupe_locations([cats.get("location", ""), *(cats.get("allLocations") or [])])
+
+
+def _ashby_locations(job: dict) -> list[str]:
+    secondary = [(x or {}).get("location", "") if isinstance(x, dict) else str(x) for x in job.get("secondaryLocations") or []]
+    return _dedupe_locations([job.get("location", ""), *secondary])
+
+
+def _bamboo_locations(data: dict) -> list[str]:
+    loc = ((data.get("result") or {}).get("jobOpening") or {}).get("location") or {}
+    parts = [loc.get("city", ""), loc.get("state", ""), loc.get("addressCountry", "")]
+    return _dedupe_locations([", ".join(p for p in parts if p)])
+
+
+def _dedupe_locations(names) -> list[str]:
+    seen, out = set(), []
+    for n in names:
+        n = (n or "").strip()
+        if n and n not in seen:
+            seen.add(n)
+            out.append(n)
+    return out
+
+
 def _lever_text(data: dict) -> str:
     chunks = [data.get("descriptionPlain") or html_to_text(data.get("description", ""))]
     for sec in data.get("lists") or []:
@@ -138,7 +171,7 @@ _ashby_boards: dict[str, dict] = {}
 _ashby_lock = threading.Lock()
 
 
-def _ashby_text(ref: AtsRef, client, cache: dict | None = None) -> str:
+def _ashby_job(ref: AtsRef, client, cache: dict | None = None) -> dict:
     """Ashby has no single-job endpoint: fetch the company board once and pick the job."""
     cache = _ashby_boards if cache is None else cache
     with _ashby_lock:
@@ -147,28 +180,128 @@ def _ashby_text(ref: AtsRef, client, cache: dict | None = None) -> str:
             board = cache[ref.api_url] = client.get_json(ref.api_url, "Ashby")
     for j in board.get("jobs", []):
         if j.get("id") == ref.job_id:
-            return j.get("descriptionPlain") or html_to_text(j.get("descriptionHtml", ""))
+            return j
     raise NotFound(ref.job_id)
 
 
-def fetch_details(ref: AtsRef, client) -> tuple[str, str]:
-    """Fetch one job: (description as plain text, readable company name or '').
+def _ashby_text(ref: AtsRef, client, cache: dict | None = None) -> str:
+    j = _ashby_job(ref, client, cache)
+    return j.get("descriptionPlain") or html_to_text(j.get("descriptionHtml", ""))
+
+
+@dataclass
+class Detail:
+    text: str
+    company: str = ""
+    locations: list[str] = field(default_factory=list)   # every location the ATS lists (Workday only)
+
+
+def workday_career_site(api_url: str) -> str:
+    """https://host/wday/cxs/<tenant>/<site>/job/... -> https://host/<site> (the tenant's career site)."""
+    m = re.match(r"^(https://[^/]+)/wday/cxs/[^/]+/([^/]+)/", api_url)
+    return f"{m.group(1)}/{m.group(2)}" if m else api_url
+
+
+def _workday_locations(data: dict) -> list[str]:
+    info = data.get("jobPostingInfo") or {}
+    seen, out = set(), []
+    for loc in [info.get("location"), *(info.get("additionalLocations") or [])]:
+        loc = (loc or "").strip()
+        if loc and loc not in seen:
+            seen.add(loc)
+            out.append(loc)
+    return out
+
+
+def _get_workday(ref: AtsRef, client) -> dict:
+    """Plain polite request first. On 403 try once more like a browser (cookies from the career site,
+    Origin / Referer). Still 403 means the posting is not being served (Workday errorCode S22)."""
+    try:
+        return client.get_json(ref.api_url, ref.ats)
+    except requests.HTTPError as exc:
+        if exc.response is None or exc.response.status_code != 403 or not hasattr(client, "get_json_browser"):
+            raise
+        return client.get_json_browser(ref.api_url, ref.ats, workday_career_site(ref.api_url))
+
+
+def fetch_full(ref: AtsRef, client) -> Detail:
+    """Fetch one job: description as plain text, readable company name ('' if none), locations.
 
     Only Greenhouse reports a clean brand name (`company_name`); Workday's hiringOrganization is
-    often a legal entity ("Autodesk Canada Co.") and the others give none. Raises NotFound on 404.
+    often a legal entity ("Autodesk Canada Co.") and the others give none. Every ATS reports where the
+    posting is: Workday lists all of them (`location` + `additionalLocations`), which resolves its
+    "N Locations" rows, and the ATS's own location is authoritative over a Simplify row's looser list.
+    Raises NotFound on 404.
     """
     if ref.ats == "Ashby":
-        return _ashby_text(ref, client), ""
-    data = client.get_json(ref.api_url, ref.ats)
+        j = _ashby_job(ref, client)
+        return Detail(j.get("descriptionPlain") or html_to_text(j.get("descriptionHtml", "")), "", _ashby_locations(j))
+    data = _get_workday(ref, client) if ref.ats == "Workday" else client.get_json(ref.api_url, ref.ats)
     text = {
         "Greenhouse": _greenhouse_text,
         "Lever": _lever_text,
         "Workday": _workday_text,
         "BambooHR": _bamboo_text,
     }[ref.ats](data)
-    return text, (data.get("company_name") or "").strip() if ref.ats == "Greenhouse" else ""
+    company = (data.get("company_name") or "").strip() if ref.ats == "Greenhouse" else ""
+    locations = {"Workday": _workday_locations, "Greenhouse": _greenhouse_locations, "Lever": _lever_locations,
+                 "BambooHR": _bamboo_locations}[ref.ats](data)
+    return Detail(text, company, locations)
+
+
+def fetch_details(ref: AtsRef, client) -> tuple[str, str]:
+    """(description as plain text, readable company name or ''). See fetch_full."""
+    d = fetch_full(ref, client)
+    return d.text, d.company
 
 
 def fetch_jd(ref: AtsRef, client) -> str:
     """Description text only (see fetch_details)."""
     return fetch_details(ref, client)[0]
+
+
+# --- stale Workday ids ------------------------------------------------------------------
+
+@dataclass
+class Relocated:
+    url: str                 # the live posting's public URL
+    detail: Detail
+    location: str            # the Canadian location that qualified it
+
+
+def _words(title: str) -> str:
+    """Search text for Workday: the title's words. Punctuation breaks its text search ("DevOps Engineer -
+    New Grad (January 2027)" finds nothing, "DevOps Engineer New Grad January 2027" finds the job)."""
+    return re.sub(r"\s+", " ", re.sub(r"[^\w]+", " ", title or "")).strip()
+
+
+def _same_title(a: str, b: str) -> bool:
+    key = lambda t: re.sub(r"[^a-z0-9]+", "", (t or "").lower())      # normalised, parentheses kept
+    return bool(key(a)) and key(a) == key(b)
+
+
+def relocate_workday(ref: AtsRef, title: str, client, is_canadian) -> Relocated | None:
+    """A Workday id that now answers S22 / 403 / 404 is usually a posting re-issued under a new requisition
+    number. Search the tenant's jobs for the title; take an exact (normalised) title match whose location is
+    Canadian (`is_canadian(text) -> bool`), fetch its detail and return its live URL. None if nothing matches."""
+    m = re.match(r"^(https://[^/]+)/wday/cxs/([^/]+)/([^/]+)/", ref.api_url)
+    if not m or not hasattr(client, "post_json"):
+        return None
+    host, tenant, site = m.groups()
+    body = {"appliedFacets": {}, "limit": 20, "offset": 0, "searchText": _words(title)}
+    try:
+        found = client.post_json(f"{host}/wday/cxs/{tenant}/{site}/jobs", ref.ats, json=body).get("jobPostings") or []
+    except Exception:                        # the search is a best effort; the job stays "jd unavailable"
+        return None
+    for posting in found:
+        if not _same_title(posting.get("title", ""), title) or not posting.get("externalPath"):
+            continue
+        live = AtsRef("Workday", f"{host}/wday/cxs/{tenant}/{site}{posting['externalPath']}")
+        try:
+            detail = fetch_full(live, client)
+        except Exception:
+            continue
+        where = " ; ".join(detail.locations) or posting.get("locationsText", "")
+        if is_canadian(where):
+            return Relocated(f"{host}/{site}{posting['externalPath']}", detail, where)
+    return None

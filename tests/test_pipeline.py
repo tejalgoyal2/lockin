@@ -27,7 +27,7 @@ def test_stage_counts_are_sequential(filters):
     assert {j.title: j.weak_title for j in jobs} == {"Software Engineer": False, "Technical Specialist": True}
     assert [j.title for j in held] == ["Software Engineer Intern"]
     assert dict(stages) == {
-        "raw": 8, "fresh": 7, "location": 6, "company": 5, "language": 5,
+        "raw": 8, "fresh": 7, "location": 6, "not_quebec_only": 6, "company": 5, "language": 5,
         "title_match": 4, "title_not_senior": 3, "not_student_only": 2, "weak_title": 1,
     }
 

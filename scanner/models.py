@@ -15,10 +15,15 @@ class Job:
     company_name: str = ""   # readable name when a source gives one (Simplify, Greenhouse)
     weak_title: bool = False  # matched only generic title words (e.g. "Engineer")
     key: str = ""
+    location_pending: bool = False   # Workday "N Locations": phase 2 reads the real list from the job detail
+    location_unresolved: bool = False  # ... and could not (kept anyway, reported)
+    relocation: str = ""             # Workday id that stopped resolving: "matched" (url replaced) or "no_match"
+    location_dropped: bool = False   # dropped in phase 2 for its resolved locations (not a Canadian job)
     # phase 2 (filled by scanner.enrich)
     jd: str = ""
     jd_status: str = ""            # "ok" | "unsupported" | "not_found" | "error" | "" (not fetched)
     jd_error: str = ""             # detail for non-ok fetches, e.g. "http 403"
+    jd_locations: list[str] = field(default_factory=list)   # every location the ATS lists for the job (Workday)
     fit_pct: float | None = None
     cluster: str | None = None
     matched: list[str] = field(default_factory=list)

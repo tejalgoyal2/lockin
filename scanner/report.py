@@ -9,6 +9,7 @@ STAGE_LABELS = {
     "active_category": "active, visible, tech category",
     "fresh": "first seen within window",
     "location": "Canadian location",
+    "not_quebec_only": "not Quebec-only",
     "company": "not on blocklist",
     "language": "not French-only",
     "title_match": "title matches tech roles",
@@ -92,6 +93,24 @@ def render(jobs: list[Job], since_days: float, now: datetime, meta: dict | None,
         if phase2.get("forbidden"):
             out += ["", "**JD fetch HTTP 403 (permission denied) by host**", "", "| Host | Jobs |", "|---|---:|"]
             out += [f"| {h} | {n} |" for h, n in phase2["forbidden"].most_common()]
+        if phase2.get("forbidden_jobs"):
+            out += ["", "**Kept without a JD (`jd unavailable`): Workday answered 403**", "",
+                    "The plain request and a second try with browser headers plus career-site cookies were both refused "
+                    "(Workday errorCode S22, a posting id it is not serving). The tenant's job search was then asked for "
+                    "the same title; an exact title match in a Canadian location replaces the id with the live URL "
+                    "(those jobs are not listed here). No proxy or scraping service is used.", "",
+                    "| Company | Role | URL | Live posting |", "|---|---|---|---|"]
+            out += [f"| {_cell(c)} | {_cell(t)} | {u} | {_cell(note)} |" for c, t, u, note in phase2["forbidden_jobs"]]
+        if phase2.get("relocated"):
+            out += ["", f"Workday ids replaced by a live posting with the same title: {phase2['relocated']}."]
+        if phase2.get("unresolved_locations"):
+            out += ["", "**Kept with an unresolved location** (Workday \"N Locations\": the list could not be read)", "",
+                    "| Company | Role | URL |", "|---|---|---|"]
+            out += [f"| {_cell(c)} | {_cell(t)} | {u} |" for c, t, u in phase2["unresolved_locations"]]
+        if phase2.get("slug_names"):
+            out += ["", "**Company names that look like raw slugs** (add them to `company_names.yaml`)", "",
+                    "| Slug | Shown as |", "|---|---|"]
+            out += [f"| {_cell(slug)} | {_cell(shown)} |" for slug, shown in phase2["slug_names"]]
         out += ["", "**Fit % distribution (kept jobs)**", "", "| Fit % | Jobs |", "|---|---:|"]
         out += [f"| {k} | {v} |" for k, v in phase2["fit_dist"]]
         out.append("")

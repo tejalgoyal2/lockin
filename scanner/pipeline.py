@@ -25,7 +25,7 @@ def run_stream(
     filter; phase 2 may rescue them from their JD text.
     """
     cutoff = now - timedelta(days=since_days)
-    names = ["raw", *[n for n, _ in pre_stages], "fresh", "location", "company",
+    names = ["raw", *[n for n, _ in pre_stages], "fresh", "location", "not_quebec_only", "company",
              "language", "title_match", "title_not_senior", "not_student_only"]
     counts: Counter = Counter()
     kept: list[Job] = []
@@ -39,10 +39,13 @@ def run_stream(
         if f["first_seen"] is None or f["first_seen"] < cutoff:
             continue
         counts["fresh"] += 1
-        loc = filters.canadian_location(f["location"])
-        if loc is None:
+        status, loc = filters.location_status(f["location"])
+        if status == "not_canada":
             continue
         counts["location"] += 1
+        if status == "quebec_only":
+            continue
+        counts["not_quebec_only"] += 1
         if not filters.company_ok(f["company"]):
             continue
         counts["company"] += 1
@@ -60,6 +63,7 @@ def run_stream(
             company=f["company"], company_name=f.get("company_name", ""), title=f["title"], location=loc, url=f["url"],
             source=f["source"], first_seen=f["first_seen"], sources={f["source"]},
             new_grad=f["source"] == "Simplify", weak_title=tier == "weak",
+            location_pending=status == "unresolved",
         )
         if not filters.not_student_only(f["title"]):
             held.append(job)

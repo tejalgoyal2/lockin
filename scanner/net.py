@@ -9,6 +9,13 @@ from urllib.parse import urlsplit
 import requests
 
 USER_AGENT = "lockin-job-scanner/0.1 (+https://github.com/tejalgoyal2/lockin)"
+# What a normal desktop browser sends. Used only as a second attempt after an ATS answered 403
+# (Workday), never for the first request and never through a proxy or scraping service.
+BROWSER_HEADERS = {
+    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                   "Chrome/124.0.0.0 Safari/537.36"),
+    "Accept-Language": "en-US,en;q=0.9",
+}
 
 
 def http_get(url: str, *, retries: int = 4, timeout: int = 120, **kwargs) -> requests.Response:
@@ -54,6 +61,7 @@ class PoliteClient:
         self._host_lock: dict[str, threading.Lock] = defaultdict(threading.Lock)
         self._host_last: dict[str, float] = {}
         self._guard = threading.Lock()
+        self._sessions: dict[str, requests.Session] = {}
 
     def _slots(self, ats: str, host: str):
         with self._guard:
@@ -73,6 +81,56 @@ class PoliteClient:
 
     def get_json(self, url: str, ats: str, **kwargs):
         return self.get(url, ats, **kwargs).json()
+
+    def post_json(self, url: str, ats: str, json=None):
+        """POST a JSON body and return the JSON answer (Workday's job search). Same pacing as `get`; a 429 is
+        retried, other errors raise requests.HTTPError."""
+        host = urlsplit(url).netloc
+        sem, lock = self._slots(ats, host)
+        with sem, lock:
+            wait = self.delay - (time.monotonic() - self._host_last.get(host, 0.0))
+            if wait > 0:
+                time.sleep(wait)
+            try:
+                for attempt in range(self.retries + 1):
+                    resp = requests.post(url, json=json, timeout=self.timeout,
+                                         headers={"User-Agent": USER_AGENT, "Accept": "application/json"})
+                    if resp.status_code == 429 and attempt < self.retries:
+                        time.sleep(float(resp.headers.get("Retry-After", 2 ** attempt)))
+                        continue
+                    resp.raise_for_status()
+                    return resp.json()
+            finally:
+                self._host_last[host] = time.monotonic()
+
+    def get_json_browser(self, url: str, ats: str, home: str):
+        """Second attempt for a URL that answered 403: browser-like headers (Origin / Referer = the
+        tenant's career site) and a first GET of that site to pick up its cookies. One cookie jar per host.
+        Raises requests.HTTPError like `get_json` when the answer is still not 2xx."""
+        host = urlsplit(url).netloc
+        sem, lock = self._slots(ats, host)
+        with sem, lock:
+            wait = self.delay - (time.monotonic() - self._host_last.get(host, 0.0))
+            if wait > 0:
+                time.sleep(wait)
+            try:
+                sess = self._sessions.get(host)
+                if sess is None:
+                    sess = self._sessions[host] = requests.Session()
+                    sess.headers.update(BROWSER_HEADERS)
+                    try:
+                        sess.get(home, timeout=self.timeout, headers={
+                            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                            "Upgrade-Insecure-Requests": "1"})
+                    except requests.RequestException:
+                        pass                                  # cookies are a best effort
+                resp = sess.get(url, timeout=self.timeout, headers={
+                    "Accept": "application/json, text/plain, */*",
+                    "Origin": f"https://{host}", "Referer": home})
+                resp.raise_for_status()
+                return resp.json()
+            finally:
+                self._host_last[host] = time.monotonic()
 
 
 def sync_git_repo(url: str, dest: Path) -> None:

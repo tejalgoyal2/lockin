@@ -1,0 +1,32 @@
+Role Overview
+As a Solution Consultant, you’ll work at the intersection of technology and customer adoption. You’ll help ensure customers succeed by bridging business needs with solutions and providing enablement support.
+
+Job Description
+
+Key Responsibilities
+
+● Prototype, validate, and deliver innovative Guidewire Cloud features in real-world customer environments.
+
+● Work directly with customers to capture use cases, requirements and validate solutions.
+
+● Take ownership across the full technology stack, including backend and frontend development.
+
+● Provide feedback loops to Solution Architects and Product Development for continuous improvement.
+
+● Serve as a trusted partner to customers during their transformation journey.
+
+Qualifications
+
+● 2–4 years of experience in technology consulting, solution development, or P&C insurance delivery.
+
+● Hands-on full-stack development experience, including modern software engineering practices such as CI/CD, DevOps, automated testing, and packaging.
+
+● Strong communication and facilitation skills with both business and technical audiences.
+
+● Experience translating requirements into actionable solution designs, and working software.
+
+● Ability to balance consulting finesse with technical competency.
+
+● Works effectively with limited guidance from others, consistently applying established best practices and standards.
+
+● Curious, adaptable, and comfortable working in a fast-paced, innovation-focused environment.

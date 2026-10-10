@@ -44,6 +44,20 @@ location:
   exclude_cs:
     - ',\s*WA\b'
   split_on: '[;|]'   # multi-location strings are split on this; first Canadian part is used
+  # The owner cannot work in French: a job is dropped when EVERY Canadian location it lists is in
+  # Quebec. A posting that also lists a non-Quebec location or "Remote, Canada" is kept.
+  quebec:
+    - '\b(Montr[ée]al|Qu[ée]bec|Laval|Gatineau|Longueuil|Sherbrooke|L[ée]vis|Saint-Laurent|St\.?\s+Laurent)\b'
+  quebec_cs:             # province abbreviation, case-sensitive
+    - ',\s*QC\b'
+    - '\bQC\s*[,-]'
+    - '^QC$'
+  # Workday lists "2 Locations" and keeps the real list in the job detail (additionalLocations).
+  # These pass the location stage unresolved; phase 2 reads the list. Unresolvable ones are kept.
+  unresolved: '^\s*\d+\s+Locations?\s*$'
+  # ... and when the list cannot be read (403, no JD) the job is kept only if the primary location in its
+  # URL is Canadian (or Quebec). Set true to keep every such job, whatever its URL says.
+  keep_unresolved_with_foreign_url: false
 
 title:
   # Two tiers. "strong" terms pass outright; "weak" terms are generic words that
@@ -131,6 +145,22 @@ title:
     - lead
     - architect
     - architects
+  # Whole words / phrases, case- and accent-insensitive ("Directeur", "directeur" and "Directrice" all hit).
+  exclude_phrases:
+    - directeur
+    - directrice
+    - director
+    - expert
+    - phd
+    - customer support specialist
+    - support specialist
+    - data specialist
+    - help improve ai
+    - english speaker
+    - flexible work
+    - data annotation
+    - data labeling
+    - ai trainer
   exclude_words_cs:      # roman-numeral levels, case-sensitive
     - II
     - III
@@ -154,12 +184,19 @@ company:
     - usasurveyjob
     - globalhr
     - tsmg
+    - mthree                 # train-and-place program, every variant ("mthree Recruiting Portal", ...)
+    - liftedsolutions        # AI-training gig work
+    - liftedanupworkcompany  # same company under its SmartRecruiters slug
 
 language:
   drop_french_titles: true
   french_pattern: 'analyste|ing[ée]nieur|d[ée]veloppeur|conseill|scientifique|sp[ée]cialiste'
   # A title that also has one of these English role words is bilingual, not French-only.
   english_role_words: [engineer, developer, analyst, scientist, specialist, consultant, programmer, architect]
+  # "Développeur de logiciels / Software Developer": when the part before " / " is French the job is
+  # dropped even though an English role word follows. Accented letters or any of these words flag it.
+  french_first_segment_pattern: '\b(de|du|des|la|le|les|et|pour|chez|aux|en|sur|avec|logiciels?|ing[ée]nieure?|d[ée]veloppeu\w+|analyste|conseill\w+|gestionnaire|charg[ée]e?|technicien\w*|stagiaire|administrateur\w*|architecte)\b|[àâçéèêëîïôûùü]'
+  drop_french_required_jd: true   # JD requires French / bilingual skills (a passing mention is not enough)
 
 report:
   path: reports/latest.md
@@ -171,7 +208,9 @@ jd:
   max_per_ats: 5
   cache_dir: .cache/jd       # successful fetches are cached by URL
   cache_ttl_days: 7
-  max_experience_years: 3    # drop when the minimum required experience is >= this
+  min_years_drop: 3          # drop when the minimum required experience (lower bound) is >= this
+  two_year_signal: "2+ yrs"  # lower bound of 2 years: kept, with this Signal, unless a rule below drops it
+  two_year_min_fit: 0.6      # ... Fit (a fraction, like the Feed's Fit % column) must reach this for a 2-year job
   rescue_student_titles: true  # fetch JDs of student-titled jobs; keep those that welcome recent grads
 
 scoring:

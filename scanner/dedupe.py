@@ -93,6 +93,9 @@ def _pass_fuzzy(jobs: list[Job]) -> tuple[list[Job], int]:
     survivors: dict[str, list[Job]] = {}
     merges = 0
     for job in jobs:
+        if job.location_pending:                 # "2 Locations" names no city: merging on it would join unrelated jobs
+            survivors.setdefault(f"pending:{canonical_url(job.url)}", []).append(job)
+            continue
         city = norm_location(job.location)
         bucket = survivors.setdefault(city, [])
         for i, cur in enumerate(bucket):
@@ -111,6 +114,7 @@ def dedupe(jobs: Iterable[Job]) -> tuple[list[Job], dict[str, int]]:
     jobs, url_merges = _pass_url(jobs)
     jobs, fuzzy_merges = _pass_fuzzy(jobs)
     for job in jobs:
-        job.key = job_key(job.company, job.title, job.location)
+        # an unresolved Workday "N Locations" job is keyed by its URL until phase 2 reads the real location
+        job.key = job_key(job.company, job.title, canonical_url(job.url) if job.location_pending else job.location)
     jobs.sort(key=lambda j: j.first_seen, reverse=True)
     return jobs, {"url": url_merges, "fuzzy": fuzzy_merges}
