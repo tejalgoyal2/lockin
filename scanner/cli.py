@@ -265,9 +265,13 @@ def run_clean_feed(args: argparse.Namespace) -> int:
     if not args.skip_refresh:                      # Workday rows without a JD: find the live posting first
         refreshed = feed_refresh.refresh(client, feed, items, cfg, filters, scorer, http, dry_run=args.dry_run)
         print(feed_refresh.render(refreshed, dry_run=args.dry_run), flush=True)
-    locations = feed_clean.find_locations({i.link for i in items}, cfg, args.feashliaa_dir)
+    records = feed_clean.find_records({i.link for i in items}, cfg, args.feashliaa_dir)
+    locations = feed_clean.locations_from(records)
     if refreshed:
         locations.update(refreshed.locations)
+        for new_link, old_link in refreshed.moved.items():       # a re-found posting keeps its company data
+            if old_link in records:
+                records[new_link] = records[old_link]
     print(f"Locations found in the source data for {len(locations)} of {len(items)} rows", flush=True)
 
     # Workday "N Locations": read the real list from the job detail, as a new job would be.
@@ -287,6 +291,13 @@ def run_clean_feed(args: argparse.Namespace) -> int:
     if not args.dry_run:
         done = feed_clean.trash(client, rep, dry_run=False)
         print(f"Trashed {done} rows")
+    if args.rescore:                               # the rows that stay: recompute Company, Fit % and Signals
+        kept = [v for v in rep.verdicts if not v.rule]
+        changes = feed_clean.rescore(kept, records, cfg, filters, scorer, load_overrides())
+        eligible = sum(1 for v in kept if v.item.interested is False and v.item.apply is False)
+        print(feed_clean.render_changes(changes, eligible, dry_run=args.dry_run))
+        done = feed_clean.apply_changes(client, feed, changes, dry_run=args.dry_run)
+        print(f"{'Would update' if args.dry_run else 'Updated'} {done} rows")
     return 0
 
 
@@ -318,6 +329,8 @@ def main(argv: list[str] | None = None) -> int:
     c = sub.add_parser("clean-feed", help="apply the current rules to the rows already in the Notion Feed "
                                          "and trash the ones that fail (never a row with Interested / Apply ticked)")
     c.add_argument("--dry-run", action="store_true", help="report what would be trashed; trash nothing")
+    c.add_argument("--rescore", action="store_true",
+                   help="also recompute Company, Fit % and Signals of the rows that stay (both boxes unticked)")
     c.add_argument("--skip-refresh", action="store_true",
                    help="do not look for live postings for Workday rows without a JD")
     c.add_argument("--config", help="path to config.yaml")

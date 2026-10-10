@@ -28,6 +28,7 @@ class RefreshReport:
     no_match: list[FeedItem] = field(default_factory=list)
     duplicate: list[FeedItem] = field(default_factory=list)             # the live link is already another row
     locations: dict[str, tuple[str, str]] = field(default_factory=dict)  # canonical link -> (location, "ats")
+    moved: dict[str, str] = field(default_factory=dict)                 # canonical new link -> canonical old link
 
 
 def stale_rows(items: list[FeedItem]) -> list[FeedItem]:
@@ -76,7 +77,9 @@ def refresh(client, feed: notion_feed.Feed, items: list[FeedItem], cfg: dict, fi
         if not dry_run:
             client.request("PATCH", f"/v1/pages/{item.page_id}", json={"properties": patch})
         taken.pop(canonical_url(item.link), None)
+        rep.moved[canonical_url(live_url)] = canonical_url(item.link)
         item.link, item.jd, item.signals = live_url, detail.text, list(job.signals)
+        item.fit = None if job.fit_pct is None else round(job.fit_pct / 100, 4)
         taken[canonical_url(live_url)] = item
         rep.updated.append((item, live_url))
         if part:
