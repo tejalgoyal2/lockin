@@ -55,6 +55,9 @@ location:
   # Workday lists "2 Locations" and keeps the real list in the job detail (additionalLocations).
   # These pass the location stage unresolved; phase 2 reads the list. Unresolvable ones are kept.
   unresolved: '^\s*\d+\s+Locations?\s*$'
+  # ... and when the list cannot be read (403, no JD) the job is kept only if the primary location in its
+  # URL is Canadian (or Quebec). Set true to keep every such job, whatever its URL says.
+  keep_unresolved_with_foreign_url: false
 
 title:
   # Two tiers. "strong" terms pass outright; "weak" terms are generic words that

@@ -139,3 +139,9 @@ def test_feed_row_company_loses_its_date_tag():
     sess = Notion([page("p", "Software Engineer", "Tower Research Capital · oct9", "https://x/1", GOOD_JD)])
     client = notion_feed.NotionClient("secret", "2026-03-11", session=sess, sleep=lambda s: None)
     assert FC.list_items(client, feed())[0].company == "Tower Research Capital"
+
+
+def test_unknown_location_does_not_trigger_the_us_authorization_rule():
+    jd = GOOD_JD + " Must be authorized to work in the United States."
+    assert verdict(item(jd=jd), "").rule is None
+    assert verdict(item(jd=jd), "Austin, TX").rule == "us_work_authorization"

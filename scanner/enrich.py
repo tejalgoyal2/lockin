@@ -35,6 +35,7 @@ R_TWO_YEAR_LOW_FIT = "two_years_low_fit"
 R_FRENCH = "requires_french"
 R_QUEBEC_ONLY = "location_quebec_only"
 R_NOT_CANADA = "location_not_canada"
+R_UNRESOLVED_FOREIGN = "location_unresolved_url_not_canadian"
 R_WEAK = "weak_title_low_fit"
 R_WEAK_NO_JD = "weak_title_no_jd"
 R_WEAK_FEW_TERMS = "weak_title_few_terms"
@@ -158,15 +159,31 @@ def _score(job: Job, cfg: dict, boost_re: re.Pattern) -> float:
     return round(total, 1)
 
 
-def resolve_location(job: Job, filters: Filters) -> str | None:
+def url_location(url: str) -> str:
+    """The location slug in a Workday URL (.../job/Toronto-ON-CAN/Title_R1 -> "Toronto ON CAN"): the job's
+    primary location, the only one visible when the detail cannot be read."""
+    m = re.search(r"/job/([^/]+)/", url or "")
+    text = re.sub(r"[-_]+", " ", m.group(1)).strip() if m else ""
+    return re.sub(r"(?<=\w) (ON|BC|AB|QC|MB|SK|NS|NB)\b", r", \1", text)      # "Guelph ON" -> "Guelph, ON"
+
+
+def resolve_location(job: Job, filters: Filters, cfg: dict | None = None) -> str | None:
     """Workday "N Locations": decide from the full list in the job detail.
 
-    Returns a drop reason, or None to keep. Nothing resolvable (no JD, 403, no list) keeps the job and
-    flags it `location_unresolved` so the report can list it.
+    Returns a drop reason, or None to keep. When the list cannot be read (no JD, 403, empty) the job is
+    kept and flagged `location_unresolved` so the report lists it, unless the primary location in its URL
+    is not Canadian: nothing then points to Canada, and keeping it would fill the Feed with US postings
+    whose detail Workday does not serve. `location.keep_unresolved_with_foreign_url: true` restores
+    "always keep".
     """
     if not job.location_pending:
         return None
     if not job.jd_locations:
+        keep_all = ((cfg or {}).get("location") or {}).get("keep_unresolved_with_foreign_url", False)
+        hint = filters.location_status(url_location(job.url))[0]
+        if hint in ("not_canada", "unresolved") and not keep_all:
+            job.location_dropped = True
+            return R_UNRESOLVED_FOREIGN
         job.location_unresolved = True
         return None
     status, part = filters.location_status(" ; ".join(job.jd_locations))
@@ -197,7 +214,7 @@ def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer,
     """Fill phase-2 fields on `job`; return a drop reason, or None to keep it."""
     clusters = clusters or ClusterResolver(cfg)
     job.cluster = clusters.resolve(job.title, None)   # overwritten below when a JD adds terms
-    reason = resolve_location(job, filters)
+    reason = resolve_location(job, filters, cfg)
     if reason:
         return reason
     jdcfg = cfg["jd"]

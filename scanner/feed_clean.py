@@ -155,7 +155,7 @@ def evaluate(item: FeedItem, location: str, cfg: dict, filters: Filters, scorer:
     if status == "quebec_only":
         v.rule = RULE_QUEBEC
         return v
-    job = to_job(item, location)
+    job = to_job(item, location or "Canada")      # unknown location: do not let the US-authorization rule guess
     job.weak_title = filters.title_tier(item.title) == "weak"
     if unresolved:
         job.location_pending, job.jd_locations = True, jd_locations or []

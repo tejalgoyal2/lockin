@@ -116,7 +116,7 @@ def test_passing_mention_of_french_is_kept():
 # --- Workday "N Locations" ------------------------------------------------------------
 
 def pending(**kw):
-    return job(loc="2 Locations", location_pending=True, **kw)
+    return job(loc="2 Locations", location_pending=True, **kw)      # a Greenhouse URL: no location slug in it
 
 
 def with_locations(j, locations, status="ok"):
@@ -146,11 +146,30 @@ def test_pending_location_outside_canada_is_dropped():
     assert E.apply_rules(j, CFG, FILTERS, SCORER) == E.R_NOT_CANADA and j.location_dropped
 
 
+CA_URL = "https://acme.wd1.myworkdayjobs.com/ext/job/{slug}/Software-Engineer_R1"
+
+
 @pytest.mark.parametrize("status,locations", [("error", []), ("ok", []), ("not_found", [])])
-def test_unresolvable_location_keeps_the_job(status, locations):
+@pytest.mark.parametrize("slug", ["Toronto-ON-CAN", "British-Columbia-Canada", "Guelph-ON", "Montreal-QC"])
+def test_unresolvable_location_keeps_the_job_when_its_url_is_canadian(status, locations, slug):
     j = with_locations(pending(), locations, status)
+    j.url = CA_URL.format(slug=slug)
     assert E.apply_rules(j, CFG, FILTERS, SCORER) is None
     assert j.location_unresolved and j.location == "2 Locations"
+
+
+@pytest.mark.parametrize("slug", ["Los-Angeles-California", "USA---Hazelwood-MO", "Hyderabad", "Leeds", "Remote"])
+def test_unresolvable_location_with_a_foreign_url_is_dropped(slug):
+    j = with_locations(pending(), [], "error")
+    j.url = CA_URL.format(slug=slug)
+    assert E.apply_rules(j, CFG, FILTERS, SCORER) == E.R_UNRESOLVED_FOREIGN and j.location_dropped
+
+
+def test_keep_unresolved_with_foreign_url_restores_keep_everything():
+    cfg = {**CFG, "location": {**CFG["location"], "keep_unresolved_with_foreign_url": True}}
+    j = with_locations(pending(), [], "error")
+    j.url = CA_URL.format(slug="Los-Angeles-California")
+    assert E.apply_rules(j, cfg, FILTERS, SCORER) is None and j.location_unresolved
 
 
 def test_location_dropped_jobs_leave_the_gaps_report_alone():
