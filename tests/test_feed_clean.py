@@ -62,8 +62,10 @@ def test_workday_multi_location_rows_use_the_detail_list():
     assert qc.rule == "location_quebec_only"
     ok = FC.evaluate(it, "2 Locations", CFG, FILTERS, SCORER, CLUSTERS, ["Dallas, TX", "Toronto, Ontario"])
     assert ok.rule is None and ok.location == "Toronto, Ontario"
-    unknown = FC.evaluate(it, "2 Locations", CFG, FILTERS, SCORER, CLUSTERS, [])      # cannot resolve: keep
-    assert unknown.rule is None
+    unknown = FC.evaluate(it, "2 Locations", CFG, FILTERS, SCORER, CLUSTERS, [])      # cannot resolve; URL says Dallas
+    assert unknown.rule == "location_unresolved_url_not_canadian"
+    ca = item(source="Workday", link="https://acme.wd1.myworkdayjobs.com/ext/job/Toronto-ON-CAN/x_R1")
+    assert FC.evaluate(ca, "2 Locations", CFG, FILTERS, SCORER, CLUSTERS, []).rule is None   # cannot resolve; URL Canadian
 
 
 def test_rows_with_a_ticked_or_unreadable_checkbox_are_never_trashed():
