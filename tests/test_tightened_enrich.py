@@ -310,7 +310,7 @@ def test_report_lists_forbidden_unresolved_and_slug_names():
     j.score = 1.0
     phase2 = {"drops": {}, "fetch": {}, "fit_dist": [], "held": 0, "rescued": 0,
               "forbidden": __import__("collections").Counter({"bdo.wd3.myworkdayjobs.com": 1}),
-              "forbidden_jobs": [("BDO", "DevOps | Engineer", "https://bdo.wd3.myworkdayjobs.com/x")],
+              "forbidden_jobs": [("BDO", "DevOps | Engineer", "https://bdo.wd3.myworkdayjobs.com/x", "searched: no exact Canadian title match")],
               "unresolved_locations": [("Acme", "Software Engineer", WD_URL)],
               "slug_names": [("intouchinsight", "Intouchinsight")]}
     text = report.render([j], 3, T, None, {}, 1, phase2)

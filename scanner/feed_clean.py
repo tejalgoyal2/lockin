@@ -109,23 +109,24 @@ def list_items(client, feed: notion_feed.Feed) -> list[FeedItem]:
 
 # --- where was each job located? -----------------------------------------------------
 
-def find_locations(urls: set[str], cfg: dict, feashliaa_dir=None) -> dict[str, str]:
-    """canonical URL -> location string, from the Feashliaa dataset and the Simplify list."""
+def find_locations(urls: set[str], cfg: dict, feashliaa_dir=None) -> dict[str, tuple[str, str]]:
+    """canonical URL -> (location, origin). The Feashliaa dataset ("ats") is the ATS's own single location and
+    wins over Simplify's list for the whole programme ("simplify")."""
     wanted = {canonical_url(u) for u in urls if u}
-    out: dict[str, str] = {}
+    out: dict[str, tuple[str, str]] = {}
     src = cfg["sources"]
     if src["feashliaa"]["enabled"]:
         data_dir = feashliaa_dir or feashliaa.fetch(src["feashliaa"])
         for rec in feashliaa.iter_raw(data_dir):
             url = canonical_url(rec.get("url") or "")
             if url in wanted:
-                out[url] = rec.get("location") or ""
+                out[url] = (rec.get("location") or "", "ats")
     if src["simplify"]["enabled"]:
         for rec in simplify.iter_raw(simplify.fetch(src["simplify"])):
             f = simplify.raw_fields(rec)
             url = canonical_url(f["url"])
             if url in wanted and url not in out:
-                out[url] = f["location"]
+                out[url] = (f["location"], "simplify")
     return out
 
 
@@ -138,8 +139,11 @@ def to_job(item: FeedItem, location: str) -> Job:
 
 
 def evaluate(item: FeedItem, location: str, cfg: dict, filters: Filters, scorer: Scorer,
-             clusters: ClusterResolver, jd_locations: list[str] | None = None) -> Verdict:
-    """The first rule a Feed row breaks, in the order a new job meets them."""
+             clusters: ClusterResolver, jd_locations: list[str] | None = None, origin: str = "") -> Verdict:
+    """The first rule a Feed row breaks, in the order a new job meets them.
+
+    `origin` says where `location` came from: "ats" (the posting's own location) or "simplify" (its list for the
+    whole programme). A Simplify row whose ATS location is not Canadian is not a Canadian job."""
     status = filters.location_status(location)[0] if location else ""
     unresolved = status == "unresolved"
     v = Verdict(item, None, location, status)
@@ -155,6 +159,9 @@ def evaluate(item: FeedItem, location: str, cfg: dict, filters: Filters, scorer:
     if status == "quebec_only":
         v.rule = RULE_QUEBEC
         return v
+    if status == "not_canada" and item.source == "Simplify" and origin == "ats":
+        v.rule = enrich_mod.R_ATS_NOT_CANADA
+        return v
     job = to_job(item, location or "Canada")      # unknown location: do not let the US-authorization rule guess
     job.weak_title = filters.title_tier(item.title) == "weak"
     if unresolved:
@@ -168,14 +175,15 @@ def evaluate(item: FeedItem, location: str, cfg: dict, filters: Filters, scorer:
     return v
 
 
-def clean(items: list[FeedItem], locations: dict[str, str], cfg: dict, filters: Filters, scorer: Scorer,
+def clean(items: list[FeedItem], locations: dict[str, tuple[str, str]], cfg: dict, filters: Filters, scorer: Scorer,
           jd_locations: dict[str, list[str]] | None = None) -> CleanReport:
     clusters = ClusterResolver(cfg)
     rep = CleanReport()
     for item in items:
         key = canonical_url(item.link)
-        rep.verdicts.append(evaluate(item, locations.get(key, ""), cfg, filters, scorer, clusters,
-                                     (jd_locations or {}).get(key)))
+        location, origin = locations.get(key, ("", ""))
+        rep.verdicts.append(evaluate(item, location, cfg, filters, scorer, clusters, (jd_locations or {}).get(key),
+                                     origin))
     return rep
 
 

@@ -96,9 +96,13 @@ def render(jobs: list[Job], since_days: float, now: datetime, meta: dict | None,
         if phase2.get("forbidden_jobs"):
             out += ["", "**Kept without a JD (`jd unavailable`): Workday answered 403**", "",
                     "The plain request and a second try with browser headers plus career-site cookies were both refused "
-                    "(Workday errorCode S22, a posting id it is not serving). No proxy or scraping service is used.", "",
-                    "| Company | Role | URL |", "|---|---|---|"]
-            out += [f"| {_cell(c)} | {_cell(t)} | {u} |" for c, t, u in phase2["forbidden_jobs"]]
+                    "(Workday errorCode S22, a posting id it is not serving). The tenant's job search was then asked for "
+                    "the same title; an exact title match in a Canadian location replaces the id with the live URL "
+                    "(those jobs are not listed here). No proxy or scraping service is used.", "",
+                    "| Company | Role | URL | Live posting |", "|---|---|---|---|"]
+            out += [f"| {_cell(c)} | {_cell(t)} | {u} | {_cell(note)} |" for c, t, u, note in phase2["forbidden_jobs"]]
+        if phase2.get("relocated"):
+            out += ["", f"Workday ids replaced by a live posting with the same title: {phase2['relocated']}."]
         if phase2.get("unresolved_locations"):
             out += ["", "**Kept with an unresolved location** (Workday \"N Locations\": the list could not be read)", "",
                     "| Company | Role | URL |", "|---|---|---|"]

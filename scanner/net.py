@@ -82,6 +82,27 @@ class PoliteClient:
     def get_json(self, url: str, ats: str, **kwargs):
         return self.get(url, ats, **kwargs).json()
 
+    def post_json(self, url: str, ats: str, json=None):
+        """POST a JSON body and return the JSON answer (Workday's job search). Same pacing as `get`; a 429 is
+        retried, other errors raise requests.HTTPError."""
+        host = urlsplit(url).netloc
+        sem, lock = self._slots(ats, host)
+        with sem, lock:
+            wait = self.delay - (time.monotonic() - self._host_last.get(host, 0.0))
+            if wait > 0:
+                time.sleep(wait)
+            try:
+                for attempt in range(self.retries + 1):
+                    resp = requests.post(url, json=json, timeout=self.timeout,
+                                         headers={"User-Agent": USER_AGENT, "Accept": "application/json"})
+                    if resp.status_code == 429 and attempt < self.retries:
+                        time.sleep(float(resp.headers.get("Retry-After", 2 ** attempt)))
+                        continue
+                    resp.raise_for_status()
+                    return resp.json()
+            finally:
+                self._host_last[host] = time.monotonic()
+
     def get_json_browser(self, url: str, ats: str, home: str):
         """Second attempt for a URL that answered 403: browser-like headers (Origin / Referer = the
         tenant's career site) and a first GET of that site to pick up its cookies. One cookie jar per host.

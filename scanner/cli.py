@@ -7,7 +7,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-from scanner import feed_clean, gaps_report, notion_feed, report
+from scanner import feed_clean, feed_refresh, gaps_report, notion_feed, report
 from scanner.applied import AppliedKeyError, AppliedSet
 from scanner.company_names import display_company, load_overrides, slug_names
 from scanner.config import load_config
@@ -205,8 +205,11 @@ def run(args: argparse.Namespace) -> int:
         phase2 = {"drops": result.drops, "fetch": result.fetch, "forbidden": result.forbidden,
                   "held": result.held_total, "rescued": result.rescued, "fit_dist": fit_distribution(final),
                   "applied": {k: len(v) for k, v in applied_skipped.items()},
-                  "forbidden_jobs": [(display_company(j, overrides), j.title, j.url) for j in result.forbidden_jobs
-                                     if id(j) in final_ids],
+                  "forbidden_jobs": [(display_company(j, overrides), j.title, j.url,
+                                      "searched: no exact Canadian title match" if j.relocation == "no_match"
+                                      else "not searched (location not Canadian)")
+                                     for j in result.forbidden_jobs if id(j) in final_ids],
+                  "relocated": sum(1 for j in final if j.relocation == "matched"),
                   "unresolved_locations": [(display_company(j, overrides), j.title, j.url) for j in final
                                            if j.location_unresolved],
                   "slug_names": slug_names(final, overrides)}
@@ -256,14 +259,21 @@ def run_clean_feed(args: argparse.Namespace) -> int:
         raise UsageError(str(exc)) from None
     items = feed_clean.list_items(client, feed)
     print(f"Feed: {len(items)} rows read", flush=True)
+    scorer = Scorer.load()
+    http = PoliteClient(delay=cfg["jd"]["request_delay"], per_ats=cfg["jd"]["max_per_ats"])
+    refreshed = None
+    if not args.skip_refresh:                      # Workday rows without a JD: find the live posting first
+        refreshed = feed_refresh.refresh(client, feed, items, cfg, filters, scorer, http, dry_run=args.dry_run)
+        print(feed_refresh.render(refreshed, dry_run=args.dry_run), flush=True)
     locations = feed_clean.find_locations({i.link for i in items}, cfg, args.feashliaa_dir)
+    if refreshed:
+        locations.update(refreshed.locations)
     print(f"Locations found in the source data for {len(locations)} of {len(items)} rows", flush=True)
 
     # Workday "N Locations": read the real list from the job detail, as a new job would be.
     jd_locations: dict[str, list[str]] = {}
-    pending = [i for i in items if filters.location_status(locations.get(canonical_url(i.link), ""))[0] == "unresolved"]
+    pending = [i for i in items if filters.location_status(locations.get(canonical_url(i.link), ("", ""))[0])[0] == "unresolved"]
     if pending:
-        http = PoliteClient(delay=cfg["jd"]["request_delay"], per_ats=cfg["jd"]["max_per_ats"])
         for item in pending:
             probe = Job(company=item.company, title=item.title, location="", url=item.link, source=item.source,
                         first_seen=datetime.now(timezone.utc))
@@ -272,7 +282,7 @@ def run_clean_feed(args: argparse.Namespace) -> int:
                 jd_locations[canonical_url(item.link)] = ats.fetch_full(ref, http).locations if ref else []
             except Exception as exc:                      # unresolved rows are kept, not guessed
                 log.debug("location lookup failed: %s", exc)
-    rep = feed_clean.clean(items, locations, cfg, filters, Scorer.load(), jd_locations)
+    rep = feed_clean.clean(items, locations, cfg, filters, scorer, jd_locations)
     print(feed_clean.render(rep, dry_run=args.dry_run))
     if not args.dry_run:
         done = feed_clean.trash(client, rep, dry_run=False)
@@ -308,6 +318,8 @@ def main(argv: list[str] | None = None) -> int:
     c = sub.add_parser("clean-feed", help="apply the current rules to the rows already in the Notion Feed "
                                          "and trash the ones that fail (never a row with Interested / Apply ticked)")
     c.add_argument("--dry-run", action="store_true", help="report what would be trashed; trash nothing")
+    c.add_argument("--skip-refresh", action="store_true",
+                   help="do not look for live postings for Workday rows without a JD")
     c.add_argument("--config", help="path to config.yaml")
     c.add_argument("--feashliaa-dir", help="use this local job-board-data clone as-is (no git sync)")
     args = parser.parse_args(argv)
