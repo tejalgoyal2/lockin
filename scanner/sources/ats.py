@@ -6,7 +6,9 @@ Endpoint shapes follow Feashliaa/job-board-aggregator and career-ops providers.
 """
 import re
 import threading
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
+import requests
 from urllib.parse import parse_qs, quote, unquote, urlsplit
 
 from scanner.models import Job
@@ -151,22 +153,66 @@ def _ashby_text(ref: AtsRef, client, cache: dict | None = None) -> str:
     raise NotFound(ref.job_id)
 
 
-def fetch_details(ref: AtsRef, client) -> tuple[str, str]:
-    """Fetch one job: (description as plain text, readable company name or '').
+@dataclass
+class Detail:
+    text: str
+    company: str = ""
+    locations: list[str] = field(default_factory=list)   # every location the ATS lists (Workday only)
+
+
+def workday_career_site(api_url: str) -> str:
+    """https://host/wday/cxs/<tenant>/<site>/job/... -> https://host/<site> (the tenant's career site)."""
+    m = re.match(r"^(https://[^/]+)/wday/cxs/[^/]+/([^/]+)/", api_url)
+    return f"{m.group(1)}/{m.group(2)}" if m else api_url
+
+
+def _workday_locations(data: dict) -> list[str]:
+    info = data.get("jobPostingInfo") or {}
+    seen, out = set(), []
+    for loc in [info.get("location"), *(info.get("additionalLocations") or [])]:
+        loc = (loc or "").strip()
+        if loc and loc not in seen:
+            seen.add(loc)
+            out.append(loc)
+    return out
+
+
+def _get_workday(ref: AtsRef, client) -> dict:
+    """Plain polite request first. On 403 try once more like a browser (cookies from the career site,
+    Origin / Referer). Still 403 means the posting is not being served (Workday errorCode S22)."""
+    try:
+        return client.get_json(ref.api_url, ref.ats)
+    except requests.HTTPError as exc:
+        if exc.response is None or exc.response.status_code != 403 or not hasattr(client, "get_json_browser"):
+            raise
+        return client.get_json_browser(ref.api_url, ref.ats, workday_career_site(ref.api_url))
+
+
+def fetch_full(ref: AtsRef, client) -> Detail:
+    """Fetch one job: description as plain text, readable company name ('' if none), locations.
 
     Only Greenhouse reports a clean brand name (`company_name`); Workday's hiringOrganization is
-    often a legal entity ("Autodesk Canada Co.") and the others give none. Raises NotFound on 404.
+    often a legal entity ("Autodesk Canada Co.") and the others give none. Workday also lists every
+    location (`location` + `additionalLocations`), which resolves its "N Locations" rows.
+    Raises NotFound on 404.
     """
     if ref.ats == "Ashby":
-        return _ashby_text(ref, client), ""
-    data = client.get_json(ref.api_url, ref.ats)
+        return Detail(_ashby_text(ref, client))
+    data = _get_workday(ref, client) if ref.ats == "Workday" else client.get_json(ref.api_url, ref.ats)
     text = {
         "Greenhouse": _greenhouse_text,
         "Lever": _lever_text,
         "Workday": _workday_text,
         "BambooHR": _bamboo_text,
     }[ref.ats](data)
-    return text, (data.get("company_name") or "").strip() if ref.ats == "Greenhouse" else ""
+    company = (data.get("company_name") or "").strip() if ref.ats == "Greenhouse" else ""
+    return Detail(text, company, _workday_locations(data) if ref.ats == "Workday" else [])
+
+
+def fetch_details(ref: AtsRef, client) -> tuple[str, str]:
+    """(description as plain text, readable company name or ''). See fetch_full."""
+    d = fetch_full(ref, client)
+    return d.text, d.company
 
 
 def fetch_jd(ref: AtsRef, client) -> str:

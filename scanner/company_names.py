@@ -40,3 +40,27 @@ def date_tag(first_seen) -> str:
 def company_cell(job: Job, overrides: dict[str, str]) -> str:
     """'<Company> · <date>', e.g. 'RBC · oct6'."""
     return f"{display_company(job, overrides)} · {date_tag(job.first_seen)}"
+
+
+def looks_like_slug(job: Job, overrides: dict[str, str]) -> bool:
+    """True when the Company cell would show a raw slug nobody has named yet.
+
+    Only names that fall back to the prettified slug count (an override, or a readable name from
+    Simplify / Greenhouse, is deliberate). A slug is raw if it is a single lowercase word ("bdo",
+    "intouchinsight"), or if the name shown is capitalised, has no spaces and is over 10 characters.
+    """
+    if overrides.get(norm_text(job.company)) or (job.company_name or "").strip():
+        return False
+    slug = (job.company or "").strip()
+    shown = prettify(slug)
+    return bool(re.fullmatch(r"[a-z0-9]+", slug)
+                or (shown[:1].isupper() and " " not in shown and len(shown) > 10))
+
+
+def slug_names(jobs: list[Job], overrides: dict[str, str]) -> list[tuple[str, str]]:
+    """[(slug, name shown)] for the jobs whose Company would be a raw slug, one per company."""
+    seen: dict[str, str] = {}
+    for job in jobs:
+        if looks_like_slug(job, overrides):
+            seen.setdefault(job.company, display_company(job, overrides))
+    return sorted(seen.items())
