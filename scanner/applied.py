@@ -121,7 +121,9 @@ class AppliedSet:
             raw = json.loads(Fernet(key.encode()).decrypt(token)).get("applied", [])
         except (InvalidToken, ValueError):          # bad key / corrupt file / key not valid Fernet base64
             raise AppliedKeyError(f"APPLIED_KEY cannot decrypt {path}; fix the secret or re-encrypt the file") from None
-        return cls.from_rows(raw, overrides)
+        loaded = cls.from_rows(raw, overrides)
+        print(f"applied list: {len(loaded)} entries loaded")        # a count only, never an entry
+        return loaded
 
     def __len__(self) -> int:
         return len(self.entries)

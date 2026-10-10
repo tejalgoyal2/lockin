@@ -81,6 +81,13 @@ def test_file_on_disk_is_ciphertext_only(tmp_path, key):
     assert [p.name for p in tmp_path.iterdir()] == ["applied.json.enc"]   # no plaintext sidecar
 
 
+def test_load_logs_a_count_only(tmp_path, key, capsys):
+    make(tmp_path, key)
+    out = capsys.readouterr().out                       # make() loads once
+    assert out.strip() == f"applied list: {len(FAKE_ROWS)} entries loaded"
+    assert "Initech" not in out and "Hooli" not in out
+
+
 def test_loading_writes_nothing_to_disk(tmp_path, key, monkeypatch):
     make(tmp_path, key)
     before = sorted(p.name for p in tmp_path.iterdir())
