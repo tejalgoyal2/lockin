@@ -1,0 +1,30 @@
+As a Low-Level Software Engineer on Tenstorrent’s Low-Level Kernel (LLK) team, you’ll work at the intersection of software and AI hardware to build the primitives that power our workloads.
+
+LLKs sit directly on top of the ISA of Tenstorrent’s AI hardware and form the foundation for the software stack above them. You’ll tackle challenging problems in low-level programming, hardware-aware optimization, and performance engineering, with the opportunity to influence how our hardware is programmed and how efficiently AI workloads run. Improvements at this layer can have an outsized impact across the entire stack.
+
+You’ll take ownership of complex technical problems from design through implementation and optimization, while working closely with engineers across LLK, hardware, runtime, and operations.
+
+This role is hybrid, based out of Toronto, Canada.
+
+We welcome candidates at various experience levels for this role. During the interview process, candidates will be assessed for the appropriate level, and offers will align with that level, which may differ from the one in this posting.
+
+Who You Are
+- Strong C/C++ engineer with significant experience building low-level, performance-critical software.
+- Deep understanding of computer architecture and how software maps to hardware.
+- Strong problem solver who can investigate complex performance and systems challenges and drive them to resolution.
+- Comfortable working close to the hardware and making informed tradeoffs between performance, correctness, and maintainability.
+- Effective technical collaborator who can work across software and hardware teams and influence technical decisions
+
+What We Need
+- Design and implement low-level kernels and software primitives that expose the capabilities of Tenstorrent AI hardware.
+- Own complex performance optimization efforts, from profiling and identifying bottlenecks through implementation and validation.
+- Develop software that enables efficient model bring-up and execution across Tenstorrent hardware.
+- Partner with LLK subteams across performance, tools, compute, and architecture bring-up, as well as hardware and runtime teams.
+- Drive improvements to the quality, performance, and capabilities of the low-level software stack.
+
+What You Will Learn
+- How to program and optimize software for custom AI hardware at the lowest levels of the stack.
+- How hardware architecture, instruction sets, and low-level kernels come together to enable AI workloads.
+- Advanced approaches to performance analysis, hardware-aware optimization, and debugging.
+- How low-level software decisions influence performance across the broader AI software stack.
+- How to solve complex problems spanning hardware, kernels, runtime, and higher-level software.

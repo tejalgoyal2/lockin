@@ -51,14 +51,14 @@ def test_case_sensitive_words(scorer):
 def test_fit_percent_and_gaps(scorer):
     fit = scorer.evaluate("Python, SQL, Docker. Java and Kafka a plus.")
     assert fit.matched == ["Docker", "Python", "SQL"] and fit.gaps == ["Java", "Kafka"]
-    assert fit.fit_pct == 60.0           # 3 / (3 + 2), nothing in a requirements section
+    assert fit.fit_pct == round(100 * 3 / 7, 1)   # matched / (matched + gaps + 2) = 3 / (3 + 2 + 2)
 
 
 def test_requirements_section_weighted_double(scorer):
     jd = "About us\nWe use Java.\n\nRequirements:\n- Python\n- SQL\n\nNice to have\n- Kubernetes\n"
     fit = scorer.evaluate(jd)
     # Python, SQL in requirements (2 each) + Kubernetes (1) = 5; Java outside requirements = 1
-    assert fit.fit_pct == round(100 * 5 / 6, 1)
+    assert fit.fit_pct == round(100 * 5 / 8, 1)   # 5 / (5 + 1 + 2)
 
 
 def test_requirements_text_stops_at_next_heading():
@@ -81,7 +81,7 @@ def test_cluster_is_the_one_with_most_matches(scorer):
 
 def test_min_terms_gate(scorer):
     jd = "Python, SQL and Docker."
-    assert scorer.evaluate(jd).fit_pct == 100.0                    # default: no gate
+    assert scorer.evaluate(jd).fit_pct == 60.0                     # default: no gate; 3 / (3 + 2), never 100 %
     low = scorer.evaluate(jd, min_terms=4)
     assert low.fit_pct is None and low.n_terms == 3 and low.matched == ["Docker", "Python", "SQL"]
-    assert scorer.evaluate(jd + " Java.", min_terms=4).fit_pct == 75.0   # 3 matched + 1 gap = 4 terms
+    assert scorer.evaluate(jd + " Java.", min_terms=4).fit_pct == 50.0   # 3 matched + 1 gap = 4 terms; 3 / (4 + 2)

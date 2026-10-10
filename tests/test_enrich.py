@@ -53,10 +53,10 @@ GOOD = "Requirements:\nPython, SQL, Docker and Git. 0-2 years of experience. Rec
 def test_good_job_is_scored_with_fit_cluster_and_signals():
     res = run([gh(1, title="Junior Data Analyst")], jds={"1": GOOD})
     (j,) = res.kept
-    assert j.jd_status == "ok" and j.fit_pct == 100.0 and j.cluster == "data"   # title says data
+    assert j.jd_status == "ok" and j.fit_pct == 80.0 and j.cluster == "data"   # title says data; 8 / (8 + 2)
     assert j.signals == ["recent graduate", "0-2 years", "junior"]
     assert j.matched == ["Docker", "Git", "Python", "SQL"]
-    assert j.score == 123.0   # Fit 100 + 4 matched x 2 + new-grad boost 15 (recent graduate)
+    assert j.score == 103.0   # Fit 80 + 4 matched x 2 + new-grad boost 15 (recent graduate)
 
 
 @pytest.mark.parametrize("jd,reason", [
@@ -71,7 +71,7 @@ def test_jd_rules_drop_with_reason(jd, reason):
 
 
 def test_experience_below_threshold_kept():
-    assert len(run([gh(1)], jds={"1": "Python. 2+ years of experience."}).kept) == 1
+    assert len(run([gh(1)], jds={"1": "Python. 1+ year of experience."}).kept) == 1
 
 
 def test_us_authorization_only_drops_without_canadian_location():
@@ -97,12 +97,12 @@ def test_fit_needs_four_terms_else_na_and_low_signal():
     assert three.fit_pct is None and "low signal" in three.signals
     assert three.matched == ["Docker", "Python", "SQL"]            # terms are still listed
     assert three.score == 6.0                                      # no Fit, but 3 matched x 2
-    assert four.fit_pct == 100.0 and "low signal" not in four.signals
+    assert four.fit_pct == 66.7 and "low signal" not in four.signals          # 4 / (4 + 2)
 
 
 def test_gap_terms_count_toward_the_four_term_minimum():
     j = run([gh(1)], jds={"1": "Python and SQL. Java and Kafka are a plus."}).kept[0]
-    assert j.fit_pct == 50.0 and "low signal" not in j.signals
+    assert j.fit_pct == 33.3 and "low signal" not in j.signals                # 2 / (2 + 2 + 2)
 
 
 def test_low_signal_applies_when_jd_has_no_terms_at_all():
@@ -117,7 +117,7 @@ def test_matched_count_breaks_fit_ties_and_is_capped():
            "3": "Python SQL Docker Git AWS Linux React Azure Terraform Kubernetes Flask Playwright Rust Bash"}
     res = run([few, many, lots], jds=jds)
     scores = {j.url[-1]: j.score for j in res.kept}
-    assert scores == {"1": 108.0, "2": 116.0, "3": 120.0}   # cap: at most 10 matched skills count
+    assert scores == {"1": 74.7, "2": 96.0, "3": 107.5}   # cap: at most 10 matched skills count
     assert [j.url[-1] for j in res.kept] == ["3", "2", "1"]
 
 
@@ -178,9 +178,9 @@ def test_scoring_boosts_and_ranking():
     plain = gh(1, title="Software Engineer", loc="Toronto, ON")
     bc = gh(2, title="Software Engineer", loc="Vancouver, BC")
     simp = gh(3, title="Software Engineer", loc="Toronto, ON", new_grad=True)
-    jd = "Python, SQL, Docker and Git."   # 4 terms: Fit 100 + 4 matched x 2 = 108
+    jd = "Python, SQL, Docker and Git."   # 4 terms: Fit 66.7 + 4 matched x 2 = 74.7
     res = run([plain, bc, simp], jds={"1": jd, "2": jd, "3": jd})
-    assert {j.url[-1]: j.score for j in res.kept} == {"1": 108.0, "2": 113.0, "3": 118.0}
+    assert {j.url[-1]: j.score for j in res.kept} == {"1": 74.7, "2": 79.7, "3": 84.7}
     assert [j.url[-1] for j in res.kept] == ["3", "2", "1"]
 
 
@@ -244,7 +244,7 @@ def test_weak_title_needs_four_terms_even_when_it_has_a_match():
     gap_terms_count = run([gh(3, title="Technical Specialist", weak_title=True)],
                           jds={"3": "Python and SQL. Java and Kafka."})
     assert few.kept == [] and few.drops == {E.R_WEAK_FEW_TERMS: 1}
-    assert len(enough.kept) == 1 and gap_terms_count.kept[0].fit_pct == 50.0
+    assert len(enough.kept) == 1 and gap_terms_count.kept[0].fit_pct == 33.3
 
 
 def test_strong_title_with_few_terms_still_kept():

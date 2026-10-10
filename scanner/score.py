@@ -9,13 +9,15 @@ _ROOT = Path(__file__).resolve().parent.parent
 CLUSTER_ORDER = ("software", "data", "ml", "security")
 
 _REQ_HEADING = re.compile(
-    r"^\W*(?:requirements?|qualifications?|what\s+you['’]?ll\s+need|must[\s-]have)\b[^\n]{0,40}$",
+    r"^\W*(?:requirements?|qualifications?|what\s+you['’]?ll\s+need|what\s+you\s+bring|who\s+you\s+are|"
+    r"what\s+we['’]?re\s+looking\s+for|about\s+you|must[\s-]have)\b[^\n]{0,40}$",
     re.IGNORECASE | re.MULTILINE)
 _STOP_HEADING = re.compile(
     r"^\W*(?:responsibilit\w+|what\s+you['’]?ll\s+do|about\b|benefits|perks|what\s+we\s+offer|"
     r"nice[\s-]to[\s-]have|preferred|bonus|compensation|why\b|our\s+culture|equal\s+opportunity)[^\n]{0,40}$",
     re.IGNORECASE | re.MULTILINE)
 REQUIREMENT_WEIGHT = 2
+FIT_SMOOTHING = 2     # Fit % = matched / (matched + gaps + FIT_SMOOTHING)
 
 
 def _alias_pattern(alias: str, case_sensitive: bool) -> re.Pattern:
@@ -40,7 +42,9 @@ def _terms(entries, cluster: str | None) -> list[Term]:
     out = []
     for e in entries:
         cs = bool(e.get("cs"))
-        out.append(Term(e["name"], cluster, [_alias_pattern(a, cs) for a in e["aliases"]]))
+        patterns = [_alias_pattern(a, cs) for a in e.get("aliases", [])]
+        patterns += [re.compile(rx) for rx in e.get("regex", [])]      # raw, case-sensitive (context-dependent words)
+        out.append(Term(e["name"], cluster, patterns))
     return out
 
 
@@ -50,13 +54,19 @@ class Fit:
     gaps: list[str] = field(default_factory=list)
     fit_pct: float | None = None                       # None: fewer than `min_terms` terms found
     cluster: str | None = None                         # from JD terms only (see scanner.cluster for titles)
-    n_terms: int = 0                                   # distinct matched + gap terms
+    n_terms: int = 0                                   # distinct matched + gap + context terms (signal strength)
+    n_core: int = 0                                    # distinct matched + gap terms only
+    context: list[str] = field(default_factory=list)   # generic engineering terms found (count towards n_terms only)
 
 
 class Scorer:
     def __init__(self, skills: dict, gaps: dict):
         self.skills = [t for c, entries in skills["clusters"].items() for t in _terms(entries, c)]
         self.gaps = _terms(gaps["terms"], None)
+        # Generic engineering vocabulary ("backend", "DevOps", "Excel", "kernel", ...). It shows that a JD is
+        # technical, so it counts towards the term threshold, but it is neither a skill nor a gap and does not
+        # move Fit %. Without it, JDs for systems, consulting and analyst roles read as "low signal".
+        self.context = _terms(gaps.get("context", []), None)
 
     @classmethod
     def load(cls, skills_path=None, gaps_path=None) -> "Scorer":
@@ -77,17 +87,22 @@ class Scorer:
         for term in self.gaps:
             if term.count_in(jd):
                 weights_g[term.name] = REQUIREMENT_WEIGHT if term.count_in(req) else 1
+        context = sorted(t.name for t in self.context if t.count_in(jd))
         wm, wg = sum(weights_m.values()), sum(weights_g.values())
-        n_terms = len(weights_m) + len(weights_g)
+        n_core = len(weights_m) + len(weights_g)
+        n_terms = n_core + len(context)
         cluster = None
         if cluster_hits:
             cluster = max(CLUSTER_ORDER, key=lambda c: cluster_hits.get(c, 0))
         return Fit(
             matched=sorted(weights_m, key=lambda n: (-weights_m[n], n)),
             gaps=sorted(weights_g, key=lambda n: (-weights_g[n], n)),
-            fit_pct=round(100 * wm / (wm + wg), 1) if wm + wg and n_terms >= min_terms else None,
+            # matched / (total + 2): a thin match cannot reach 100 %
+            fit_pct=round(100 * wm / (wm + wg + FIT_SMOOTHING), 1) if wm + wg and n_terms >= min_terms else None,
             cluster=cluster,
             n_terms=n_terms,
+            n_core=n_core,
+            context=context,
         )
 
 
