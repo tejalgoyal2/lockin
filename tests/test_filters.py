@@ -122,5 +122,5 @@ def test_company_blocklist(filters):
 def test_french_only_titles_dropped_but_bilingual_kept(filters):
     assert not filters.language_ok("Ingénieur logiciel")
     assert not filters.language_ok("Analyste de données")
-    assert filters.language_ok("Analyste de données / Data Analyst")
+    assert filters.language_ok("Data Analyst / Analyste de données")      # English first: kept
     assert filters.language_ok("Software Engineer")
