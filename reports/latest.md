@@ -152,3 +152,10 @@ Student-titled jobs held for JD check: 29; rescued: 0.
 | 80-100 | 11 |
 | n/a (no JD or no tech terms) | 18 |
 
+## Feed rows still without a JD (2026-10-10)
+
+Workday rows written with `jd unavailable` were searched in their tenant for the same title. BDO's was replaced by its live posting. This one has no exact title match in a Canadian location and is left as it is:
+
+| Company | Role | Link |
+|---|---|---|
+| Capital One | Associate, Software Engineer, New Grad | https://capitalone.wd12.myworkdayjobs.com/capital_one/job/Toronto-ON/Associate--Software-Engineer--New-Grad_R1003046 |
