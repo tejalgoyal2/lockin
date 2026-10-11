@@ -347,6 +347,12 @@
    "gaps": [],
    "title": "IT Support Analyst"
   },
+  "0bebcda6df70715070b8beb54aaa5c86450be6ce": {
+   "company": "Maxon",
+   "date": "2026-10-11",
+   "gaps": [],
+   "title": "Cloud and Systems Integration Developer"
+  },
   "0ccc0a76e94d0b72a4ce7647a9c21906af8ea879": {
    "company": "Stripe",
    "date": "2026-10-10",
@@ -1724,6 +1730,12 @@
     "Snowflake"
    ],
    "title": "Machine Learning Analyst"
+  },
+  "3d9bf02f0d726df6edb30ebbdc9a06cef31d157b": {
+   "company": "Ssctech",
+   "date": "2026-10-11",
+   "gaps": [],
+   "title": "Analyst, Risk Analytics & Performance"
   },
   "3e0522d24bd2a09a2bc656a280a16dd8d1dc4e22": {
    "company": "Cisco",
@@ -3335,6 +3347,15 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Compensation and Benefits Specialist"
+  },
+  "7480a4633144e2488e358071de3ec959a93c41f2": {
+   "company": "Tailscale",
+   "date": "2026-10-11",
+   "gaps": [
+    "Go",
+    "distributed systems"
+   ],
+   "title": "Infrastructure Engineer"
   },
   "74f61ecf8544c079d981ca3ade610bd4addcc59b": {
    "company": "Ciena",
@@ -5105,6 +5126,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "VTS Test Technologist Co-op"
+  },
+  "ae8e07da409c1ed26302d9f2c35b32a92b2e1e45": {
+   "company": "Thermofisher",
+   "date": "2026-10-11",
+   "gaps": [],
+   "title": "Scientist I – Analytical Operations"
   },
   "aeba5a4cd2a96a7daeb6888638c5587bcb822d3f": {
    "company": "Dentalcorp",
