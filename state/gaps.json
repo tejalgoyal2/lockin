@@ -279,6 +279,12 @@
    "gaps": [],
    "title": "Finite Element Analysis Specialist"
   },
+  "096ae3bc83ea2cd30049e7a80bfbf7593dcef4bb": {
+   "company": "Geaerospace",
+   "date": "2026-10-12",
+   "gaps": [],
+   "title": "Engines Engineering Intern – Computer or Software Engineering – US – Summer 2027 - Returning Students"
+  },
   "096d53f94e91b8d6aee920aaa6344b9df23464e9": {
    "company": "Monks",
    "date": "2026-10-07",
@@ -433,6 +439,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Labour Relations Analyst (Contract)"
+  },
+  "0f4969dd8a21204796f745f234751d8311fabe57": {
+   "company": "Finni Health",
+   "date": "2026-10-12",
+   "gaps": [],
+   "title": "Board Certified Behavior Analyst (BCBA)- Ontario, OH"
   },
   "0fd16ded19d3d2845a815e35c6f21eea0cc120c7": {
    "company": "Dimensional",
@@ -710,6 +722,12 @@
     "React Native"
    ],
    "title": "Software Engineer Intern (Summer 2027)"
+  },
+  "181d1f2db41cfaf25be73ba692e727a935b6e228": {
+   "company": "Ia",
+   "date": "2026-10-12",
+   "gaps": [],
+   "title": "Business Data Steward"
   },
   "183ac5f74e75a546da852a59cd09d11281ee3059": {
    "company": "Flynncompanies",
@@ -1053,6 +1071,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Bilingual Customer Care Specialist - 6 Month Contract"
+  },
+  "251b33b04bc228d4743d81512456c17412bc5a40": {
+   "company": "Slice",
+   "date": "2026-10-12",
+   "gaps": [],
+   "title": "Software Developer, Web"
   },
   "25deee846967c9953afd794dc6256ab08b0b46d8": {
    "company": "BMO",
@@ -2382,6 +2406,14 @@
    "gaps": [],
    "title": "Analyst, Employee Benefits"
   },
+  "546579cc89f89980e7a2acf0f1530fb9379ffa62": {
+   "company": "OPENLANE",
+   "date": "2026-10-12",
+   "gaps": [
+    "Swift"
+   ],
+   "title": "AI First iOS Software Engineer (Remote)"
+  },
   "546acfaface233120295405bd3904cdf6b11957b": {
    "company": "Mastercard",
    "date": "2026-10-07",
@@ -3273,6 +3305,12 @@
    "gaps": [],
    "title": "Advisor Compliance and Business Practices Specialist"
   },
+  "71b5b1681d256a5fe3524dbf1e3085b70c9bf0f4": {
+   "company": "Geaerospace",
+   "date": "2026-10-12",
+   "gaps": [],
+   "title": "Engines Engineering Co-op – US – Fall 2027 - Returning Students"
+  },
   "71dd3fc3a7414a95831b03756b6ba8f13f8f597f": {
    "company": "BeyondTrust",
    "date": "2026-10-07",
@@ -3469,6 +3507,15 @@
    "gaps": [],
    "title": "Test Automation Technologist"
   },
+  "78b8f6917542ecc3b15484918e04efb0e208c648": {
+   "company": "OPENLANE",
+   "date": "2026-10-12",
+   "gaps": [
+    "Kotlin",
+    "unit testing"
+   ],
+   "title": "AI First Android Developer"
+  },
   "78d0a3b766e178100aa6ca164d30c43abb77aa40": {
    "company": "Multimatic",
    "date": "2026-10-07",
@@ -3654,6 +3701,12 @@
    "gaps": [],
    "title": "Accounts Payable Specialist"
   },
+  "7b8f439a6ff8f8b5ff1644610d21aebe25900856": {
+   "company": "Novartis",
+   "date": "2026-10-12",
+   "gaps": [],
+   "title": "Allergy Territory Account Specialist –Edison, NJ"
+  },
   "7bd96b8f78ab2e98752f6c091cb24f8ee15b40f8": {
    "company": "Onni",
    "date": "2026-10-10",
@@ -3733,6 +3786,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Resident Engineer"
+  },
+  "7e1e0816ff150f43c5e7573d0ba775e8d24b3bf5": {
+   "company": "Son",
+   "date": "2026-10-12",
+   "gaps": [],
+   "title": "Summer Engineering Intern - District 8 - Ainsworth and Valentine"
   },
   "7e996e4155fa00d42d6a0d1fd751d98b0fe19ba8": {
    "company": "McKesson",
@@ -3837,6 +3896,14 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Implementation Specialist-1"
+  },
+  "81a8dfb232712ab6af8eaa7b101d67883bc3c2f9": {
+   "company": "Gdit",
+   "date": "2026-10-12",
+   "gaps": [
+    "Tableau"
+   ],
+   "title": "Summer 2027 Project Management/Business Analyst Internship"
   },
   "81d9489ab2f882fe7cf62e6a7467fb18646bd2ff": {
    "company": "Braze",
@@ -4211,6 +4278,12 @@
    "date": "2026-10-10",
    "gaps": [],
    "title": "Summer 2027 Intern- Enterprise Platform Functions"
+  },
+  "8f4c14de2cd4764e5626949579a6c1a3341de201": {
+   "company": "Valmont",
+   "date": "2026-10-12",
+   "gaps": [],
+   "title": "Product Analyst Intern (Part Time)"
   },
   "8fb692b93763db9404f558702cf636beb0c47ed6": {
    "company": "Analogdevices",
@@ -4618,6 +4691,14 @@
    "gaps": [],
    "title": "Product Developer, Apparel (6 Month Contract)"
   },
+  "9d83d096ff18379ada9fc2b4a691c2cd38dd1baf": {
+   "company": "Zoll",
+   "date": "2026-10-12",
+   "gaps": [
+    "Salesforce"
+   ],
+   "title": "Bilingual Contract Specialist (English/French)"
+  },
   "9d8ffe22c7f973db340901a32190ba07ffc06dcf": {
    "company": "Nelnet",
    "date": "2026-10-10",
@@ -4952,6 +5033,12 @@
    "gaps": [],
    "title": "Security Engineer"
   },
+  "a7cf832042553e1f5c6fa1c6346aacf0392262eb": {
+   "company": "Woodward",
+   "date": "2026-10-12",
+   "gaps": [],
+   "title": "Engineering Internship Summer 2027"
+  },
   "a88a2a0b6aa87f893bcb1cc2c8af702ef81d83cd": {
    "company": "WorkOS",
    "date": "2026-10-07",
@@ -5150,6 +5237,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Data Centre Solutions Summer Student"
+  },
+  "af924d68c7678d67bcc3d452ac88025738570326": {
+   "company": "Johnsonelectric",
+   "date": "2026-10-12",
+   "gaps": [],
+   "title": "CNC Engineering Tech"
   },
   "b08cfd2f0a524f5b40277520fca75cff24aaa478": {
    "company": "Open Farm",
@@ -5388,6 +5481,12 @@
     "Salesforce"
    ],
    "title": "Data Migration Consultant"
+  },
+  "b8d3c8a7128547814efcd91b43f052030107c803": {
+   "company": "Geaerospace",
+   "date": "2026-10-12",
+   "gaps": [],
+   "title": "Engines Engineering Intern – US – Summer 2027 - Returning Students"
   },
   "b8e52e46b3b120223dcd0b74d4cb2ca1b7db5181": {
    "company": "Euna",
@@ -5659,6 +5758,12 @@
    "date": "2026-10-10",
    "gaps": [],
    "title": "Junior Automation Systems Designer - Electrical"
+  },
+  "c3faa867b193815d81f11ec0c30afe3ee1431863": {
+   "company": "Copart",
+   "date": "2026-10-12",
+   "gaps": [],
+   "title": "Inventory Specialist/Receiver"
   },
   "c47df22215c92efd6ef631b36d21ee3592e0b1cd": {
    "company": "Johnsonelectric",
@@ -6045,6 +6150,14 @@
    "gaps": [],
    "title": "Structures (CAE) Engineer"
   },
+  "d47686cdcc4b8567cf8206611db4f83b96bfbf88": {
+   "company": "Huron",
+   "date": "2026-10-12",
+   "gaps": [
+    "Oracle"
+   ],
+   "title": "Digital Consulting Associate, Oracle Reporting & Analytics (U.S. or Canada)"
+  },
   "d5017350394e271fe1f9ca9c1b680bd9e63fee92": {
    "company": "Brantfordpoliceservice",
    "date": "2026-10-07",
@@ -6328,6 +6441,14 @@
    "gaps": [],
    "title": "Audit Specialist (Paid Internship)"
   },
+  "e00eaceeb72f66265bd0def8f62828fe97efb7cf": {
+   "company": "Databricks",
+   "date": "2026-10-12",
+   "gaps": [
+    "Java"
+   ],
+   "title": "Software Engineering Intern (2027)"
+  },
   "e05d1a673a16f143fba0ad9c79d4f0cbf6a84920": {
    "company": "TMX Group",
    "date": "2026-10-10",
@@ -6371,6 +6492,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Test Specialist - CDU"
+  },
+  "e2a3168ec4bbefca18c8b45188b3a5d29fc3ac31": {
+   "company": "Slihrms",
+   "date": "2026-10-12",
+   "gaps": [],
+   "title": "Water Engineering Intern - Summer 2027"
   },
   "e2a5f36b2ee0caa1c0aec04f50ca19839030bc8d": {
    "company": "Vulcanx",
@@ -6954,6 +7081,12 @@
    "date": "2026-10-10",
    "gaps": [],
    "title": "UI/UX Software Engineer (UE5)"
+  },
+  "f65a31736ca7678d1a65d41e25da23c2becc64e7": {
+   "company": "Geaerospace",
+   "date": "2026-10-12",
+   "gaps": [],
+   "title": "Engines Engineering Co-op – Computer or Software Engineering – US – Fall 2027 - Returning Students"
   },
   "f6ab4d5c74da278f82816ee21099367c6ccafbff": {
    "company": "Think Academy US",

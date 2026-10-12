@@ -1,63 +1,63 @@
 # Gap terms: what JDs ask for that skills.yaml does not cover
 
-Generated 2026-10-07 (UTC). Counts are jobs, not mentions: each job is counted once, from every JD fetched (including jobs the filters later dropped). Move a term from `gaps.yaml` to `skills.yaml` once you have it.
+Generated 2026-10-12 (UTC). Counts are jobs, not mentions: each job is counted once, from every JD fetched (including jobs the filters later dropped). Move a term from `gaps.yaml` to `skills.yaml` once you have it.
 
-## Top 25 gap terms, last 7 days (657 jobs with a JD)
-
-| Term | Jobs | Example titles |
-|---|---:|---|
-| Java | 39 | Software Development Internship (Summer 2027) (Autodesk); Software Engineer, Metronome Infrastructure (Stripe); Engineer (Xero) |
-| GCP | 30 | Software Engineer (Product - Backend) (Vasco); Junior Software Engineer - AI Agent Platform (Motorola Solutions); Database Administrator (LCBO) |
-| Salesforce | 24 | Cash & Collections Analyst (12 Month Contract - Hybrid) (OpenTable); Human Resource Operations - Immigration Specialist (Capital One); Specialist, Order Management - Americas (AVEVA) |
-| distributed systems | 24 | Software Development Internship (Summer 2027) (Autodesk); Systems Developer, PAAS / Développeur de systèmes, PAAS (Tower Research Capital); Software Engineer, Metronome Infrastructure (Stripe) |
-| Oracle | 23 | Database Administrator (LCBO); System Engineer (DataStealth); Specialist, Order Management - Americas (AVEVA) |
-| Tableau | 21 | Analyste de données produit/ Product Data Analyst (Budge); Business Data Analyst (Moneris); QA Laboratory Systems Analyst (LCBO) |
-| microservices | 19 | Software Development Internship (Summer 2027) (Autodesk); Software Development Engineer in Test (Magnet Forensics); Engineer (Xero) |
-| Snowflake | 17 | Business Data Analyst (Moneris); Intern, Data Scientist - Summer 2027 (Capital One); Software Engineer (Repositories) (Chainguard) |
-| Jenkins | 15 | Software Automation Developer Intern (Exegy); Database Administrator (LCBO); Software Development Engineer in Test (Magnet Forensics) |
-| ServiceNow | 15 | Payroll Support Specialist (UBC); Branch Support Specialist (BMO); Service Now AI DevOps Specialist (McKesson) |
-| SAP | 14 | Student, IT, Data Science and Software, Calgary (May 2027) (Cenovus); Equipment Specialist (Sanofi); Applications Engineer (Weir) |
-| unit testing | 13 | Firmware Developer (Miovision); Python Analyst/Programmer (TMX Group); Software Developer (iOS) (Priceline) |
-| GitLab | 12 | Software Automation Developer Intern (Exegy); Distinguished Engineer, Core DevOps (GitLab); AWS Cloud Platform Engineer (Appnovation) |
-| MySQL | 12 | Software Engineer, Networking (Features) (Tailscale); Database Administrator (LCBO); Full Stack Developer (PHP/JavaScript) (TMX Group) |
-| Angular | 11 | Frontend Developer Intern, Winter 2027 (Coveo); Full Stack Software Engineer (Remarcable); Software Developer (Fidelity Canada) |
-| Vue | 11 | Software Engineer (Product - Backend) (Vasco); Grants Specialist (Cira); Full Stack Software Engineer (Remarcable) |
-| MATLAB | 9 | GPU & AI Accelerator Hardware Design Undergraduate Intern (Intel); Analog Design Engineer Intern (Semtech); Optical Components Test Engineer - Ottawa or Quebec City (Ciena) |
-| Ruby | 8 | Student, AI and Software Engineering, Calgary (May 2027) (Cenovus); Product Engineer (OpsLevel); Developer Advocate (Asana) |
-| dbt | 8 | Business Data Analyst (Moneris); Intern, Data Scientist - Summer 2027 (Capital One); Data Scientist (Opusclip) |
-| BigQuery | 7 | Software Engineer (Product - Backend) (Vasco); Data Scientist (Opusclip); Data Analytics Engineer (Toptal) |
-| Go | 7 | Software Engineer, Networking (Features) (Tailscale); Software Engineer, Driver Earnings (Lyft); Software Engineer, Pricing (Lyft) |
-| Grafana | 7 | Software Development Engineer in Test (Magnet Forensics); Site Reliability Engineering I (Loblaw); DevOps Engineer, Evisort AI (Workday) |
-| GraphQL | 7 | Full Stack Software Engineer (Remarcable); Shopify Developer (Warner Music Group); Product Engineer (OpsLevel) |
-| SAS | 7 | Actuarial Analyst I (Alberta Motor Association); Soil Health Specialist (Ontariosoilcrop); Data Scientist, Credit Risk Quantification (Desjardins) |
-| Spring | 7 | Software Developer (Fidelity Canada); Software Developer (Interac); Jr. Software Engineer - Java, Angular, JavaScript (Motorola Solutions) |
-
-## Top 25 gap terms, last 30 days (657 jobs with a JD)
+## Top 25 gap terms, last 7 days (1023 jobs with a JD)
 
 | Term | Jobs | Example titles |
 |---|---:|---|
-| Java | 39 | Software Development Internship (Summer 2027) (Autodesk); Software Engineer, Metronome Infrastructure (Stripe); Engineer (Xero) |
-| GCP | 30 | Software Engineer (Product - Backend) (Vasco); Junior Software Engineer - AI Agent Platform (Motorola Solutions); Database Administrator (LCBO) |
-| Salesforce | 24 | Cash & Collections Analyst (12 Month Contract - Hybrid) (OpenTable); Human Resource Operations - Immigration Specialist (Capital One); Specialist, Order Management - Americas (AVEVA) |
-| distributed systems | 24 | Software Development Internship (Summer 2027) (Autodesk); Systems Developer, PAAS / Développeur de systèmes, PAAS (Tower Research Capital); Software Engineer, Metronome Infrastructure (Stripe) |
-| Oracle | 23 | Database Administrator (LCBO); System Engineer (DataStealth); Specialist, Order Management - Americas (AVEVA) |
-| Tableau | 21 | Analyste de données produit/ Product Data Analyst (Budge); Business Data Analyst (Moneris); QA Laboratory Systems Analyst (LCBO) |
-| microservices | 19 | Software Development Internship (Summer 2027) (Autodesk); Software Development Engineer in Test (Magnet Forensics); Engineer (Xero) |
-| Snowflake | 17 | Business Data Analyst (Moneris); Intern, Data Scientist - Summer 2027 (Capital One); Software Engineer (Repositories) (Chainguard) |
-| Jenkins | 15 | Software Automation Developer Intern (Exegy); Database Administrator (LCBO); Software Development Engineer in Test (Magnet Forensics) |
-| ServiceNow | 15 | Payroll Support Specialist (UBC); Branch Support Specialist (BMO); Service Now AI DevOps Specialist (McKesson) |
-| SAP | 14 | Student, IT, Data Science and Software, Calgary (May 2027) (Cenovus); Equipment Specialist (Sanofi); Applications Engineer (Weir) |
-| unit testing | 13 | Firmware Developer (Miovision); Python Analyst/Programmer (TMX Group); Software Developer (iOS) (Priceline) |
-| GitLab | 12 | Software Automation Developer Intern (Exegy); Distinguished Engineer, Core DevOps (GitLab); AWS Cloud Platform Engineer (Appnovation) |
-| MySQL | 12 | Software Engineer, Networking (Features) (Tailscale); Database Administrator (LCBO); Full Stack Developer (PHP/JavaScript) (TMX Group) |
-| Angular | 11 | Frontend Developer Intern, Winter 2027 (Coveo); Full Stack Software Engineer (Remarcable); Software Developer (Fidelity Canada) |
-| Vue | 11 | Software Engineer (Product - Backend) (Vasco); Grants Specialist (Cira); Full Stack Software Engineer (Remarcable) |
-| MATLAB | 9 | GPU & AI Accelerator Hardware Design Undergraduate Intern (Intel); Analog Design Engineer Intern (Semtech); Optical Components Test Engineer - Ottawa or Quebec City (Ciena) |
-| Ruby | 8 | Student, AI and Software Engineering, Calgary (May 2027) (Cenovus); Product Engineer (OpsLevel); Developer Advocate (Asana) |
-| dbt | 8 | Business Data Analyst (Moneris); Intern, Data Scientist - Summer 2027 (Capital One); Data Scientist (Opusclip) |
-| BigQuery | 7 | Software Engineer (Product - Backend) (Vasco); Data Scientist (Opusclip); Data Analytics Engineer (Toptal) |
-| Go | 7 | Software Engineer, Networking (Features) (Tailscale); Software Engineer, Driver Earnings (Lyft); Software Engineer, Pricing (Lyft) |
-| Grafana | 7 | Software Development Engineer in Test (Magnet Forensics); Site Reliability Engineering I (Loblaw); DevOps Engineer, Evisort AI (Workday) |
-| GraphQL | 7 | Full Stack Software Engineer (Remarcable); Shopify Developer (Warner Music Group); Product Engineer (OpsLevel) |
-| SAS | 7 | Actuarial Analyst I (Alberta Motor Association); Soil Health Specialist (Ontariosoilcrop); Data Scientist, Credit Risk Quantification (Desjardins) |
-| Spring | 7 | Software Developer (Fidelity Canada); Software Developer (Interac); Jr. Software Engineer - Java, Angular, JavaScript (Motorola Solutions) |
+| Java | 67 | Software Engineering Intern (2027) (Databricks); Unix/Linux Developer – Application Modernization (Capco); Winter Co-op 2027 - Software Engineering (Manulife) |
+| GCP | 46 | Backend Software Engineer (Megaport); DevOps Analyst (TMX Group); Junior NLP Data Scientist (UBC) |
+| Oracle | 39 | Digital Consulting Associate, Oracle Reporting & Analytics (U.S. or Canada) (Huron); Backend Software Engineer (Megaport); Financial System Analyst (Cae) |
+| distributed systems | 38 | Infrastructure Engineer (Tailscale); DevOps Analyst (TMX Group); Software Engineer Intern (Genesys) |
+| Salesforce | 34 | Bilingual Contract Specialist (English/French) (Zoll); Distribution Engineer, Intake (Hydroottawa); Associate Solutions Engineer \| Housing (Eliseai) |
+| microservices | 32 | Directeur technique - Cloud natif, IA et DevOps (Valtech); Machine Learning Engineer Intern (Workday); DevOps Engineer (Broadridge) |
+| Tableau | 31 | Summer 2027 Project Management/Business Analyst Internship (Gdit); 2027 Future Talent Program - International Pricing Analytics - Intern (Msd); Business Systems Analyst, Winter 2027 Co-op (CIBC) |
+| SAP | 27 | Warehouse Process & Automation Engineer - Onsite (Curtisswright); IT Business Analyst (Sodalessolutions); Pharmacy Contracts & Member Onboarding Specialist (12 month contract) (McKesson) |
+| Snowflake | 23 | Treasury Operations Analyst (Mercury); Credit Investment Analyst (Float); Customer Support Developer (Databases) (Airbyte) |
+| unit testing | 21 | AI First Android Developer (OPENLANE); Software Verification Engineer ON (Aviyatech); Software Analyst Intern (Winter 2027, 8-12months) (Hitachi) |
+| MySQL | 20 | Développeur(-euse) logiciel – Intégration / Backfill Integration Developer – Canada (Montreal) (mthree Recruiting Portal); Applied AI Engineer (ContactMonkey); Integration and Test Developer (Syntronic) |
+| Jenkins | 18 | DevOps Engineer (Broadridge); DevOps Developer (Platform Engineering) (FCC); Java Developer – Application Modernization (Capco) |
+| MATLAB | 17 | Research Engineer - Instrumentation (UBC); Software Verification Engineer ON (Aviyatech); Signal and Power Integrity Engineer - New Grad (Ciena) |
+| GitLab | 16 | Network Engineer (Moneris); DevOps Engineer (Broadridge); QA Automation Engineer – SmartBear & Playwright (Capco) |
+| ServiceNow | 16 | Advisor IT Data Network Operations & Support (Enbridge); Payroll Support Specialist (UBC); Branch Support Specialist (BMO) |
+| Angular | 15 | Software Developer (Intouchinsight); AI-Directed Software Engineer (Volarisgroup); Forward Deployed Engineer - Full Stack AI Solutions (Vistavu) |
+| Ansible | 14 | DevOps Analyst (TMX Group); Software Developer Coop (Cae); Network Engineer (Moneris) |
+| Go | 14 | Infrastructure Engineer (Tailscale); DevOps Analyst (TMX Group); DevOps Engineer (Broadridge) |
+| Grafana | 13 | DevOps Analyst (TMX Group); Kubernetes Platform Developer (Navcanada); DevOps Analyst (TMX Group) |
+| Spring | 12 | Backend Software Engineer (Megaport); QA Automation Engineer – SmartBear & Playwright (Capco); AI-Directed Software Engineer (Volarisgroup) |
+| Vue | 12 | Applied AI Engineer (ContactMonkey); Software Engineer (Product - Backend) (Vasco); Grants Specialist (Cira) |
+| GraphQL | 11 | Backend Engineer, Payments & Risk (Stripe); Greenfield Full Stack Developer (Boeing); Backend Engineer, Developer & End-user Experience Platform (Stripe) |
+| Kafka | 11 | Software Engineer, Streaming Platform (Sentry); Software Developer (Cisco); Integration and Test Developer (Syntronic) |
+| Kotlin | 11 | AI First Android Developer (OPENLANE); Backend Software Engineer (Megaport); Software Engineer, Android, Level 4 (Snapchat) |
+| Ruby | 10 | Associate, Client Engineering (Mexico City) (Glia); Applied AI Engineer (ContactMonkey); Student, AI and Software Engineering, Calgary (May 2027) (Cenovus) |
+
+## Top 25 gap terms, last 30 days (1023 jobs with a JD)
+
+| Term | Jobs | Example titles |
+|---|---:|---|
+| Java | 67 | Software Engineering Intern (2027) (Databricks); Unix/Linux Developer – Application Modernization (Capco); Winter Co-op 2027 - Software Engineering (Manulife) |
+| GCP | 46 | Backend Software Engineer (Megaport); DevOps Analyst (TMX Group); Junior NLP Data Scientist (UBC) |
+| Oracle | 39 | Digital Consulting Associate, Oracle Reporting & Analytics (U.S. or Canada) (Huron); Backend Software Engineer (Megaport); Financial System Analyst (Cae) |
+| distributed systems | 38 | Infrastructure Engineer (Tailscale); DevOps Analyst (TMX Group); Software Engineer Intern (Genesys) |
+| Salesforce | 34 | Bilingual Contract Specialist (English/French) (Zoll); Distribution Engineer, Intake (Hydroottawa); Associate Solutions Engineer \| Housing (Eliseai) |
+| microservices | 32 | Directeur technique - Cloud natif, IA et DevOps (Valtech); Machine Learning Engineer Intern (Workday); DevOps Engineer (Broadridge) |
+| Tableau | 31 | Summer 2027 Project Management/Business Analyst Internship (Gdit); 2027 Future Talent Program - International Pricing Analytics - Intern (Msd); Business Systems Analyst, Winter 2027 Co-op (CIBC) |
+| SAP | 27 | Warehouse Process & Automation Engineer - Onsite (Curtisswright); IT Business Analyst (Sodalessolutions); Pharmacy Contracts & Member Onboarding Specialist (12 month contract) (McKesson) |
+| Snowflake | 23 | Treasury Operations Analyst (Mercury); Credit Investment Analyst (Float); Customer Support Developer (Databases) (Airbyte) |
+| unit testing | 21 | AI First Android Developer (OPENLANE); Software Verification Engineer ON (Aviyatech); Software Analyst Intern (Winter 2027, 8-12months) (Hitachi) |
+| MySQL | 20 | Développeur(-euse) logiciel – Intégration / Backfill Integration Developer – Canada (Montreal) (mthree Recruiting Portal); Applied AI Engineer (ContactMonkey); Integration and Test Developer (Syntronic) |
+| Jenkins | 18 | DevOps Engineer (Broadridge); DevOps Developer (Platform Engineering) (FCC); Java Developer – Application Modernization (Capco) |
+| MATLAB | 17 | Research Engineer - Instrumentation (UBC); Software Verification Engineer ON (Aviyatech); Signal and Power Integrity Engineer - New Grad (Ciena) |
+| GitLab | 16 | Network Engineer (Moneris); DevOps Engineer (Broadridge); QA Automation Engineer – SmartBear & Playwright (Capco) |
+| ServiceNow | 16 | Advisor IT Data Network Operations & Support (Enbridge); Payroll Support Specialist (UBC); Branch Support Specialist (BMO) |
+| Angular | 15 | Software Developer (Intouchinsight); AI-Directed Software Engineer (Volarisgroup); Forward Deployed Engineer - Full Stack AI Solutions (Vistavu) |
+| Ansible | 14 | DevOps Analyst (TMX Group); Software Developer Coop (Cae); Network Engineer (Moneris) |
+| Go | 14 | Infrastructure Engineer (Tailscale); DevOps Analyst (TMX Group); DevOps Engineer (Broadridge) |
+| Grafana | 13 | DevOps Analyst (TMX Group); Kubernetes Platform Developer (Navcanada); DevOps Analyst (TMX Group) |
+| Spring | 12 | Backend Software Engineer (Megaport); QA Automation Engineer – SmartBear & Playwright (Capco); AI-Directed Software Engineer (Volarisgroup) |
+| Vue | 12 | Applied AI Engineer (ContactMonkey); Software Engineer (Product - Backend) (Vasco); Grants Specialist (Cira) |
+| GraphQL | 11 | Backend Engineer, Payments & Risk (Stripe); Greenfield Full Stack Developer (Boeing); Backend Engineer, Developer & End-user Experience Platform (Stripe) |
+| Kafka | 11 | Software Engineer, Streaming Platform (Sentry); Software Developer (Cisco); Integration and Test Developer (Syntronic) |
+| Kotlin | 11 | AI First Android Developer (OPENLANE); Backend Software Engineer (Megaport); Software Engineer, Android, Level 4 (Snapchat) |
+| Ruby | 10 | Associate, Client Engineering (Mexico City) (Glia); Applied AI Engineer (ContactMonkey); Student, AI and Software Engineering, Calgary (May 2027) (Cenovus) |
