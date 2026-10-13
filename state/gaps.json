@@ -415,6 +415,12 @@
    "gaps": [],
    "title": "Compliance Data Enablement Intern"
   },
+  "0e29e66e3cfcf5160dffba2645ccfd4e91cdcb6c": {
+   "company": "Legora",
+   "date": "2026-10-13",
+   "gaps": [],
+   "title": "Legal Engineer Associate"
+  },
   "0e41024cd2a2955d3f51848fff0a786a27ab69fa": {
    "company": "Enbridge",
    "date": "2026-10-10",
@@ -676,6 +682,24 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Energy Specialist (Engineering)"
+  },
+  "15ec8de374e8b01a7f475b5150c0286b4d6dc19a": {
+   "company": "BMO",
+   "date": "2026-10-13",
+   "gaps": [
+    "SAS",
+    "SSIS"
+   ],
+   "title": "Data and Reporting Analyst"
+  },
+  "16853c459cfe93ab03e654381e5d853e69ffd3d9": {
+   "company": "1Password",
+   "date": "2026-10-13",
+   "gaps": [
+    "Looker",
+    "Oracle"
+   ],
+   "title": "Data Intern - Product Analytics - Winter 2027"
   },
   "16cc23b712cad44e4d19c0b08f231a26498bcab6": {
    "company": "Aero",
@@ -1209,6 +1233,16 @@
    "gaps": [],
    "title": "Supply Chain Analyst - THD Order Management"
   },
+  "2a732fa99e48c43750dfa74b0b417cafff0d69a4": {
+   "company": "Manulife",
+   "date": "2026-10-13",
+   "gaps": [
+    "GCP",
+    "Java",
+    "Tableau"
+   ],
+   "title": "Winter Co-op 2027 - AI"
+  },
   "2ae1d3b93bee8b912b35f8c440d222e7e278c982": {
    "company": "QuadBridge",
    "date": "2026-10-07",
@@ -1670,6 +1704,27 @@
    "gaps": [],
    "title": "Deskside and MEM Analyst"
   },
+  "3b05157db841fdeb3c027b33d69e519421b44d7c": {
+   "company": "BMO",
+   "date": "2026-10-13",
+   "gaps": [],
+   "title": "Technical Business Analyst"
+  },
+  "3b1134e3763a005a8d09ea48fbe29886a8e9f5c1": {
+   "company": "Talentmanagementsolution",
+   "date": "2026-10-13",
+   "gaps": [
+    "Appium",
+    "Cypress",
+    "GitLab",
+    "Jenkins",
+    "Postman",
+    "Selenium",
+    "distributed systems",
+    "microservices"
+   ],
+   "title": "Automation Engineer"
+  },
   "3b38422cc8350266f056c93a5a3d41cf09e4c0a0": {
    "company": "Copart",
    "date": "2026-10-10",
@@ -1794,6 +1849,12 @@
     "Snowflake"
    ],
    "title": "Ruby on Rails Developer"
+  },
+  "3edb5bd7cea1579da0bdccb860f1e7b5b86f6e15": {
+   "company": "Capco",
+   "date": "2026-10-13",
+   "gaps": [],
+   "title": "Business Analyst"
   },
   "3ee3e7d603f4ae7f6498d5c96e0facae56248516": {
    "company": "Hitachi",
@@ -1951,6 +2012,14 @@
    ],
    "title": "Digital Performance Analyst"
   },
+  "44293c3591ccfbfca27009371eea9b4a6012275d": {
+   "company": "Multimatic",
+   "date": "2026-10-13",
+   "gaps": [
+    "SAP"
+   ],
+   "title": "Financial Analyst"
+  },
   "44413ef52c91d419c297c9cff409145d1778c186": {
    "company": "Rbi",
    "date": "2026-10-07",
@@ -2045,6 +2114,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Sourcing and Procurement Analyst"
+  },
+  "46d579fa5d136b9a12112aba7b8867ac65229762": {
+   "company": "Suncor",
+   "date": "2026-10-13",
+   "gaps": [],
+   "title": "Mine Engineer"
   },
   "46fe5dde781e03ee9f6e9778bb88046130f71909": {
    "company": "TMX Group",
@@ -2206,6 +2281,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Bilingual Loan Processing Specialist"
+  },
+  "4ddb6021ed942ce73c6407c30c6fdb6deb7ec1b2": {
+   "company": "Mejuri",
+   "date": "2026-10-13",
+   "gaps": [],
+   "title": "Visual Merchandising Specialist"
   },
   "4e4c94fa3ba2b35a029dfb00317c2b26a91be0c0": {
    "company": "Jobber",
@@ -2589,6 +2670,14 @@
    "gaps": [],
    "title": "2027 Data Analytics & AltaGas - 2027 Process Automation Co-op Student"
   },
+  "59b6d7cdd6667952c8ecd2db0e478336ca42af8d": {
+   "company": "Roche",
+   "date": "2026-10-13",
+   "gaps": [
+    "SAS"
+   ],
+   "title": "Analytical Data Science Programmer"
+  },
   "5a4cf957076e1a05e1412cf7ca9d3d69c13d501a": {
    "company": "Velora",
    "date": "2026-10-07",
@@ -2900,6 +2989,12 @@
    ],
    "title": "Data Scientist, Credit Risk Quantification"
   },
+  "62b88b0d947df46f52d35c3bb5a1df148e8377b1": {
+   "company": "Jj",
+   "date": "2026-10-13",
+   "gaps": [],
+   "title": "Solution Engineer Enterprise Contracting"
+  },
   "62b993d32ae4991c23ef092cf69f6c1a1cf9ea47": {
    "company": "D3Security",
    "date": "2026-10-10",
@@ -2947,6 +3042,17 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Specialist, Social Media and Content - Year-Round - Full-Time"
+  },
+  "6602f214b4b2de9ec02d13e273201ab6259da5d1": {
+   "company": "SOTI",
+   "date": "2026-10-13",
+   "gaps": [
+    "Angular",
+    "Elixir",
+    "Java",
+    "Ruby"
+   ],
+   "title": "Software Developer Intern - SOTI MobiControl Apple HQ (January 2027 12 Months)"
   },
   "665bec2812ca11bd0b78efe84335c2f5dc543d1e": {
    "company": "Volarisgroup",
@@ -3141,6 +3247,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Course Development Quality Control Specialist"
+  },
+  "6cd5029788469fed3599f3e607e36d7c18eeec93": {
+   "company": "Gevernova",
+   "date": "2026-10-13",
+   "gaps": [],
+   "title": "Field Engineer Intern"
   },
   "6cdf322c51725260732979a47a769529fa4da594": {
    "company": "Bdc",
@@ -3911,6 +4023,12 @@
    "gaps": [],
    "title": "Technical Writer"
   },
+  "81f16776f5156c0aff097049e43c81f49d7cac6a": {
+   "company": "Gevernova",
+   "date": "2026-10-13",
+   "gaps": [],
+   "title": "Field Engineer Intern"
+  },
   "824132d8d60f1b9aab8517d82e489a9cc5e91e4d": {
    "company": "Finning",
    "date": "2026-10-10",
@@ -4060,6 +4178,17 @@
    "gaps": [],
    "title": "Controls Programmer"
   },
+  "885603e169034f1f5a07398e365d9691c578c9e0": {
+   "company": "Snowflake",
+   "date": "2026-10-13",
+   "gaps": [
+    "GCP",
+    "Java",
+    "Snowflake",
+    "distributed systems"
+   ],
+   "title": "AI Software Engineer"
+  },
   "88da1004e1ee3ac625a38ad7cd55b221c7f639f0": {
    "company": "Centricsoftware",
    "date": "2026-10-10",
@@ -4141,6 +4270,15 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Data Portfolio Solution Specialist"
+  },
+  "8c4270cb02ff2fa74039bd8b60af212bb46dcbde": {
+   "company": "Manulife",
+   "date": "2026-10-13",
+   "gaps": [
+    "GCP",
+    "Java"
+   ],
+   "title": "Winter Co-op 2027 - Data Engineering"
   },
   "8c8918cca86b55a6eaf94355a39d6171c1da2a5a": {
    "company": "Quora",
@@ -4238,6 +4376,15 @@
     "microservices"
    ],
    "title": "Associate Software Engineer New Grad"
+  },
+  "8e1b685018fa860fbc4a72b0a6edaeefa88835ad": {
+   "company": "Manulife",
+   "date": "2026-10-13",
+   "gaps": [
+    "Go",
+    "Java"
+   ],
+   "title": "Winter Co-op 2027 - Software Engineering (8 Months)"
   },
   "8e22f9adef37b8bb80165cb65e61c082a21ce032": {
    "company": "Cae",
@@ -4602,6 +4749,12 @@
    "gaps": [],
    "title": "Technical Support Controls Specialist"
   },
+  "99e5f60d7257a4a07efd7ab198c4f83ce023058d": {
+   "company": "Smarteralloys",
+   "date": "2026-10-13",
+   "gaps": [],
+   "title": "Materials Science Engineer"
+  },
   "9a01783344fb1cdba2245ebc6fab1d97ba740094": {
    "company": "Navcanada",
    "date": "2026-10-07",
@@ -4640,6 +4793,12 @@
     "Java"
    ],
    "title": "Software Developer Co-op (Winter 2027)"
+  },
+  "9b24fa817e301b9eb76f8b233f384b8efba0a35b": {
+   "company": "Manulife",
+   "date": "2026-10-13",
+   "gaps": [],
+   "title": "Canada Operations Analyst"
   },
   "9b326f02e9ad09e28cd4e98c51c3d22fc23d5388": {
    "company": "Dentalcorp",
@@ -4768,6 +4927,17 @@
    "date": "2026-10-10",
    "gaps": [],
    "title": "eCommerce Content Specialist"
+  },
+  "9f5ce62101cd9933530c1459b3bc656865e1e054": {
+   "company": "Verily",
+   "date": "2026-10-13",
+   "gaps": [
+    "Go",
+    "Java",
+    "Redshift",
+    "distributed systems"
+   ],
+   "title": "Software Engineer - ML Launchpad"
   },
   "9f945fee5d17ec85c33eda64bf062dacaf399279": {
    "company": "Smardt",
@@ -5338,6 +5508,12 @@
    "gaps": [],
    "title": "Regulatory Compliance Specialist"
   },
+  "b3dae21959651ff7ec2619e70d574dbd7d6ae197": {
+   "company": "Algonquincollege",
+   "date": "2026-10-13",
+   "gaps": [],
+   "title": "Full-time Abilities, Leave, and Wellness Specialist"
+  },
   "b432faca99518744bd6e383faa7d67ad223fe967": {
    "company": "Wasteconnections",
    "date": "2026-10-07",
@@ -5440,6 +5616,16 @@
    "gaps": [],
    "title": "Technical Customer Support Advocate"
   },
+  "b7b28b58aa9d7ff472f4696626f1930408d4202f": {
+   "company": "Glia",
+   "date": "2026-10-13",
+   "gaps": [
+    "Java",
+    "PHP",
+    "Ruby"
+   ],
+   "title": "Associate, Client Engineer (Vancouver)"
+  },
   "b7e3ae186b45f69bc6f994e823a7b8f630843964": {
    "company": "Tti",
    "date": "2026-10-07",
@@ -5495,6 +5681,19 @@
     "GCP"
    ],
    "title": "Cloud Engineer"
+  },
+  "b9251e7d9d0289e027ffca23efdf6afb6d0b4d5a": {
+   "company": "Spgi",
+   "date": "2026-10-13",
+   "gaps": [
+    "BigQuery",
+    "GCP",
+    "Java",
+    "Salesforce",
+    "Snowflake",
+    "Splunk"
+   ],
+   "title": "IT Service Operations, API and Cloud Warehouse Integrations"
   },
   "b977524fd227ec90eda15475bb5a7c675b264e55": {
    "company": "Sentry",
@@ -5598,6 +5797,15 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Spontaneous Application – Engineering"
+  },
+  "bc8e856be35cb6e8f578e250a0bf23d37019d426": {
+   "company": "Manulife",
+   "date": "2026-10-13",
+   "gaps": [
+    "GCP",
+    "Java"
+   ],
+   "title": "Winter Co-op 2027 - Data Engineering"
   },
   "bca7248925b727fca9bdcb5af0b584659caf0751": {
    "company": "Ryder",
@@ -5995,6 +6203,14 @@
    "gaps": [],
    "title": "Shift Engineer/ Building Operator"
   },
+  "ce5dfeb71e0188b8f7bce83fbd5e2e5bd4ddd30d": {
+   "company": "1Password",
+   "date": "2026-10-13",
+   "gaps": [
+    "Oracle"
+   ],
+   "title": "Finance Intern - Technical Accounting & Treasury - Winter 2027"
+  },
   "cef4da3cbcf53d5f0d64f79c1219cec0644d547d": {
    "company": "Medcan",
    "date": "2026-10-10",
@@ -6071,6 +6287,14 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Security Operations, Specialist"
+  },
+  "d216ef96a5c50411eaa2c76fd684b1dca1fc7592": {
+   "company": "Diligent Corporation",
+   "date": "2026-10-13",
+   "gaps": [
+    "Salesforce"
+   ],
+   "title": "Solution Engineer"
   },
   "d238dae237165e28d94d2f843d33c4d1cd0d1a9d": {
    "company": "Vanderlande",
@@ -6158,6 +6382,12 @@
    ],
    "title": "Digital Consulting Associate, Oracle Reporting & Analytics (U.S. or Canada)"
   },
+  "d4bf14c0c520c84c0f9294e279585abb91c18264": {
+   "company": "Capco",
+   "date": "2026-10-13",
+   "gaps": [],
+   "title": "AI Security Engineer"
+  },
   "d5017350394e271fe1f9ca9c1b680bd9e63fee92": {
    "company": "Brantfordpoliceservice",
    "date": "2026-10-07",
@@ -6197,6 +6427,14 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Yacht & Private Jet Specialist"
+  },
+  "d6b6b007780377f9d1cdaee9e62e720649c9189f": {
+   "company": "Fairstone",
+   "date": "2026-10-13",
+   "gaps": [
+    "SAP"
+   ],
+   "title": "Commercial Portfolio Analyst, Large Commercial"
   },
   "d6b9f6ad4f8ea3c75e86f5c708a5394a00cde730": {
    "company": "LCBO",
@@ -6775,6 +7013,18 @@
    "gaps": [],
    "title": "Reservoir Engineer Specialist"
   },
+  "eafd2bf3bd27452ab06574e3b575ace02ed5f86c": {
+   "company": "Cisco",
+   "date": "2026-10-13",
+   "gaps": [
+    "GCP",
+    "Go",
+    "Java",
+    "Ruby",
+    "microservices"
+   ],
+   "title": "Software Developer, Hybrid, Ottawa, Canada"
+  },
   "eb25165c6c38a7afb8a8037312a3d920d8799fab": {
    "company": "Motorola Solutions",
    "date": "2026-10-07",
@@ -6831,6 +7081,14 @@
    "date": "2026-10-10",
    "gaps": [],
    "title": "Financial Controls and Communication Analyst"
+  },
+  "ed3dd7e82911155ea49e5b5f168719a00b30f4e2": {
+   "company": "Sunlife",
+   "date": "2026-10-13",
+   "gaps": [
+    "ServiceNow"
+   ],
+   "title": "Student, AI Developer"
   },
   "ed53871173d15768316a5dfa999d2350e5b95b1b": {
    "company": "Awc",
@@ -7093,6 +7351,18 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "ELA Teacher Recruitment & Training Specialist"
+  },
+  "f6dc7ff2a56cb7e0ed049000f1a67299de891d73": {
+   "company": "Stripe",
+   "date": "2026-10-13",
+   "gaps": [
+    "Go",
+    "Java",
+    "Kotlin",
+    "Objective-C",
+    "Swift"
+   ],
+   "title": "Android Engineer, Terminal - CA"
   },
   "f76b88f3df28969cedee4c7942dacd016b28d18f": {
    "company": "Openai",
