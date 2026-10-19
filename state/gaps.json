@@ -314,6 +314,12 @@
    "gaps": [],
    "title": "Advisor, Digital Platforms & Operations"
   },
+  "07c2147bb188128c1c78fa15c3430ef5415a6e27": {
+   "company": "Manulife",
+   "date": "2026-10-19",
+   "gaps": [],
+   "title": "Analyst, Business Line Controls - Specialized Lending"
+  },
   "07c7a6011c322d37d8085649ec1980a2ae20629f": {
    "company": "Ludia",
    "date": "2026-10-07",
@@ -1268,6 +1274,15 @@
    "gaps": [],
    "title": "Engineering Graduate Program"
   },
+  "1fa67964274a1fe447b691b82bb23353758daa08": {
+   "company": "Huron",
+   "date": "2026-10-19",
+   "gaps": [
+    "SSIS",
+    "unit testing"
+   ],
+   "title": "Microsoft Dynamics 365 Technical Consultant / Developer"
+  },
   "2052f8b94c6b675f764e713d047eca9b3a019ef7": {
    "company": "Canadian Tire",
    "date": "2026-10-10",
@@ -1336,6 +1351,14 @@
    "date": "2026-10-17",
    "gaps": [],
    "title": "Compliance Operations Analyst"
+  },
+  "232035f13fbfc8c9fab001581435f2dc30320e11": {
+   "company": "Promiserobotics",
+   "date": "2026-10-19",
+   "gaps": [
+    "unit testing"
+   ],
+   "title": "Robotics and Control Support Engineer"
   },
   "23258e67500a34c87a2951119ac8139047053cdf": {
    "company": "Loblaw",
@@ -1692,6 +1715,16 @@
    "gaps": [],
    "title": "Mortgage Specialist"
   },
+  "2c54c31ba0bca9c6b0b4519ede90cf8bc6393809": {
+   "company": "PwC",
+   "date": "2026-10-19",
+   "gaps": [
+    "Informatica",
+    "Oracle",
+    "SAP"
+   ],
+   "title": "Data Risk Management, Associate"
+  },
   "2c737b99d75d1ce1dd1942be3af783e66db4bf13": {
    "company": "Crypto",
    "date": "2026-10-15",
@@ -1821,6 +1854,12 @@
     "Java"
    ],
    "title": "Développeur de logiciels / Software Developer"
+  },
+  "2fffad0e873d301271a0f1db3d9eaa866ab52f93": {
+   "company": "Markelcorp",
+   "date": "2026-10-19",
+   "gaps": [],
+   "title": "Associate Underwriter - Cyber & Tech E&O"
   },
   "2fffbe9f97762c5496684d7fc5c24971093877ca": {
    "company": "Ramudden",
@@ -2032,6 +2071,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Software Developer / Développeur(euse) logiciel"
+  },
+  "3563d755f227702a2ce4394ee2bda15a0a22cbc0": {
+   "company": "PwC",
+   "date": "2026-10-19",
+   "gaps": [],
+   "title": "Business AI Engineer - Intern - 2027"
   },
   "358e640092d7848a4adc85af304dd2af78aae794": {
    "company": "CW",
@@ -3655,6 +3700,12 @@
    "gaps": [],
    "title": "Mortgage Specialist"
   },
+  "5af75487f345290e30154bc874871cf6b29c9257": {
+   "company": "BMO",
+   "date": "2026-10-19",
+   "gaps": [],
+   "title": "Support Analyst - Messaging Client"
+  },
   "5b0a9b952182f08123edccd49d50e71bd75eb4b6": {
    "company": "Alberta Motor Association",
    "date": "2026-10-07",
@@ -3996,6 +4047,12 @@
    ],
    "title": "Frontend Developer Intern, Winter 2027"
   },
+  "6218c2633f82c90327eecefb4414149928c46388": {
+   "company": "Nvidia",
+   "date": "2026-10-19",
+   "gaps": [],
+   "title": "Advanced Development Engineering Student, GPU Networking"
+  },
   "623a538a3487df78ddf00b555b5ef81419d5f642": {
    "company": "OPAL-RT",
    "date": "2026-10-07",
@@ -4057,6 +4114,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "VDC Services Specialist"
+  },
+  "63bcc171893ca2c579be5e2efb38b507ae3d7d51": {
+   "company": "BMO",
+   "date": "2026-10-19",
+   "gaps": [],
+   "title": "Inbound Analyst, US Fraud"
   },
   "6422dc132451d0abb8bda280bda0966218be06e0": {
    "company": "Hitachi",
@@ -4812,6 +4875,14 @@
    "gaps": [],
    "title": "Account Specialist – Warranty and Service Contracts"
   },
+  "770132afd364655ea011a89e99411bc44d7f4655": {
+   "company": "Dentsuaegis",
+   "date": "2026-10-19",
+   "gaps": [
+    "Java"
+   ],
+   "title": "data Intern"
+  },
   "770c3bbe2fce35d60b3b6639f30617f44f80d79c": {
    "company": "Oshkoshcorporation",
    "date": "2026-10-15",
@@ -5506,6 +5577,14 @@
    "gaps": [],
    "title": "Treasury Analyst"
   },
+  "8528c1e4eb20985f04a51c9956d8f07381061574": {
+   "company": "Pentair",
+   "date": "2026-10-19",
+   "gaps": [
+    "Salesforce"
+   ],
+   "title": "Engineering Leadership Development Internship Program – Summer 2027"
+  },
   "8540dbeb7a35699307709764591654940fffb16a": {
    "company": "Invinity",
    "date": "2026-10-07",
@@ -5932,6 +6011,12 @@
     "Tableau"
    ],
    "title": "Data Specialist"
+  },
+  "8fe9bef047504df20f917aa033d232113b54d054": {
+   "company": "BMO",
+   "date": "2026-10-19",
+   "gaps": [],
+   "title": "Mortgage Specialist"
   },
   "8ff3c71ffedbbbd099301510c5b9cdd42ccef165": {
    "company": "Kpluss",
@@ -6482,6 +6567,16 @@
    "gaps": [],
    "title": "Change Management Specialist"
   },
+  "9c738cd91538acdc274cc81e884bce4e6a03b9c2": {
+   "company": "HeyGen",
+   "date": "2026-10-19",
+   "gaps": [
+    "GCP",
+    "Go",
+    "MySQL"
+   ],
+   "title": "Software Engineer Intern (Winter 2027)"
+  },
   "9d2762d8734feefbc08e862400e433f405807016": {
    "company": "Optrust",
    "date": "2026-10-10",
@@ -6774,6 +6869,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "TSS Course Maintenance Specialist (2 Positions Available)"
+  },
+  "a35dd86108724ac711683e788834c2fa39480a47": {
+   "company": "Allegion",
+   "date": "2026-10-19",
+   "gaps": [],
+   "title": "Summer Intern - Product Data"
   },
   "a398298bc8375aae65f178af622143c660cc3aeb": {
    "company": "Talentmanagementsolution",
@@ -7383,6 +7484,14 @@
    "gaps": [],
    "title": "Case Resolution Engineer"
   },
+  "b5e369ae3e9247e73e894638972bfd53b807d82b": {
+   "company": "Canadian Tire",
+   "date": "2026-10-19",
+   "gaps": [
+    "ServiceNow"
+   ],
+   "title": "ITSM Governance Specialist"
+  },
   "b5fa164e1a6ccbfb44111fc906a413aa1a2f80b4": {
    "company": "Analogdevices",
    "date": "2026-10-07",
@@ -7582,6 +7691,12 @@
     "ServiceNow"
    ],
    "title": "Operations Engineer I – Service Operations (12-Month Contract)"
+  },
+  "b9c53f66294edfe7d885392abea9d933f5a114f7": {
+   "company": "BMO",
+   "date": "2026-10-19",
+   "gaps": [],
+   "title": "Mortgage Specialist"
   },
   "ba151bd98aec59c989705e30ade8c2414728e068": {
    "company": "Vanderlande",
@@ -8059,6 +8174,12 @@
    ],
    "title": "Accounts Receivable Specialist"
   },
+  "c6767395bdff3da936fc01f9b0da348b2ee62e49": {
+   "company": "Cenovus",
+   "date": "2026-10-19",
+   "gaps": [],
+   "title": "Student, Engineering, Multiple Locations (May 2027)"
+  },
   "c697058065a26085793105d4f2be30868ac0b06e": {
    "company": "Torontobluejays",
    "date": "2026-10-17",
@@ -8107,6 +8228,14 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Brand Market Specialist - New Brunswick, NJ"
+  },
+  "c74fb3c24e57a097cbd3759ee885495de8352dea": {
+   "company": "Synechron",
+   "date": "2026-10-19",
+   "gaps": [
+    "Snowflake"
+   ],
+   "title": "Power BI Developer"
   },
   "c7888606d4a23c2f13867562ff70e8285407b368": {
    "company": "Workday",
@@ -8231,6 +8360,12 @@
    "date": "2026-10-10",
    "gaps": [],
    "title": "Account Specialist"
+  },
+  "cb1a0cb95c6837cf97041b3c02a45e92b984f025": {
+   "company": "Allegion",
+   "date": "2026-10-19",
+   "gaps": [],
+   "title": "Summer Intern - Product Data"
   },
   "cba67ef5d0d2355d875a2d5a7ca1b5eb73893d5b": {
    "company": "Tiree",
@@ -8506,6 +8641,12 @@
    "gaps": [],
    "title": "Service Engineers TCA MT"
   },
+  "d3e4a8613a45300bc7e7df6aa672d1efff8d6665": {
+   "company": "Sunlife",
+   "date": "2026-10-19",
+   "gaps": [],
+   "title": "Penetration Testing Analyst"
+  },
   "d436ddd059e8a50452eb77fe1fd192f829b97dd7": {
    "company": "Appnovation",
    "date": "2026-10-07",
@@ -8630,6 +8771,12 @@
    "date": "2026-10-10",
    "gaps": [],
    "title": "Analyst, Procurement Delivery"
+  },
+  "d73c16a95db0f0ae6919ecb09f84ee7d20977acc": {
+   "company": "Dentsuaegis",
+   "date": "2026-10-19",
+   "gaps": [],
+   "title": "Social Media Content Specialist - English + other languages - Remote"
   },
   "d7d458b6bf3a8299491dcf4138d052f89af9ba76": {
    "company": "Canadian Tire",
@@ -8883,6 +9030,12 @@
     "SAP"
    ],
    "title": "Supply Chain & Logistics Specialist (m/f/d)"
+  },
+  "df1c3ac8a6c22a0266c0a292866954cd8ef3a88a": {
+   "company": "Wgl",
+   "date": "2026-10-19",
+   "gaps": [],
+   "title": "AltaGas - Analyst, Income Tax - Reporting and Compliance"
   },
   "df441b52bc7b75e0825894fb6e32a57aa5de74a0": {
    "company": "Transunion",
