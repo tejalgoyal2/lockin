@@ -15,6 +15,7 @@ from scanner.cluster import ClusterResolver
 from scanner.dedupe import canonical_url
 from scanner.filters import Filters
 from scanner.models import Job
+from scanner.normalize import norm_text
 from scanner.score import Scorer
 from scanner.sources import feashliaa, simplify
 
@@ -36,6 +37,8 @@ class FeedItem:
     signals: list[str]
     interested: bool | None
     apply: bool | None
+    fit: float | None = None     # the Fit % column (a fraction), as stored
+    company_cell: str = ""       # the Company cell as stored, "<name> · <date tag>"
 
 
 @dataclass
@@ -79,7 +82,7 @@ def list_items(client, feed: notion_feed.Feed) -> list[FeedItem]:
     are re-read through the property-item endpoint."""
     n, ids = feed.names, feed.ids
     params = {"filter_properties[]": [ids[k] for k in ("name", "company", "link", "source", "signals", "jd",
-                                                        "interested", "apply")]}
+                                                        "interested", "apply", "fit")]}
     items, cursor = [], None
     while True:
         body = {"page_size": 100, **({"start_cursor": cursor} if cursor else {})}
@@ -101,6 +104,8 @@ def list_items(client, feed: notion_feed.Feed) -> list[FeedItem]:
                 signals=[o["name"] for o in (props.get(n["signals"]) or {}).get("multi_select", [])],
                 interested=(props.get(n["interested"]) or {}).get("checkbox"),
                 apply=(props.get(n["apply"]) or {}).get("checkbox"),
+                fit=(props.get(n["fit"]) or {}).get("number"),
+                company_cell=company,
             ))
         if not data.get("has_more"):
             return items
@@ -109,25 +114,46 @@ def list_items(client, feed: notion_feed.Feed) -> list[FeedItem]:
 
 # --- where was each job located? -----------------------------------------------------
 
-def find_locations(urls: set[str], cfg: dict, feashliaa_dir=None) -> dict[str, tuple[str, str]]:
-    """canonical URL -> (location, origin). The Feashliaa dataset ("ats") is the ATS's own single location and
-    wins over Simplify's list for the whole programme ("simplify")."""
+@dataclass
+class Found:
+    """What the source data says about one job."""
+    location: str = ""
+    origin: str = ""             # "ats" (the posting's own location) or "simplify" (its list for the programme)
+    company: str = ""            # the ATS slug (Feashliaa)
+    company_name: str = ""       # readable name (Simplify)
+
+
+def find_records(urls: set[str], cfg: dict, feashliaa_dir=None) -> dict[str, Found]:
+    """canonical URL -> Found, from the Feashliaa dataset and the Simplify list. The Feashliaa location is the
+    ATS's own and wins over Simplify's list for the whole programme; the slug comes from Feashliaa and the
+    readable name from Simplify, as when the job was first merged."""
     wanted = {canonical_url(u) for u in urls if u}
-    out: dict[str, tuple[str, str]] = {}
+    out: dict[str, Found] = {}
     src = cfg["sources"]
     if src["feashliaa"]["enabled"]:
         data_dir = feashliaa_dir or feashliaa.fetch(src["feashliaa"])
         for rec in feashliaa.iter_raw(data_dir):
             url = canonical_url(rec.get("url") or "")
             if url in wanted:
-                out[url] = (rec.get("location") or "", "ats")
+                out[url] = Found(rec.get("location") or "", "ats", rec.get("company") or "")
     if src["simplify"]["enabled"]:
         for rec in simplify.iter_raw(simplify.fetch(src["simplify"])):
             f = simplify.raw_fields(rec)
             url = canonical_url(f["url"])
-            if url in wanted and url not in out:
-                out[url] = (f["location"], "simplify")
+            if url not in wanted:
+                continue
+            found = out.setdefault(url, Found(f["location"], "simplify", f["company"]))
+            found.company_name = found.company_name or f["company_name"]
     return out
+
+
+def locations_from(records: dict[str, Found]) -> dict[str, tuple[str, str]]:
+    return {url: (r.location, r.origin) for url, r in records.items()}
+
+
+def find_locations(urls: set[str], cfg: dict, feashliaa_dir=None) -> dict[str, tuple[str, str]]:
+    """canonical URL -> (location, origin)."""
+    return locations_from(find_records(urls, cfg, feashliaa_dir))
 
 
 # --- the rules ------------------------------------------------------------------------
@@ -228,3 +254,86 @@ def trash(client, rep: CleanReport, *, dry_run: bool) -> int:
     rows = [notion_feed.FeedRow(v.item.page_id, datetime.now(timezone.utc), v.item.link, False, False)
             for v in rep.trashable()]
     return notion_feed.trash_rows(client, rows, dry_run=dry_run)
+
+
+# --- rescoring the rows that stay ------------------------------------------------------
+
+@dataclass
+class Change:
+    item: FeedItem
+    company: tuple[str, str] | None = None            # (old cell, new cell)
+    fit: tuple[float | None, float | None] | None = None
+    signals: tuple[list[str], list[str]] | None = None
+
+    def properties(self, names: dict[str, str]) -> dict:
+        props = {}
+        if self.company:
+            props[names["company"]] = {"rich_text": [{"type": "text", "text": {"content": self.company[1]}}]}
+        if self.fit:
+            props[names["fit"]] = {"number": self.fit[1]}
+        if self.signals:
+            props[names["signals"]] = {"multi_select": [{"name": x} for x in self.signals[1]]}
+        return props
+
+
+def _fit_cell(fit: float | None) -> str:
+    return "n/a" if fit is None else f"{fit * 100:.1f}%"
+
+
+def rescore(verdicts: list[Verdict], records: dict[str, Found], cfg: dict, filters: Filters, scorer: Scorer,
+            overrides: dict[str, str]) -> list[Change]:
+    """Recompute Company, Fit % and Signals for the rows that passed every rule and have both boxes unticked,
+    with the current term lists, Fit formula, 2-year tag and company_names.yaml. Only changed values are returned."""
+    clusters = ClusterResolver(cfg)
+    changes = []
+    for v in verdicts:
+        it = v.item
+        if v.rule or it.interested is not False or it.apply is not False:
+            continue
+        rec = records.get(canonical_url(it.link)) or Found()
+        job = to_job(it, v.location or "Canada")
+        job.weak_title = filters.title_tier(it.title) == "weak"
+        job.jd_status = "ok" if it.jd.strip() else ("error" if "jd unavailable" in it.signals else "")
+        job.company, job.company_name = rec.company or it.company, rec.company_name
+        enrich_mod.apply_rules(job, cfg, filters, scorer, clusters)
+        ch = Change(it)
+        # Company: only company_names.yaml changes a name. Names that came from the ATS ("Tucows Inc.") cannot be
+        # rebuilt from the dataset, so they are left alone.
+        shown = overrides.get(norm_text(rec.company)) if rec.company else None
+        tag = it.company_cell.rsplit(" · ", 1)[1] if " · " in it.company_cell else ""
+        if shown:
+            new_cell = f"{shown} · {tag}" if tag else shown
+            if new_cell != it.company_cell:
+                ch.company = (it.company_cell, new_cell)
+        new_fit = None if job.fit_pct is None else round(job.fit_pct / 100, 4)
+        if (new_fit is None) != (it.fit is None) or (new_fit is not None and abs(new_fit - it.fit) > 0.0002):
+            ch.fit = (it.fit, new_fit)
+        if sorted(job.signals) != sorted(it.signals):
+            ch.signals = (list(it.signals), list(job.signals))
+        if ch.company or ch.fit or ch.signals:
+            changes.append(ch)
+    return changes
+
+
+def render_changes(changes: list[Change], rescored: int, *, dry_run: bool) -> str:
+    out = [f"Rescore ({'dry run: nothing changed' if dry_run else 'updated in place'}): {rescored} rows with both boxes "
+           f"unticked kept, {len(changes)} changed", "",
+           "| Role | Company | Fit % | Signals |", "|---|---|---|---|"]
+    for c in changes:
+        company = f"{c.company[0]} → {c.company[1]}" if c.company else c.item.company_cell
+        fit = f"{_fit_cell(c.fit[0])} → {_fit_cell(c.fit[1])}" if c.fit else _fit_cell(c.item.fit)
+        sig = (f"{', '.join(c.signals[0]) or '-'} → {', '.join(c.signals[1]) or '-'}" if c.signals
+               else ", ".join(c.item.signals) or "-")
+        out.append(f"| {c.item.title.replace('|', '/')} | {company} | {fit} | {sig} |")
+    if not changes:
+        out.append("| none | | | |")
+    return "\n".join(out) + "\n"
+
+
+def apply_changes(client, feed, changes: list[Change], *, dry_run: bool) -> int:
+    done = 0
+    for c in changes:
+        if not dry_run:
+            client.request("PATCH", f"/v1/pages/{c.item.page_id}", json={"properties": c.properties(feed.names)})
+        done += 1
+    return done
