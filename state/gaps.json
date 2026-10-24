@@ -372,6 +372,14 @@
    "gaps": [],
    "title": "Analyst, Corporate Compliance (Contract) 12 months"
   },
+  "074f1ce074b755ad6a07b91cd7d05b281010ffb8": {
+   "company": "Flir",
+   "date": "2026-10-24",
+   "gaps": [
+    "MATLAB"
+   ],
+   "title": "Sensor Characterization Specialist"
+  },
   "0752778c384187869e8fc7a079766c847e3bcfce": {
    "company": "Bci",
    "date": "2026-10-14",
@@ -464,6 +472,12 @@
    ],
    "title": "Change, Learning & Communications Analyst"
   },
+  "08decf2669db8d37bd08cc4a66b90fe29ba5f27d": {
+   "company": "RBC",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Mortgage Specialist Assistant"
+  },
   "08e985ef03893fb61e8b82d96bc17283c042e615": {
    "company": "Strathconaresources",
    "date": "2026-10-20",
@@ -529,6 +543,12 @@
     "Salesforce"
    ],
    "title": "Technical Support Specialist"
+  },
+  "0a08100ffdd723d6fb481ed754e3f0c919ed2063": {
+   "company": "PwC",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Deals - DTDS - Analytics Intern - Summer 2027"
   },
   "0a0e937532f537e6a2d741fb2a07a343704c1815": {
    "company": "Sci",
@@ -821,6 +841,12 @@
    "gaps": [],
    "title": "EHS Specialist I"
   },
+  "10b14a61b5825f6a446c457d8a757a323690fabf": {
+   "company": "Sunrisefarms",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Quality Assurance Specialist - 12 Month Contract"
+  },
   "10e082e9a6269832839f31fa2395ef45701950ae": {
    "company": "Fanatics Betting & Gaming",
    "date": "2026-10-07",
@@ -1015,6 +1041,14 @@
    ],
    "title": "Forward-Deployed Software Engineer (AI Integration & Modernization)"
   },
+  "1475a203fc81ce9362fe725551adb18f337f1c37": {
+   "company": "Sysco",
+   "date": "2026-10-24",
+   "gaps": [
+    "Salesforce"
+   ],
+   "title": "Culinary Specialist 12-18 Month Contract"
+  },
   "1486cdeed4f3dad3b8da81870fcf93d766918a16": {
    "company": "Cilf",
    "date": "2026-10-07",
@@ -1043,6 +1077,12 @@
     "SAP"
    ],
    "title": "Specialist, Quality Assurance"
+  },
+  "14cd9a21a75ae6a9ca6a8bf734ed7067bc62230a": {
+   "company": "Ferrovial",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Webber - Field Engineer Intern I - Waterworks"
   },
   "1505505a9929f90d790ce1179f81fbd19a065511": {
    "company": "Cgg",
@@ -1088,6 +1128,14 @@
    "date": "2026-10-22",
    "gaps": [],
    "title": "Quality Assurance Analyst - ESC"
+  },
+  "162a88566bde92a4670699c39dd19a026954042e": {
+   "company": "Altera",
+   "date": "2026-10-24",
+   "gaps": [
+    "GCP"
+   ],
+   "title": "AI Cloud Data Engineer"
   },
   "16853c459cfe93ab03e654381e5d853e69ffd3d9": {
    "company": "1Password",
@@ -1213,6 +1261,15 @@
    "date": "2026-10-17",
    "gaps": [],
    "title": "Customer Content Specialist"
+  },
+  "18e69ae372d0c51e6340f645cc4a843183d32eee": {
+   "company": "1Password",
+   "date": "2026-10-24",
+   "gaps": [
+    "Go",
+    "Oracle"
+   ],
+   "title": "Developer Intern, Developer Interfaces - Winter 2027"
   },
   "192d00a5b42f1aacbfcc867bc5108cec61852bc5": {
    "company": "Desjardins",
@@ -1350,6 +1407,12 @@
    "gaps": [],
    "title": "Engineering Intern – Summer 2027"
   },
+  "1cb628bf71c4361a9a0a2e689b7413dee4862432": {
+   "company": "Lifeworks",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Pension Analyst"
+  },
   "1cd3304148d0404f1eb779e65b31c67679abd6b9": {
    "company": "Canadian Tire",
    "date": "2026-10-10",
@@ -1414,6 +1477,12 @@
     "unit testing"
    ],
    "title": "Software Development Engineer in Test"
+  },
+  "1ded1f968f3c232fdc1e7ef3513f1be0d61e2912": {
+   "company": "Quadreal",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Analyst, Sustainability"
   },
   "1df895ef1c8cb10c1fc89b7a95085cdac65214f2": {
    "company": "Uasu",
@@ -1611,6 +1680,14 @@
    "gaps": [],
    "title": "Compliance Operations Analyst"
   },
+  "230a32fbb599dad59eeba5e8c1fbe69b4df69af6": {
+   "company": "Autofi",
+   "date": "2026-10-24",
+   "gaps": [
+    "Postman"
+   ],
+   "title": "Implementations Configuration Specialist - Canada"
+  },
   "232035f13fbfc8c9fab001581435f2dc30320e11": {
    "company": "Promiserobotics",
    "date": "2026-10-19",
@@ -1681,6 +1758,18 @@
    "date": "2026-10-10",
    "gaps": [],
    "title": "Specialist, Corporate Communications"
+  },
+  "24bde0672c82695b377c5b5abf9e0ab4c5163f33": {
+   "company": "GitLab",
+   "date": "2026-10-24",
+   "gaps": [
+    "GitLab",
+    "Go",
+    "Kafka",
+    "Ruby",
+    "Vue"
+   ],
+   "title": "Backend Engineer, Knowledge Graph (Rust)"
   },
   "24fdb6804f0c096dbc0c485aac0876cc2bb1d256": {
    "company": "Columbiasportswearcompany",
@@ -1921,6 +2010,12 @@
    "gaps": [],
    "title": "Integration CO-OP"
   },
+  "29e371130a148f4f20ef53c16edb93fa0597e5b5": {
+   "company": "Ranovus",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Optoelectronics Wafer Test Engineering"
+  },
   "29e7dec4ced5199e6eab4d4ee8d6aa973810d86e": {
    "company": "Fidelity Canada",
    "date": "2026-10-14",
@@ -2108,11 +2203,25 @@
    ],
    "title": "Junior Developer"
   },
+  "2d70546e4784428d9b5ad6fadb5e223a30ebe274": {
+   "company": "Cohere",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Public Sector Delivery Analyst"
+  },
   "2dec1636c6c02746efb982ed7b1f281eb1258dfe": {
    "company": "LAPORTE L.E.I.",
    "date": "2026-10-10",
    "gaps": [],
    "title": "Automation Engineer"
+  },
+  "2e0e8e1461b2c77a2f5dccd89f189ae1d55eab18": {
+   "company": "Suncor",
+   "date": "2026-10-24",
+   "gaps": [
+    "SAP"
+   ],
+   "title": "Rotating Engineer"
   },
   "2e105204b6c2afe4c5e99b6d914326ce6cb71f2d": {
    "company": "Autodesk",
@@ -2168,6 +2277,12 @@
     "SAP"
    ],
    "title": "Operations Analyst"
+  },
+  "2f738315fd91cde42545e6c8cab8325edca7e01f": {
+   "company": "Wgl",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "AltaGas - Financial Analyst, Trucking Operations"
   },
   "2faba4b987ffc21f0172f37320abf845476ceb71": {
    "company": "Okta",
@@ -2267,6 +2382,12 @@
    "date": "2026-10-22",
    "gaps": [],
    "title": "Communications Specialist, School of Pharmacy"
+  },
+  "30ecd4e033fb38782dd78fde054fb23d05bea20a": {
+   "company": "Kepler",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Strategic Communications Specialist"
   },
   "311185bb9471f9b5840582ab327e9ef30cabf8bd": {
    "company": "Openai",
@@ -2399,6 +2520,12 @@
    "gaps": [],
    "title": "Microsoft Copilot and AI Specialist"
   },
+  "3460e67171d9ca08fb513ab32d23e325a314d7e5": {
+   "company": "Kawartha",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Cost Analyst"
+  },
   "34684b6bccf716ca320b4207b364d4fa6891f5dc": {
    "company": "Miovision",
    "date": "2026-10-10",
@@ -2470,6 +2597,12 @@
    "gaps": [],
    "title": "Business AI Engineer - Intern - 2027"
   },
+  "3571eb242ac4f923d6344e6c4dcc5368b78749e8": {
+   "company": "FCC",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Loans Analyst, Agriculture Business Financing (2 Positions Available)"
+  },
   "358e640092d7848a4adc85af304dd2af78aae794": {
    "company": "CW",
    "date": "2026-10-07",
@@ -2513,6 +2646,12 @@
     "Redis"
    ],
    "title": "[C] Software Engineer"
+  },
+  "36b217676cb4ebcccfcd0e4ac2a1d2113f249ccf": {
+   "company": "Rockwellautomation",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "QUALITY ENGINEER"
   },
   "36b6dd02f717f8fa41e8f2a1de2766a2ed3ccbb7": {
    "company": "Fidelity Canada",
@@ -2769,6 +2908,12 @@
    "gaps": [],
    "title": "Office - Title Specialist"
   },
+  "3b450dc8f502326b102e7858db5f1c50b6dc8474": {
+   "company": "PlayStation Waterloo Co-Op",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Software Developer in Test Co-Op"
+  },
   "3b58c13b069ed5aed53373eb54f2f4d9b0f1ddbd": {
    "company": "AppDirect",
    "date": "2026-10-07",
@@ -2986,6 +3131,18 @@
    "gaps": [],
    "title": "FSP Site Budget & Contracts Specialist"
   },
+  "3f3495358e4507b415eb9dadf77354e98121d3b5": {
+   "company": "Enbridge",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Scheduling Specialist"
+  },
+  "3f53ac22661871463229e7ca28a5a3b7327c2f23": {
+   "company": "Slihrms",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Water Resources Engineer"
+  },
   "3f57e971fec379434e823996ae6de33580f8823b": {
    "company": "Medaviehs",
    "date": "2026-10-07",
@@ -3131,6 +3288,12 @@
    "date": "2026-10-14",
    "gaps": [],
    "title": "Threat Analyst 2"
+  },
+  "423acfa4dece70fc0b0c9e317b189d6fcc4f075a": {
+   "company": "Rbi",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Analyst, Retail E-Commerce, Tim Hortons, Canada"
   },
   "4243b18b71ec82de95f25e1afac1d7d6686338d1": {
    "company": "Canadian Tire",
@@ -3283,6 +3446,12 @@
    ],
    "title": "Analyst, Service Management (Fixed Term - 12 Months)"
   },
+  "4442b12c2961678bc75195eb5fdb84c745770ff6": {
+   "company": "Suncor",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Reliability Engineer or EIT - Base Plant, FMM"
+  },
   "4457c763f430702e52aac3c36db65310e22ded7e": {
    "company": "Sophos",
    "date": "2026-10-07",
@@ -3300,6 +3469,12 @@
    "date": "2026-10-10",
    "gaps": [],
    "title": "Electronics/Software Placement Student"
+  },
+  "448841f0dec87cc237560f2ba30d96b81e0e2855": {
+   "company": "Waveapps",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Financial Services Operations Analyst"
   },
   "44932774b10a2f351e233c6109f0d4eca5d7faf3": {
    "company": "Manulife",
@@ -3340,6 +3515,12 @@
    "date": "2026-10-17",
    "gaps": [],
    "title": "Maintenance Specialist"
+  },
+  "45848b9070db38291f71d64f81b6d25490dd0f7d": {
+   "company": "Knitwellgroup",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Client Specialist"
   },
   "45956275779465c14d1fa059d2c76073dbc8179c": {
    "company": "Rbi",
@@ -3419,6 +3600,14 @@
    "gaps": [],
    "title": "Junior Mechatronics Engineer"
   },
+  "4753e76d72b7895bda93aeb6d97a712d83c149eb": {
+   "company": "Jane",
+   "date": "2026-10-24",
+   "gaps": [
+    "Helm"
+   ],
+   "title": "Cloud Security Engineer"
+  },
   "475e9f454105ff77ed825d6b8ca5d7216395c397": {
    "company": "Vanderlande",
    "date": "2026-10-15",
@@ -3476,6 +3665,12 @@
    "gaps": [],
    "title": "Workplace Investigations Specialist"
   },
+  "488244776a39378b2ee21ab6c78efda85e1ff18f": {
+   "company": "Worldwide",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "RTSM Specialist (US)"
+  },
   "489a5a34bbfdc1e58293b2fcf9a19fbb51d0b800": {
    "company": "Gore Mutual Insurance",
    "date": "2026-10-10",
@@ -3493,6 +3688,12 @@
    "date": "2026-10-15",
    "gaps": [],
    "title": "Financial Analyst"
+  },
+  "48edd8229b84bbd1a04ea29c7a8c3d93a9079fb5": {
+   "company": "UBC",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Program Specialist, Extracurricular and Extended Learning"
   },
   "48f788b18d880c102a87168ef39bcb780f85c63d": {
    "company": "Cityofhamilton",
@@ -3653,6 +3854,12 @@
    "gaps": [],
    "title": "New Student Transition Specialist, Graduate"
   },
+  "4d73f59af73f99db6fcf4b37d3df7f319ccecf33": {
+   "company": "Analogdevices",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Associate Engineer – SDK and Tools Development"
+  },
   "4d779e917ab50d3851af80e0466535170f13a191": {
    "company": "Sanofi",
    "date": "2026-10-17",
@@ -3662,6 +3869,12 @@
     "Tableau"
    ],
    "title": "Data Scientist - Applied AI/Gen AI"
+  },
+  "4da1d1ff47f7043676df44866f8eb9bc24dcf45f": {
+   "company": "Industrial Electric Manufacturing",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Materials Replenishment Engineer"
   },
   "4da4e33b73ac23ea89c74e1376f17941877fcbe7": {
    "company": "Wintrust",
@@ -3820,6 +4033,12 @@
    ],
    "title": "Forward Deployed Engineer - Full Stack AI Solutions"
   },
+  "50f0846791498f346d9c8b34b269dc13275ea84a": {
+   "company": "Trailappliances",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Technical Product Owner - AI & Power Platform"
+  },
   "511c1ac23d43a52b4bad8b912f8f7771404d0152": {
    "company": "Ag",
    "date": "2026-10-10",
@@ -3854,6 +4073,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Spécialiste de la chaîne d'approvisionnement // Supply Chain Specialist"
+  },
+  "51c7822928b03f8cfa9b4376f5f996aae930af1e": {
+   "company": "Fispan",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Solutions Engineer"
   },
   "51c7b2f998cfd908d1c225f7986bc81ccf30ce33": {
    "company": "Legbc",
@@ -4148,6 +4373,12 @@
     "Tableau"
    ],
    "title": "Data Governance Specialist"
+  },
+  "56187fc9667d9a1a5fb2292dfc041d96d6689ce2": {
+   "company": "Okaneconsultants",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Junior Consultant (Mining Engineer in Training)"
   },
   "562c57135373cf5ef9955d474dae1de8b2afda06": {
    "company": "BMO",
@@ -4451,6 +4682,14 @@
    "date": "2026-10-21",
    "gaps": [],
    "title": "Equity Market Analyst & Portfolio Associate"
+  },
+  "5bae2fe50af44e461f907b8be1592b4ddabdd5a2": {
+   "company": "Asana",
+   "date": "2026-10-24",
+   "gaps": [
+    "distributed systems"
+   ],
+   "title": "Software Engineer, AI"
   },
   "5bd63d6f9589370beb570901c8f3468189acf877": {
    "company": "Creationtech",
@@ -4843,6 +5082,12 @@
    "gaps": [],
    "title": "Cyber Security Engineer"
   },
+  "62dd7a54441504b488c508ec9edc571ad3bda089": {
+   "company": "Jj",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Clinical Account Specialist - Toronto (ON) - Johnson & Johnson MedTech, Electrophysiology"
+  },
   "6341f8643cab4ca75d35fdbedfcd47a9433f34d6": {
    "company": "Asana",
    "date": "2026-10-10",
@@ -4880,6 +5125,14 @@
    "date": "2026-10-19",
    "gaps": [],
    "title": "Inbound Analyst, US Fraud"
+  },
+  "63f31afeb260259d65ef8c1b0e3c28cfa98d8e42": {
+   "company": "Kyndryl",
+   "date": "2026-10-24",
+   "gaps": [
+    "GCP"
+   ],
+   "title": "Cloud Consultant"
   },
   "6422dc132451d0abb8bda280bda0966218be06e0": {
    "company": "Hitachi",
@@ -5023,6 +5276,14 @@
     "DynamoDB"
    ],
    "title": "Software Engineering Intern (January 2027)"
+  },
+  "66af1d86f88a0ad53ec99fb724ffcdfbeb5ba722": {
+   "company": "Gianttiger",
+   "date": "2026-10-24",
+   "gaps": [
+    "ServiceNow"
+   ],
+   "title": "Bilingual Specialist, Tier 2 Support"
   },
   "66fb520d679b05008c4b25d8528bd9c03e45a371": {
    "company": "Geotab",
@@ -5227,6 +5488,18 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Analyst, Credit Risk (18 Month Contract)"
+  },
+  "6b2fef41943fce854775580f084de68fe6bdd194": {
+   "company": "Manulife",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Bilingual Disability Calculation Analyst"
+  },
+  "6b66395b30b084a051bbd8dc3204c949d9668cf4": {
+   "company": "Bis",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Risk and Compliance Specialist"
   },
   "6b9c03d63ea88941dffbf23cc96a954fc07e9e3f": {
    "company": "Moneris",
@@ -5477,6 +5750,12 @@
    ],
    "title": "DevOps & Cloud Platform Intern (December 2026 to April 2027)"
   },
+  "704fccccecc80c2f4e6ee507510113c01c4af5dd": {
+   "company": "Ia",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Intern – Business Analyst"
+  },
   "705614f0951f2dfcf3c2df2f249cd608a7b07d5c": {
    "company": "WCB Alberta",
    "date": "2026-10-07",
@@ -5709,6 +5988,14 @@
    "gaps": [],
    "title": "Programmatic & Data Strategist - 12 Month Contract - Hybrid"
   },
+  "73d57121f16ff8058714cf8e8b235c8e7097588c": {
+   "company": "DraftKings",
+   "date": "2026-10-24",
+   "gaps": [
+    "microservices"
+   ],
+   "title": "Software Engineer"
+  },
   "73e83c4f519791c1e5ac620c31ec787b6eba91aa": {
    "company": "Medtronic",
    "date": "2026-10-15",
@@ -5773,6 +6060,14 @@
     "MATLAB"
    ],
    "title": "Optical Components Test Engineer - Ottawa or Quebec City"
+  },
+  "74f7f5680eca56abe003332c7d85136b6a1c115d": {
+   "company": "Mercury",
+   "date": "2026-10-24",
+   "gaps": [
+    "Elixir"
+   ],
+   "title": "Software Engineer - Mercury Command"
   },
   "74fe361c05166ae1619a4eb7fef485524733abd1": {
    "company": "Yardsticktechnologies",
@@ -5870,6 +6165,23 @@
    "gaps": [],
    "title": "Property Tax Specialist"
   },
+  "7630e09ef1f750f9da1d563efb6c8db09f144cf3": {
+   "company": "Dentsu",
+   "date": "2026-10-24",
+   "gaps": [
+    "Looker",
+    "Tableau"
+   ],
+   "title": "Analyst, Media Effectiveness"
+  },
+  "7676f948aeec3ae45d85cb2b23a6ed740864f88c": {
+   "company": "Enbridge",
+   "date": "2026-10-24",
+   "gaps": [
+    "Angular"
+   ],
+   "title": "Full Stack Developer Advisor"
+  },
   "76f22b1d103ea7ab1f3890fbb81e71fd5d60a51b": {
    "company": "Aviva",
    "date": "2026-10-14",
@@ -5895,6 +6207,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Investment Administration Analyst"
+  },
+  "7774fc9bebae3c1ef8a3fbf9f03f18dbf3d2eeb2": {
+   "company": "Trimble",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Navigation & Machine Learning Engineering Intern (16 Months)"
   },
   "77a04cc268a6e1107fe9adfb86afd4b33005e5a9": {
    "company": "Lyft",
@@ -5935,6 +6253,18 @@
    "date": "2026-10-15",
    "gaps": [],
    "title": "Technical Specialist - Fuel Systems"
+  },
+  "77e4747747cc48227ddf049eb4a3eb29e8c7e0df": {
+   "company": "Konrad Group",
+   "date": "2026-10-24",
+   "gaps": [
+    "BigQuery",
+    "Looker",
+    "Redshift",
+    "Snowflake",
+    "Tableau"
+   ],
+   "title": "Associate Data Analyst"
   },
   "77f7d2d859e47c52a0e8359b51af6b37a7009f45": {
    "company": "Ciena",
@@ -6029,6 +6359,15 @@
    "date": "2026-10-10",
    "gaps": [],
    "title": "Engineer"
+  },
+  "79a5e988b2f8deecbe4ce8913e77205eddee219b": {
+   "company": "Airliquidehr",
+   "date": "2026-10-24",
+   "gaps": [
+    "Oracle",
+    "Salesforce"
+   ],
+   "title": "SAP Support Customer Experience Specialist"
   },
   "79ae0d229732e0f59af325fe502d380edd60ebc6": {
    "company": "Wealthsimple",
@@ -6452,6 +6791,14 @@
    "date": "2026-10-20",
    "gaps": [],
    "title": "Trackwork Engineer"
+  },
+  "7f5d918161f2f5e71baf627d4395156930d06f18": {
+   "company": "Coinbase",
+   "date": "2026-10-24",
+   "gaps": [
+    "Go"
+   ],
+   "title": "Offensive Security Engineer, AI"
   },
   "7f832d879d96161d73b00f42721f45bbd3ee9dc6": {
    "company": "Docebo",
@@ -6878,6 +7225,12 @@
    "date": "2026-10-22",
    "gaps": [],
    "title": "Service Desk Analyst"
+  },
+  "89173855097c1f7975c7fdcfa33530f63e719675": {
+   "company": "Bakerhughes",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Intern - Field Engineer - Summer 2027 Opportunities"
   },
   "893926b35d9d4549dbefc74d703e6ed6cfad23a1": {
    "company": "PwC",
@@ -7382,6 +7735,12 @@
    ],
    "title": "Embedded Simulation Developer - SIL and Virtualization"
   },
+  "925bcecd933e4ff7c1efad036fd1a5b97e2ddc46": {
+   "company": "Mercury",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Frontend Engineer - Design Systems"
+  },
   "926d4a8be792008b173167cc54084e4b43faa51d": {
    "company": "Coveo",
    "date": "2026-10-07",
@@ -7538,6 +7897,12 @@
    "gaps": [],
    "title": "Product Analyst- Winter 2027 Co-op"
   },
+  "95ae8c178f66c6109b3203c78b0ba346b7b6211f": {
+   "company": "UBC",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Technical Analyst for Sustainable Bio-based Materials"
+  },
   "95b7f765cade85cecb0e0d95dca57c6bd93d5b4c": {
    "company": "Otppb",
    "date": "2026-10-07",
@@ -7610,6 +7975,12 @@
    "gaps": [],
    "title": "Housing Specialist"
   },
+  "96c5529a60420ce016df334b617e8e88c086a1b8": {
+   "company": "Hubinternational",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Advisor Experience Specialist"
+  },
   "96e562cbd179164efb7af7117477cf6a4848b1bf": {
    "company": "UBC",
    "date": "2026-10-22",
@@ -7652,6 +8023,12 @@
    ],
    "title": "Backend Engineer, Payments & Risk"
   },
+  "978fa9c0a13ffccc36647f25b5d54326f2d1dea7": {
+   "company": "Geospectrum",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Procurement Specialist"
+  },
   "97bbf15aa34013c0b5c46bb9210f45728116c066": {
    "company": "Johnsonelectric",
    "date": "2026-10-07",
@@ -7673,6 +8050,12 @@
     "GCP"
    ],
    "title": "AI Data Scientist"
+  },
+  "983166aa3ad0779f90910a6a6a8bda1a697deb65": {
+   "company": "Iko",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Benefits Specialist"
   },
   "9845f8adbbdff0e7fd2c7941e4dc12181fb54852": {
    "company": "Icf",
@@ -7759,6 +8142,14 @@
    "gaps": [],
    "title": "Materials Science Engineer"
   },
+  "99e6ae0a796ea642e4fdbef0c98f8f6c87102574": {
+   "company": "Ciena",
+   "date": "2026-10-24",
+   "gaps": [
+    "MATLAB"
+   ],
+   "title": "NPI Optical Test Engineer"
+  },
   "9a01783344fb1cdba2245ebc6fab1d97ba740094": {
    "company": "Navcanada",
    "date": "2026-10-07",
@@ -7842,11 +8233,32 @@
    ],
    "title": "Smart Grid Engineer"
   },
+  "9ba1847cbcd431360a1ac5840ced01c452ea6b48": {
+   "company": "1Password",
+   "date": "2026-10-24",
+   "gaps": [
+    "Go",
+    "Oracle"
+   ],
+   "title": "Developer Intern, Credential Brokering - Winter 2027"
+  },
+  "9bbcd5077f9cd0012ae4723e499f9076a1ce0fdd": {
+   "company": "Numeris",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Data Scientist"
+  },
   "9bd542b2145e398852f2e4e33b5dbce850f55b8a": {
    "company": "Rethink Canada",
    "date": "2026-10-07",
    "gaps": [],
    "title": "IT Support Specialist - 12 Month Contract"
+  },
+  "9bfff49cf9b21371821f016eb4d64abf99fdb3f9": {
+   "company": "Trimble",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Software Engineering Intern"
   },
   "9c00acf9756a906012cf9b7cd052c9d54335f40a": {
    "company": "Ebury",
@@ -8027,6 +8439,12 @@
    "gaps": [],
    "title": "eCommerce Content Specialist"
   },
+  "9f496b8502b1db50294cdb68307f1490dc672353": {
+   "company": "Suncor",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Mine Planning Engineer in Training"
+  },
   "9f5ce62101cd9933530c1459b3bc656865e1e054": {
    "company": "Verily",
    "date": "2026-10-13",
@@ -8037,6 +8455,12 @@
     "distributed systems"
    ],
    "title": "Software Engineer - ML Launchpad"
+  },
+  "9f61708fb05ef670190dbc86c9e1a57517a9b2dc": {
+   "company": "Enbridge",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Specialist, Infrastructure Planning"
   },
   "9f945fee5d17ec85c33eda64bf062dacaf399279": {
    "company": "Smardt",
@@ -8093,6 +8517,12 @@
    ],
    "title": "Winter Co-op 2027 - HR Knowledge Analyst"
   },
+  "a0684f11abcb30142ce157f1645cdd19e38c0e98": {
+   "company": "Broccolini",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Talent Acquisition Specialist (1 Year Contract)"
+  },
   "a07bcabcacf04481ba25ea844431a8927072ca90": {
    "company": "Loblaw",
    "date": "2026-10-07",
@@ -8124,6 +8554,12 @@
     "Oracle"
    ],
    "title": "Developer Intern, Front-End Platform - Winter 2027"
+  },
+  "a0feb97aff32937aa004ec89098eaf887309259e": {
+   "company": "ShareGate",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Technical Support IT (6-month Contract)"
   },
   "a107fe5a80bbf6a36af37c8ddfd928b7babdf93b": {
    "company": "Blgllp",
@@ -8243,6 +8679,12 @@
     "DynamoDB"
    ],
    "title": "AgentCore Platform Engineer"
+  },
+  "a2f5d251139ba477f7941d5d289a21bc094e5a62": {
+   "company": "Mlse",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Business Analytics Intern"
   },
   "a3080162eeae58d7484e9985036b511015548402": {
    "company": "Fispan",
@@ -8719,6 +9161,12 @@
    "gaps": [],
    "title": "Scientist I – Analytical Operations"
   },
+  "aea6d6e82f9cde647ccfc19cd030d50339da08e7": {
+   "company": "UBC",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Nucleic Acids Specialist, ATMF"
+  },
   "aeba5a4cd2a96a7daeb6888638c5587bcb822d3f": {
    "company": "Dentalcorp",
    "date": "2026-10-10",
@@ -8768,6 +9216,17 @@
     "Redis"
    ],
    "title": "Fullstack Engineer (Moderation)"
+  },
+  "afb229e41a87387da090a981492a017c53e53d06": {
+   "company": "GitLab",
+   "date": "2026-10-24",
+   "gaps": [
+    "GitLab",
+    "Salesforce",
+    "Snowflake",
+    "Tableau"
+   ],
+   "title": "Ecosystem Operations Specialist"
   },
   "afb5cc24541a402d3e94d29980798e9b7596a0f5": {
    "company": "Appnovation",
@@ -9040,6 +9499,14 @@
    "gaps": [],
    "title": "Insolvency Analyst, Personal Debt Solutions"
   },
+  "b50c90e884b26921ece0ebb0052b02f126d44242": {
+   "company": "Workwhilejobs",
+   "date": "2026-10-24",
+   "gaps": [
+    "React Native"
+   ],
+   "title": "Software Engineer, Fullstack"
+  },
   "b51dbcca30d7051c2d03b4668b5e5d8f7a557806": {
    "company": "Boyneclarke",
    "date": "2026-10-17",
@@ -9190,6 +9657,14 @@
    "gaps": [],
    "title": "HR Business Partner Specialist"
   },
+  "b75f19aae53351593f4155efee0e88048db6e6c1": {
+   "company": "Hoopp",
+   "date": "2026-10-24",
+   "gaps": [
+    "Snowflake"
+   ],
+   "title": "Investment Data Governance Analyst"
+  },
   "b76ff2263b395c12045d84ed13ee40bbe610dd14": {
    "company": "Procurify",
    "date": "2026-10-10",
@@ -9229,6 +9704,14 @@
    "date": "2026-10-20",
    "gaps": [],
    "title": "Geotechnical Engineer-in-Training (Hybrid)"
+  },
+  "b7ff26e7379a3eda4c8b279074d598d30ea099f6": {
+   "company": "Wgl",
+   "date": "2026-10-24",
+   "gaps": [
+    "Oracle"
+   ],
+   "title": "AltaGas - Sourcing Specialist"
   },
   "b81bea7734ccd7adfcbff96e323fa69ccca2865f": {
    "company": "NeuraFlash, Part of Accenture",
@@ -10331,6 +10814,18 @@
    ],
    "title": "Finance Intern - Technical Accounting & Treasury - Winter 2027"
   },
+  "ce60eb5ffaf3fc449a8e10f83b157a30aaf6a281": {
+   "company": "Trimble",
+   "date": "2026-10-24",
+   "gaps": [
+    "Cypress",
+    "GitLab",
+    "Java",
+    "Jenkins",
+    "Selenium"
+   ],
+   "title": "Automated Test Engineering Intern (16-Month Internship)"
+  },
   "ce7cf2e7101d350ecb22f70f126b01fb3725fbbc": {
    "company": "CIBC",
    "date": "2026-10-23",
@@ -10374,6 +10869,12 @@
    "date": "2026-10-20",
    "gaps": [],
    "title": "Mine Engineer"
+  },
+  "cfb7cd97e769e986208be5bc51207eab3cd0d29c": {
+   "company": "Intactfc",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Specialist, Risk Control"
   },
   "cfe4f0aeb792baadb5ec29f6be470aa0c977c40a": {
    "company": "Clearesult",
@@ -10502,6 +11003,15 @@
    "gaps": [],
    "title": "Cybersecurity Analyst – Tier 2"
   },
+  "d249750b967a79ddbd2627875bef6c923583f03d": {
+   "company": "Gorgias",
+   "date": "2026-10-24",
+   "gaps": [
+    "BigQuery",
+    "dbt"
+   ],
+   "title": "GTM Engineer - Growth"
+  },
   "d24d9259d4b57183160238ace728241d53d42aca": {
    "company": "1Password",
    "date": "2026-10-23",
@@ -10546,6 +11056,12 @@
    "date": "2026-10-21",
    "gaps": [],
    "title": "Managing Technical Consultant, Capital Project Delivery and/or Mine Closure Planning"
+  },
+  "d2ed21c34ebe9e06f80cf40b0684eb989d925427": {
+   "company": "Conetec",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Field Engineer"
   },
   "d2edcb4fa1c137528e2fdfcf869b614d2f2ea8e0": {
    "company": "People Corporation",
@@ -10673,11 +11189,27 @@
    ],
    "title": "Digital Consulting Associate, Oracle Reporting & Analytics (U.S. or Canada)"
   },
+  "d4beb7cc86ced776aff3a80096e78c719a940ee1": {
+   "company": "Flir",
+   "date": "2026-10-24",
+   "gaps": [
+    "SAP"
+   ],
+   "title": "Reliability Engineer"
+  },
   "d4bf14c0c520c84c0f9294e279585abb91c18264": {
    "company": "Capco",
    "date": "2026-10-13",
    "gaps": [],
    "title": "AI Security Engineer"
+  },
+  "d4bfc858a0026efbeb9d68001b30d4456f13ef04": {
+   "company": "Perimetermed",
+   "date": "2026-10-24",
+   "gaps": [
+    "GCP"
+   ],
+   "title": "Software Engineer, AI Integration"
   },
   "d4f8e9c7b48fc35ab6fba590d65a5eea0565dc2b": {
    "company": "Capitalauto",
@@ -10897,6 +11429,20 @@
    "gaps": [],
    "title": "Field Data Scientist"
   },
+  "dbb62902152c2287bd68a2c2416161909c2f3b9a": {
+   "company": "Citi",
+   "date": "2026-10-24",
+   "gaps": [
+    "Angular",
+    "Java",
+    "Kotlin",
+    "Splunk",
+    "Spring",
+    "Swift",
+    "Tableau"
+   ],
+   "title": "Application Development Technology Analyst"
+  },
   "dbc8401a4f3ab1b3d626ecd427cd18c4836170f8": {
    "company": "GitLab",
    "date": "2026-10-07",
@@ -10905,6 +11451,18 @@
     "distributed systems"
    ],
    "title": "Distinguished Engineer, Core DevOps"
+  },
+  "dbf6d1972c6eee110c99baaa7034a6c8a41b1b33": {
+   "company": "Fivetran",
+   "date": "2026-10-24",
+   "gaps": [
+    "CircleCI",
+    "GCP",
+    "Java",
+    "Oracle",
+    "dbt"
+   ],
+   "title": "Software Engineer I"
   },
   "dc0790473b8b111e6e760cfdaa760f54b019c47c": {
    "company": "CIBC",
@@ -10958,6 +11516,12 @@
    "date": "2026-10-10",
    "gaps": [],
    "title": "Analyst, Advisory (Real Estate)"
+  },
+  "dccd9b0d508e15a45fd42fff8a4b15107456c65c": {
+   "company": "Trailappliances",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Product Owner - Data & Business Intelligence"
   },
   "dce3f77c876bdb1756e47295a58b385b795e5e6e": {
    "company": "Docebo",
@@ -11014,6 +11578,14 @@
     "GCP"
    ],
    "title": "Junior NLP Data Scientist"
+  },
+  "ddce361afa4661bfc4a2d2d991187a62a11ebd1e": {
+   "company": "BMO",
+   "date": "2026-10-24",
+   "gaps": [
+    "Tableau"
+   ],
+   "title": "BMO Capital Markets Summer 2027 Internship Risk and Capital Solutions Analyst, Toronto"
   },
   "ddd39212474f1af95977411f27982f865861e79c": {
    "company": "BMO",
@@ -11193,6 +11765,12 @@
    ],
    "title": "Analyst, Customer Experience"
   },
+  "e0da2654a24615ee656c8ea6f41eaa20ff8ec533": {
+   "company": "Canadagoose",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Project Specialist, Production"
+  },
   "e0ebf4917b41a415a792a4c0270140bc40ce9afa": {
    "company": "Pebl",
    "date": "2026-10-14",
@@ -11222,6 +11800,24 @@
    "date": "2026-10-14",
    "gaps": [],
    "title": "Quality Control Specialist"
+  },
+  "e174e083d8dfcdbb579e3973e64aaf12fd2f1225": {
+   "company": "Kong",
+   "date": "2026-10-24",
+   "gaps": [
+    "Datadog",
+    "Flink",
+    "Grafana",
+    "Jenkins",
+    "Kafka",
+    "NestJS",
+    "Prometheus",
+    "Salesforce",
+    "Snowflake",
+    "distributed systems",
+    "microservices"
+   ],
+   "title": "Software Engineer"
   },
   "e18dfa501bd610950da2399560006adfce739e36": {
    "company": "Robinhood",
@@ -11434,6 +12030,14 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Test Technologist"
+  },
+  "e51471ddffa862b6ed2bb3104c686e63bca5c4bb": {
+   "company": "Magnet Forensics",
+   "date": "2026-10-24",
+   "gaps": [
+    "Salesforce"
+   ],
+   "title": "Operations Analyst"
   },
   "e52946e71661f3a8b34de6424619107f75f96927": {
    "company": "Suncor",
@@ -11796,6 +12400,16 @@
    "gaps": [],
    "title": "Accounts Receivable Specialist"
   },
+  "eb61a74aff87cc20c04e1880400cb980ad9b7aa2": {
+   "company": "Telus Digital",
+   "date": "2026-10-24",
+   "gaps": [
+    "Java",
+    "Kotlin",
+    "Swift"
+   ],
+   "title": "Software Engineering Intern/Co-op (Canada) - Summer 2027"
+  },
   "eb89819a97086f5e4ccdf730fad8cbd2adcc4149": {
    "company": "Pulsemedica",
    "date": "2026-10-07",
@@ -12005,6 +12619,16 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Human Resources Specialist"
+  },
+  "f105dc96d300cece78149c7099240073deebd65e": {
+   "company": "Telesat",
+   "date": "2026-10-24",
+   "gaps": [
+    "GitLab",
+    "MATLAB",
+    "unit testing"
+   ],
+   "title": "Systems Engineering Specialist"
   },
   "f11c92ce12456d00316183a6d3b1f95924251e22": {
    "company": "Talentmanagementsolution",
@@ -12278,11 +12902,23 @@
    "gaps": [],
    "title": "Early Career Environmental Scientist/Engineer"
   },
+  "f64d2806d62fec2e9c2d053cdd0fbdd947f1362a": {
+   "company": "Telesat",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Communication Systems Engineer"
+  },
   "f65a31736ca7678d1a65d41e25da23c2becc64e7": {
    "company": "Geaerospace",
    "date": "2026-10-12",
    "gaps": [],
    "title": "Engines Engineering Co-op – Computer or Software Engineering – US – Fall 2027 - Returning Students"
+  },
+  "f69baebef8c64b183907302260cb25a0d90f41d4": {
+   "company": "Agilent",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Quality Control Analyst"
   },
   "f6ab4d5c74da278f82816ee21099367c6ccafbff": {
    "company": "Think Academy US",
@@ -12451,6 +13087,16 @@
    ],
    "title": "Systems Developer, PAAS / Développeur de systèmes, PAAS"
   },
+  "fae786bc7aed73b7023b7e454940d7eef4e7e093": {
+   "company": "Workday",
+   "date": "2026-10-24",
+   "gaps": [
+    "Go",
+    "Java",
+    "distributed systems"
+   ],
+   "title": "Software Development Engineer - AI Infrastructure Development Platform"
+  },
   "faefd2b3589a7a61f08266df08cfaebdeeac7e1a": {
    "company": "Vasco",
    "date": "2026-10-07",
@@ -12531,6 +13177,12 @@
    "gaps": [],
    "title": "QA Operations Specialist (15-month contract)"
   },
+  "fc51c685440b4eb4112ddbdc58292234c8f9b210": {
+   "company": "Enbridge",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Specialist, Infrastructure Planning"
+  },
   "fc641935b28b789a83ef0b2a5e1828a11e6b3e6e": {
    "company": "Manulife",
    "date": "2026-10-07",
@@ -12579,11 +13231,25 @@
    ],
    "title": "Payroll Specialist"
   },
+  "fdc8934c269ba1de115df8d1c8b6d1bd534365e8": {
+   "company": "Workleap",
+   "date": "2026-10-24",
+   "gaps": [],
+   "title": "Technical Support IT (6-month Contract)"
+  },
   "fdf56c3dab940687a1077046a368912f880f70d6": {
    "company": "Cineflix",
    "date": "2026-10-20",
    "gaps": [],
    "title": "AI Artist"
+  },
+  "fe2b773d704ca8f384465ef2014fddf84c9e990b": {
+   "company": "EQ Bank",
+   "date": "2026-10-24",
+   "gaps": [
+    "GCP"
+   ],
+   "title": "Data Scientist, Growth (12 month contract)"
   },
   "fe3d8fd506516a2fc2f09fb7821220763871ea84": {
    "company": "Sbdinc",
