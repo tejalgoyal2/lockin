@@ -1,58 +1,188 @@
 # Owner's skills, grouped by cluster (SPEC §5). The owner maintains this file.
+# Rebuilt from the owner's master-resume skill pools (SPEC §11 #64); every pool entry is here.
 # Each skill: a display name and the aliases that count as a match in a JD.
 #   - Matching is case-insensitive and word-bounded ("Java" never matches "JavaScript").
-#   - `cs: true` makes a skill's aliases case-sensitive (for words that are also plain English:
-#     Rust, React, REST, Spark, Flask, JS).
-# Seeded from SPEC §5; "Spark" is included on the reading of "Spark (if listed)".
+#   - `cs: true` makes a skill's aliases case-sensitive (for words that are also plain English or other
+#     acronyms: Rust, React, REST, Spark, Flask, JS, DAX, ...).
+#   - `regex:` entries are raw Python regexes, case-sensitive unless they say (?i). They are for names that
+#     are only a skill in context: R, C, Excel, RAG, API integration.
+# Clusters software / data / ml / security decide a job's cluster from its JD when the title has none;
+# `general` (process and tools) never decides a cluster.
 clusters:
   software:
+    # --- languages
     - {name: Python, aliases: [Python]}
-    - {name: JavaScript, aliases: [JavaScript, ECMAScript]}
-    - {name: JS, aliases: [JS], cs: true}
+    - {name: JavaScript, aliases: [JavaScript, ECMAScript, ES6], regex: ['(?<![\w.])JS(?!\w)']}   # "JS" upper case only
     - {name: TypeScript, aliases: [TypeScript]}
-    - {name: C#, aliases: ["C#", CSharp]}
+    - {name: C#, aliases: ["C#", CSharp, C Sharp]}
     - {name: Rust, aliases: [Rust], cs: true}
+    - name: C/C++
+      aliases: ["C/C++", "C++", "C or C++", "C and C++", "C, C++"]
+      # Plain "C" only in a list of languages or after "in/using/with" ("Python, C, Java", "written in C").
+      regex: ['(?<![\w#+./-])C(?=\s*(?:,|/|\band\b|\bor\b)\s*(?:C\+\+|C#|Python|Java|Rust|Go|Assembly|Fortran)(?![\w+#]))',
+              '(?<![\w#+])(?:Python|Java|Rust|Go|Assembly|Fortran|C\+\+)\s*(?:,|/|\band\b|\bor\b)\s*C(?![\w#+/-])(?!\.\w)',
+              '\b(?i:in|using|with)\s+C(?=\s*(?:[,;)]|\.(?:\s|$)|\s+(?:or|and|programming|language)\b|$))']
     - {name: PowerShell, aliases: [PowerShell]}
-    - {name: Bash, aliases: [Bash, shell scripting]}
-    - {name: C/C++, aliases: ["C/C++", "C++", "C or C++"]}
-    - {name: React, aliases: [React, React.js, ReactJS], cs: true}
+    - {name: Bash, aliases: [Bash, shell scripting, shell scripts, shell script]}
+    - name: R
+      aliases: [R programming, R language, RStudio, R Studio, R Shiny, tidyverse, ggplot2, dplyr]
+      cs: true
+      # Plain "R" only next to another analytics language or after "in/using/with" ("Python, R", "SQL or R",
+      # "proficiency in R."). Never "R&D", a requisition id ("R-411229", "R03371") or "(R)".
+      regex: ['(?<![\w&/-])R(?=\s*(?:,|/|\band\b|\bor\b)\s*(?:Python|SQL|SAS|Stata|SPSS|MATLAB|Julia|Scala|Java|Excel|Power BI|Tableau|Spark|PySpark)\b)',
+              '\b(?:Python|SQL|SAS|Stata|SPSS|MATLAB|Julia|Scala|Java|Excel|Power BI|Tableau|Spark|PySpark)\s*(?:,|/|\band\b|\bor\b)\s*R(?![\w&''’/-])(?!\.\w)',
+              '\b(?i:in|using|with|such as|like|including)\s+R(?=\s*(?:[,;)]|\.(?:\s|$)|\s+(?:or|and|to|for|programming|language|Shiny)\b|$))']
+    - {name: Power Fx, aliases: [Power Fx, PowerFx]}
+    - {name: HTML/CSS, aliases: [HTML, HTML5, CSS, CSS3, "HTML/CSS", SCSS, Sass], cs: true}
+    # --- frontend
+    - name: React
+      aliases: [React.js, ReactJS]
+      # "React", not the verb ("React to change productively", "react quickly").
+      regex: ['\bReact(?!\w|\.\w)(?!\s+(?:to|quickly|positively|productively|calmly|appropriately|accordingly|well)\b)']
     - {name: Next.js, aliases: [Next.js, NextJS]}
-    - {name: Node.js, aliases: [Node.js, NodeJS]}
+    - {name: Tailwind CSS, aliases: [Tailwind, Tailwind CSS, TailwindCSS], cs: true}
+    - {name: Vite, aliases: [Vite, Vite.js, ViteJS], cs: true}      # case-sensitive: French "vite" (quickly)
+    - {name: Canvas API, aliases: [Canvas API, HTML5 Canvas, HTML Canvas]}
+    - {name: Cytoscape.js, aliases: [Cytoscape.js, Cytoscape]}
+    - {name: Framer Motion, aliases: [Framer Motion]}
+    - {name: Recharts, aliases: [Recharts]}
+    - {name: responsive design, aliases: [responsive design, responsive web design, responsive UI, responsive layouts]}
+    - {name: SSR, aliases: [server-side rendering, server side rendering], regex: ['\bSSR\b']}
+    # --- backend / APIs
     - {name: .NET, aliases: [.NET, ASP.NET, dotnet, ".NET Core"]}
+    - {name: Node.js, aliases: [Node.js, NodeJS]}
     - {name: Flask, aliases: [Flask], cs: true}
     - {name: REST APIs, aliases: [REST, RESTful, REST API, REST APIs], cs: true}
-    - {name: MCP, aliases: [MCP, Model Context Protocol]}
+    - name: API integration
+      aliases: [API integration, API integrations, integrating APIs, third-party APIs, third party APIs]
+      regex: ['(?i)\bintegrat\w*\s+(?:with\s+)?(?:\w+[\s-]+){0,3}APIs?\b', '(?i)\bAPIs?\s+integrations?\b']
+    - {name: MCP, aliases: [MCP, Model Context Protocol], cs: true}
+    - {name: Anthropic API, aliases: [Anthropic API, Anthropic, Claude API]}
+    - {name: Gemini API, aliases: [Gemini API, Google Gemini, Gemini Pro]}   # plain "Gemini" is also a company
+    - {name: Groq API, aliases: [Groq]}
+    - {name: Ollama, aliases: [Ollama]}
+    - {name: Supabase, aliases: [Supabase]}
+    - {name: Redis, aliases: [Redis, Upstash]}
+    - {name: stored procedures, aliases: [stored procedure, stored procedures, stored procs]}
+    # --- cloud / DevOps
+    - {name: Azure, aliases: [Azure, Microsoft Azure]}
+    - {name: Azure DevOps, aliases: [Azure DevOps, Azure Pipelines, Azure Repos, Azure Boards]}
+    - {name: Entra ID, aliases: [Entra ID, Microsoft Entra, Azure AD, Azure Active Directory]}
+    - {name: PIM, aliases: [Privileged Identity Management, Azure PIM, Entra PIM, Azure AD PIM]}   # plain "PIM" is usually Product Information Management
+    - {name: AWS, aliases: [AWS, Amazon Web Services]}
     - {name: Docker, aliases: [Docker]}
     - {name: Kubernetes, aliases: [Kubernetes, K8s]}
     - {name: Terraform, aliases: [Terraform]}
-    - {name: AWS, aliases: [AWS, Amazon Web Services]}
-    - {name: Azure, aliases: [Azure]}
-    - {name: Cloudflare Workers, aliases: [Cloudflare Workers, Cloudflare]}
-    - {name: Git, aliases: [Git, GitHub]}
-    - {name: CI/CD, aliases: [CI/CD, CICD, continuous integration, continuous delivery, continuous deployment]}
-    - {name: Playwright, aliases: [Playwright]}
+    - {name: CI/CD, aliases: [CI/CD, CICD, CI / CD, continuous integration, continuous delivery, continuous deployment]}
+    - {name: Git, aliases: [Git, version control, source control]}
+    - {name: GitHub, aliases: [GitHub, GitHub Actions]}
+    - {name: Bitbucket, aliases: [Bitbucket]}
     - {name: Linux, aliases: [Linux]}
+    - {name: Cloudflare, aliases: [Cloudflare, Cloudflare Workers, Cloudflare Pages]}
+    - {name: Vercel, aliases: [Vercel]}
+    - {name: Playwright, aliases: [Playwright]}
+    - {name: test automation, aliases: [test automation, automated testing, automated tests, automation testing, automated test]}
+    - {name: regression testing, aliases: [regression testing, regression tests, regression test suite]}
+    - {name: GitHub Copilot, aliases: [GitHub Copilot]}     # not Microsoft (365) Copilot
+    - {name: Streamlit, aliases: [Streamlit]}
   data:
-    - {name: SQL, aliases: [SQL, T-SQL]}
-    - {name: PostgreSQL, aliases: [PostgreSQL, Postgres, Supabase]}
-    - {name: SQL Server, aliases: [SQL Server, MSSQL]}
+    - {name: SQL, aliases: [SQL]}
+    - {name: T-SQL, aliases: [T-SQL, TSQL, Transact-SQL]}
+    - {name: SQL Server, aliases: [SQL Server, MSSQL, MS SQL, SSMS]}
+    - {name: Azure SQL MI, aliases: [Azure SQL Managed Instance, Azure SQL MI, SQL MI, SQL Managed Instance]}
+    - {name: PostgreSQL, aliases: [PostgreSQL, Postgres]}
     - {name: MongoDB, aliases: [MongoDB, Mongo]}
-    - {name: Azure Data Factory, aliases: [Azure Data Factory, ADF]}
-    - {name: Azure SQL MI, aliases: [Azure SQL Managed Instance, Azure SQL MI, SQL MI]}
-    - {name: Entra ID, aliases: [Entra ID, Azure AD, Azure Active Directory]}
-    - {name: Databricks, aliases: [Databricks]}
+    - {name: Azure Data Factory, aliases: [Azure Data Factory, Data Factory], regex: ['(?<!Oracle )\bADF\b']}   # not Oracle ADF
+    - {name: Databricks, aliases: [Databricks, Databricks SQL]}
+    - {name: Delta Lake, aliases: [Delta Lake, Delta tables]}
+    - {name: Lakebase, aliases: [Lakebase]}
     - {name: Unity Catalog, aliases: [Unity Catalog]}
     - {name: Spark, aliases: [Spark, PySpark, Apache Spark], cs: true}
+    - {name: ETL/ELT, aliases: [ETL, "ETL/ELT", "ELT/ETL", data pipeline, data pipelines, data ingestion], regex: ['\bELT\b']}
+    - {name: data modeling, aliases: [data modeling, data modelling, data model, data models, dimensional modeling, dimensional modelling, star schema]}
+    - {name: data quality, aliases: [data quality, data validation, data quality validation, data quality checks]}
+    - {name: data lineage, aliases: [data lineage, lineage]}
+    - {name: Azure Blob Storage, aliases: [Azure Blob Storage, Azure Blob, Blob Storage]}
+    # --- analytics
     - {name: Power BI, aliases: [Power BI, PowerBI]}
-    - {name: Power Apps, aliases: [Power Apps, PowerApps]}
-    - {name: Power Automate, aliases: [Power Automate]}
+    - {name: DAX, aliases: [DAX], cs: true}
+    - {name: semantic models, aliases: [semantic model, semantic models, semantic layer]}
     - {name: pandas, aliases: [pandas]}
     - {name: NumPy, aliases: [NumPy]}
+    - name: Excel
+      aliases: [MS Excel, Microsoft Excel, Excel spreadsheets]
+      # "Excel" the product, never the verb ("you excel at", "Excel in a fast-paced team").
+      regex: ['(?<![\w-])Excel(?![\w-])(?!\s+(?:at|in|under|when|as|with|on)\b)',
+              '(?i)\b(?:advanced|proficien\w*\s+(?:in|with)|knowledge\s+of|experience\s+(?:in|with))\s+excel\b']
+    # Plain "statistics" is left out: it also means a degree name, "performance statistics" and EEO boilerplate.
+    - {name: statistical analysis, aliases: [statistical analysis, statistical modeling, statistical modelling, statistical methods, statistical inference, statistical techniques, applied statistics, regression analysis, linear regression, logistic regression, time series analysis]}
+    - {name: A/B testing, aliases: [A/B testing, A/B tests, A/B test, AB testing, split testing]}
+    - {name: hypothesis testing, aliases: [hypothesis testing, hypothesis tests, statistical significance]}
+    - {name: data visualization, aliases: [data visualization, data visualisation, data visualizations, dashboarding, visualization tools]}
+    - {name: Jupyter, aliases: [Jupyter, Jupyter Notebook, Jupyter Notebooks, JupyterLab]}
+    - {name: Google Colab, aliases: [Google Colab, Colab]}
   ml:
+    - {name: machine learning, aliases: [machine learning, deep learning, neural network, neural networks], regex: ['\bML\b']}
     - {name: PyTorch, aliases: [PyTorch]}
     - {name: TensorFlow, aliases: [TensorFlow]}
     - {name: scikit-learn, aliases: [scikit-learn, scikit learn, sklearn]}
-    - {name: LLM, aliases: [LLM, LLMs, large language model, large language models, Anthropic, Claude API]}
-    - {name: Gemini API, aliases: [Gemini API, Gemini]}
+    - {name: federated learning, aliases: [federated learning]}
+    - name: transfer learning
+      aliases: [transfer learning]
+      regex: ['(?i)\bfine[- ]?tun\w*\s+(?:of\s+)?(?:\w+[\s-]+){0,2}(?:models?|LLMs?|networks?|transformers?)\b']
+    - {name: CNNs, aliases: [CNN, CNNs, convolutional neural network, convolutional neural networks]}
+    - {name: YOLO, aliases: [YOLO, YOLOv5, YOLOv8], cs: true}
+    - {name: ResNet, aliases: [ResNet]}
+    - {name: hyperparameter optimization, aliases: [hyperparameter optimization, hyperparameter tuning, hyperparameter optimisation]}
+    - {name: model evaluation, aliases: [model evaluation, model validation, evaluation metrics]}
+    - {name: LLMs, aliases: [LLM, LLMs, large language model, large language models]}
+    - {name: GenAI, aliases: [GenAI, Gen AI, generative AI]}
+    - {name: LangChain, aliases: [LangChain]}
+    - name: RAG
+      aliases: [retrieval-augmented generation, retrieval augmented generation]
+      regex: ['\bRAG\b(?!\s+(?:status|statuses|rating|ratings|reporting|report|reports)\b)']   # not "RAG status" (red/amber/green)
+    - {name: hybrid retrieval, aliases: [hybrid retrieval, hybrid search]}
+    - {name: ChromaDB, aliases: [ChromaDB]}
+    - {name: BM25, aliases: [BM25]}
+    - {name: Hugging Face, aliases: [Hugging Face, HuggingFace]}
+    - {name: RAGAS, aliases: [RAGAS], cs: true}
+    - {name: spaCy, aliases: [spaCy]}
+    - {name: NLTK, aliases: [NLTK]}
+    - {name: NER, aliases: [named entity recognition], regex: ['\bNER\b']}
+    - {name: TF-IDF, aliases: [TF-IDF, TFIDF]}
+    - {name: NLP, aliases: [NLP, natural language processing]}
+    - {name: prompt engineering, aliases: [prompt engineering, prompt design]}
+    - {name: computer vision, aliases: [computer vision]}
+    - {name: OpenCV, aliases: [OpenCV]}
+    - {name: OCR, aliases: [Tesseract, OCR, optical character recognition]}
+    - {name: model quantization, aliases: [model quantization, quantization]}
+    - {name: CUDA, aliases: [CUDA]}
   security:
-    - {name: CrowdStrike, aliases: [CrowdStrike, LogScale]}
+    - {name: CrowdStrike, aliases: [CrowdStrike, CrowdStrike Falcon]}
+    - {name: LogScale, aliases: [LogScale, Humio]}
+    - {name: SIEM, aliases: [SIEM]}
+    - {name: EDR, aliases: [endpoint detection and response, endpoint detection & response], regex: ['\bEDR\b']}
+    - {name: detection engineering, aliases: [detection engineering]}
+    - {name: incident response, aliases: [incident response]}
+    - {name: MITRE ATT&CK, aliases: [MITRE ATT&CK, "ATT&CK", MITRE]}
+    - {name: Okta, aliases: [Okta]}
+    - {name: Intune, aliases: [Intune]}
+    - {name: RBAC, aliases: [RBAC, role-based access control, role based access control]}
+    - {name: MFA, aliases: [multi-factor authentication, multifactor authentication, 2FA], regex: ['\bMFA\b']}
+    - {name: zero trust, aliases: [zero trust, zero-trust]}
+  general:
+    - {name: Agile, aliases: [Agile, Scrum, Kanban, sprint, sprints]}
+    - {name: Jira, aliases: [Jira]}
+    - {name: Confluence, aliases: [Confluence], cs: true}
+    - {name: ServiceNow, aliases: [ServiceNow]}
+    - {name: Power Apps, aliases: [Power Apps, PowerApps, Power Platform]}
+    - {name: Power Automate, aliases: [Power Automate, Microsoft Flow]}
+    - {name: Appian, aliases: [Appian]}
+    - {name: MuleSoft, aliases: [MuleSoft]}
+    - {name: code review, aliases: [code review, code reviews]}
+    - {name: debugging, aliases: [debugging, troubleshooting, troubleshoot, root cause analysis, root-cause analysis], regex: ['\bRCA\b']}
+    - {name: technical documentation, aliases: [technical documentation, technical docs]}
+    - name: requirements gathering
+      aliases: [requirements gathering, requirement gathering, requirements elicitation, gathering requirements, gather requirements]
+      regex: ['(?i)\bgather(?:ing)?\s+(?:business\s+|technical\s+|user\s+)?requirements\b']
+    - {name: UAT, aliases: [user acceptance testing], regex: ['\bUAT\b']}

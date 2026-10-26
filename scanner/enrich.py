@@ -285,7 +285,8 @@ def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer,
     if job.jd_status == "ok":
         jd = job.jd
         exp = jd_rules.parse_experience(jd)
-        fit = scorer.evaluate(jd, cfg["scoring"]["min_terms_for_fit"])
+        fit = scorer.evaluate(jd, cfg["scoring"]["min_terms_for_fit"], (job.company, job.company_name),
+                              cfg["scoring"].get("min_core_terms_for_fit", 1))
         job.fit_pct, job.matched, job.gaps = fit.fit_pct, fit.matched, fit.gaps
         job.cluster = clusters.resolve(job.title, fit.cluster)
         job.signals = jd_rules.detect_signals(job.title, jd, exp)

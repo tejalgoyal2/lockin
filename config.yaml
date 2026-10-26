@@ -215,7 +215,8 @@ jd:
 
 scoring:
   weak_title_min_fit: 20     # a weak_title job is dropped if Fit % is below this or no skill matches
-  min_terms_for_fit: 4       # Fit % needs this many distinct terms (matched + gaps); fewer -> n/a + `low signal`
+  min_terms_for_fit: 4       # Fit % needs this many distinct terms (matched + gaps + context); fewer -> n/a + `low signal`
+  min_core_terms_for_fit: 2  # ... of which at least this many skills or gaps (one skill and three generic words is not a fit)
   matched_bonus_per_skill: 2 # ranking Score += this per matched skill ...
   matched_bonus_cap: 10      # ... counting at most this many skills
   boost:

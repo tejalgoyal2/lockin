@@ -53,10 +53,10 @@ GOOD = "Requirements:\nPython, SQL, Docker and Git. 0-2 years of experience. Rec
 def test_good_job_is_scored_with_fit_cluster_and_signals():
     res = run([gh(1, title="Junior Data Analyst")], jds={"1": GOOD})
     (j,) = res.kept
-    assert j.jd_status == "ok" and j.fit_pct == 80.0 and j.cluster == "data"   # title says data; 8 / (8 + 2)
+    assert j.jd_status == "ok" and j.fit_pct == 66.7 and j.cluster == "data"   # title says data; 4 / (4 + 2)
     assert j.signals == ["recent graduate", "0-2 years", "junior"]
     assert j.matched == ["Docker", "Git", "Python", "SQL"]
-    assert j.score == 103.0   # Fit 80 + 4 matched x 2 + new-grad boost 15 (recent graduate)
+    assert j.score == 89.7    # Fit 66.7 + 4 matched x 2 + new-grad boost 15 (recent graduate)
 
 
 @pytest.mark.parametrize("jd,reason", [
@@ -84,7 +84,7 @@ def test_us_authorization_only_drops_without_canadian_location():
 def test_weak_title_dropped_when_few_terms_no_match_or_low_fit():
     none = run([gh(1, title="Technical Specialist", weak_title=True)], jds={"1": "Greet customers."})
     low = run([gh(2, title="Technical Specialist", weak_title=True)],
-              jds={"2": "Python. Java, Kafka, Golang, Kotlin, Scala, Spring Boot, Redis."})
+              jds={"2": "Python. Java, Kafka, Golang, Kotlin, Scala, Spring Boot, Elasticsearch."})
     ok = run([gh(3, title="Technical Specialist", weak_title=True)], jds={"3": "Python, SQL, Docker, Git."})
     assert none.drops == {E.R_WEAK_FEW_TERMS: 1}      # no terms at all
     assert low.drops == {E.R_WEAK: 1}                 # 8 terms, Fit 12.5 < 20
