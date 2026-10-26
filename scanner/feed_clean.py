@@ -4,7 +4,8 @@
 rebuilds the job, runs the same rules a new job faces, and trashes the rows that fail them. Rows with
 Interested, Apply or done-del ticked, or a checkbox that cannot be read, are never trashed or changed: they
 are reported.
-Rows that fail the plain Canada location check are listed but never trashed.
+A row whose location (the posting's current one, from the source data) is not Canadian, or whose title names a
+place outside Canada, fails like any other rule.
 """
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -27,6 +28,7 @@ RULE_COMPANY = "blocklisted company"
 RULE_FRENCH_TITLE = "French title"
 RULE_TITLE = "title exclude"
 RULE_QUEBEC = enrich_mod.R_QUEBEC_ONLY
+RULE_TITLE_PLACE = "title names a place outside Canada"
 
 
 @dataclass
@@ -71,10 +73,6 @@ class CleanReport:
 
     def protected(self) -> list[Verdict]:
         return [v for v in self.failing() if v not in self.trashable()]
-
-    def location_failures(self) -> list[Verdict]:
-        """Rows that pass every rule but whose location fails the Canada filter (reported, never trashed)."""
-        return [v for v in self.verdicts if not v.rule and v.location_status == "not_canada"]
 
     def location_unknown(self) -> list[Verdict]:
         return [v for v in self.verdicts if not v.rule and not v.location_status]
@@ -195,8 +193,11 @@ def evaluate(item: FeedItem, location: str, cfg: dict, filters: Filters, scorer:
     if status == "quebec_only":
         v.rule = RULE_QUEBEC
         return v
-    if status == "not_canada" and item.source == "Simplify" and origin == "ats":
-        v.rule = enrich_mod.R_ATS_NOT_CANADA
+    if status == "not_canada":
+        v.rule = enrich_mod.R_ATS_NOT_CANADA if item.source == "Simplify" and origin == "ats" else enrich_mod.R_NOT_CANADA
+        return v
+    if not filters.title_location_ok(item.title):
+        v.rule = RULE_TITLE_PLACE
         return v
     job = to_job(item, location or "Canada")      # unknown location: do not let the US-authorization rule guess
     job.weak_title = filters.title_tier(item.title) == "weak"
@@ -247,12 +248,6 @@ def render(rep: CleanReport, *, dry_run: bool) -> str:
         out += ["", "Break a rule but NOT trashed (Interested, Apply or done-del ticked, or unreadable)", "",
                 "| Rule | Role | Company |", "|---|---|---|"]
         out += [f"| {v.rule} " + _row(v) for v in rep.protected()]
-    fails = rep.location_failures()
-    out += ["", f"Remaining rows whose location fails the Canada filter (reported, not trashed): {len(fails)}"]
-    if fails:
-        out += ["", "| Role | Company | Location |", "|---|---|---|"]
-        out += [f"| {v.item.title.replace('|', '/')} | {v.item.company.replace('|', '/')} | {v.location} |"
-                for v in fails]
     unknown = rep.location_unknown()
     out += ["", f"Remaining rows whose source record was not found, so the location was not checked: {len(unknown)}"]
     if unknown:

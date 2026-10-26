@@ -58,6 +58,16 @@ location:
   # ... and when the list cannot be read (403, no JD) the job is kept only if the primary location in its
   # URL is Canadian (or Quebec). Set true to keep every such job, whatever its URL says.
   keep_unresolved_with_foreign_url: false
+  # A title that names a place outside Canada, and no Canadian one, fails the location stage even when the
+  # location field says Canada: TribalScale listed "Forward Deployed Engineer (Washington, D.C.)" as "Remote Canada".
+  # Whole words, case-insensitive. Ambiguous names (London, Paris, Cambridge: also Ontario towns) are left out.
+  title_foreign:
+    - 'United States|America(?:n)?-based'
+    - 'Alabama|Alaska|Arizona|Arkansas|California|Colorado|Connecticut|Delaware|Florida|Georgia|Hawaii|Idaho|Illinois|Indiana|Iowa|Kansas|Kentucky|Louisiana|Maine|Maryland|Massachusetts|Michigan|Minnesota|Mississippi|Missouri|Montana|Nebraska|Nevada|New Hampshire|New Jersey|New Mexico|New York|North Carolina|North Dakota|Ohio|Oklahoma|Oregon|Pennsylvania|Rhode Island|South Carolina|South Dakota|Tennessee|Texas|Utah|Vermont|Virginia|West Virginia|Wisconsin|Wyoming'
+    - 'Washington,?\s*D\.?\s?C\.?|Washington State|San Francisco|Bay Area|Silicon Valley|Los Angeles|LA-based|Seattle|Boston|Chicago|Austin|Dallas|Houston|Denver|Atlanta|Miami|Fort Lauderdale|Philadelphia|Pittsburgh|San Diego|San Jose|Palo Alto|Mountain View|Menlo Park|Sunnyvale|Redwood City|Raleigh|Nashville|Minneapolis|Detroit|Salt Lake City|Las Vegas|Orlando|Tampa|Portland|Kirkland|Bellevue|Redmond|Phoenix'
+    - 'United Kingdom|England|Scotland|Ireland|Dublin|India|Bangalore|Bengaluru|Hyderabad|Pune|Chennai|Gurugram|Gurgaon|Noida|Germany|Berlin|Munich|Netherlands|Amsterdam|Poland|Warsaw|Mexico|Brazil|Philippines|Manila|Singapore|Australia|Sydney|Japan|Tokyo|Israel|Tel Aviv|Spain|Madrid|Portugal|Lisbon|Argentina|Costa Rica'
+  title_foreign_cs:            # case-sensitive abbreviations
+    - 'US|USA|U\.S\.(?:A\.)?|NYC|UK|EMEA|APAC|LATAM'
 
 title:
   # Two tiers. "strong" terms pass outright; "weak" terms are generic words that

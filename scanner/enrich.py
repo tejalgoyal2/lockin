@@ -245,10 +245,12 @@ _GENERIC_LOCATION = re.compile(r"^\W*(remote|hybrid|anywhere|global|worldwide|mu
 
 
 def _ats_location(job: Job, filters: Filters) -> str | None:
-    """A Simplify row lists the locations of a whole programme ("Vancouver, BC; Dublin, Ireland; United States")
-    while the ATS posting it links to has one, so the ATS wins: if it names places and none is Canadian, the
-    job is not a Canadian job. Vague ATS locations ("Remote", "Hybrid") say nothing and are ignored."""
-    if "Simplify" not in job.sources or not job.jd_locations:
+    """The ATS posting's own, current location wins over the dataset's for every job: a Simplify row lists the
+    locations of a whole programme ("Vancouver, BC; Dublin, Ireland; United States") and a dataset row can be a
+    day old while the employer has moved the posting ("Remote Canada" -> "Remote USA"). If the ATS names places
+    and none is Canadian, the job is not a Canadian job. Vague ATS locations ("Remote", "Hybrid") say nothing
+    and are ignored."""
+    if not job.jd_locations:
         return None
     named = [loc for loc in job.jd_locations if not _GENERIC_LOCATION.search(loc)]
     if not named:
