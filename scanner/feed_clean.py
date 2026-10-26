@@ -9,6 +9,7 @@ Rows that fail the plain Canada location check are listed but never trashed.
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+from pathlib import Path
 
 from scanner import enrich as enrich_mod
 from scanner import notion_feed
@@ -139,7 +140,7 @@ def find_records(urls: set[str], cfg: dict, feashliaa_dir=None) -> dict[str, Fou
     out: dict[str, Found] = {}
     src = cfg["sources"]
     if src["feashliaa"]["enabled"]:
-        data_dir = feashliaa_dir or feashliaa.fetch(src["feashliaa"])
+        data_dir = Path(feashliaa_dir) if feashliaa_dir else feashliaa.fetch(src["feashliaa"])
         for rec in feashliaa.iter_raw(data_dir):
             url = canonical_url(rec.get("url") or "")
             if url in wanted:
