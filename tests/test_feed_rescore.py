@@ -14,9 +14,9 @@ FOUR = "Python, SQL, Docker and Git."          # 4 matched skills, no gaps: Fit 
 
 
 def item(title="Software Developer", cell="Bdo · oct8", jd=FOUR, fit=1.0, signals=(), interested=False,
-         apply=False, link="https://x.example/job/1", page="p1"):
+         apply=False, link="https://x.example/job/1", page="p1", done_del=False):
     return FC.FeedItem(page, title, cell.rsplit(" · ", 1)[0], link, "Workday", jd, list(signals), interested, apply,
-                       fit, cell)
+                       fit, cell, done_del)
 
 
 def verdicts(items, location="Toronto, ON"):
@@ -58,7 +58,8 @@ def test_the_date_tag_is_kept_and_a_row_without_a_source_record_keeps_its_name()
 
 def test_ticked_unreadable_and_failing_rows_are_skipped():
     rows = [item(interested=True, page="a"), item(apply=True, page="b"), item(interested=None, page="c"),
-            item(title="Data Specialist", page="d")]                  # fails a title rule
+            item(title="Data Specialist", page="d"),                  # fails a title rule
+            item(done_del=True, page="e"), item(done_del=None, page="f")]
     assert rescore(rows) == []
 
 
@@ -91,7 +92,7 @@ def test_report_shows_old_and_new_per_row():
                   fit=(1.0, 0.667), signals=(["junior"], ["junior", "2+ yrs"]))
     text = FC.render_changes([c], 5, dry_run=False)
     assert "| Junior Software Developer | Bdo · oct8 → BDO · oct8 | 100.0% → 66.7% | junior → junior, 2+ yrs |" in text
-    assert "5 rows with both boxes unticked kept, 1 changed" in text
+    assert "5 rows with all boxes unticked kept, 1 changed" in text
 
 
 def test_find_records_takes_the_slug_from_the_ats_and_the_name_from_simplify(monkeypatch):

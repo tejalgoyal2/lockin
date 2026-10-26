@@ -97,12 +97,13 @@ class Notion:
         return resp
 
 
-def page(pid, title, company, link, jd, interested=False, apply=False, signals=()):
+def page(pid, title, company, link, jd, interested=False, apply=False, signals=(), done_del=False):
     rt = lambda s: [{"type": "text", "plain_text": s, "text": {"content": s}}]
     return {"id": pid, "properties": {
         "Name": {"title": rt(title)}, "Company": {"rich_text": rt(company)}, "Link": {"url": link},
         "Source": {"select": {"name": "Greenhouse"}}, "Signals": {"multi_select": [{"name": s} for s in signals]},
-        "JD": {"rich_text": rt(jd)}, "Interested": {"checkbox": interested}, "Apply": {"checkbox": apply}}}
+        "JD": {"rich_text": rt(jd)}, "Interested": {"checkbox": interested}, "Apply": {"checkbox": apply},
+        **({} if done_del is None else {"done-del": {"checkbox": done_del}})}}
 
 
 def feed():
@@ -125,6 +126,19 @@ def test_list_items_and_trash_only_rows_that_fail_and_are_unticked():
     assert FC.trash(client, rep, dry_run=True) == 1 and sess.patched == []
     assert FC.trash(client, rep, dry_run=False) == 1
     assert sess.patched == [("/v1/pages/bad", {"in_trash": True})]
+
+
+def test_rows_marked_done_del_or_without_a_done_del_value_are_never_trashed():
+    sess = Notion([
+        page("moved", "Data Specialist", "McKesson · oct8", "https://boards.greenhouse.io/mck/jobs/2", GOOD_JD,
+             done_del=True),
+        page("unknown", "Data Specialist", "McKesson · oct8", "https://boards.greenhouse.io/mck/jobs/3", GOOD_JD,
+             done_del=None),
+    ])
+    client = notion_feed.NotionClient("secret", "2026-03-11", session=sess, sleep=lambda s: None)
+    rep = FC.clean(FC.list_items(client, feed()), {}, CFG, FILTERS, SCORER)
+    assert len(rep.failing()) == 2 and rep.trashable() == [] and len(rep.protected()) == 2
+    assert FC.trash(client, rep, dry_run=False) == 0 and sess.patched == []
 
 
 def test_render_has_a_table_per_rule_and_never_prints_ids():

@@ -239,9 +239,10 @@ cluster:
 notion:
   api_version: "2026-03-11"   # Notion-Version header; 2026-03-11 renamed `archived` to `in_trash`
   daily_cap: 40               # at most this many rows written per run, highest Score first
-  feed_ttl_days: 14           # trash Feed rows older than this when Interested and Apply are both unticked
   verify_readback_min_chars: 4000   # after writing, read back a JD at least this long and compare lengths
-  # Property names exactly as they appear in the Feed. The scanner never writes `interested` / `apply`.
+  # Property names exactly as they appear in the Feed. The scanner never writes `interested` / `apply` /
+  # `done_del`. At the start of each run it trashes the rows whose `done_del` box is ticked (the owner's
+  # automation ticks it after copying the row to the main database) and no other row.
   properties:
     name: Name
     company: Company
@@ -252,6 +253,7 @@ notion:
     jd: JD
     interested: Interested
     apply: Apply
+    done_del: done-del
 
 state:
   dir: state                  # seen.json (rows already written) and gaps.json

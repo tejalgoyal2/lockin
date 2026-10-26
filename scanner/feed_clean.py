@@ -2,7 +2,8 @@
 
 `python -m scanner clean-feed [--dry-run]` reads every Feed row (title, company, link, JD, checkboxes),
 rebuilds the job, runs the same rules a new job faces, and trashes the rows that fail them. Rows with
-Interested or Apply ticked, or a checkbox that cannot be read, are never trashed: they are reported.
+Interested, Apply or done-del ticked, or a checkbox that cannot be read, are never trashed or changed: they
+are reported.
 Rows that fail the plain Canada location check are listed but never trashed.
 """
 from collections import defaultdict
@@ -39,6 +40,12 @@ class FeedItem:
     apply: bool | None
     fit: float | None = None     # the Fit % column (a fraction), as stored
     company_cell: str = ""       # the Company cell as stored, "<name> · <date tag>"
+    done_del: bool | None = False  # the owner's automation copied the row to the main DB (trashed by the next run)
+
+    @property
+    def untouched(self) -> bool:
+        """Interested, Apply and done-del are all known and unticked: the only rows clean-feed may change."""
+        return self.interested is False and self.apply is False and self.done_del is False
 
 
 @dataclass
@@ -57,8 +64,8 @@ class CleanReport:
         return [v for v in self.verdicts if v.rule]
 
     def trashable(self) -> list[Verdict]:
-        """Failing rows whose Interested and Apply boxes are both known and unticked."""
-        return [v for v in self.failing() if v.item.interested is False and v.item.apply is False]
+        """Failing rows whose Interested, Apply and done-del boxes are all known and unticked."""
+        return [v for v in self.failing() if v.item.untouched]
 
     def protected(self) -> list[Verdict]:
         return [v for v in self.failing() if v not in self.trashable()]
@@ -82,7 +89,7 @@ def list_items(client, feed: notion_feed.Feed) -> list[FeedItem]:
     are re-read through the property-item endpoint."""
     n, ids = feed.names, feed.ids
     params = {"filter_properties[]": [ids[k] for k in ("name", "company", "link", "source", "signals", "jd",
-                                                        "interested", "apply", "fit")]}
+                                                        "interested", "apply", "fit", "done_del")]}
     items, cursor = [], None
     while True:
         body = {"page_size": 100, **({"start_cursor": cursor} if cursor else {})}
@@ -106,6 +113,7 @@ def list_items(client, feed: notion_feed.Feed) -> list[FeedItem]:
                 apply=(props.get(n["apply"]) or {}).get("checkbox"),
                 fit=(props.get(n["fit"]) or {}).get("number"),
                 company_cell=company,
+                done_del=(props.get(n["done_del"]) or {}).get("checkbox"),
             ))
         if not data.get("has_more"):
             return items
@@ -226,7 +234,7 @@ def render(rep: CleanReport, *, dry_run: bool) -> str:
     by_rule: dict[str, list[Verdict]] = defaultdict(list)
     for v in rep.trashable():
         by_rule[v.rule].append(v)
-    out += ["", "Rule -> rows removed (Interested and Apply both unticked)", "",
+    out += ["", "Rule -> rows removed (Interested, Apply and done-del all unticked)", "",
             "| Rule | Role | Company |", "|---|---|---|"]
     for rule, vs in sorted(by_rule.items(), key=lambda kv: (-len(kv[1]), kv[0])):
         for v in vs:
@@ -234,7 +242,7 @@ def render(rep: CleanReport, *, dry_run: bool) -> str:
     if not by_rule:
         out.append("| none | | |")
     if rep.protected():
-        out += ["", "Break a rule but NOT trashed (a checkbox is ticked or unreadable)", "",
+        out += ["", "Break a rule but NOT trashed (Interested, Apply or done-del ticked, or unreadable)", "",
                 "| Rule | Role | Company |", "|---|---|---|"]
         out += [f"| {v.rule} " + _row(v) for v in rep.protected()]
     fails = rep.location_failures()
@@ -282,13 +290,13 @@ def _fit_cell(fit: float | None) -> str:
 
 def rescore(verdicts: list[Verdict], records: dict[str, Found], cfg: dict, filters: Filters, scorer: Scorer,
             overrides: dict[str, str]) -> list[Change]:
-    """Recompute Company, Fit % and Signals for the rows that passed every rule and have both boxes unticked,
+    """Recompute Company, Fit % and Signals for the rows that passed every rule and have all three boxes unticked,
     with the current term lists, Fit formula, 2-year tag and company_names.yaml. Only changed values are returned."""
     clusters = ClusterResolver(cfg)
     changes = []
     for v in verdicts:
         it = v.item
-        if v.rule or it.interested is not False or it.apply is not False:
+        if v.rule or not it.untouched:
             continue
         rec = records.get(canonical_url(it.link)) or Found()
         job = to_job(it, v.location or "Canada")
@@ -316,7 +324,7 @@ def rescore(verdicts: list[Verdict], records: dict[str, Found], cfg: dict, filte
 
 
 def render_changes(changes: list[Change], rescored: int, *, dry_run: bool) -> str:
-    out = [f"Rescore ({'dry run: nothing changed' if dry_run else 'updated in place'}): {rescored} rows with both boxes "
+    out = [f"Rescore ({'dry run: nothing changed' if dry_run else 'updated in place'}): {rescored} rows with all boxes "
            f"unticked kept, {len(changes)} changed", "",
            "| Role | Company | Fit % | Signals |", "|---|---|---|---|"]
     for c in changes:

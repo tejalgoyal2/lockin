@@ -106,8 +106,18 @@ def connect_feed(cfg, token, ds_id, args):
     return client, feed
 
 
+def trash_moved_rows(client, feed, *, dry_run: bool) -> int:
+    """Start of the run: trash the Feed rows the owner's automation has copied to the main database (`done-del`
+    ticked). No other row is ever trashed by a run."""
+    rows = notion_feed.list_rows(client, feed)
+    moved = notion_feed.moved_rows(rows)
+    done = notion_feed.trash_rows(client, moved, dry_run=dry_run)
+    print(f"Notion: Feed has {len(rows)} rows; {'would trash' if dry_run else 'trashed'} {done} with done-del ticked")
+    return done
+
+
 def notion_step(cfg, args, client, feed, final, seen, overrides, now):
-    """Dedupe against seen.json and the Feed, clean up old rows, write the top rows. Returns exit code."""
+    """Dedupe against seen.json and the Feed, write the top rows. Returns exit code."""
     ncfg = cfg["notion"]
     cap = args.max_rows if args.max_rows is not None else ncfg["daily_cap"]
     today = now.date()
@@ -115,10 +125,6 @@ def notion_step(cfg, args, client, feed, final, seen, overrides, now):
     if client:
         rows = notion_feed.list_rows(client, feed)
         feed_links = {r.link for r in rows if r.link}
-        stale = notion_feed.stale_rows(rows, now, ncfg["feed_ttl_days"])
-        done = notion_feed.trash_rows(client, stale, dry_run=args.dry_run)
-        print(f"Notion: Feed has {len(rows)} rows; {'would trash' if args.dry_run else 'trashed'} {done} "
-              f"older than {ncfg['feed_ttl_days']} days with Interested and Apply both unticked")
     candidates = sorted(final, key=lambda j: -j.score)[:args.top] if args.top else final
     if not args.dry_run:
         remembered = [j for j in notion_feed.already_in_feed(candidates, feed_links) if j.key not in seen.seen]
@@ -173,6 +179,8 @@ def run(args: argparse.Namespace) -> int:
     if use_notion:
         token, ds_id = notion_credentials(args)
         client, feed = connect_feed(cfg, token, ds_id, args)
+        if client:
+            trash_moved_rows(client, feed, dry_run=args.dry_run)
 
     fresh = cfg["freshness"]
     since = args.since if args.since is not None else (
@@ -294,7 +302,7 @@ def run_clean_feed(args: argparse.Namespace) -> int:
     if args.rescore:                               # the rows that stay: recompute Company, Fit % and Signals
         kept = [v for v in rep.verdicts if not v.rule]
         changes = feed_clean.rescore(kept, records, cfg, filters, scorer, load_overrides())
-        eligible = sum(1 for v in kept if v.item.interested is False and v.item.apply is False)
+        eligible = sum(1 for v in kept if v.item.untouched)
         print(feed_clean.render_changes(changes, eligible, dry_run=args.dry_run))
         done = feed_clean.apply_changes(client, feed, changes, dry_run=args.dry_run)
         print(f"{'Would update' if args.dry_run else 'Updated'} {done} rows")
@@ -327,10 +335,10 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--seed", type=int, default=None, help="seed for --sample")
     p.add_argument("--simplify-file", help="use a local listings.json instead of downloading")
     c = sub.add_parser("clean-feed", help="apply the current rules to the rows already in the Notion Feed "
-                                         "and trash the ones that fail (never a row with Interested / Apply ticked)")
+                                         "and trash the ones that fail (never a row with Interested / Apply / done-del ticked)")
     c.add_argument("--dry-run", action="store_true", help="report what would be trashed; trash nothing")
     c.add_argument("--rescore", action="store_true",
-                   help="also recompute Company, Fit % and Signals of the rows that stay (both boxes unticked)")
+                   help="also recompute Company, Fit % and Signals of the rows that stay (all boxes unticked)")
     c.add_argument("--skip-refresh", action="store_true",
                    help="do not look for live postings for Workday rows without a JD")
     c.add_argument("--config", help="path to config.yaml")

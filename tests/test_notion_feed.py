@@ -166,51 +166,58 @@ def test_link_check_ignores_tracking_params_but_not_job_ids():
     assert [j.key for j in chosen] == ["key2"] and skipped == {"link_in_feed": 1}
 
 
-# --- cleanup --------------------------------------------------------------------------
+# --- cleanup: only rows the owner's automation marked done-del ---------------------------
 
 def rows_fixture(notion, client, feed):
-    old = (NOW - timedelta(days=20)).isoformat().replace("+00:00", "Z")
-    fresh = (NOW - timedelta(days=3)).isoformat().replace("+00:00", "Z")
+    old = (NOW - timedelta(days=60)).isoformat().replace("+00:00", "Z")
+    fresh = (NOW - timedelta(days=1)).isoformat().replace("+00:00", "Z")
     ids = {
         "old_plain": notion.add_row("https://a/1", old),
         "old_interested": notion.add_row("https://a/2", old, interested=True),
         "old_apply": notion.add_row("https://a/3", old, apply=True),
-        "old_both": notion.add_row("https://a/4", old, interested=True, apply=True),
-        "fresh_plain": notion.add_row("https://a/5", fresh),
-        "edge_13d": notion.add_row("https://a/6", (NOW - timedelta(days=13, hours=23)).isoformat()),
+        "moved": notion.add_row("https://a/4", old, interested=True, apply=True, done_del=True),
+        "moved_fresh": notion.add_row("https://a/5", fresh, done_del=True),
+        "fresh_plain": notion.add_row("https://a/6", fresh),
     }
     return ids, nf.list_rows(client, feed)
 
 
-def test_cleanup_trashes_only_old_rows_with_both_boxes_unticked(notion, client, feed):
+def test_cleanup_trashes_only_rows_with_done_del_ticked(notion, client, feed):
     ids, rows = rows_fixture(notion, client, feed)
-    stale = nf.stale_rows(rows, NOW, 14)
-    assert [r.page_id for r in stale] == [ids["old_plain"]]
-    nf.trash_rows(client, stale, dry_run=False)
-    assert notion.pages[ids["old_plain"]]["in_trash"] is True
-    for k in ("old_interested", "old_apply", "old_both", "fresh_plain", "edge_13d"):
+    moved = nf.moved_rows(rows)
+    assert sorted(r.page_id for r in moved) == sorted([ids["moved"], ids["moved_fresh"]])
+    nf.trash_rows(client, moved, dry_run=False)
+    assert notion.pages[ids["moved"]]["in_trash"] is True and notion.pages[ids["moved_fresh"]]["in_trash"] is True
+    for k in ("old_plain", "old_interested", "old_apply", "fresh_plain"):     # no age-based cleanup any more
         assert notion.pages[ids[k]]["in_trash"] is False
     trashed = [r for r in notion.requests if r["method"] == "PATCH"]
-    assert len(trashed) == 1 and trashed[0]["json"] == {"in_trash": True}
+    assert len(trashed) == 2 and all(t["json"] == {"in_trash": True} for t in trashed)
 
 
-def test_row_with_a_missing_checkbox_value_is_never_trashed():
-    old = NOW - timedelta(days=30)
-    rows = [nf.FeedRow("p1", old, "https://a", interested=None, apply=False),
-            nf.FeedRow("p2", old, "https://b", interested=False, apply=None)]
-    assert nf.stale_rows(rows, NOW, 14) == []
+def test_row_with_an_unreadable_done_del_is_never_trashed():
+    old = NOW - timedelta(days=90)
+    rows = [nf.FeedRow("p1", old, "https://a", interested=False, apply=False, done_del=None),
+            nf.FeedRow("p2", old, "https://b", interested=False, apply=False, done_del=False)]
+    assert nf.moved_rows(rows) == []
 
 
 def test_dry_run_cleanup_makes_no_patch_requests(notion, client, feed):
     _, rows = rows_fixture(notion, client, feed)
-    nf.trash_rows(client, nf.stale_rows(rows, NOW, 14), dry_run=True)
+    assert nf.trash_rows(client, nf.moved_rows(rows), dry_run=True) == 2
     assert not [r for r in notion.requests if r["method"] == "PATCH"]
+
+
+def test_feed_without_done_del_fails_the_schema_check():
+    from tests.fakes import good_schema
+    schema = good_schema()
+    del schema["properties"]["done-del"]
+    assert any("done-del" in p for p in nf.validate_schema(schema, NAMES))
 
 
 def test_list_rows_asks_only_for_the_needed_properties(notion, client, feed):
     rows_fixture(notion, client, feed)
     q = [r for r in notion.requests if r["path"].endswith("/query")][-1]
-    assert q["params"] == {"filter_properties[]": ["p_link", "p_int", "p_apply"]}
+    assert q["params"] == {"filter_properties[]": ["p_link", "p_int", "p_apply", "p_done"]}
 
 
 # --- writing + read-back --------------------------------------------------------------

@@ -13,7 +13,8 @@ to triage. It runs on GitHub Actions. Design: [SPEC.md](SPEC.md).
 3. Fetch each JD (Greenhouse, Lever, Ashby, Workday, BambooHR), apply the JD rules (3+ years, current
    enrollment, clearance) and score the fit against `skills.yaml` / `gaps.yaml`.
 4. Write the top `notion.daily_cap` (40) new jobs to the Feed, skipping anything in `state/seen.json` or
-   already in the Feed by Link; trash Feed rows older than 14 days that you never ticked.
+   already in the Feed by Link. At the start of the run, Feed rows whose `done-del` box is ticked (your Notion
+   automation ticks it after copying the row to your main database) are trashed; no other row is ever trashed.
 5. Commit `state/` and `reports/` back to the repo. `reports/latest.md` is the full candidate list;
    `reports/gaps.md` (Mondays) lists the tech terms JDs ask for that you do not list yet.
 
@@ -29,10 +30,11 @@ to triage. It runs on GitHub Actions. Design: [SPEC.md](SPEC.md).
    | Link | URL |
    | Source | Select, options: Workday, Greenhouse, Lever, Ashby, BambooHR, Paylocity, Simplify, Watchlist |
    | Fit % | Number, format **Percent** |
-   | Signals | Multi-select, options: new grad, recent graduate, 0-2 years, entry level, junior, low signal, jd unavailable |
+   | Signals | Multi-select, options: new grad, recent graduate, 0-2 years, entry level, junior, low signal, jd unavailable (`2+ yrs` is created on first use) |
    | JD | Text |
    | Interested | Checkbox |
    | Apply | Checkbox |
+   | done-del | Checkbox |
 
 2. **Create a Notion integration** (an internal connection) at <https://www.notion.so/profile/integrations>
    with read, update and insert content capabilities. Copy its secret.
