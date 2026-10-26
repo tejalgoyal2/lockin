@@ -301,6 +301,8 @@ def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer,
         job.signals = jd_rules.detect_signals(job.title, jd, exp)
         if fit.fit_pct is None:
             job.signals.append(jd_rules.LOW_SIGNAL)
+        if jd_rules.requires_peng(jd):
+            job.signals.append(jdcfg.get("peng_signal", jd_rules.PENG))
         if cfg.get("language", {}).get("drop_french_required_jd", True) and jd_rules.requires_french(jd):
             return R_FRENCH
         if jd_rules.requires_enrollment(jd):

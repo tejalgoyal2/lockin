@@ -235,6 +235,7 @@ jd:
   min_years_drop: 3          # drop when the minimum required experience (lower bound) is >= this
   two_year_signal: "2+ yrs"  # lower bound of 2 years: kept, with this Signal, unless a rule below drops it
   two_year_min_fit: 0.6      # ... Fit (a fraction, like the Feed's Fit % column) must reach this for a 2-year job
+  peng_signal: "P.Eng req"   # Signal when the JD requires a P.Eng licence (not when an EIT is accepted); never a drop
   rescue_student_titles: true  # fetch JDs of student-titled jobs; keep those that welcome recent grads
 
 scoring:
