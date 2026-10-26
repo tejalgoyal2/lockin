@@ -9,6 +9,7 @@ from pathlib import Path
 
 from scanner import feed_clean, feed_refresh, gaps_report, notion_feed, report
 from scanner.applied import AppliedKeyError, AppliedSet
+from scanner.ats_names import NameStore, ats_name, fill_names
 from scanner.company_names import display_company, load_overrides, slug_names
 from scanner.config import load_config
 from scanner.dedupe import canonical_url, dedupe
@@ -209,6 +210,10 @@ def run(args: argparse.Namespace) -> int:
         result = enrich(deduped, held_deduped, cfg, filters, scorer, client_jd,
                         progress=lambda m: print(m, flush=True))
         final, applied_skipped = applied.filter(result.kept)
+        names = NameStore(state_dir / "company_names.json")
+        named = fill_names(final, overrides, names, client_jd, today)
+        names.save()
+        print(f"Company names from the ATS: {named} jobs", flush=True)
         final_ids = {id(j) for j in final}      # identity: Job has field-wise __eq__
         phase2 = {"drops": result.drops, "fetch": result.fetch, "forbidden": result.forbidden,
                   "held": result.held_total, "rescued": result.rescued, "fit_dist": fit_distribution(final),
@@ -301,7 +306,11 @@ def run_clean_feed(args: argparse.Namespace) -> int:
         print(f"Trashed {done} rows")
     if args.rescore:                               # the rows that stay: recompute Company, Fit % and Signals
         kept = [v for v in rep.verdicts if not v.rule]
-        changes = feed_clean.rescore(kept, records, cfg, filters, scorer, load_overrides())
+        store = NameStore(Path(cfg["state"]["dir"]) / "company_names.json")
+        today = datetime.now(timezone.utc).date()
+        changes = feed_clean.rescore(kept, records, cfg, filters, scorer, load_overrides(),
+                                     name_for=lambda link: ats_name(link, store, http, today))
+        store.save()
         eligible = sum(1 for v in kept if v.item.untouched)
         print(feed_clean.render_changes(changes, eligible, dry_run=args.dry_run))
         done = feed_clean.apply_changes(client, feed, changes, dry_run=args.dry_run)

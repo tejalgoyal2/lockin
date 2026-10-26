@@ -103,3 +103,21 @@ def test_find_records_takes_the_slug_from_the_ats_and_the_name_from_simplify(mon
                                                             "locations": ["Vancouver, BC, Canada"]}])
     rec = FC.find_records({url}, CFG, feashliaa_dir="unused")[FC.canonical_url(url)]
     assert (rec.location, rec.origin, rec.company, rec.company_name) == ("Dublin, Ireland", "ats", "2kearlycareers", "2K")
+
+
+def test_a_slug_cell_gets_the_ats_name_and_other_names_are_left_alone():
+    tjx = item(cell="Tjx · oct14", fit=0.667, link="https://tjx.wd1.myworkdayjobs.com/tjx_external/job/x/y_REQ1",
+               page="t")
+    evr = item(cell="Evr · oct16", fit=0.667, link="https://jobs.lever.co/evr/ed1fd146", page="e")
+    tucows = item(cell="Tucows Inc. · oct7", fit=0.667, link="https://tucows.wd1.myworkdayjobs.com/x/job/y/z", page="u")
+    asked = []
+
+    def name_for(link):
+        asked.append(link)
+        return {"https://tjx.wd1.myworkdayjobs.com/tjx_external/job/x/y_REQ1": "TJX"}.get(link, "")
+    changes = FC.rescore(verdicts([tjx, evr, tucows]), {}, CFG, FILTERS, SCORER, OVERRIDES, name_for=name_for)
+    got = {c.item.page_id: c.company for c in changes}
+    assert got["t"] == ("Tjx · oct14", "TJX · oct14")                          # from the ATS
+    assert got["e"] == ("Evr · oct16", "Elk Valley Resources · oct16")         # company_names.yaml (Lever has no name)
+    assert "u" not in got                                                      # an ATS name, not a slug: kept
+    assert asked == ["https://tjx.wd1.myworkdayjobs.com/tjx_external/job/x/y_REQ1"]

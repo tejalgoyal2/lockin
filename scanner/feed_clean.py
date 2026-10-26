@@ -16,6 +16,7 @@ from scanner import notion_feed
 from scanner.cluster import ClusterResolver
 from scanner.dedupe import canonical_url
 from scanner.filters import Filters
+from scanner.ats_names import slug_from_url
 from scanner.models import Job
 from scanner.normalize import norm_text
 from scanner.score import Scorer
@@ -290,9 +291,13 @@ def _fit_cell(fit: float | None) -> str:
 
 
 def rescore(verdicts: list[Verdict], records: dict[str, Found], cfg: dict, filters: Filters, scorer: Scorer,
-            overrides: dict[str, str]) -> list[Change]:
+            overrides: dict[str, str], name_for=lambda link: "") -> list[Change]:
     """Recompute Company, Fit % and Signals for the rows that passed every rule and have all three boxes unticked,
-    with the current term lists, Fit formula, 2-year tag and company_names.yaml. Only changed values are returned."""
+    with the current term lists, Fit formula, 2-year tag and company names. Only changed values are returned.
+
+    Company: a company_names.yaml entry always wins. Otherwise a name that is just the prettified ATS slug ("Tjx",
+    "Cityofhamilton") is replaced by Simplify's name or the ATS's own (`name_for(link)`); any other name (one that
+    came from Simplify or the ATS, "Tucows Inc.") is left alone."""
     clusters = ClusterResolver(cfg)
     changes = []
     for v in verdicts:
@@ -300,15 +305,16 @@ def rescore(verdicts: list[Verdict], records: dict[str, Found], cfg: dict, filte
         if v.rule or not it.untouched:
             continue
         rec = records.get(canonical_url(it.link)) or Found()
+        slug = rec.company or slug_from_url(it.link)
         job = to_job(it, v.location or "Canada")
         job.weak_title = filters.title_tier(it.title) == "weak"
         job.jd_status = "ok" if it.jd.strip() else ("error" if "jd unavailable" in it.signals else "")
-        job.company, job.company_name = rec.company or it.company, rec.company_name
+        job.company, job.company_name = slug or it.company, rec.company_name
         enrich_mod.apply_rules(job, cfg, filters, scorer, clusters)
         ch = Change(it)
-        # Company: only company_names.yaml changes a name. Names that came from the ATS ("Tucows Inc.") cannot be
-        # rebuilt from the dataset, so they are left alone.
-        shown = overrides.get(norm_text(rec.company)) if rec.company else None
+        shown = overrides.get(norm_text(slug)) if slug else None
+        if not shown and slug and norm_text(it.company) == norm_text(slug):      # the cell shows the raw slug
+            shown = rec.company_name or name_for(it.link) or None
         tag = it.company_cell.rsplit(" · ", 1)[1] if " · " in it.company_cell else ""
         if shown:
             new_cell = f"{shown} · {tag}" if tag else shown
