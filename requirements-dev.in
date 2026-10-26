@@ -1,0 +1,5 @@
+# Test dependencies. requirements-dev.txt is generated from this file with hashes:
+#   pip-compile --generate-hashes --allow-unsafe --strip-extras requirements-dev.in
+-c requirements.txt
+-r requirements.in
+pytest>=8.0

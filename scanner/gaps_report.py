@@ -21,7 +21,7 @@ def record_gaps(store: GapsStore, jobs: list[Job], scorer: Scorer, today: date,
     for job in jobs:
         if job.jd_status != "ok" or not job.key or job.location_dropped:   # not a Canadian job
             continue
-        gaps = scorer.evaluate(job.jd).gaps
+        gaps = scorer.evaluate(job.jd, companies=(job.company, job.company_name)).gaps
         if store.record(job.key, today, job.title, display_company(job, overrides), gaps):
             added += 1
     return added

@@ -18,7 +18,7 @@ FILTERS = Filters.from_config(CFG)
 SCORER = Scorer.load()
 NOCACHE = E.JDCache(None, 0)
 
-# Four matched skills, no gaps: Fit 66.7 % (4 / (4 + 2)), above the 60 % the 2-year rule asks for.
+# Four matched skills, no gaps: Fit 80 % (4 / (4 + 1)), above the 60 % the 2-year rule asks for.
 STRONG = "Requirements:\nPython, SQL, Docker and Git. {exp}"
 # One skill plus gaps: Fit well under 60 %.
 WEAK_FIT = "Python. Java, Kafka, Golang and Redis. {exp}"
@@ -57,7 +57,7 @@ def test_three_or_more_years_is_dropped(exp):
 
 def test_two_years_with_strong_fit_is_kept_with_signal():
     (j,) = run([job()], {"1": STRONG.format(exp="2+ years of experience.")}).kept
-    assert "2+ yrs" in j.signals and j.fit_pct == 66.7
+    assert "2+ yrs" in j.signals and j.fit_pct == 80.0
 
 
 def test_two_to_four_years_uses_the_lower_bound_of_two():
@@ -85,7 +85,7 @@ def test_two_year_fit_threshold_comes_from_config(monkeypatch):
     cfg = {**CFG, "jd": {**CFG["jd"], "two_year_min_fit": 0.9}}
     res = E.enrich([job()], [], cfg, FILTERS, SCORER, FakeClient({"1": STRONG.format(exp="2 years of experience.")}),
                    cache=NOCACHE)
-    assert res.drops == {E.R_TWO_YEAR_LOW_FIT: 1}            # 66.7 % < 90 %
+    assert res.drops == {E.R_TWO_YEAR_LOW_FIT: 1}            # 80 % < 90 %
 
 
 def test_masters_route_uses_its_own_years():

@@ -13,7 +13,8 @@ to triage. It runs on GitHub Actions. Design: [SPEC.md](SPEC.md).
 3. Fetch each JD (Greenhouse, Lever, Ashby, Workday, BambooHR), apply the JD rules (3+ years, current
    enrollment, clearance) and score the fit against `skills.yaml` / `gaps.yaml`.
 4. Write the top `notion.daily_cap` (40) new jobs to the Feed, skipping anything in `state/seen.json` or
-   already in the Feed by Link; trash Feed rows older than 14 days that you never ticked.
+   already in the Feed by Link. At the start of the run, Feed rows whose `done-del` box is ticked (your Notion
+   automation ticks it after copying the row to your main database) are trashed; no other row is ever trashed.
 5. Commit `state/` and `reports/` back to the repo. `reports/latest.md` is the full candidate list;
    `reports/gaps.md` (Mondays) lists the tech terms JDs ask for that you do not list yet.
 
@@ -29,10 +30,11 @@ to triage. It runs on GitHub Actions. Design: [SPEC.md](SPEC.md).
    | Link | URL |
    | Source | Select, options: Workday, Greenhouse, Lever, Ashby, BambooHR, Paylocity, Simplify, Watchlist |
    | Fit % | Number, format **Percent** |
-   | Signals | Multi-select, options: new grad, recent graduate, 0-2 years, entry level, junior, low signal, jd unavailable |
+   | Signals | Multi-select, options: new grad, recent graduate, 0-2 years, entry level, junior, low signal, jd unavailable (`2+ yrs` is created on first use) |
    | JD | Text |
    | Interested | Checkbox |
    | Apply | Checkbox |
+   | done-del | Checkbox |
 
 2. **Create a Notion integration** (an internal connection) at <https://www.notion.so/profile/integrations>
    with read, update and insert content capabilities. Copy its secret.
@@ -46,18 +48,22 @@ to triage. It runs on GitHub Actions. Design: [SPEC.md](SPEC.md).
    After that the schedule (`0 16 * * *` UTC) takes over. The workflow commits to the branch it runs on; if
    that branch is protected, allow GitHub Actions to push to it.
 
-Your own Notion automation can copy a ticked row to your main database and delete it from the Feed:
-`state/seen.json` is what stops that job from being written again.
+Your own Notion automation can copy a ticked row to your main database and tick `done-del`; the next run trashes
+that row, and `state/seen.json` stops the job from being written again.
 
 ## Run it locally
 
 ```bash
-pip install -r requirements-dev.txt
+pip install --require-hashes -r requirements-dev.txt        # Python 3.12; every package pinned by hash
 python -m scanner run --dry-run --skip-notion --since 7     # scan, score, print Notion payloads; touches nothing
 NOTION_TOKEN=... NOTION_FEED_DATA_SOURCE_ID=... python -m scanner run --dry-run   # also checks the Feed schema
 NOTION_TOKEN=... NOTION_FEED_DATA_SOURCE_ID=... python -m scanner run --max-rows 5
 pytest
 ```
+
+Dependencies: edit `requirements.in` / `requirements-dev.in`, then regenerate the pinned files with
+`pip-compile --generate-hashes --allow-unsafe --strip-extras requirements.in` (and the same for
+`requirements-dev.in`). Dependabot opens weekly PRs for pip and GitHub Actions.
 
 Useful flags: `--since N`, `--max-rows N`, `--no-jd` (phase 1 only), `--no-notion`, `--gaps-report always`.
 

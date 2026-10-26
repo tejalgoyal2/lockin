@@ -1,0 +1,6 @@
+# Direct dependencies of the scanner. requirements.txt is generated from this file with hashes:
+#   pip-compile --generate-hashes --allow-unsafe --strip-extras requirements.in
+# The workflow installs with `pip install --require-hashes -r requirements.txt`.
+requests>=2.31
+pyyaml>=6.0
+cryptography>=42

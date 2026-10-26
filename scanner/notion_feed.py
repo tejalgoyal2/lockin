@@ -1,20 +1,23 @@
 """Write the best candidates to the Notion "Job Feed" data source (SPEC §6).
 
-The scanner only ever writes to the Feed. It never writes the owner's `Interested` / `Apply`
-checkboxes and never touches a row where either is ticked.
+The scanner only ever writes to the Feed. It never writes the owner's `Interested` / `Apply` / `done-del`
+checkboxes. The only rows it trashes on a daily run are the ones the owner's Notion automation has already
+copied to the main database and marked `done-del`.
 """
 import logging
 import random
 import re
 import time
+import unicodedata
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 
 import requests
 
 from scanner.company_names import company_cell
 from scanner.dedupe import canonical_url
 from scanner.models import Job
+from scanner.text import INVISIBLE
 
 log = logging.getLogger(__name__)
 
@@ -30,6 +33,7 @@ TRUNCATED = "\n\n[truncated]"
 EXPECTED_TYPES = {
     "name": "title", "company": "rich_text", "link": "url", "source": "select", "fit": "number",
     "signals": "multi_select", "jd": "rich_text", "interested": "checkbox", "apply": "checkbox",
+    "done_del": "checkbox",
 }
 SOURCE_OPTIONS = ("Workday", "Greenhouse", "Lever", "Ashby", "BambooHR", "Paylocity", "Simplify", "Watchlist")
 SIGNAL_OPTIONS = ("new grad", "recent graduate", "0-2 years", "entry level", "junior", "low signal",
@@ -200,7 +204,7 @@ def jd_rich_text(jd: str, max_items: int = JD_ITEMS_MAX) -> tuple[list[dict], st
 
     Returns (items, text_actually_sent).
     """
-    jd = (jd or "").replace("\x00", "")
+    jd = INVISIBLE.sub("", (jd or "").replace("\x00", ""))     # Notion would drop them (read-back)
     cap = max_items * RICH_TEXT_ITEM_MAX
     if _utf16_len(jd) > cap:
         keep = chunk_text(jd, cap - _utf16_len(TRUNCATED))[0]
@@ -256,6 +260,7 @@ class FeedRow:
     link: str
     interested: bool | None     # None: property absent from the response
     apply: bool | None
+    done_del: bool | None = None   # ticked by the owner's automation once the row is copied to the main DB
 
 
 def _parse_ts(ts: str) -> datetime:
@@ -263,9 +268,9 @@ def _parse_ts(ts: str) -> datetime:
 
 
 def list_rows(client: NotionClient, feed: Feed) -> list[FeedRow]:
-    """Every row in the Feed (paginated), fetching only Link / Interested / Apply."""
+    """Every row in the Feed (paginated), fetching only Link / Interested / Apply / done-del."""
     n, ids = feed.names, feed.ids
-    params = {"filter_properties[]": [ids["link"], ids["interested"], ids["apply"]]}
+    params = {"filter_properties[]": [ids["link"], ids["interested"], ids["apply"], ids["done_del"]]}
     rows, cursor = [], None
     while True:
         body = {"page_size": 100}
@@ -281,6 +286,7 @@ def list_rows(client: NotionClient, feed: Feed) -> list[FeedRow]:
                 link=(props.get(n["link"]) or {}).get("url") or "",
                 interested=(props.get(n["interested"]) or {}).get("checkbox"),
                 apply=(props.get(n["apply"]) or {}).get("checkbox"),
+                done_del=(props.get(n["done_del"]) or {}).get("checkbox"),
             ))
         if not data.get("has_more"):
             return rows
@@ -322,13 +328,13 @@ def already_in_feed(jobs: list[Job], feed_links: set[str]) -> list[Job]:
     return [j for j in jobs if canonical_url(j.url) in canon]
 
 
-def stale_rows(rows: list[FeedRow], now: datetime, ttl_days: int) -> list[FeedRow]:
-    """Rows created more than `ttl_days` ago where BOTH checkboxes are known and unticked.
+def moved_rows(rows: list[FeedRow]) -> list[FeedRow]:
+    """Rows whose `done-del` box is ticked: the owner's automation has copied them to the main database.
 
-    A row with either box ticked, or with a checkbox missing from the response, is never returned.
+    These are the only rows a daily run trashes. Anything else (old, unticked, unreadable) stays: the owner
+    deletes unwanted rows by hand.
     """
-    cutoff = now - timedelta(days=ttl_days)
-    return [r for r in rows if r.created < cutoff and r.interested is False and r.apply is False]
+    return [r for r in rows if r.done_del is True]
 
 
 def trash_rows(client: NotionClient, rows: list[FeedRow], *, dry_run: bool) -> int:
@@ -397,9 +403,22 @@ def verify_readback(client: NotionClient, feed: Feed, written: list[tuple[Job, s
     job, page_id, sent = long_ones[0] if long_ones else max(candidates, key=lambda w: len(w[2]))
     got = read_property_text(client, page_id, feed.ids["jd"])
     ok = got == sent
+    note = "" if long_ones else f" (no JD over {min_chars} chars was written)"
+    if not ok and _visible(got) == _visible(sent):
+        # Notion silently drops some invisible format characters (U+200B is the one seen live). The text
+        # is intact, so the run does not fail; the note shows which characters went missing.
+        ok = True
+        dropped = sorted({f"U+{ord(c):04X}" for c in sent if unicodedata.category(c) == "Cf"} -
+                         {f"U+{ord(c):04X}" for c in got if unicodedata.category(c) == "Cf"})
+        note += f" (Notion dropped invisible characters: {', '.join(dropped) or 'format'})"
     msg = (f"read-back {'OK' if ok else 'MISMATCH'}: {job.company} | {job.title}: sent {len(sent)} chars, "
-           f"read {len(got)} chars" + ("" if long_ones else f" (no JD over {min_chars} chars was written)"))
+           f"read {len(got)} chars" + note)
     return ok, msg
+
+
+def _visible(text: str) -> str:
+    """Text without Unicode format characters (category Cf: zero-width spaces, joiners, BOM, ...)."""
+    return "".join(c for c in text if unicodedata.category(c) != "Cf")
 
 
 # --- dry-run preview ------------------------------------------------------------------

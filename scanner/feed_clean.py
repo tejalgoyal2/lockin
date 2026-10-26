@@ -2,18 +2,22 @@
 
 `python -m scanner clean-feed [--dry-run]` reads every Feed row (title, company, link, JD, checkboxes),
 rebuilds the job, runs the same rules a new job faces, and trashes the rows that fail them. Rows with
-Interested or Apply ticked, or a checkbox that cannot be read, are never trashed: they are reported.
-Rows that fail the plain Canada location check are listed but never trashed.
+Interested, Apply or done-del ticked, or a checkbox that cannot be read, are never trashed or changed: they
+are reported.
+A row whose location (the posting's current one, from the source data) is not Canadian, or whose title names a
+place outside Canada, fails like any other rule.
 """
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+from pathlib import Path
 
 from scanner import enrich as enrich_mod
 from scanner import notion_feed
 from scanner.cluster import ClusterResolver
 from scanner.dedupe import canonical_url
 from scanner.filters import Filters
+from scanner.ats_names import slug_from_url
 from scanner.models import Job
 from scanner.normalize import norm_text
 from scanner.score import Scorer
@@ -24,6 +28,7 @@ RULE_COMPANY = "blocklisted company"
 RULE_FRENCH_TITLE = "French title"
 RULE_TITLE = "title exclude"
 RULE_QUEBEC = enrich_mod.R_QUEBEC_ONLY
+RULE_TITLE_PLACE = "title names a place outside Canada"
 
 
 @dataclass
@@ -39,6 +44,12 @@ class FeedItem:
     apply: bool | None
     fit: float | None = None     # the Fit % column (a fraction), as stored
     company_cell: str = ""       # the Company cell as stored, "<name> · <date tag>"
+    done_del: bool | None = False  # the owner's automation copied the row to the main DB (trashed by the next run)
+
+    @property
+    def untouched(self) -> bool:
+        """Interested, Apply and done-del are all known and unticked: the only rows clean-feed may change."""
+        return self.interested is False and self.apply is False and self.done_del is False
 
 
 @dataclass
@@ -57,15 +68,11 @@ class CleanReport:
         return [v for v in self.verdicts if v.rule]
 
     def trashable(self) -> list[Verdict]:
-        """Failing rows whose Interested and Apply boxes are both known and unticked."""
-        return [v for v in self.failing() if v.item.interested is False and v.item.apply is False]
+        """Failing rows whose Interested, Apply and done-del boxes are all known and unticked."""
+        return [v for v in self.failing() if v.item.untouched]
 
     def protected(self) -> list[Verdict]:
         return [v for v in self.failing() if v not in self.trashable()]
-
-    def location_failures(self) -> list[Verdict]:
-        """Rows that pass every rule but whose location fails the Canada filter (reported, never trashed)."""
-        return [v for v in self.verdicts if not v.rule and v.location_status == "not_canada"]
 
     def location_unknown(self) -> list[Verdict]:
         return [v for v in self.verdicts if not v.rule and not v.location_status]
@@ -82,7 +89,7 @@ def list_items(client, feed: notion_feed.Feed) -> list[FeedItem]:
     are re-read through the property-item endpoint."""
     n, ids = feed.names, feed.ids
     params = {"filter_properties[]": [ids[k] for k in ("name", "company", "link", "source", "signals", "jd",
-                                                        "interested", "apply", "fit")]}
+                                                        "interested", "apply", "fit", "done_del")]}
     items, cursor = [], None
     while True:
         body = {"page_size": 100, **({"start_cursor": cursor} if cursor else {})}
@@ -106,6 +113,7 @@ def list_items(client, feed: notion_feed.Feed) -> list[FeedItem]:
                 apply=(props.get(n["apply"]) or {}).get("checkbox"),
                 fit=(props.get(n["fit"]) or {}).get("number"),
                 company_cell=company,
+                done_del=(props.get(n["done_del"]) or {}).get("checkbox"),
             ))
         if not data.get("has_more"):
             return items
@@ -131,7 +139,7 @@ def find_records(urls: set[str], cfg: dict, feashliaa_dir=None) -> dict[str, Fou
     out: dict[str, Found] = {}
     src = cfg["sources"]
     if src["feashliaa"]["enabled"]:
-        data_dir = feashliaa_dir or feashliaa.fetch(src["feashliaa"])
+        data_dir = Path(feashliaa_dir) if feashliaa_dir else feashliaa.fetch(src["feashliaa"])
         for rec in feashliaa.iter_raw(data_dir):
             url = canonical_url(rec.get("url") or "")
             if url in wanted:
@@ -185,8 +193,11 @@ def evaluate(item: FeedItem, location: str, cfg: dict, filters: Filters, scorer:
     if status == "quebec_only":
         v.rule = RULE_QUEBEC
         return v
-    if status == "not_canada" and item.source == "Simplify" and origin == "ats":
-        v.rule = enrich_mod.R_ATS_NOT_CANADA
+    if status == "not_canada":
+        v.rule = enrich_mod.R_ATS_NOT_CANADA if item.source == "Simplify" and origin == "ats" else enrich_mod.R_NOT_CANADA
+        return v
+    if not filters.title_location_ok(item.title):
+        v.rule = RULE_TITLE_PLACE
         return v
     job = to_job(item, location or "Canada")      # unknown location: do not let the US-authorization rule guess
     job.weak_title = filters.title_tier(item.title) == "weak"
@@ -226,7 +237,7 @@ def render(rep: CleanReport, *, dry_run: bool) -> str:
     by_rule: dict[str, list[Verdict]] = defaultdict(list)
     for v in rep.trashable():
         by_rule[v.rule].append(v)
-    out += ["", "Rule -> rows removed (Interested and Apply both unticked)", "",
+    out += ["", "Rule -> rows removed (Interested, Apply and done-del all unticked)", "",
             "| Rule | Role | Company |", "|---|---|---|"]
     for rule, vs in sorted(by_rule.items(), key=lambda kv: (-len(kv[1]), kv[0])):
         for v in vs:
@@ -234,15 +245,9 @@ def render(rep: CleanReport, *, dry_run: bool) -> str:
     if not by_rule:
         out.append("| none | | |")
     if rep.protected():
-        out += ["", "Break a rule but NOT trashed (a checkbox is ticked or unreadable)", "",
+        out += ["", "Break a rule but NOT trashed (Interested, Apply or done-del ticked, or unreadable)", "",
                 "| Rule | Role | Company |", "|---|---|---|"]
         out += [f"| {v.rule} " + _row(v) for v in rep.protected()]
-    fails = rep.location_failures()
-    out += ["", f"Remaining rows whose location fails the Canada filter (reported, not trashed): {len(fails)}"]
-    if fails:
-        out += ["", "| Role | Company | Location |", "|---|---|---|"]
-        out += [f"| {v.item.title.replace('|', '/')} | {v.item.company.replace('|', '/')} | {v.location} |"
-                for v in fails]
     unknown = rep.location_unknown()
     out += ["", f"Remaining rows whose source record was not found, so the location was not checked: {len(unknown)}"]
     if unknown:
@@ -281,25 +286,30 @@ def _fit_cell(fit: float | None) -> str:
 
 
 def rescore(verdicts: list[Verdict], records: dict[str, Found], cfg: dict, filters: Filters, scorer: Scorer,
-            overrides: dict[str, str]) -> list[Change]:
-    """Recompute Company, Fit % and Signals for the rows that passed every rule and have both boxes unticked,
-    with the current term lists, Fit formula, 2-year tag and company_names.yaml. Only changed values are returned."""
+            overrides: dict[str, str], name_for=lambda link: "") -> list[Change]:
+    """Recompute Company, Fit % and Signals for the rows that passed every rule and have all three boxes unticked,
+    with the current term lists, Fit formula, 2-year tag and company names. Only changed values are returned.
+
+    Company: a company_names.yaml entry always wins. Otherwise a name that is just the prettified ATS slug ("Tjx",
+    "Cityofhamilton") is replaced by Simplify's name or the ATS's own (`name_for(link)`); any other name (one that
+    came from Simplify or the ATS, "Tucows Inc.") is left alone."""
     clusters = ClusterResolver(cfg)
     changes = []
     for v in verdicts:
         it = v.item
-        if v.rule or it.interested is not False or it.apply is not False:
+        if v.rule or not it.untouched:
             continue
         rec = records.get(canonical_url(it.link)) or Found()
+        slug = rec.company or slug_from_url(it.link)
         job = to_job(it, v.location or "Canada")
         job.weak_title = filters.title_tier(it.title) == "weak"
         job.jd_status = "ok" if it.jd.strip() else ("error" if "jd unavailable" in it.signals else "")
-        job.company, job.company_name = rec.company or it.company, rec.company_name
+        job.company, job.company_name = slug or it.company, rec.company_name
         enrich_mod.apply_rules(job, cfg, filters, scorer, clusters)
         ch = Change(it)
-        # Company: only company_names.yaml changes a name. Names that came from the ATS ("Tucows Inc.") cannot be
-        # rebuilt from the dataset, so they are left alone.
-        shown = overrides.get(norm_text(rec.company)) if rec.company else None
+        shown = overrides.get(norm_text(slug)) if slug else None
+        if not shown and slug and norm_text(it.company) == norm_text(slug):      # the cell shows the raw slug
+            shown = rec.company_name or name_for(it.link) or None
         tag = it.company_cell.rsplit(" · ", 1)[1] if " · " in it.company_cell else ""
         if shown:
             new_cell = f"{shown} · {tag}" if tag else shown
@@ -316,7 +326,7 @@ def rescore(verdicts: list[Verdict], records: dict[str, Found], cfg: dict, filte
 
 
 def render_changes(changes: list[Change], rescored: int, *, dry_run: bool) -> str:
-    out = [f"Rescore ({'dry run: nothing changed' if dry_run else 'updated in place'}): {rescored} rows with both boxes "
+    out = [f"Rescore ({'dry run: nothing changed' if dry_run else 'updated in place'}): {rescored} rows with all boxes "
            f"unticked kept, {len(changes)} changed", "",
            "| Role | Company | Fit % | Signals |", "|---|---|---|---|"]
     for c in changes:

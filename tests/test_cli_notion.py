@@ -74,13 +74,25 @@ def test_row_the_owner_moved_out_of_the_feed_does_not_come_back(env):
     assert all(p["in_trash"] for p in notion.pages.values()) and len(notion.pages) == 2
 
 
-def test_cleanup_runs_before_writing_and_spares_ticked_rows(env):
+def test_start_of_run_trashes_only_done_del_rows(env, capsys):
     notion, client, feed, seen = env
     old = (NOW - timedelta(days=30)).isoformat()
-    plain = notion.add_row("https://a/1", old)
+    plain = notion.add_row("https://a/1", old)                  # old and unticked: the owner deletes by hand
     ticked = notion.add_row("https://a/2", old, apply=True)
-    cli.notion_step(CFG, args(max_rows=1), client, feed, jobs(), seen, {}, NOW)
-    assert notion.pages[plain]["in_trash"] and not notion.pages[ticked]["in_trash"]
+    moved = notion.add_row("https://a/3", old, interested=True, apply=True, done_del=True)
+    assert cli.trash_moved_rows(client, feed, dry_run=False) == 1
+    assert notion.pages[moved]["in_trash"]
+    assert not notion.pages[plain]["in_trash"] and not notion.pages[ticked]["in_trash"]
+    assert "trashed 1 with done-del ticked" in capsys.readouterr().out
+    cli.notion_step(CFG, args(max_rows=1), client, feed, jobs(), seen, {}, NOW)    # writing trashes nothing
+    assert not notion.pages[plain]["in_trash"] and not notion.pages[ticked]["in_trash"]
+
+
+def test_dry_run_trashes_no_done_del_row(env, capsys):
+    notion, client, feed, seen = env
+    moved = notion.add_row("https://a/3", NOW.isoformat(), done_del=True)
+    assert cli.trash_moved_rows(client, feed, dry_run=True) == 1
+    assert not notion.pages[moved]["in_trash"] and "would trash 1" in capsys.readouterr().out
 
 
 def test_dry_run_prints_payloads_and_writes_nothing(env, capsys):

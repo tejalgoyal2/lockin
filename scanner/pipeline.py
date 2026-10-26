@@ -40,8 +40,8 @@ def run_stream(
             continue
         counts["fresh"] += 1
         status, loc = filters.location_status(f["location"])
-        if status == "not_canada":
-            continue
+        if status == "not_canada" or not filters.title_location_ok(f["title"]):
+            continue                    # the title can name the real place: "(Washington, D.C.)" listed as "Remote Canada"
         counts["location"] += 1
         if status == "quebec_only":
             continue

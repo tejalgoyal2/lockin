@@ -177,7 +177,7 @@ def test_stale_workday_row_gets_link_jd_fit_and_signals_in_place():
     props = body["properties"]
     assert set(props) == {"Link", "JD", "Fit %", "Signals"}                  # nothing else, never the checkboxes
     assert props["Link"]["url"].endswith("JR7194")
-    assert props["Fit %"]["number"] == 0.667                                # 4 / (4 + 2)
+    assert props["Fit %"]["number"] == 0.8                                  # 4 / (4 + 1)
     assert "jd unavailable" not in [s["name"] for s in props["Signals"]["multi_select"]]
     assert "Python" in props["JD"]["rich_text"][0]["text"]["content"]
     assert it.link.endswith("JR7194") and "jd unavailable" not in it.signals     # the in-memory row follows
@@ -259,9 +259,12 @@ def test_ats_location_in_quebec_only_drops_a_simplify_row():
     assert run_2k(two_k(), "Montréal, QC").drops == {E.R_QUEBEC_ONLY: 1}
 
 
-def test_rows_not_listed_by_simplify_are_left_to_the_phase_1_location():
+def test_the_ats_location_wins_for_every_source():
+    # Was Simplify-only. A dataset row can be stale: TribalScale moved its postings from "Remote Canada" to
+    # "Remote USA" after they were listed (SPEC §11 #70)
     j = two_k(sources=("Greenhouse",), loc="Vancouver, BC")
-    assert len(run_2k(j, "Dublin, Ireland").kept) == 1
+    assert run_2k(j, "Dublin, Ireland").drops == {E.R_ATS_NOT_CANADA: 1}
+    assert len(run_2k(two_k(sources=("Greenhouse",), loc="Vancouver, BC"), "Remote").kept) == 1   # vague: ignored
 
 
 @pytest.mark.parametrize("payload,expected", [
@@ -307,11 +310,11 @@ def test_feed_row_for_2k_is_trashed_because_its_ats_location_is_dublin():
     v = FC.evaluate(it, "Dublin, Ireland", CFG, FILTERS, SCORER, ClusterResolver(CFG), origin="ats")
     assert v.rule == E.R_ATS_NOT_CANADA
     rep = FC.CleanReport([v])
-    assert rep.trashable() == [v] and rep.location_failures() == []
+    assert rep.trashable() == [v]
 
 
-def test_a_simplify_only_location_that_is_not_canadian_is_reported_not_trashed():
+def test_a_simplify_only_location_that_is_not_canadian_is_trashed():
     it = FC.FeedItem("p", "Engineering Graduate Program", "2K", GH_URL, "Simplify", "Python, SQL, Docker, Git.", [],
                      False, False)
     v = FC.evaluate(it, "Dublin, Ireland", CFG, FILTERS, SCORER, ClusterResolver(CFG), origin="simplify")
-    assert v.rule is None and v.location_status == "not_canada"
+    assert v.rule == E.R_NOT_CANADA and FC.CleanReport([v]).trashable() == [v]

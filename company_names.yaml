@@ -139,3 +139,28 @@ intouchinsight: Intouch Insight
 vistavu: VistaVu Solutions
 vistavusolutions: VistaVu Solutions
 optrust: OPTrust
+# --- added 2026-10-26 (SPEC §11 #68). Each checked against the employer's own text (career site, JD "About us").
+# Workday career sites rarely publish a usable name and Lever none, so those need an entry here.
+acciona: ACCIONA                  # JD: "ACCIONA is a global company"
+aptiv: Aptiv                      # Workday career site: "Aptiv is a global industrial technology company"
+canopygrowth: Canopy Growth        # JD/site: "At Canopy Growth, quality, consistency and trust ..."
+championx: ChampionX              # site: "ChampionX is now part of SLB"
+equinix: Equinix                  # JD: "Equinix is the world's digital infrastructure company"
+evismart: EviSmart                # JD: "EviSmart builds software and AI-powered solutions" (board says Evismart)
+evr: Elk Valley Resources         # JD: "Elk Valley Resources (EVR) operates four steelmaking coal mines"
+gianttiger: Giant Tiger           # site: "joining Giant Tiger"
+hoopp: HOOPP                      # Workday og:title
+hydroottawa: Hydro Ottawa         # JD: "At Hydro Ottawa"
+lightspeedhq: Lightspeed          # JD: "At Lightspeed, your growth is our priority"
+lvs1: Long View                   # JD: "Why Work At Long View?"
+markelcorp: Markel                # career site logo: "Markel Logo"
+method-crm: Method                # JD: "About Method ... Method CRM is purpose-built for small businesses"
+nelnet: Nelnet                    # JD: "Nelnet is a diversified and innovative company"
+omers: OMERS                      # site: "Why choose OMERS and Oxford?"
+sandboxaq: SandboxAQ              # JD: "SandboxAQ is a high-growth company delivering AI solutions"
+smiledigitalhealth: Smile Digital Health   # JD: "Smile Digital Health makes it easy for healthcare stakeholders"
+snapchat: Snap                    # site: "Curious what it's like to work at Snap?"
+sunlife: Sun Life                 # Workday og:title "Sun Life"
+web: Newfold Digital              # JD/site: "Newfold Digital is a leading web technology company" (Web.com's parent)
+wgl: AltaGas                      # Workday site "altagas": "AltaGas is a leading energy infrastructure company"
+workwhilejobs: WorkWhile          # JD: "WorkWhile is on a mission to help workers"

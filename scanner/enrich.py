@@ -32,6 +32,7 @@ R_EXPERIENCE = "experience_3plus"
 R_TWO_YEAR_INTERN = "two_years_excludes_internships"
 R_TWO_YEAR_NO_FIT = "two_years_no_fit"
 R_TWO_YEAR_LOW_FIT = "two_years_low_fit"
+R_LOW_SIGNAL_TITLE = "low_signal_not_dev_title"
 R_FRENCH = "requires_french"
 R_QUEBEC_ONLY = "location_quebec_only"
 R_NOT_CANADA = "location_not_canada"
@@ -244,10 +245,12 @@ _GENERIC_LOCATION = re.compile(r"^\W*(remote|hybrid|anywhere|global|worldwide|mu
 
 
 def _ats_location(job: Job, filters: Filters) -> str | None:
-    """A Simplify row lists the locations of a whole programme ("Vancouver, BC; Dublin, Ireland; United States")
-    while the ATS posting it links to has one, so the ATS wins: if it names places and none is Canadian, the
-    job is not a Canadian job. Vague ATS locations ("Remote", "Hybrid") say nothing and are ignored."""
-    if "Simplify" not in job.sources or not job.jd_locations:
+    """The ATS posting's own, current location wins over the dataset's for every job: a Simplify row lists the
+    locations of a whole programme ("Vancouver, BC; Dublin, Ireland; United States") and a dataset row can be a
+    day old while the employer has moved the posting ("Remote Canada" -> "Remote USA"). If the ATS names places
+    and none is Canadian, the job is not a Canadian job. Vague ATS locations ("Remote", "Hybrid") say nothing
+    and are ignored."""
+    if not job.jd_locations:
         return None
     named = [loc for loc in job.jd_locations if not _GENERIC_LOCATION.search(loc)]
     if not named:
@@ -273,6 +276,12 @@ def two_year_reason(exp: jd_rules.Experience, fit_pct: float | None, jdcfg: dict
     return None
 
 
+def dev_title(title: str, cfg: dict) -> bool:
+    """The title names a developer role (engineer, developer, programmer, scientist, analyst; plural allowed)."""
+    nouns = cfg["scoring"].get("low_signal_title_nouns") or []
+    return not nouns or bool(re.search(r"\b(?:" + "|".join(map(re.escape, nouns)) + r")s?\b", title or "", re.IGNORECASE))
+
+
 def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer,
                 clusters: ClusterResolver | None = None) -> str | None:
     """Fill phase-2 fields on `job`; return a drop reason, or None to keep it."""
@@ -285,12 +294,15 @@ def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer,
     if job.jd_status == "ok":
         jd = job.jd
         exp = jd_rules.parse_experience(jd)
-        fit = scorer.evaluate(jd, cfg["scoring"]["min_terms_for_fit"])
+        fit = scorer.evaluate(jd, cfg["scoring"]["min_terms_for_fit"], (job.company, job.company_name),
+                              cfg["scoring"].get("min_core_terms_for_fit", 1))
         job.fit_pct, job.matched, job.gaps = fit.fit_pct, fit.matched, fit.gaps
         job.cluster = clusters.resolve(job.title, fit.cluster)
         job.signals = jd_rules.detect_signals(job.title, jd, exp)
         if fit.fit_pct is None:
             job.signals.append(jd_rules.LOW_SIGNAL)
+        if jd_rules.requires_peng(jd):
+            job.signals.append(jdcfg.get("peng_signal", jd_rules.PENG))
         if cfg.get("language", {}).get("drop_french_required_jd", True) and jd_rules.requires_french(jd):
             return R_FRENCH
         if jd_rules.requires_enrollment(jd):
@@ -312,6 +324,8 @@ def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer,
                 return R_WEAK_FEW_TERMS
             if not job.matched or (job.fit_pct or 0) < cfg["scoring"]["weak_title_min_fit"]:
                 return R_WEAK
+        if fit.fit_pct is None and not dev_title(job.title, cfg):
+            return R_LOW_SIGNAL_TITLE          # "Automation Cell Operator", "Associate Underwriter - Cyber"
     else:
         # No JD: a strong title stays (with the penalty); a weak one has nothing to vouch for it.
         if job.weak_title:

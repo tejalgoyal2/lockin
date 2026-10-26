@@ -6,7 +6,8 @@ from datetime import datetime, timezone
 from scanner.notion_feed import SIGNAL_OPTIONS, SOURCE_OPTIONS
 
 NAMES = {"name": "Name", "company": "Company", "link": "Link", "source": "Source", "fit": "Fit %",
-         "signals": "Signals", "jd": "JD", "interested": "Interested", "apply": "Apply"}
+         "signals": "Signals", "jd": "JD", "interested": "Interested", "apply": "Apply",
+         "done_del": "done-del"}
 
 
 def good_schema():
@@ -22,6 +23,7 @@ def good_schema():
         "JD": {"id": "p_jd", "type": "rich_text", "rich_text": {}},
         "Interested": {"id": "p_int", "type": "checkbox", "checkbox": {}},
         "Apply": {"id": "p_apply", "type": "checkbox", "checkbox": {}},
+        "done-del": {"id": "p_done", "type": "checkbox", "checkbox": {}},
     }}
 
 
@@ -52,10 +54,11 @@ class FakeNotion:
         for r in rows:
             self.add_row(**r)
 
-    def add_row(self, link, created, interested=False, apply=False, jd=""):
+    def add_row(self, link, created, interested=False, apply=False, jd="", done_del=False):
         pid = f"page-{next(self._ids)}"
         self.pages[pid] = {"id": pid, "created_time": created, "in_trash": False,
-                           "props": {"Link": link, "Interested": interested, "Apply": apply, "JD": jd}}
+                           "props": {"Link": link, "Interested": interested, "Apply": apply, "JD": jd,
+                                     "done-del": done_del}}
         return pid
 
     def request(self, method, url, headers=None, json=None, params=None, timeout=None):
@@ -75,7 +78,8 @@ class FakeNotion:
             jd = "".join(i["text"]["content"] for i in props["JD"]["rich_text"])
             self.pages[pid] = {"id": pid, "created_time": datetime.now(timezone.utc).isoformat(),
                                "in_trash": False, "created_payload": json,
-                               "props": {"Link": props["Link"]["url"], "Interested": False, "Apply": False, "JD": jd}}
+                               "props": {"Link": props["Link"]["url"], "Interested": False, "Apply": False, "JD": jd,
+                                         "done-del": False}}
             return Resp(body={"object": "page", "id": pid})
         if method == "PATCH" and path.startswith("/v1/pages/"):
             self.pages[path.rsplit("/", 1)[1]]["in_trash"] = json.get("in_trash", False)
@@ -100,4 +104,5 @@ class FakeNotion:
         return {"id": p["id"], "created_time": p["created_time"], "properties": {
             "Link": {"type": "url", "url": p["props"]["Link"]},
             "Interested": {"type": "checkbox", "checkbox": p["props"]["Interested"]},
-            "Apply": {"type": "checkbox", "checkbox": p["props"]["Apply"]}}}
+            "Apply": {"type": "checkbox", "checkbox": p["props"]["Apply"]},
+            "done-del": {"type": "checkbox", "checkbox": p["props"].get("done-del", False)}}}

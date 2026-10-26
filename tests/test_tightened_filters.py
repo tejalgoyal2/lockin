@@ -148,3 +148,40 @@ def test_pending_workday_jobs_are_not_merged_or_keyed_by_the_placeholder_locatio
     out, merges = dedupe([wd(1), wd(2)])
     assert len(out) == 2 and merges == {"url": 0, "fuzzy": 0}
     assert out[0].key != out[1].key
+
+
+# --- a title that names the real place (SPEC §11 #70) ---------------------------------------------------------
+
+from scanner.config import load_config as _load_config
+from scanner.filters import Filters as _Filters
+
+FILTERS = _Filters.from_config(_load_config())
+
+@pytest.mark.parametrize("title", [
+    "Forward Deployed Engineer (Washington, D.C.)", "Forward Deployed Engineer (New York)",
+    "Forward Deployed Engineer (Atlanta, Georgia)", "Forward Deployed Engineer (Fort Lauderdale/Miami)",
+    "Forward Deployed Engineer (San Francisco)", "AI Product Manager (NYC-based)", "AI Product Designer (US Based)",
+    "AI-First Product Manager (LA-based hybrid role)", "Software Engineer - Remote US", "Data Analyst (Bengaluru)",
+    "Engineering Graduate Program - Dublin",
+])
+def test_a_title_naming_a_place_outside_canada_fails_the_location_stage(title):
+    assert not FILTERS.title_location_ok(title), title
+
+
+@pytest.mark.parametrize("title", [
+    "Software Engineer", "Data Engineer (NYC or Toronto)", "Developer, London, ON", "Software Engineer, Level 3, Backend",
+    "Status Page Engineer", "Business Systems Analyst", "Java Developer (Remote, Canada)",
+])
+def test_titles_without_a_foreign_place_pass(title):
+    assert FILTERS.title_location_ok(title), title
+
+
+def test_tribalscale_listed_as_remote_canada_is_dropped_at_phase_1():
+    now = datetime.now(timezone.utc)
+    recs = [{"title": "Forward Deployed Engineer (Washington, D.C.)", "location": "Remote Canada", "company": "tribalscale",
+             "url": "https://job-boards.greenhouse.io/tribalscale/jobs/1", "first_seen": now - timedelta(hours=2)},
+            {"title": "Forward Deployed Engineer", "location": "Remote Canada", "company": "tribalscale",
+             "url": "https://job-boards.greenhouse.io/tribalscale/jobs/2", "first_seen": now - timedelta(hours=2)}]
+    fields = lambda r: {**r, "company_name": "", "source": "Greenhouse"}
+    kept, stages, _ = run_stream(recs, fields, FILTERS, now, 3)
+    assert [j.title for j in kept] == ["Forward Deployed Engineer"]

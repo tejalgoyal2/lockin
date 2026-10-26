@@ -3,7 +3,8 @@
 A Workday row with the `jd unavailable` Signal usually holds a requisition id Workday no longer serves
 (the posting was re-issued under a new number). For each such row: ask the tenant's job search for the same
 title (exact, normalised), take a Canadian match, fetch its JD, and update Link, JD, Fit % and Signals in
-place. Name, Company, Source and the Interested / Apply checkboxes are never touched. No match: the row is
+place. Name, Company, Source and the Interested / Apply / done-del checkboxes are never touched, and a row
+already marked done-del (on its way out) is skipped. No match: the row is
 left as it is and listed.
 """
 from dataclasses import dataclass, field
@@ -32,7 +33,7 @@ class RefreshReport:
 
 
 def stale_rows(items: list[FeedItem]) -> list[FeedItem]:
-    return [i for i in items if i.source == "Workday" and UNAVAILABLE in i.signals]
+    return [i for i in items if i.source == "Workday" and UNAVAILABLE in i.signals and i.done_del is False]
 
 
 def refresh(client, feed: notion_feed.Feed, items: list[FeedItem], cfg: dict, filters: Filters, scorer: Scorer,

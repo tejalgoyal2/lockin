@@ -221,6 +221,39 @@ def requires_french(text: str) -> bool:
     return False
 
 
+# --- P.Eng licence (SPEC §11 #72) ---------------------------------------------
+_PENG = re.compile(
+    r"\bP\.\s?Eng\b\.?|\bPEng\b|"                                   # case-sensitive: never "develop engineering"
+    r"(?i:professional\s+engineer(?:ing)?\b(?!\s+(?:services|firm|team|staff)))|"
+    r"\b(?:PEO|APEGA|APEGS|EGBC|APEGNB|APEGM)\b|(?i:engineers\s+and\s+geoscientists\s+(?:BC|british\s+columbia))")
+_PENG_REQUIRED = re.compile(
+    r"(?i)\b(?:must|required|requires?|requirement|mandatory|licen[cs]ed|licen[cs]e|registered|registration|"
+    r"eligib\w*|hold|holding|member(?:ship)?\s+(?:in\s+good\s+standing|of|with))\b")
+_PENG_OPTIONAL = re.compile(r"(?i)\b(?:asset|preferred|nice\s+to\s+have|a\s+plus|bonus|advantage(?:ous)?|desir(?:ed|able)|"
+                            r"would\s+be\s+(?:great|nice))\b")
+_EIT = re.compile(r"\bEIT\b|\bE\.I\.T\.?|(?i:engineer[\s-]+in[\s-]+training|engineering\s+intern\b)")
+
+
+def requires_peng(jd: str) -> bool:
+    """The JD asks for a P.Eng licence (or eligibility for one): a mention under a requirements heading, or one next
+    to a requirement word ("licensed", "must", "registered", "eligible"). Not when an EIT is accepted anywhere in
+    the JD, and not for perks ("training to achieve your P.Eng. designation")."""
+    from scanner.score import sections      # local: score must not depend on jd_rules
+    jd = jd or ""
+    if _EIT.search(jd):
+        return False
+    req = [(a, b) for a, b, k in sections(jd) if k == "req"]
+    for m in _PENG.finditer(jd):
+        line_start = jd.rfind("\n", 0, m.start()) + 1
+        line_end = jd.find("\n", m.end())
+        line = jd[line_start: line_end if line_end != -1 else len(jd)]
+        if _PENG_OPTIONAL.search(line):
+            continue                                     # "registration with EGBC is considered an asset"
+        if any(a <= m.start() < b for a, b in req) or _PENG_REQUIRED.search(line):
+            return True
+    return False
+
+
 # --- Notion "Signals" multi-select ------------------------------------------
 _SIGNAL_NEW_GRAD = re.compile(r"new[\s-]?grad(?:uate)?s?\b", re.IGNORECASE)
 _SIGNAL_RECENT = re.compile(r"recent(?:ly)?\s+graduat\w*|graduated\s+within|university\s+grad|college\s+grad", re.IGNORECASE)
@@ -232,6 +265,7 @@ SIGNAL_ORDER = ("new grad", "recent graduate", "0-2 years", "entry level", "juni
 TWO_YEARS = "2+ yrs"                 # requirement is exactly 2 years (kept only with a strong Fit, see enrich)
 LOW_SIGNAL = "low signal"            # JD found, but too few tech terms to trust Fit %
 JD_UNAVAILABLE = "jd unavailable"    # no JD text could be fetched
+PENG = "P.Eng req"                   # the JD requires a P.Eng licence (kept, never dropped)
 
 
 def detect_signals(title: str, jd: str, exp: Experience) -> list[str]:

@@ -4,7 +4,7 @@ Each predicate returns True when the record should be KEPT.
 """
 import re
 import unicodedata
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from scanner.normalize import norm_text
 
@@ -49,6 +49,7 @@ class Filters:
     unresolved: re.Pattern | None
     title_exclude_phrases: list
     french_first: re.Pattern
+    title_foreign: list = field(default_factory=list)
 
     @classmethod
     def from_config(cls, cfg: dict) -> "Filters":
@@ -78,6 +79,8 @@ class Filters:
             unresolved=re.compile(loc["unresolved"], re.IGNORECASE) if loc.get("unresolved") else None,
             title_exclude_phrases=[re.compile(r"\b" + re.escape(fold(p)) + r"\b") for p in title.get("exclude_phrases") or []],
             french_first=re.compile(lang.get("french_first_segment_pattern", "$^"), re.IGNORECASE),
+            title_foreign=([re.compile(rf"(?<![\w.])(?:{p})(?![\w])", re.IGNORECASE) for p in loc.get("title_foreign") or []]
+                           + [re.compile(rf"(?<![\w.])(?:{p})(?![\w])") for p in loc.get("title_foreign_cs") or []]),
         )
 
     # -- location -----------------------------------------------------------
@@ -91,6 +94,13 @@ class Filters:
             if _any(self.loc_include, cleaned):
                 out.append(part)
         return out
+
+    def title_location_ok(self, title: str) -> bool:
+        """False when the title names a place outside Canada and no Canadian place: "Software Engineer (New York)",
+        "AI Product Manager (NYC-based)". "Data Engineer (NYC or Toronto)" and titles naming no place pass."""
+        if not _any(self.title_foreign, title or ""):
+            return True
+        return bool(self._canadian_parts(title))
 
     def is_quebec(self, part: str) -> bool:
         """A location in Quebec and nowhere else: "Montréal, QC", "Quebec, Canada" yes; "Ottawa/Gatineau" no."""

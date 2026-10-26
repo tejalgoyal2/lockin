@@ -12,7 +12,7 @@ import requests
 from urllib.parse import parse_qs, quote, unquote, urlsplit
 
 from scanner.models import Job
-from scanner.text import html_to_text
+from scanner.text import INVISIBLE, html_to_text
 
 SUPPORTED = ("Greenhouse", "Lever", "Ashby", "Workday", "BambooHR")
 
@@ -235,7 +235,8 @@ def fetch_full(ref: AtsRef, client) -> Detail:
     """
     if ref.ats == "Ashby":
         j = _ashby_job(ref, client)
-        return Detail(j.get("descriptionPlain") or html_to_text(j.get("descriptionHtml", "")), "", _ashby_locations(j))
+        text = j.get("descriptionPlain") or html_to_text(j.get("descriptionHtml", ""))
+        return Detail(INVISIBLE.sub("", text), "", _ashby_locations(j))
     data = _get_workday(ref, client) if ref.ats == "Workday" else client.get_json(ref.api_url, ref.ats)
     text = {
         "Greenhouse": _greenhouse_text,
@@ -243,6 +244,7 @@ def fetch_full(ref: AtsRef, client) -> Detail:
         "Workday": _workday_text,
         "BambooHR": _bamboo_text,
     }[ref.ats](data)
+    text = INVISIBLE.sub("", text)          # plain-text fields (Lever, Ashby) skip html_to_text
     company = (data.get("company_name") or "").strip() if ref.ats == "Greenhouse" else ""
     locations = {"Workday": _workday_locations, "Greenhouse": _greenhouse_locations, "Lever": _lever_locations,
                  "BambooHR": _bamboo_locations}[ref.ats](data)

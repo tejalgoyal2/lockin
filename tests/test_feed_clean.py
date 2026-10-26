@@ -48,12 +48,19 @@ def test_two_year_rows_need_a_fit_and_internships_to_count():
     assert verdict(item(jd="Python. Java, Kafka, Redis, Golang. 2 years of experience.")).rule == "two_years_low_fit"
 
 
-def test_location_failures_are_reported_not_ruled():
+def test_a_row_whose_location_is_not_canadian_is_trashed():
+    # Was report-only; the TribalScale rows ("Remote USA" now) stayed in the Feed because of it (SPEC §11 #70)
     v = verdict(item(), "Austin, TX")
-    assert v.rule is None and v.location_status == "not_canada"
+    assert v.rule == "location_not_canada" and v.location_status == "not_canada"
     rep = FC.CleanReport([v, verdict(item(page="p2")), verdict(item(page="p3"), "")])
-    assert rep.location_failures() == [v]
+    assert rep.trashable() == [v]
     assert len(rep.location_unknown()) == 1                    # no source record, so nothing to check
+
+
+def test_a_title_naming_a_us_place_is_trashed_even_when_the_location_says_canada():
+    v = verdict(item(title="Forward Deployed Agile Software Engineer (Washington, D.C.)"), "Remote Canada")
+    assert v.rule == FC.RULE_TITLE_PLACE
+    assert verdict(item(title="Data Engineer (NYC or Toronto)"), "Toronto, ON").rule is None
 
 
 def test_workday_multi_location_rows_use_the_detail_list():
@@ -97,12 +104,13 @@ class Notion:
         return resp
 
 
-def page(pid, title, company, link, jd, interested=False, apply=False, signals=()):
+def page(pid, title, company, link, jd, interested=False, apply=False, signals=(), done_del=False):
     rt = lambda s: [{"type": "text", "plain_text": s, "text": {"content": s}}]
     return {"id": pid, "properties": {
         "Name": {"title": rt(title)}, "Company": {"rich_text": rt(company)}, "Link": {"url": link},
         "Source": {"select": {"name": "Greenhouse"}}, "Signals": {"multi_select": [{"name": s} for s in signals]},
-        "JD": {"rich_text": rt(jd)}, "Interested": {"checkbox": interested}, "Apply": {"checkbox": apply}}}
+        "JD": {"rich_text": rt(jd)}, "Interested": {"checkbox": interested}, "Apply": {"checkbox": apply},
+        **({} if done_del is None else {"done-del": {"checkbox": done_del}})}}
 
 
 def feed():
@@ -127,6 +135,19 @@ def test_list_items_and_trash_only_rows_that_fail_and_are_unticked():
     assert sess.patched == [("/v1/pages/bad", {"in_trash": True})]
 
 
+def test_rows_marked_done_del_or_without_a_done_del_value_are_never_trashed():
+    sess = Notion([
+        page("moved", "Data Specialist", "McKesson · oct8", "https://boards.greenhouse.io/mck/jobs/2", GOOD_JD,
+             done_del=True),
+        page("unknown", "Data Specialist", "McKesson · oct8", "https://boards.greenhouse.io/mck/jobs/3", GOOD_JD,
+             done_del=None),
+    ])
+    client = notion_feed.NotionClient("secret", "2026-03-11", session=sess, sleep=lambda s: None)
+    rep = FC.clean(FC.list_items(client, feed()), {}, CFG, FILTERS, SCORER)
+    assert len(rep.failing()) == 2 and rep.trashable() == [] and len(rep.protected()) == 2
+    assert FC.trash(client, rep, dry_run=False) == 0 and sess.patched == []
+
+
 def test_render_has_a_table_per_rule_and_never_prints_ids():
     rep = FC.CleanReport([verdict(item(title="Data Specialist", company="McKesson", page="secret-page-id")),
                           verdict(item(title="Directeur", page="x2", interested=True)),
@@ -134,7 +155,8 @@ def test_render_has_a_table_per_rule_and_never_prints_ids():
     text = FC.render(rep, dry_run=True)
     assert "| title exclude | Data Specialist | McKesson |" in text
     assert "NOT trashed" in text and "Directeur" in text
-    assert "Austin, TX" in text and "secret-page-id" not in text and "dry run" in text
+    assert "| location_not_canada | Software Engineer | Acme |" in text
+    assert "secret-page-id" not in text and "dry run" in text
 
 
 def test_feed_row_company_loses_its_date_tag():
@@ -146,4 +168,4 @@ def test_feed_row_company_loses_its_date_tag():
 def test_unknown_location_does_not_trigger_the_us_authorization_rule():
     jd = GOOD_JD + " Must be authorized to work in the United States."
     assert verdict(item(jd=jd), "").rule is None
-    assert verdict(item(jd=jd), "Austin, TX").rule == "us_work_authorization"
+    assert verdict(item(jd=jd), "Austin, TX").rule == "location_not_canada"       # the location rule comes first
