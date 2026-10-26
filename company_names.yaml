@@ -143,6 +143,7 @@ optrust: OPTrust
 # Workday career sites rarely publish a usable name and Lever none, so those need an entry here.
 acciona: ACCIONA                  # JD: "ACCIONA is a global company"
 aptiv: Aptiv                      # Workday career site: "Aptiv is a global industrial technology company"
+canopygrowth: Canopy Growth        # JD/site: "At Canopy Growth, quality, consistency and trust ..."
 championx: ChampionX              # site: "ChampionX is now part of SLB"
 equinix: Equinix                  # JD: "Equinix is the world's digital infrastructure company"
 evismart: EviSmart                # JD: "EviSmart builds software and AI-powered solutions" (board says Evismart)
