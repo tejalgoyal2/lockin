@@ -161,6 +161,20 @@ title:
     - data annotation
     - data labeling
     - ai trainer
+    # non-tech roles that leaked into the Feed (SPEC §11 #67)
+    - business developer
+    - business development
+    - distinguished
+    - crew
+    - electrician
+    - journeyperson
+    - operator
+    - investigator
+    - underwriter
+    - artist
+    - loss prevention
+    - store
+    - security agent
   exclude_words_cs:      # roman-numeral levels, case-sensitive
     - II
     - III
@@ -215,6 +229,9 @@ jd:
 
 scoring:
   weak_title_min_fit: 20     # a weak_title job is dropped if Fit % is below this or no skill matches
+  # A `low signal` job (JD found, Fit % n/a) is kept only when its title names a developer role: a JD with too few
+  # tech terms and a title like "Cell Operator" or "Underwriter" is not a tech job. Whole words, plural allowed.
+  low_signal_title_nouns: [engineer, developer, programmer, scientist, analyst]
   min_terms_for_fit: 4       # Fit % needs this many distinct terms (matched + gaps + context); fewer -> n/a + `low signal`
   min_core_terms_for_fit: 2  # ... of which at least this many skills or gaps (one skill and three generic words is not a fit)
   matched_bonus_per_skill: 2 # ranking Score += this per matched skill ...

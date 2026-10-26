@@ -32,6 +32,7 @@ R_EXPERIENCE = "experience_3plus"
 R_TWO_YEAR_INTERN = "two_years_excludes_internships"
 R_TWO_YEAR_NO_FIT = "two_years_no_fit"
 R_TWO_YEAR_LOW_FIT = "two_years_low_fit"
+R_LOW_SIGNAL_TITLE = "low_signal_not_dev_title"
 R_FRENCH = "requires_french"
 R_QUEBEC_ONLY = "location_quebec_only"
 R_NOT_CANADA = "location_not_canada"
@@ -273,6 +274,12 @@ def two_year_reason(exp: jd_rules.Experience, fit_pct: float | None, jdcfg: dict
     return None
 
 
+def dev_title(title: str, cfg: dict) -> bool:
+    """The title names a developer role (engineer, developer, programmer, scientist, analyst; plural allowed)."""
+    nouns = cfg["scoring"].get("low_signal_title_nouns") or []
+    return not nouns or bool(re.search(r"\b(?:" + "|".join(map(re.escape, nouns)) + r")s?\b", title or "", re.IGNORECASE))
+
+
 def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer,
                 clusters: ClusterResolver | None = None) -> str | None:
     """Fill phase-2 fields on `job`; return a drop reason, or None to keep it."""
@@ -313,6 +320,8 @@ def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer,
                 return R_WEAK_FEW_TERMS
             if not job.matched or (job.fit_pct or 0) < cfg["scoring"]["weak_title_min_fit"]:
                 return R_WEAK
+        if fit.fit_pct is None and not dev_title(job.title, cfg):
+            return R_LOW_SIGNAL_TITLE          # "Automation Cell Operator", "Associate Underwriter - Cyber"
     else:
         # No JD: a strong title stays (with the penalty); a weak one has nothing to vouch for it.
         if job.weak_title:
