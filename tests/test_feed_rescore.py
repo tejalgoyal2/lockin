@@ -10,7 +10,7 @@ CFG = load_config()
 FILTERS = Filters.from_config(CFG)
 SCORER = Scorer.load()
 OVERRIDES = load_overrides()
-FOUR = "Python, SQL, Docker and Git."          # 4 matched skills, no gaps: Fit 66.7 % under matched / (matched + gaps + 2)
+FOUR = "Python, SQL, Docker and Git."          # 4 matched skills, no gaps: Fit 80 % under matched / (matched + gaps + 1)
 
 
 def item(title="Software Developer", cell="Bdo · oct8", jd=FOUR, fit=1.0, signals=(), interested=False,
@@ -34,26 +34,26 @@ def test_company_fit_and_signals_are_recomputed_with_the_current_rules():
               title="Junior Software Developer")
     (c,) = rescore([it])
     assert c.company == ("Bdo · oct8", "BDO · oct8")                  # company_names.yaml
-    assert c.fit == (1.0, 0.667)                                       # old formula said 100 %
+    assert c.fit == (1.0, 0.8)                                       # old formula said 100 %
     assert c.signals == (["junior"], ["junior", "2+ yrs"])
 
 
 def test_a_row_that_is_already_current_is_not_touched():
-    it = item(cell="BDO · oct8", fit=0.667)
+    it = item(cell="BDO · oct8", fit=0.8)
     assert rescore([it]) == []
 
 
 def test_ats_names_are_not_rebuilt_from_a_slug():
-    it = item(cell="Tucows Inc. · oct7", fit=0.667)
+    it = item(cell="Tucows Inc. · oct7", fit=0.8)
     recs = {FC.canonical_url(it.link): FC.Found("Toronto, ON", "ats", "tucows")}
     assert rescore([it], recs) == []                                   # not in company_names.yaml: left as it is
 
 
 def test_the_date_tag_is_kept_and_a_row_without_a_source_record_keeps_its_name():
-    it = item(cell="Optrust · sept29", fit=0.667)
+    it = item(cell="Optrust · sept29", fit=0.8)
     (c,) = rescore([it], {FC.canonical_url(it.link): FC.Found("Toronto, ON", "ats", "optrust")})
     assert c.company == ("Optrust · sept29", "OPTrust · sept29")
-    assert rescore([item(cell="Bdo · oct8", fit=0.667)], {}) == []
+    assert rescore([item(cell="Bdo · oct8", fit=0.8)], {}) == []
 
 
 def test_ticked_unreadable_and_failing_rows_are_skipped():
@@ -78,20 +78,20 @@ def test_apply_changes_writes_only_what_changed_and_never_the_checkboxes():
 
     names = CFG["notion"]["properties"]
     feed = notion_feed.Feed("ds", names, {k: k for k in names})
-    c = FC.Change(item(), company=("Bdo · oct8", "BDO · oct8"), fit=(1.0, 0.667))
+    c = FC.Change(item(), company=("Bdo · oct8", "BDO · oct8"), fit=(1.0, 0.8))
     assert FC.apply_changes(C(), feed, [c], dry_run=True) == 1 and sent == []
     assert FC.apply_changes(C(), feed, [c], dry_run=False) == 1
     (method, path, body), = sent
     assert (method, path) == ("PATCH", "/v1/pages/p1")
     assert set(body["properties"]) == {"Company", "Fit %"}
-    assert body["properties"]["Fit %"] == {"number": 0.667}
+    assert body["properties"]["Fit %"] == {"number": 0.8}
 
 
 def test_report_shows_old_and_new_per_row():
     c = FC.Change(item(title="Junior Software Developer", signals=["junior"]), company=("Bdo · oct8", "BDO · oct8"),
-                  fit=(1.0, 0.667), signals=(["junior"], ["junior", "2+ yrs"]))
+                  fit=(1.0, 0.8), signals=(["junior"], ["junior", "2+ yrs"]))
     text = FC.render_changes([c], 5, dry_run=False)
-    assert "| Junior Software Developer | Bdo · oct8 → BDO · oct8 | 100.0% → 66.7% | junior → junior, 2+ yrs |" in text
+    assert "| Junior Software Developer | Bdo · oct8 → BDO · oct8 | 100.0% → 80.0% | junior → junior, 2+ yrs |" in text
     assert "5 rows with all boxes unticked kept, 1 changed" in text
 
 
@@ -106,10 +106,10 @@ def test_find_records_takes_the_slug_from_the_ats_and_the_name_from_simplify(mon
 
 
 def test_a_slug_cell_gets_the_ats_name_and_other_names_are_left_alone():
-    tjx = item(cell="Tjx · oct14", fit=0.667, link="https://tjx.wd1.myworkdayjobs.com/tjx_external/job/x/y_REQ1",
+    tjx = item(cell="Tjx · oct14", fit=0.8, link="https://tjx.wd1.myworkdayjobs.com/tjx_external/job/x/y_REQ1",
                page="t")
-    evr = item(cell="Evr · oct16", fit=0.667, link="https://jobs.lever.co/evr/ed1fd146", page="e")
-    tucows = item(cell="Tucows Inc. · oct7", fit=0.667, link="https://tucows.wd1.myworkdayjobs.com/x/job/y/z", page="u")
+    evr = item(cell="Evr · oct16", fit=0.8, link="https://jobs.lever.co/evr/ed1fd146", page="e")
+    tucows = item(cell="Tucows Inc. · oct7", fit=0.8, link="https://tucows.wd1.myworkdayjobs.com/x/job/y/z", page="u")
     asked = []
 
     def name_for(link):

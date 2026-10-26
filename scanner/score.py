@@ -42,7 +42,8 @@ _BULLET = re.compile(r"^\s*[-•*·▪◦‣–]\s")
 REQUIREMENT_WEIGHT = 1.0   # a term the requirements section asks for
 OTHER_WEIGHT = 0.5         # ... only elsewhere (responsibilities, intro, nice-to-have) when a requirements section exists
 NICE_WEIGHT = 0.5          # ... only under a nice-to-have / preferred heading (always)
-FIT_SMOOTHING = 2          # Fit % = matched / (matched + gaps + 2), in requirement-term units
+PROCESS_WEIGHT = 0.5       # skills in the `process` cluster (Agile, Jira, UAT, ...) count half wherever they appear
+FIT_SMOOTHING = 1          # Fit % = matched / (matched + gaps + 1), in requirement-term units
 
 
 def heading_kind(line: str) -> str | None:
@@ -166,10 +167,11 @@ class Scorer:
             for term in terms:
                 if norm_text(term.name) in own:
                     continue
+                scale = PROCESS_WEIGHT if term.cluster == "process" else 1.0
                 for p in term.patterns:
                     for m in p.finditer(jd):
                         kind = next((k for a, b, k in spans if a <= m.start() < b), "body")
-                        hits.append(_Hit(m.start(), m.end(), term, owned, base.get(kind, other)))
+                        hits.append(_Hit(m.start(), m.end(), term, owned, base.get(kind, other) * scale))
         hits = _drop_nested(hits)
         _apply_alternatives(jd, hits)
 
@@ -192,7 +194,7 @@ class Scorer:
         return Fit(
             matched=sorted(weights_m, key=lambda n: (-weights_m[n], n)),
             gaps=sorted(weights_g, key=lambda n: (-weights_g[n], n)),
-            # matched / (total + 2): a thin match cannot reach 100 %
+            # matched / (total + 1): a thin match cannot reach 100 %
             fit_pct=(round(100 * wm / (wm + wg + FIT_SMOOTHING), 1)
                      if wm + wg and n_terms >= min_terms and n_core >= min_core else None),
             cluster=cluster,

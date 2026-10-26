@@ -177,7 +177,7 @@ def test_stale_workday_row_gets_link_jd_fit_and_signals_in_place():
     props = body["properties"]
     assert set(props) == {"Link", "JD", "Fit %", "Signals"}                  # nothing else, never the checkboxes
     assert props["Link"]["url"].endswith("JR7194")
-    assert props["Fit %"]["number"] == 0.667                                # 4 / (4 + 2)
+    assert props["Fit %"]["number"] == 0.8                                  # 4 / (4 + 1)
     assert "jd unavailable" not in [s["name"] for s in props["Signals"]["multi_select"]]
     assert "Python" in props["JD"]["rich_text"][0]["text"]["content"]
     assert it.link.endswith("JR7194") and "jd unavailable" not in it.signals     # the in-memory row follows

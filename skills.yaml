@@ -7,7 +7,7 @@
 #   - `regex:` entries are raw Python regexes, case-sensitive unless they say (?i). They are for names that
 #     are only a skill in context: R, C, Excel, RAG, API integration.
 # Clusters software / data / ml / security decide a job's cluster from its JD when the title has none;
-# `general` (process and tools) never decides a cluster.
+# `process` (process and tools, half weight) never decides a cluster.
 clusters:
   software:
     # --- languages
@@ -85,6 +85,12 @@ clusters:
     - {name: regression testing, aliases: [regression testing, regression tests, regression test suite]}
     - {name: GitHub Copilot, aliases: [GitHub Copilot]}     # not Microsoft (365) Copilot
     - {name: Streamlit, aliases: [Streamlit]}
+    - {name: debugging, aliases: [debugging]}
+    # --- low-code / integration platforms (full weight)
+    - {name: Power Apps, aliases: [Power Apps, PowerApps, Power Platform]}
+    - {name: Power Automate, aliases: [Power Automate, Microsoft Flow]}
+    - {name: Appian, aliases: [Appian]}
+    - {name: MuleSoft, aliases: [MuleSoft]}
   data:
     - {name: SQL, aliases: [SQL]}
     - {name: T-SQL, aliases: [T-SQL, TSQL, Transact-SQL]}
@@ -170,17 +176,14 @@ clusters:
     - {name: RBAC, aliases: [RBAC, role-based access control, role based access control]}
     - {name: MFA, aliases: [multi-factor authentication, multifactor authentication, 2FA], regex: ['\bMFA\b']}
     - {name: zero trust, aliases: [zero trust, zero-trust]}
-  general:
+  # Process / tools: half weight in Fit % (PROCESS_WEIGHT, SPEC §11 #71), and they never decide a cluster.
+  process:
     - {name: Agile, aliases: [Agile, Scrum, Kanban, sprint, sprints]}
     - {name: Jira, aliases: [Jira]}
     - {name: Confluence, aliases: [Confluence], cs: true}
     - {name: ServiceNow, aliases: [ServiceNow]}
-    - {name: Power Apps, aliases: [Power Apps, PowerApps, Power Platform]}
-    - {name: Power Automate, aliases: [Power Automate, Microsoft Flow]}
-    - {name: Appian, aliases: [Appian]}
-    - {name: MuleSoft, aliases: [MuleSoft]}
     - {name: code review, aliases: [code review, code reviews]}
-    - {name: debugging, aliases: [debugging, troubleshooting, troubleshoot, root cause analysis, root-cause analysis], regex: ['\bRCA\b']}
+    - {name: troubleshooting, aliases: [troubleshooting, troubleshoot, root cause analysis, root-cause analysis], regex: ['\bRCA\b']}
     - {name: technical documentation, aliases: [technical documentation, technical docs]}
     - name: requirements gathering
       aliases: [requirements gathering, requirement gathering, requirements elicitation, gathering requirements, gather requirements]
