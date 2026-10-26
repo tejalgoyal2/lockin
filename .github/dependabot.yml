@@ -1,0 +1,14 @@
+# Weekly dependency updates. pip: Dependabot re-runs pip-compile on requirements.in, so requirements.txt keeps its
+# hashes. github-actions: the SHA-pinned actions in .github/workflows.
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5

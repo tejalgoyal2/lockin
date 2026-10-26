@@ -48,18 +48,22 @@ to triage. It runs on GitHub Actions. Design: [SPEC.md](SPEC.md).
    After that the schedule (`0 16 * * *` UTC) takes over. The workflow commits to the branch it runs on; if
    that branch is protected, allow GitHub Actions to push to it.
 
-Your own Notion automation can copy a ticked row to your main database and delete it from the Feed:
-`state/seen.json` is what stops that job from being written again.
+Your own Notion automation can copy a ticked row to your main database and tick `done-del`; the next run trashes
+that row, and `state/seen.json` stops the job from being written again.
 
 ## Run it locally
 
 ```bash
-pip install -r requirements-dev.txt
+pip install --require-hashes -r requirements-dev.txt        # Python 3.12; every package pinned by hash
 python -m scanner run --dry-run --skip-notion --since 7     # scan, score, print Notion payloads; touches nothing
 NOTION_TOKEN=... NOTION_FEED_DATA_SOURCE_ID=... python -m scanner run --dry-run   # also checks the Feed schema
 NOTION_TOKEN=... NOTION_FEED_DATA_SOURCE_ID=... python -m scanner run --max-rows 5
 pytest
 ```
+
+Dependencies: edit `requirements.in` / `requirements-dev.in`, then regenerate the pinned files with
+`pip-compile --generate-hashes --allow-unsafe --strip-extras requirements.in` (and the same for
+`requirements-dev.in`). Dependabot opens weekly PRs for pip and GitHub Actions.
 
 Useful flags: `--since N`, `--max-rows N`, `--no-jd` (phase 1 only), `--no-notion`, `--gaps-report always`.
 
