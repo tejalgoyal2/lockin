@@ -54,12 +54,12 @@ class FakeClient:
     ("https://cityofhamilton.bamboohr.com/careers/2390", "City of Hamilton"),
     ("https://bakertillywm.bamboohr.com/careers/358", "Baker Tilly WM"),
     ("https://firstlightai.bamboohr.com/careers/526", "Quickplay"),
-    ("https://jobs.ashbyhq.com/sandboxaq/753edb00-9eaa-4ccc-ac84-682f72f14fe7", "SandboxAQ"),
+    ("https://jobs.ashbyhq.com/sandboxaq/job-1", "SandboxAQ"),
     ("https://tjx.wd1.myworkdayjobs.com/tjx_external/job/CAN-Winnipeg-MB/Loss-Prevention_REQ167603", "TJX"),
     ("https://ssctech.wd1.myworkdayjobs.com/en-US/ssctechnologies/job/Toronto-Canada/Analyst_R45965", "SS&C"),
     ("https://bdo.wd3.myworkdayjobs.com/bdo/job/Toronto---Bay-St/Consultant_JR7209", ""),          # "Canada" is not BDO
     ("https://gianttiger.wd3.myworkdayjobs.com/gianttiger/job/Johnstown/Operator_JR133523", ""),   # empty og:title
-    ("https://jobs.lever.co/lvs1/034040ff-9933-433f-9d15-730d3632da5c", ""),                       # Lever: no source
+    ("https://jobs.lever.co/lvs1/job-2", ""),                       # Lever: no source
 ])
 def test_name_from_each_ats(url, name, tmp_path):
     store = N.NameStore(tmp_path / "names.json")
