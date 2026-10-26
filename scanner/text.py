@@ -6,6 +6,10 @@ from html.parser import HTMLParser
 _BLOCK = {"p", "div", "br", "ul", "ol", "table", "tr", "section", "article", "header", "footer",
           "h1", "h2", "h3", "h4", "h5", "h6", "blockquote", "pre", "hr"}
 _SKIP = {"script", "style"}
+# Invisible characters with no meaning in plain text: zero-width space / joiner-less word joiner, BOM,
+# soft hyphen. Notion drops U+200B when it stores a rich_text value, so a JD that kept one failed the
+# read-back length check (the Oct 20 and Oct 24 scans). Removing them also lets "Py\u00adthon" match.
+INVISIBLE = re.compile("[\u200b\u2060\ufeff\u00ad]")
 
 
 class _Extractor(HTMLParser):
@@ -42,7 +46,7 @@ def html_to_text(raw: str, *, unescape_first: bool = False) -> str:
     parser = _Extractor()
     parser.feed(raw)
     parser.close()
-    text = "".join(parser.parts).replace("\xa0", " ")
+    text = INVISIBLE.sub("", "".join(parser.parts)).replace("\xa0", " ")
     text = re.sub(r"[ \t\r\f\v]+", " ", text)
     text = re.sub(r" *\n *", "\n", text)
     text = re.sub(r"\n{3,}", "\n\n", text)

@@ -18,3 +18,8 @@ def test_greenhouse_double_escaped_content():
 def test_scripts_dropped_and_empty():
     assert html_to_text("<style>x{}</style><script>alert(1)</script>hi") == "hi"
     assert html_to_text("") == ""
+
+
+def test_invisible_characters_are_removed():
+    # Notion drops U+200B when it stores text, which broke the JD read-back check (Oct 20 / Oct 24 scans)
+    assert html_to_text("<p>Py​thon­ and﻿ SQL⁠</p>") == "Python and SQL"

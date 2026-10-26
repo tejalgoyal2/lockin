@@ -240,6 +240,20 @@ def test_readback_detects_a_mismatch(notion, client, feed):
     assert not ok and "MISMATCH" in msg and "5000" in msg and "4990" in msg
 
 
+def test_zero_width_spaces_are_not_sent(notion, client, feed):
+    # The Oct 20 / Oct 24 scans failed: the JDs held U+200B, Notion dropped it, read-back was 1 / 5 chars short
+    items, sent = nf.jd_rich_text("Build\u200b data\u200b pipelines\ufeff")
+    assert sent == "Build data pipelines" and items[0]["text"]["content"] == sent
+
+
+def test_readback_passes_when_notion_drops_only_invisible_characters(notion, client, feed):
+    res = nf.write_jobs(client, feed, [make_job(1, jd="x" * 5000)], OVERRIDES)
+    page_id = res.written[0][1]
+    res.written[0] = (res.written[0][0], page_id, "x" * 2500 + "\u200c" + "x" * 2500)   # as if a joiner was sent
+    ok, msg = nf.verify_readback(client, feed, res.written)
+    assert ok and "dropped invisible characters: U+200C" in msg
+
+
 def test_failed_write_is_not_retried_on_5xx_and_aborts_after_three_in_a_row(notion, client, feed):
     notion.scripted = [Resp(503, {"code": "service_unavailable", "message": "x"})] * 10
     res = nf.write_jobs(client, feed, [make_job(i) for i in range(1, 6)], OVERRIDES)

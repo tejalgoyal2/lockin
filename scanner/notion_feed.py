@@ -7,6 +7,7 @@ import logging
 import random
 import re
 import time
+import unicodedata
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 
@@ -15,6 +16,7 @@ import requests
 from scanner.company_names import company_cell
 from scanner.dedupe import canonical_url
 from scanner.models import Job
+from scanner.text import INVISIBLE
 
 log = logging.getLogger(__name__)
 
@@ -200,7 +202,7 @@ def jd_rich_text(jd: str, max_items: int = JD_ITEMS_MAX) -> tuple[list[dict], st
 
     Returns (items, text_actually_sent).
     """
-    jd = (jd or "").replace("\x00", "")
+    jd = INVISIBLE.sub("", (jd or "").replace("\x00", ""))     # Notion would drop them (read-back)
     cap = max_items * RICH_TEXT_ITEM_MAX
     if _utf16_len(jd) > cap:
         keep = chunk_text(jd, cap - _utf16_len(TRUNCATED))[0]
@@ -397,9 +399,22 @@ def verify_readback(client: NotionClient, feed: Feed, written: list[tuple[Job, s
     job, page_id, sent = long_ones[0] if long_ones else max(candidates, key=lambda w: len(w[2]))
     got = read_property_text(client, page_id, feed.ids["jd"])
     ok = got == sent
+    note = "" if long_ones else f" (no JD over {min_chars} chars was written)"
+    if not ok and _visible(got) == _visible(sent):
+        # Notion silently drops some invisible format characters (U+200B is the one seen live). The text
+        # is intact, so the run does not fail; the note shows which characters went missing.
+        ok = True
+        dropped = sorted({f"U+{ord(c):04X}" for c in sent if unicodedata.category(c) == "Cf"} -
+                         {f"U+{ord(c):04X}" for c in got if unicodedata.category(c) == "Cf"})
+        note += f" (Notion dropped invisible characters: {', '.join(dropped) or 'format'})"
     msg = (f"read-back {'OK' if ok else 'MISMATCH'}: {job.company} | {job.title}: sent {len(sent)} chars, "
-           f"read {len(got)} chars" + ("" if long_ones else f" (no JD over {min_chars} chars was written)"))
+           f"read {len(got)} chars" + note)
     return ok, msg
+
+
+def _visible(text: str) -> str:
+    """Text without Unicode format characters (category Cf: zero-width spaces, joiners, BOM, ...)."""
+    return "".join(c for c in text if unicodedata.category(c) != "Cf")
 
 
 # --- dry-run preview ------------------------------------------------------------------
