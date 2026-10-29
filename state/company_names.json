@@ -47,6 +47,10 @@
   "name": "",
   "checked": "2026-10-28"
  },
+ "Workday:bcaa.wd3.myworkdayjobs.com/bcaacareers": {
+  "name": "",
+  "checked": "2026-10-29"
+ },
  "Workday:danaher.wd1.myworkdayjobs.com/danaherjobs": {
   "name": "",
   "checked": "2026-10-28"
@@ -54,6 +58,14 @@
  "Workday:dentsuaegis.wd3.myworkdayjobs.com/dan_global": {
   "name": "dentsu",
   "checked": "2026-10-26"
+ },
+ "Workday:mars.wd3.myworkdayjobs.com/external": {
+  "name": "",
+  "checked": "2026-10-29"
+ },
+ "Workday:navcanada.wd10.myworkdayjobs.com/nav_careers": {
+  "name": "",
+  "checked": "2026-10-29"
  },
  "Workday:tcenergy.wd3.myworkdayjobs.com/career_site_tc": {
   "name": "TC Energy",
