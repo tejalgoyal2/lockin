@@ -35,6 +35,10 @@
   "name": "samdesk Canada",
   "checked": "2026-10-28"
  },
+ "BambooHR:wesley": {
+  "name": "Wesley",
+  "checked": "2026-10-30"
+ },
  "Workday:aimco.wd10.myworkdayjobs.com/aimcocareers": {
   "name": "",
   "checked": "2026-10-27"
@@ -51,6 +55,10 @@
   "name": "",
   "checked": "2026-10-29"
  },
+ "Workday:ci.wd3.myworkdayjobs.com/ci_financial_external_career-site": {
+  "name": "",
+  "checked": "2026-10-30"
+ },
  "Workday:danaher.wd1.myworkdayjobs.com/danaherjobs": {
   "name": "",
   "checked": "2026-10-28"
@@ -59,6 +67,10 @@
   "name": "dentsu",
   "checked": "2026-10-26"
  },
+ "Workday:flir.wd1.myworkdayjobs.com/flircareers": {
+  "name": "",
+  "checked": "2026-10-30"
+ },
  "Workday:mars.wd3.myworkdayjobs.com/external": {
   "name": "",
   "checked": "2026-10-29"
@@ -66,6 +78,10 @@
  "Workday:navcanada.wd10.myworkdayjobs.com/nav_careers": {
   "name": "",
   "checked": "2026-10-29"
+ },
+ "Workday:sandvik.wd3.myworkdayjobs.com/sandvik-jobs": {
+  "name": "",
+  "checked": "2026-10-30"
  },
  "Workday:tcenergy.wd3.myworkdayjobs.com/career_site_tc": {
   "name": "TC Energy",
