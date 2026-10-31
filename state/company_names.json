@@ -1,4 +1,8 @@
 {
+ "Ashby:1password": {
+  "name": "1Password",
+  "checked": "2026-10-31"
+ },
  "Ashby:cohere": {
   "name": "Cohere",
   "checked": "2026-10-28"
@@ -14,6 +18,10 @@
  "Ashby:npx": {
   "name": "Nuclear Promise X",
   "checked": "2026-10-28"
+ },
+ "BambooHR:amii": {
+  "name": "Alberta Machine Intelligence Institute",
+  "checked": "2026-10-31"
  },
  "BambooHR:blanclabs": {
   "name": "Blanc Labs",
@@ -79,9 +87,17 @@
   "name": "",
   "checked": "2026-10-29"
  },
+ "Workday:petronascanada.wd3.myworkdayjobs.com/petronascanada": {
+  "name": "",
+  "checked": "2026-10-31"
+ },
  "Workday:sandvik.wd3.myworkdayjobs.com/sandvik-jobs": {
   "name": "",
   "checked": "2026-10-30"
+ },
+ "Workday:synechron.wd1.myworkdayjobs.com/synechroncareers": {
+  "name": "",
+  "checked": "2026-10-31"
  },
  "Workday:tcenergy.wd3.myworkdayjobs.com/career_site_tc": {
   "name": "TC Energy",

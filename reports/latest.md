@@ -1,29 +1,28 @@
 # Canadian entry-level tech jobs: candidates
 
-- Generated: 2026-10-30 20:25 UTC
+- Generated: 2026-10-31 19:43 UTC
 - Window: first seen in the last 3 day(s)
-- Feashliaa dataset last updated: 2026-10-30T15:18:51.209227Z
-- Candidates after dedupe: **828**
-- Remaining after JD rules: **52** (ranked by Score)
+- Feashliaa dataset last updated: 2026-10-31T14:38:55.150971Z
+- Candidates after dedupe: **748**
+- Remaining after JD rules: **46** (ranked by Score)
 
 | First Seen | Company | Role | Location | Source | Tier | Fit % | Cluster | Signals | Gaps | URL |
 |---|---|---|---|---|---|---|---|---|---|---|
+| 2026-10-31 | amii | Machine Learning Resident - Client: Ultimarii (12 month term) | Edmonton, Alberta | BambooHR | strong | 93.3 | ml |  |  | https://amii.bamboohr.com/careers/247 |
 | 2026-10-30 | ciena | Photonic Card Software Developer - New Grad | Ottawa | Workday | strong | 81 | software | new grad, 0-2 years |  | https://ciena.wd5.myworkdayjobs.com/careers/job/Ottawa/Experienced-Photonic-Card-Software-Developer_R031379 |
-| 2026-10-28 | npx | Data Analyst | Ontario | Ashby | strong | 91.3 | data |  |  | https://jobs.ashbyhq.com/npx/a8ec84ad-f045-4fe8-b130-439955e96a1f |
-| 2026-10-28 | bb | QNX Systems Software Developer | Ottawa, Ontario | Workday | strong | 90.5 | software |  |  | https://bb.wd3.myworkdayjobs.com/blackberry/job/Ottawa-Ontario/QNX-Systems-Software-Developer_20260323-2 |
+| 2026-10-31 | bdo | Consultant, Cloud Engineer - Azure | Toronto - Bay St | Workday | strong | 89.5 | software | 2+ yrs |  | https://bdo.wd3.myworkdayjobs.com/bdo/job/Toronto---Bay-St/Consultant--Cloud-Engineer---Azure_JR7308-1 |
 | 2026-10-29 | hootsuite | Junior Cyber Incident Response Analyst | Vancouver, British Columbia, Canada | Greenhouse | strong | 83.3 | security | 0-2 years, junior | Ansible | https://job-boards.greenhouse.io/hootsuite/jobs/8331544 |
-| 2026-10-28 | sharegateen | GTM Engineering - ShareGate | Canada - Remote | Greenhouse | weak | 87.5 | software |  |  | https://job-boards.greenhouse.io/sharegateen/jobs/5266966007 |
-| 2026-10-28 | workleap | GTM Engineering - ShareGate | Canada - Remote | Greenhouse | weak | 87.5 | software |  |  | https://job-boards.greenhouse.io/workleap/jobs/5266962007 |
-| 2026-10-28 | martello | DevOps & Security Engineer | Kanata, Ontario | BambooHR | strong | 86.2 | security |  | Nginx | https://martello.bamboohr.com/careers/211 |
-| 2026-10-28 | databricks | Software Engineer - New Grad (2027 Start) | Vancouver, Canada | Greenhouse | strong | 75 | software | new grad |  | https://databricks.com/company/careers/open-positions/job?gh_jid=6865698002 |
+| 2026-10-31 | konradgroup | Data Analyst | Toronto | Greenhouse | strong | 89.5 | data | 2+ yrs |  | https://www.konrad.com/careers/job/8109497003?gh_jid=8109497003 |
+| 2026-10-31 | synechron | Application Support Engineer (Front Office) | Mississauga, ON | Workday | weak | 86.7 | software |  |  | https://synechron.wd1.myworkdayjobs.com/synechroncareers/job/Mississauga-ON/Application-Support-Engineer--Front-Office-_JR1045835 |
 | 2026-10-29 | soti | Associate Software Development Engineer in Test (SDET) | Mississauga, Canada – Meadowvale Office (HQ) | Workday | strong | 82.8 | software | 2+ yrs | Angular, Jenkins | https://soti.wd3.myworkdayjobs.com/careers/job/Mississauga-Canada--Meadowvale-Office-HQ/Associate-Software-Development-Engineer-in-Test--SDET-_R10624 |
 | 2026-10-30 | flir | Software Development Engineer | Canada - Edmonton, AB | Workday | strong | 86.7 | software |  |  | https://flir.wd1.myworkdayjobs.com/flircareers/job/Canada---Edmonton-AB/Software-Development-Engineer_REQ36962 |
-| 2026-10-28 | blanclabs | Full Stack Software Engineer | Toronto, Ontario | BambooHR | strong | 81.8 | software | 2+ yrs | FastAPI | https://blanclabs.bamboohr.com/careers/275 |
-| 2026-10-28 | blanclabs | Full Stack Software Engineer - AI Agents | Toronto, Ontario | BambooHR | strong | 81.8 | ml | 2+ yrs | FastAPI | https://blanclabs.bamboohr.com/careers/273 |
+| 2026-10-30 | mitel | Junior Full Stack Web Developer | Ottawa | Workday+Simplify | strong | 59.2 | software | new grad, recent graduate, 0-2 years, junior | Angular, DynamoDB, Elasticsearch, microservices, unit testing | https://mitel.wd3.myworkdayjobs.com/mitelcareers/job/Ottawa/Junior-Full-Stack-Web-Developer_R013211 |
 | 2026-10-30 | hellofresh | WMS Software Developer [OPERATIONS TECHNOLOGY] | Toronto, Ontario, Canada | Greenhouse | strong | 80 | software |  | Kafka | https://careers.hellofresh.com/global/en/job/8313383?gh_jid=8313383 |
 | 2026-10-30 | ci | Financial & Tax Reporting Analyst | Toronto, ON | Workday | weak | 83.3 | data | 2+ yrs |  | https://ci.wd3.myworkdayjobs.com/ci_financial_external_career-site/job/Toronto-ON/Financial---Tax-Reporting-Analyst_JR6520 |
-| 2026-10-28 | cohere | Web Developer | Toronto | Ashby | strong | 85.7 | software |  |  | https://jobs.ashbyhq.com/cohere/4232d337-fbc7-4e8c-81d5-2903ab0eb6e8 |
-| 2026-10-28 | mongodb | Software Engineer 3, Identity and Access Management | Toronto | Greenhouse | strong | 80.6 | software | 2+ yrs | GCP | https://www.mongodb.com/careers/job/?gh_jid=8313374 |
+| 2026-10-31 | d2l | Software Test Developer | Kitchener | Greenhouse | strong | 84.6 | software |  |  | https://www.d2l.com/careers/jobs/?job_id=1273753&gh_jid=1273753 |
+| 2026-10-31 | konradgroup | Product Analyst | Toronto | Greenhouse | weak | 83.3 | data |  |  | https://www.konrad.com/careers/job/8109548003?gh_jid=8109548003 |
+| 2026-10-31 | wealthsimple | Security Incident Response Developer | Remote (Canada) | Ashby | strong | 81.8 | security | 0-2 years |  | https://jobs.ashbyhq.com/wealthsimple/0d2fc16a-b098-4d25-ac86-351465e8d466 |
+| 2026-10-30 | DraftKings | Software Engineer | Remote in Canada | Simplify | strong | 71.4 | software | 2+ yrs | microservices | https://draftkings.wd1.myworkdayjobs.com/Employee_Referral_Portal/job/Remote---Canada/Software-Engineer--December-2026-Grads-_JR15324-1 |
 | 2026-10-29 | mars | Retail Operations Specialist - Mars Canada | CAN-Ontario-Bolton | Workday | weak | 83.3 | data | 2+ yrs |  | https://mars.wd3.myworkdayjobs.com/external/job/CAN-Ontario-Bolton/Retail-Operations-Specialist---Mars-Canada_R169738-2 |
 | 2026-10-29 | equinix | DevOps Engineer | Toronto | Workday | strong | 75.8 | software |  | Go | https://equinix.wd1.myworkdayjobs.com/external/job/Dallas/DevOps-Engineer_JR-162405-1 |
 | 2026-10-29 | versapay | GTM Engineer | Canada (Remote) | Lever | weak | 72.2 | software |  | Salesforce, Snowflake | https://jobs.lever.co/versapay/5b8d1d13-e1bc-4b3e-a72e-c4c6115d725e |
@@ -35,18 +34,16 @@
 | 2026-10-30 | gitlab | Backend Engineer, Source Code: Repository Services (Ruby) | Remote, Canada | Greenhouse | strong | 62.8 | software |  | Helm, gRPC, Go, Ruby | https://job-boards.greenhouse.io/gitlab/jobs/8922427002 |
 | 2026-10-29 | fil | Software Developer | Toronto Office | Workday | strong | 68.4 | software | 0-2 years | Oracle | https://fil.wd3.myworkdayjobs.com/fidelitycanada/job/Toronto-Office/Software-Developer_J71844 |
 | 2026-10-30 | d2l | Product Support Analyst | Kitchener Ontario,  Toronto, Ontario, Ontario (Remote) | Greenhouse | weak | 61.9 | software |  | Java, Salesforce | https://www.d2l.com/careers/jobs/?job_id=7696232&gh_jid=7696232 |
-| 2026-10-28 | samsters | Security and Compliance Analyst | Edmonton, Alberta | BambooHR | strong | 71.4 | security | 2+ yrs |  | https://samsters.bamboohr.com/careers/127 |
-| 2026-10-28 | alimentiv-2 | Database Programmer | Toronto, Ontario | Lever | strong | 66.7 | data |  |  | https://jobs.lever.co/alimentiv-2/772d5040-96c5-4617-b4a0-aa04b485d406 |
-| 2026-10-28 | tcenergy | Automation Engineer-In-Training | Calgary, Alberta | Workday | strong | 63.6 | software |  |  | https://tcenergy.wd3.myworkdayjobs.com/career_site_tc/job/Calgary-Alberta/Automation-Engineer_JR-10643 |
-| 2026-10-28 | betr | Frontend Engineer - Mobile | Canada | Lever | strong | 58.3 | software |  | React Native, GraphQL | https://jobs.lever.co/betr/5a4af3ba-6ba1-45db-a74c-f5e6456081ed |
+| 2026-10-31 | flir | Quality & Reliability Engineering Specialist | Canada - Waterloo, ON | Workday | weak | 63.6 | software |  | VBA | https://flir.wd1.myworkdayjobs.com/flircareers/job/Canada---Waterloo-ON/Quality---Reliability-Engineering-Specialist_REQ37271 |
+| 2026-10-31 | 1password | Finance Systems Analyst - Integrations and Automation | Canada) | Ashby | strong | 55 | software |  | Postman, Salesforce, integration testing, Oracle | https://jobs.ashbyhq.com/1password/9d3f7564-490b-4107-b315-ece3146760a8 |
 | 2026-10-29 | hydroottawa | Grid Technology Specialist (Temporary - 12 months) | Ottawa, ON | Workday | weak | 60 | data |  | Oracle | https://hydroottawa.wd3.myworkdayjobs.com/hydro_ottawa_careersite/job/Ottawa-ON/Grid-Technology-Specialist--Temporary---12-months-_R005309-1 |
 | 2026-10-29 | stackadapt | DevOps Engineer (Services Team) | Canada | Greenhouse | strong | 57.9 | software |  | distributed systems, Grafana, Prometheus | https://job-boards.greenhouse.io/stackadapt/jobs/4470989009 |
 | 2026-10-30 | sandvik | Pricing Analyst | Canada, ON, Lively | Workday | weak | 52.9 | data |  | SAP | https://sandvik.wd3.myworkdayjobs.com/sandvik-jobs/job/Canada-ON-Lively/Pricing-Analyst_R0098866 |
 | 2026-10-29 | konradgroup | Android Developer | Toronto | Greenhouse | strong | 23.8 | software |  | Dart, GraphQL, Java, Kotlin, React Native, Swift | https://www.konrad.com/careers/job/8076013003?gh_jid=8076013003 |
 | 2026-10-30 | konradgroup | iOS Developer | Toronto | Greenhouse | strong | 21.7 | software |  | Swift, Dart, GraphQL, Objective-C, React Native, Java | https://www.konrad.com/careers/job/8081638003?gh_jid=8081638003 |
-| 2026-10-28 | danaher | Automation Engineer | Burnaby, British Columbia, Canada | Workday | strong | n/a | software | 0-2 years, low signal |  | https://danaher.wd1.myworkdayjobs.com/danaherjobs/job/Burnaby-British-Columbia-Canada/Automation-Engineer_R1320747 |
+| 2026-10-31 | petronascanada | Accounting Analyst, Master Data New Grad | Calgary | Workday | strong | n/a | data | new grad, recent graduate, low signal | SAP | https://petronascanada.wd3.myworkdayjobs.com/petronascanada/job/Calgary/Accounting-Analyst--Master-Data-New-Grad_R0001854 |
+| 2026-10-30 | BlackLine | Associate Software Engineer | Toronto, ON, Canada | Simplify | strong | n/a | software | low signal |  | https://blackline.wd108.myworkdayjobs.com/BlackLineCareers/job/Toronto/Associate-Software-Engineer_002014 |
 | 2026-10-29 | xero | Engineer - Payments Platform | CAN: Vancouver (333 Seymour St) | Ashby | strong | n/a | software | low signal | distributed systems | https://jobs.ashbyhq.com/xero/2e04b914-c805-405c-b148-bd9fca904e93 |
-| 2026-10-28 | owi | UI Programmer | New Westminster, British Columbia | BambooHR | strong | n/a | software | low signal |  | https://owi.bamboohr.com/careers/206 |
 | 2026-10-29 | neurohire.ai | Software Developer | Remote in Canada | Simplify | strong | n/a | software | jd unavailable |  | https://apply.workable.com/neurohire-dot-a-i/j/01ECE8E2C4/apply |
 | 2026-10-29 | Raydar | AI Product Engineer / Forward Deployed Engineer | Remote in Canada | Simplify | strong | n/a | ml | jd unavailable |  | https://apply.workable.com/raydar/j/31364F00E3/apply |
 | 2026-10-29 | xero | Engineer - Reporting, Insights and Data-in | CAN: Vancouver (333 Seymour St) | Ashby | strong | n/a | data | low signal |  | https://jobs.ashbyhq.com/xero/0b316f05-d2f3-4596-be9e-ebaf52632e94 |
@@ -54,12 +51,9 @@
 | 2026-10-29 | alimentiv-2 | Information Security Analyst | London, Ontario | Lever | strong | n/a | security | low signal |  | https://jobs.lever.co/alimentiv-2/5179ade1-33fd-4e03-a0f8-bfe08536f7c2 |
 | 2026-10-29 | thoughtworks | Associate (Graduate) Developer | Toronto, Canada | Greenhouse+Simplify | strong | n/a | software | jd unavailable |  | https://www.thoughtworks.com/careers/jobs/8333236?gh_jid=8333236 |
 | 2026-10-28 | American Express | Campus Graduate Full-Time Engineer - 2027 AI Engineering - Enterprise Technology Services | Toronto, ON, Canada | Simplify | strong | n/a | ml | jd unavailable |  | https://egug.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/26015465 |
-| 2026-10-27 | Intuit | Software Developer 1 | Toronto, ON, Canada | Simplify | strong | n/a | software | jd unavailable |  | https://jobs.intuit.com/job/toronto/software-developer-1/27595/102521439744 |
-| 2026-10-27 | Intuit | Software Developer 1 - API Management Platform | Toronto, ON, Canada | Simplify | strong | n/a | software | jd unavailable |  | https://jobs.intuit.com/job/toronto/software-developer-1-api-management-platform/27595/102521440064 |
 | 2026-10-29 | valtech | Jr. AI Native Experience Designer | Canada - Remote | Greenhouse | strong | n/a | ml | junior, jd unavailable |  | https://job-boards.eu.greenhouse.io/valtech/jobs/5020038101 |
 | 2026-10-29 | valtech | Jr. AI Native Engineer | Canada - Remote | Greenhouse | strong | n/a | ml | junior, jd unavailable |  | https://job-boards.eu.greenhouse.io/valtech/jobs/5020030101 |
 | 2026-10-29 | bb | AI Engineering Specialist | 2 Locations | Workday | strong | n/a | ml | jd unavailable |  | https://bb.wd3.myworkdayjobs.com/blackberry/job/Waterloo-Ontario/Senior-Software-Developer--AI-Solutions_20260133 |
-| 2026-10-28 | cisco | Software Developer | Kanata, Ontario, Canada | Workday | strong | n/a | software | jd unavailable |  | https://cisco.wd5.myworkdayjobs.com/cisco_careers/job/Kanata-Ontario-Canada/Software-Developer_2027516-1 |
 
 ## Stage counts
 
@@ -67,41 +61,41 @@
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 1,446,233 |
-| first seen within window | 85,065 |
-| Canadian location | 7,693 |
-| not Quebec-only | 7,288 |
-| not on blocklist | 7,052 |
-| not French-only | 7,024 |
-| title matches tech roles | 2,149 |
-| not senior / non-software | 885 |
-| not student-only | 828 |
-|   of which weak_title | 567 |
+| raw records | 1,435,463 |
+| first seen within window | 73,040 |
+| Canadian location | 6,946 |
+| not Quebec-only | 6,589 |
+| not on blocklist | 6,399 |
+| not French-only | 6,377 |
+| title matches tech roles | 1,926 |
+| not senior / non-software | 798 |
+| not student-only | 750 |
+|   of which weak_title | 513 |
 
 **Simplify**
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 19,166 |
-| active, visible, tech category | 2,101 |
-| first seen within window | 137 |
-| Canadian location | 7 |
-| not Quebec-only | 7 |
-| not on blocklist | 7 |
-| not French-only | 7 |
-| title matches tech roles | 7 |
-| not senior / non-software | 7 |
-| not student-only | 7 |
+| raw records | 19,098 |
+| active, visible, tech category | 2,142 |
+| first seen within window | 125 |
+| Canadian location | 9 |
+| not Quebec-only | 9 |
+| not on blocklist | 9 |
+| not French-only | 9 |
+| title matches tech roles | 9 |
+| not senior / non-software | 9 |
+| not student-only | 9 |
 |   of which weak_title | 0 |
 
 **Combined**
 
 | Stage | Remaining |
 |---|---:|
-| before dedupe | 835 |
-|   merged by canonical URL | 1 |
-|   merged by fuzzy company+title | 6 |
-| after dedupe | 828 |
+| before dedupe | 759 |
+|   merged by canonical URL | 2 |
+|   merged by fuzzy company+title | 9 |
+| after dedupe | 748 |
 
 ## JD rules
 
@@ -109,74 +103,65 @@
 
 | Reason | Jobs |
 |---|---:|
-| location_not_canada | 560 |
-| experience_3plus | 82 |
-| weak_title_few_terms | 47 |
-| location_unresolved_url_not_canadian | 32 |
-| requires_enrollment | 31 |
-| two_years_no_fit | 25 |
-| student_title_not_rescued | 23 |
+| location_not_canada | 513 |
+| experience_3plus | 75 |
+| weak_title_few_terms | 45 |
+| student_title_not_rescued | 25 |
+| requires_enrollment | 23 |
+| two_years_no_fit | 22 |
+| location_unresolved_url_not_canadian | 22 |
 | requires_french | 8 |
-| weak_title_no_jd | 6 |
 | location_quebec_only | 6 |
-| security_clearance | 6 |
-| student_title_no_jd | 4 |
-| two_years_low_fit | 3 |
+| weak_title_no_jd | 5 |
+| location_ats_not_canada | 2 |
+| student_title_no_jd | 2 |
+| low_signal_not_dev_title | 1 |
+| security_clearance | 1 |
 
-Student-titled jobs held for JD check: 57; rescued: 0.
+Student-titled jobs held for JD check: 48; rescued: 0.
 
 **JD fetch status** (source:status)
 
 | Source:status | Jobs |
 |---|---:|
 | Ashby:not_found | 1 |
-| Ashby:ok | 8 |
+| Ashby:ok | 7 |
 | BambooHR:not_found | 1 |
-| BambooHR:ok | 34 |
-| Greenhouse:not_found | 4 |
+| BambooHR:ok | 18 |
+| Greenhouse:not_found | 3 |
 | Greenhouse:ok | 26 |
-| Lever:ok | 14 |
-| Simplify:ok | 1 |
-| Simplify:unsupported | 5 |
-| Workday:error | 38 |
-| Workday:not_found | 3 |
-| Workday:ok | 750 |
+| Lever:ok | 12 |
+| Simplify:ok | 4 |
+| Simplify:unsupported | 3 |
+| Workday:error | 26 |
+| Workday:not_found | 2 |
+| Workday:ok | 693 |
 
 **JD fetch HTTP 403 (permission denied) by host**
 
 | Host | Jobs |
 |---|---:|
-| cisco.wd5.myworkdayjobs.com | 4 |
+| bmo.wd3.myworkdayjobs.com | 3 |
 | centene.wd5.myworkdayjobs.com | 2 |
+| telstra.wd3.myworkdayjobs.com | 2 |
 | bb.wd3.myworkdayjobs.com | 2 |
-| bmo.wd3.myworkdayjobs.com | 2 |
-| pru.wd5.myworkdayjobs.com | 2 |
 | valet.wd1.myworkdayjobs.com | 1 |
 | ensemblehp.wd5.myworkdayjobs.com | 1 |
 | consertus.wd501.myworkdayjobs.com | 1 |
 | corrohealth.wd1.myworkdayjobs.com | 1 |
+| bannerhealth.wd108.myworkdayjobs.com | 1 |
 | cooley.wd1.myworkdayjobs.com | 1 |
 | lnw.wd5.myworkdayjobs.com | 1 |
 | gilead.wd1.myworkdayjobs.com | 1 |
 | agilent.wd5.myworkdayjobs.com | 1 |
+| strayer.wd1.myworkdayjobs.com | 1 |
 | jj.wd5.myworkdayjobs.com | 1 |
 | msd.wd5.myworkdayjobs.com | 1 |
 | medtronic.wd1.myworkdayjobs.com | 1 |
 | gunvor.wd3.myworkdayjobs.com | 1 |
+| healthcare.wd1.myworkdayjobs.com | 1 |
 | capitalone.wd12.myworkdayjobs.com | 1 |
-| relationinsurance.wd5.myworkdayjobs.com | 1 |
-| aggreko.wd3.myworkdayjobs.com | 1 |
-| cat.wd5.myworkdayjobs.com | 1 |
-| stryker.wd1.myworkdayjobs.com | 1 |
-| mobility.wd503.myworkdayjobs.com | 1 |
-| slihrms.wd3.myworkdayjobs.com | 1 |
-| ppg.wd5.myworkdayjobs.com | 1 |
-| kardex.wd103.myworkdayjobs.com | 1 |
-| vishay.wd3.myworkdayjobs.com | 1 |
-| elevancehealth.wd1.myworkdayjobs.com | 1 |
-| jci.wd5.myworkdayjobs.com | 1 |
-| cibc.wd3.myworkdayjobs.com | 1 |
-| pwc.wd3.myworkdayjobs.com | 1 |
+| cisco.wd5.myworkdayjobs.com | 1 |
 
 **Kept without a JD (`jd unavailable`): Workday answered 403**
 
@@ -185,7 +170,6 @@ The plain request and a second try with browser headers plus career-site cookies
 | Company | Role | URL | Live posting |
 |---|---|---|---|
 | Bb | AI Engineering Specialist | https://bb.wd3.myworkdayjobs.com/blackberry/job/Waterloo-Ontario/Senior-Software-Developer--AI-Solutions_20260133 | searched: no exact Canadian title match |
-| Cisco | Software Developer | https://cisco.wd5.myworkdayjobs.com/cisco_careers/job/Kanata-Ontario-Canada/Software-Developer_2027516-1 | searched: no exact Canadian title match |
 
 **Kept with an unresolved location** (Workday "N Locations": the list could not be read)
 
@@ -199,14 +183,14 @@ The plain request and a second try with browser headers plus career-site cookies
 |---|---|
 | bb | Bb |
 | bcaa | Bcaa |
-| betr | Betr |
 | ci | Ci |
-| danaher | Danaher |
 | flir | Flir |
 | mars | Mars |
 | navcanada | Navcanada |
+| petronascanada | Petronascanada |
 | sandvik | Sandvik |
 | shyftlabs | Shyftlabs |
+| synechron | Synechron |
 | valtech | Valtech |
 | versapay | Versapay |
 
@@ -216,8 +200,8 @@ The plain request and a second try with browser headers plus career-site cookies
 |---|---:|
 | 0-19 | 0 |
 | 20-39 | 2 |
-| 40-59 | 3 |
-| 60-79 | 14 |
-| 80-100 | 17 |
-| n/a (no JD or no tech terms) | 16 |
+| 40-59 | 4 |
+| 60-79 | 12 |
+| 80-100 | 15 |
+| n/a (no JD or no tech terms) | 13 |
 
