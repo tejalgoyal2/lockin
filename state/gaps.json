@@ -12,6 +12,12 @@
    "gaps": [],
    "title": "Bilingual Client & Account Analyst"
   },
+  "0023494c3ae1a2bc426020b2a6920561800b0a23": {
+   "company": "UBC",
+   "date": "2026-11-02",
+   "gaps": [],
+   "title": "Engineer"
+  },
   "003cebdc57e6b550758173ed45b2b187ddf1b142": {
    "company": "Intactfc",
    "date": "2026-10-07",
@@ -401,6 +407,15 @@
    "date": "2026-10-10",
    "gaps": [],
    "title": "IT Specialist"
+  },
+  "066c8364308d173823b06cfee0dab5a843c17d01": {
+   "company": "PointClickCare",
+   "date": "2026-11-02",
+   "gaps": [
+    "Salesforce",
+    "Tableau"
+   ],
+   "title": "Finance Contracts Analyst"
   },
   "067f935fc80386edbd38eba26b8f05e2519a2cca": {
    "company": "Interac",
@@ -1829,6 +1844,14 @@
    "date": "2026-10-29",
    "gaps": [],
    "title": "Baseball Research Specialist"
+  },
+  "1ddfb34f1c99aab2637602493b61acbc74f50352": {
+   "company": "PwC",
+   "date": "2026-11-02",
+   "gaps": [
+    "React Native"
+   ],
+   "title": "Tax Innovation Delivery Experience (TIDE) - Software Engineering - Intern - Summer 2027"
   },
   "1ded1f968f3c232fdc1e7ef3513f1be0d61e2912": {
    "company": "Quadreal",
@@ -3309,6 +3332,12 @@
    ],
    "title": "[C] Software Engineer"
   },
+  "36ac1db780eff5ecf11b4cd2293659ec8b0a8b70": {
+   "company": "Clutch Technologies Inc.",
+   "date": "2026-11-02",
+   "gaps": [],
+   "title": "Production Development Engineer"
+  },
   "36b217676cb4ebcccfcd0e4ac2a1d2113f249ccf": {
    "company": "Rockwellautomation",
    "date": "2026-10-24",
@@ -4451,11 +4480,25 @@
    "gaps": [],
    "title": "Proposal Specialist - Buildings East"
   },
+  "4776bdf8a92d79db1d0ff77d50175b490ac2b8d9": {
+   "company": "Manulife",
+   "date": "2026-11-02",
+   "gaps": [
+    "SAP"
+   ],
+   "title": "Payroll Analyst"
+  },
   "4793f39365c8de55cbcf25811307de1e466fe9ff": {
    "company": "Salesforce",
    "date": "2026-10-28",
    "gaps": [],
    "title": "Summer 2027 Intern - Forward Deployed Engineer – Global Public Sector"
+  },
+  "47c9ac814e28a622410dc634fc74945f0d7d778c": {
+   "company": "Accesscu",
+   "date": "2026-11-02",
+   "gaps": [],
+   "title": "Insurance Development Specialist (Full-Time, 14 Month term) Winnipeg/Hybrid"
   },
   "47e71b65dd7366f47a9a2bc8717fa5d51c0703bb": {
    "company": "Accenture",
@@ -4890,6 +4933,12 @@
    "date": "2026-10-23",
    "gaps": [],
    "title": "Scientist"
+  },
+  "4f46431d1e2e29a1dfe0728f106b49e959d33324": {
+   "company": "Draper",
+   "date": "2026-11-02",
+   "gaps": [],
+   "title": "Digital Engineering – Requirements Engineering Intern (Summer 2027)"
   },
   "4f5742a22efee145a78eb398225336bf336334ad": {
    "company": "BMO",
@@ -5378,6 +5427,12 @@
    "gaps": [],
    "title": "Reservation Specialist (Loden Hotel & Arden Hotel)"
   },
+  "5601e9521ddc57dae11c8c7b467cdc695d73f67d": {
+   "company": "Oregon",
+   "date": "2026-11-02",
+   "gaps": [],
+   "title": "Behavior Health Specialist 2, QMHP Limited Duration (Ontario)"
+  },
   "560c2009ead8ac816eb7738b508723df070eaea7": {
    "company": "Southbow",
    "date": "2026-10-28",
@@ -5777,6 +5832,12 @@
    "gaps": [],
    "title": "Equity Market Analyst & Portfolio Associate"
   },
+  "5b6d759886a973684a5031cabe73d0bdcd952658": {
+   "company": "Cheo",
+   "date": "2026-11-02",
+   "gaps": [],
+   "title": "Privacy Specialist, Privacy Compliance, Access and Freedom of Information Department – Permanent Full-Time (1.0)"
+  },
   "5bae2fe50af44e461f907b8be1592b4ddabdd5a2": {
    "company": "Asana",
    "date": "2026-10-24",
@@ -6053,6 +6114,12 @@
    "date": "2026-10-17",
    "gaps": [],
    "title": "Packaging Training Specialist"
+  },
+  "5f3c0a518650ea6bd3e6d605af95d12fdf09c7b2": {
+   "company": "Anokacounty",
+   "date": "2026-11-02",
+   "gaps": [],
+   "title": "Seasonal Traffic Engineering Assistant - Intern"
   },
   "5f43b16ee990a22f69717194e73a5bdbaebc563f": {
    "company": "Enmax",
@@ -6365,6 +6432,12 @@
    "date": "2026-10-31",
    "gaps": [],
    "title": "Aviation Predictive Analytics Co-op Student"
+  },
+  "64f7dc1de4cab69891a71df57488ba12ab594179": {
+   "company": "Ciena",
+   "date": "2026-11-02",
+   "gaps": [],
+   "title": "R&D Optical Product Ramp Engineer"
   },
   "650cd3dc5883d9c865035dc088fb8348fce06ecb": {
    "company": "Cisco",
@@ -7318,6 +7391,14 @@
    "gaps": [],
    "title": "Bilingual Technical Trainer (Central Region)"
   },
+  "73b0ce8f5f0fa43ae6f1aaa8c67688be7a567e78": {
+   "company": "DEPT®",
+   "date": "2026-11-02",
+   "gaps": [
+    "Angular"
+   ],
+   "title": "Frontend Developer - 6 months FTC"
+  },
   "73c2ff8d4908ca4bc37dc187d52c22ac690319de": {
    "company": "Pelmorex",
    "date": "2026-10-07",
@@ -8159,11 +8240,23 @@
    "gaps": [],
    "title": "Solutions Engineer"
   },
+  "7d569e7399c03f7c0dc40f6e0928e9558d5d9397": {
+   "company": "Draper",
+   "date": "2026-11-02",
+   "gaps": [],
+   "title": "Digital Engineering – Requirements Engineering Co-Op (Spring 2027)"
+  },
   "7d57526e0d0f1e4e48b864d971cd40cdf68ec0af": {
    "company": "Hubinternational",
    "date": "2026-10-27",
    "gaps": [],
    "title": "Junior Analyst, Employee Benefits"
+  },
+  "7d8c4a24e1be5de5d756556bae174a92b5f37197": {
+   "company": "Enmax",
+   "date": "2026-11-02",
+   "gaps": [],
+   "title": "Business Continuity Specialist"
   },
   "7db07fb5c4f64bc14f1d648138d4bc30e1a75a65": {
    "company": "Lumiq Learn",
@@ -8528,6 +8621,12 @@
    "gaps": [],
    "title": "Wellness Program Specialist"
   },
+  "82b2c7304697f4c5e4815106c92ba863e67c2c27": {
+   "company": "Axis",
+   "date": "2026-11-02",
+   "gaps": [],
+   "title": "Technical Trainer, Canada"
+  },
   "82ce9865c2f28eabe5994bb614dd68605fe1d03e": {
    "company": "Fanshawe College",
    "date": "2026-10-23",
@@ -8549,6 +8648,12 @@
     "Tableau"
    ],
    "title": "Digital Merchandising Specialist (14 Months Contract)"
+  },
+  "82ffd96c78384c4adccd3a92688ee0e595d83afa": {
+   "company": "BMO",
+   "date": "2026-11-02",
+   "gaps": [],
+   "title": "BMO Capital Markets New Grad 2027 Investment Banking Analyst, Toronto"
   },
   "83a99732c923b22bb4b5a41a658f0b470a9df361": {
    "company": "BDO Canada",
@@ -9486,6 +9591,12 @@
     "SAS"
    ],
    "title": "Security Associate"
+  },
+  "92b85bd620517fd9e6e2ff11d9469931683daee5": {
+   "company": "Flynn Companies",
+   "date": "2026-11-02",
+   "gaps": [],
+   "title": "BIM Specialist"
   },
   "92bfdd7b5dea490433a582780074599fe822efe2": {
    "company": "Desjardins",
@@ -11007,6 +11118,12 @@
     "SSIS"
    ],
    "title": ".NET/C# Engineer, TD Securities"
+  },
+  "aad2d294d6f5d3741f56b1af027d75559b44d7ff": {
+   "company": "BMO",
+   "date": "2026-11-02",
+   "gaps": [],
+   "title": "Private Wealth Analyst, Summer 2027 (Co-op/Internship) - 4 months"
   },
   "aadad1fb8a9c3b50f39d8e6bcedbe0b02a051946": {
    "company": "Capitalpower",
@@ -12950,6 +13067,12 @@
    "gaps": [],
    "title": "Mainframe Capacity and Performance Specialist"
   },
+  "c7d6c8544cd6e769ff5c776dc28d234c55177eda": {
+   "company": "Gn",
+   "date": "2026-11-02",
+   "gaps": [],
+   "title": "Hearing Instrument Specialist"
+  },
   "c821cf307831addbe91dd03bd2a4205064f17704": {
    "company": "Waveapps",
    "date": "2026-10-07",
@@ -13176,6 +13299,14 @@
    "gaps": [],
    "title": "Junior Technical Support Engineer"
   },
+  "cc9c4bb1d66deeebdd0ac738e2719fd541349b67": {
+   "company": "Tailscale",
+   "date": "2026-11-02",
+   "gaps": [
+    "integration testing"
+   ],
+   "title": "Front End Engineer"
+  },
   "ccbcdf175367707d174a863cda68808647fdf7c5": {
    "company": "Lumentum",
    "date": "2026-10-29",
@@ -13193,6 +13324,12 @@
    "date": "2026-10-10",
    "gaps": [],
    "title": "Embedded Software Engineer Co-op - Audio Tech"
+  },
+  "ccd32e69adacce813e00dab03bebdf4e81e7a024": {
+   "company": "Sait",
+   "date": "2026-11-02",
+   "gaps": [],
+   "title": "Business Systems Analyst"
   },
   "ccd575fcaf57bd7ed92d32061b80e1bfae1eac61": {
    "company": "StackAdapt",
@@ -13916,6 +14053,12 @@
    "gaps": [],
    "title": "Analyst, Procurement Delivery"
   },
+  "d6fa7701a50c95903a26fe33cf5a4ceafb901b74": {
+   "company": "Ecolab",
+   "date": "2026-11-02",
+   "gaps": [],
+   "title": "Test Technologist - PCL (Evening)"
+  },
   "d724c7107e0ebe7cca5d373919fbdc81c6060ce2": {
    "company": "Barclays",
    "date": "2026-10-22",
@@ -13947,6 +14090,14 @@
    "date": "2026-10-10",
    "gaps": [],
    "title": "Financial Analyst, Consolidation & Reporting"
+  },
+  "d7fcbff4df7dfb84d38e481e263fc1a0a49d48c1": {
+   "company": "Rewind",
+   "date": "2026-11-02",
+   "gaps": [
+    "Salesforce"
+   ],
+   "title": "Enterprise Account Executive (DevOps)"
   },
   "d8353396a066a284e49cb09ad5af83ded585aa51": {
    "company": "Boeing",
@@ -14374,6 +14525,12 @@
     "SAP"
    ],
    "title": "Supply Chain & Logistics Specialist (m/f/d)"
+  },
+  "defc62c35aef8a7f4f2f768347286822486a1a22": {
+   "company": "Sun Life",
+   "date": "2026-11-02",
+   "gaps": [],
+   "title": "Service Specialist"
   },
   "df1c3ac8a6c22a0266c0a292866954cd8ef3a88a": {
    "company": "Wgl",
@@ -15733,6 +15890,12 @@
    ],
    "title": "Research Engineer - Benchmarks"
   },
+  "f4f4f72107d3b2077df51fa44ffa8de858b91ecb": {
+   "company": "Manulife",
+   "date": "2026-11-02",
+   "gaps": [],
+   "title": "Disability Benefit Calculation Analyst"
+  },
   "f4fccba1521c243867d006151edbea9b5477e4d9": {
    "company": "SOTI",
    "date": "2026-10-27",
@@ -16227,6 +16390,12 @@
     "Oracle"
    ],
    "title": "Payroll Specialist"
+  },
+  "fd461e576dc70ef937b1b1604347ac068b690f71": {
+   "company": "Cmhadurham",
+   "date": "2026-11-02",
+   "gaps": [],
+   "title": "Property Specialist Contract to March 31, 2027"
   },
   "fd99ae2ec59bab42f72b872b480fd1c367abbf13": {
    "company": "CIBC",

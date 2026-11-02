@@ -1,63 +1,63 @@
 # Gap terms: what JDs ask for that skills.yaml does not cover
 
-Generated 2026-10-26 (UTC). Counts are jobs, not mentions: each job is counted once, from every JD fetched (including jobs the filters later dropped). Move a term from `gaps.yaml` to `skills.yaml` once you have it.
+Generated 2026-11-02 (UTC). Counts are jobs, not mentions: each job is counted once, from every JD fetched (including jobs the filters later dropped). Move a term from `gaps.yaml` to `skills.yaml` once you have it.
 
-## Top 25 gap terms, last 7 days (466 jobs with a JD)
-
-| Term | Jobs | Example titles |
-|---|---:|---|
-| Java | 28 | Full Stack Developer, Investly (Fidelity Canada); Software Development Engineer - AI Infrastructure Development Platform (Workday); Software Engineering Intern/Co-op (Canada) - Summer 2027 (Telus Digital) |
-| Oracle | 28 | Finance Application Specialist - Oracle Fusion (Intactfc); Software Engineer I (Fivetran); AltaGas - Sourcing Specialist (Wgl) |
-| GCP | 27 | Data Scientist, Growth (12 month contract) (EQ Bank); Software Engineer I (Fivetran); Software Engineer, AI Integration (Perimetermed) |
-| Tableau | 18 | BMO Capital Markets Summer 2027 Internship Risk and Capital Solutions Analyst, Toronto (BMO); Application Development Technology Analyst (Citi); Ecosystem Operations Specialist (GitLab) |
-| Angular | 15 | Full Stack Developer, Investly (Fidelity Canada); Developer, RBC Amplify 2027, Toronto (RBC); Developer, RBC Amplify 2027, Vancouver (RBC) |
-| distributed systems | 14 | Software Development Engineer - AI Infrastructure Development Platform (Workday); Software Engineer (Kong); Software Engineer, AI (Asana) |
-| SAP | 13 | Reliability Engineer (Flir); Rotating Engineer (Suncor); Cost Analyst (Cenovus) |
-| Go | 12 | Software Development Engineer - AI Infrastructure Development Platform (Workday); Developer Intern, Credential Brokering - Winter 2027 (1Password); Offensive Security Engineer, AI (Coinbase) |
-| Salesforce | 12 | Client Service Specialist (Fiserv); Operations Analyst (Magnet Forensics); Software Engineer (Kong) |
-| GraphQL | 11 | Developer, RBC Amplify 2027, Toronto (RBC); Developer, RBC Amplify 2027, Vancouver (RBC); Data Engineer, RBC Amplify 2027, Calgary (RBC) |
-| MATLAB | 11 | Systems Engineering Specialist (Telesat); NPI Optical Test Engineer (Ciena); Sensor Characterization Specialist (Flir) |
-| ServiceNow | 11 | Bilingual Specialist, Tier 2 Support (Gianttiger); I&T Resilience and Data Governance Specialist (Enmax); Change, Learning & Communications Analyst (Iko) |
-| microservices | 10 | Software Engineer (Kong); Software Engineer (DraftKings); Cleared Software Engineer Intern - Summer 2027 (Caci) |
-| unit testing | 10 | Full Stack Developer, Investly (Fidelity Canada); Systems Engineering Specialist (Telesat); Software Developer Intern - Winter 2027 (Ciena) |
-| Jenkins | 8 | Software Engineer (Kong); Automated Test Engineering Intern (16-Month Internship) (Trimble); Software Engineer Embedded Systems I (Co-op) - United States (Cisco) |
-| MySQL | 8 | Software Engineer (Web); Software Developer (Nasdaq); Junior Database Administrator (Forum Ventures) |
-| Snowflake | 8 | Software Engineer (Kong); Investment Data Governance Analyst (Hoopp); Ecosystem Operations Specialist (GitLab) |
-| BigQuery | 7 | GTM Engineer - Growth (Gorgias); Associate Data Analyst (Konrad Group); Data Science Analyst (Loblaw) |
-| Spring | 7 | Application Development Technology Analyst (Citi); Cleared Software Engineer Intern - Summer 2027 (Caci); Software Engineer (Web) |
-| Vue | 7 | Backend Engineer, Knowledge Graph (Rust) (GitLab); Software Engineer Full Stack / Backend I (Co-op) - United States (Cisco); Junior Software Developer (Kraunelectric) |
-| GitLab | 6 | Systems Engineering Specialist (Telesat); Automated Test Engineering Intern (16-Month Internship) (Trimble); Ecosystem Operations Specialist (GitLab) |
-| Looker | 6 | Associate Data Analyst (Konrad Group); Analyst, Media Effectiveness (Dentsu); Data Science Analyst (Loblaw) |
-| Datadog | 5 | Software Engineer (Kong); Developer Intern, Vault Team - Winter 2027 (1Password); Summer 2027 Intern: Software Engineering Intern (Assurant) |
-| Ruby | 5 | Backend Engineer, Knowledge Graph (Rust) (GitLab); Developer Intern, Machine Identity - Winter 2027 (1Password); Developer, Device Trust Reliability (1Password) |
-| Splunk | 5 | Application Development Technology Analyst (Citi); AppOps, Specialist (Interac); Software Engineer Full Stack / Backend I (Co-op) - United States (Cisco) |
-
-## Top 25 gap terms, last 30 days (1901 jobs with a JD)
+## Top 25 gap terms, last 7 days (436 jobs with a JD)
 
 | Term | Jobs | Example titles |
 |---|---:|---|
-| Java | 134 | Full Stack Developer, Investly (Fidelity Canada); Software Development Engineer - AI Infrastructure Development Platform (Workday); Software Engineering Intern/Co-op (Canada) - Summer 2027 (Telus Digital) |
-| GCP | 93 | Data Scientist, Growth (12 month contract) (EQ Bank); Software Engineer I (Fivetran); Software Engineer, AI Integration (Perimetermed) |
-| Oracle | 82 | Finance Application Specialist - Oracle Fusion (Intactfc); Software Engineer I (Fivetran); AltaGas - Sourcing Specialist (Wgl) |
-| Tableau | 68 | BMO Capital Markets Summer 2027 Internship Risk and Capital Solutions Analyst, Toronto (BMO); Application Development Technology Analyst (Citi); Ecosystem Operations Specialist (GitLab) |
-| distributed systems | 62 | Software Development Engineer - AI Infrastructure Development Platform (Workday); Software Engineer (Kong); Software Engineer, AI (Asana) |
-| Salesforce | 61 | Client Service Specialist (Fiserv); Operations Analyst (Magnet Forensics); Software Engineer (Kong) |
-| SAP | 59 | Reliability Engineer (Flir); Rotating Engineer (Suncor); Cost Analyst (Cenovus) |
-| microservices | 51 | Software Engineer (Kong); Software Engineer (DraftKings); Cleared Software Engineer Intern - Summer 2027 (Caci) |
-| Go | 45 | Software Development Engineer - AI Infrastructure Development Platform (Workday); Developer Intern, Credential Brokering - Winter 2027 (1Password); Offensive Security Engineer, AI (Coinbase) |
-| Snowflake | 42 | Software Engineer (Kong); Investment Data Governance Analyst (Hoopp); Ecosystem Operations Specialist (GitLab) |
-| unit testing | 41 | Full Stack Developer, Investly (Fidelity Canada); Systems Engineering Specialist (Telesat); Software Developer Intern - Winter 2027 (Ciena) |
+| SAP | 19 | Payroll Analyst (Manulife); Software Engineer (Ecolab); Accounting Analyst, Master Data New Grad (Petronascanada) |
+| Java | 14 | ASIC Engineer Intern (Ciena); Software Developer Intern - SOTI XSight (May 2027 12 Months) (SOTI); Hardware Characterization Automation Co-op (Winter 2027) (Ciena) |
+| Tableau | 14 | Finance Contracts Analyst (PointClickCare); Project Analyst Co-op- Winter 2027 (CIBC); Student, Data Analyst (Winter-Summer-Fall 2027) (Sun Life) |
+| Salesforce | 10 | Enterprise Account Executive (DevOps) (Rewind); Finance Contracts Analyst (PointClickCare); Finance Systems Analyst - Integrations and Automation (1Password) |
+| distributed systems | 10 | Quality Assurance Engineer (Trulioo); Principle SRE (Merative); DevOps Engineer (Services Team) (StackAdapt) |
+| Oracle | 9 | Oracle EPM Analyst (Marsh McLennan); Finance Systems Analyst - Integrations and Automation (1Password); Inventory and Materials Specialist (Orionsteel) |
+| GCP | 6 | Scientific Communications and Medical Information Specialist (Roche); Specialist, Data Governance and Strategy (Moneris); Document & Training Specialist, Radioconjugate PQS (Astrazeneca) |
+| Go | 6 | Backend Engineer, Source Code: Repository Services (Ruby) (GitLab); Software Engineer, AI Entries (Lyft); DevOps Engineer (Equinix) |
+| VBA | 6 | Quality & Reliability Engineering Specialist (Flir); Student, Data Analyst (Winter-Summer-Fall 2027) (Sun Life); Hardware Characterization Automation Co-op (Winter 2027) (Ciena) |
+| microservices | 6 | Junior Full Stack Web Developer (Mitel Networks); Quality Assurance Engineer (Trulioo); Technical Consultant I (Zafin) |
+| Grafana | 5 | Quality Assurance Engineer (Trulioo); Principle SRE (Merative); DevOps Engineer (Services Team) (StackAdapt) |
+| GraphQL | 5 | iOS Developer (Konrad Group); Android Developer (Konrad Group); Frontend Engineer - Mobile (Betr) |
+| React Native | 5 | Tax Innovation Delivery Experience (TIDE) - Software Engineering - Intern - Summer 2027 (PwC); iOS Developer (Konrad Group); Android Developer (Konrad Group) |
+| Ruby | 5 | Software Developer Intern - SOTI XSight (May 2027 12 Months) (SOTI); Backend Engineer, Source Code: Repository Services (Ruby) (GitLab); Software Developer (Cisco) |
+| Vue | 5 | Advanced Deployment Technical Consultant (HPE); HPC & AI Software - Engineering Resolution Engineer (HPE); Pricing Analyst (Cardinalhealth) |
+| Airflow | 4 | Software Developer, Data Engineering (Robinhood); Full Stack Engineer, Agentic AI (Lazer); Cloud Engineering, Data & Analytics - Software Engineering Intern - Summer 2027 (PwC) |
+| Ansible | 4 | Principle SRE (Merative); Junior Cyber Incident Response Analyst (Hootsuite); Intern, Cybersecurity (Rockwellautomation) |
+| Jenkins | 4 | Wi-Fi Python Test Automation Developer (Syntronic); Associate Software Development Engineer in Test (SDET) (SOTI); Bioinformatics Specialist (UBC) |
+| Kafka | 4 | Principle SRE (Merative); WMS Software Developer [OPERATIONS TECHNOLOGY] (HelloFresh); IT Specialist, Integration & Automation (Saputo) |
+| Looker | 4 | Forward - Data Visualization & Analytics Specialist (Shyftlabs); Software Developer, Data Engineering (Robinhood); Data Analyst (Stryker) |
+| Prometheus | 4 | Principle SRE (Merative); DevOps Engineer (Services Team) (StackAdapt); Software Engineering Intern, AI Agents and Backend Infrastructure – 2027 (Nvidia) |
+| integration testing | 4 | Front End Engineer (Tailscale); Finance Systems Analyst - Integrations and Automation (1Password); Technical Consultant I (Zafin) |
+| Angular | 3 | Frontend Developer - 6 months FTC (DEPT®); Junior Full Stack Web Developer (Mitel Networks); Associate Software Development Engineer in Test (SDET) (SOTI) |
+| Cisco | 3 | Analyst, Infrastructure-Storage & Compute Services (Firstam); Network Operations Analyst (Sun Life); Forward - Security Engineer, Network & Infrastructure Security (Shyftlabs) |
+| Elasticsearch | 3 | Junior Full Stack Web Developer (Mitel Networks); Jr. AI Native Engineer (Valtech); AI Engineer (Remarcable) |
+
+## Top 25 gap terms, last 30 days (2337 jobs with a JD)
+
+| Term | Jobs | Example titles |
+|---|---:|---|
+| Java | 148 | ASIC Engineer Intern (Ciena); Software Developer Intern - SOTI XSight (May 2027 12 Months) (SOTI); Hardware Characterization Automation Co-op (Winter 2027) (Ciena) |
+| GCP | 99 | Scientific Communications and Medical Information Specialist (Roche); Specialist, Data Governance and Strategy (Moneris); Document & Training Specialist, Radioconjugate PQS (Astrazeneca) |
+| Oracle | 91 | Oracle EPM Analyst (Marsh McLennan); Finance Systems Analyst - Integrations and Automation (1Password); Inventory and Materials Specialist (Orionsteel) |
+| Tableau | 82 | Finance Contracts Analyst (PointClickCare); Project Analyst Co-op- Winter 2027 (CIBC); Student, Data Analyst (Winter-Summer-Fall 2027) (Sun Life) |
+| SAP | 78 | Payroll Analyst (Manulife); Software Engineer (Ecolab); Accounting Analyst, Master Data New Grad (Petronascanada) |
+| distributed systems | 72 | Quality Assurance Engineer (Trulioo); Principle SRE (Merative); DevOps Engineer (Services Team) (StackAdapt) |
+| Salesforce | 71 | Enterprise Account Executive (DevOps) (Rewind); Finance Contracts Analyst (PointClickCare); Finance Systems Analyst - Integrations and Automation (1Password) |
+| microservices | 57 | Junior Full Stack Web Developer (Mitel Networks); Quality Assurance Engineer (Trulioo); Technical Consultant I (Zafin) |
+| Go | 51 | Backend Engineer, Source Code: Repository Services (Ruby) (GitLab); Software Engineer, AI Entries (Lyft); DevOps Engineer (Equinix) |
+| Snowflake | 44 | GTM Engineer (Versapay); Cube Developer (Synechron); Software Engineer (Kong) |
+| unit testing | 44 | Front End Developer Student (Olg); Junior Full Stack Web Developer (Mitel Networks); Embedded Software Engineer – Co-op Winter 2027 (Ciena) |
+| Angular | 39 | Frontend Developer - 6 months FTC (DEPT®); Junior Full Stack Web Developer (Mitel Networks); Associate Software Development Engineer in Test (SDET) (SOTI) |
+| MATLAB | 39 | Optical Performance Lab Verification and Testing Co-op (Ciena); Control Systems Engineer (Geospectrum); 2027 Summer Intern, Systems Engineer, ASD (General Motors) |
 | ServiceNow | 38 | Bilingual Specialist, Tier 2 Support (Gianttiger); I&T Resilience and Data Governance Specialist (Enmax); Change, Learning & Communications Analyst (Iko) |
-| Angular | 36 | Full Stack Developer, Investly (Fidelity Canada); Developer, RBC Amplify 2027, Toronto (RBC); Developer, RBC Amplify 2027, Vancouver (RBC) |
-| MATLAB | 36 | Systems Engineering Specialist (Telesat); NPI Optical Test Engineer (Ciena); Sensor Characterization Specialist (Flir) |
-| Jenkins | 32 | Software Engineer (Kong); Automated Test Engineering Intern (16-Month Internship) (Trimble); Software Engineer Embedded Systems I (Co-op) - United States (Cisco) |
-| MySQL | 31 | Software Engineer (Web); Software Developer (Nasdaq); Junior Database Administrator (Forum Ventures) |
-| GraphQL | 27 | Developer, RBC Amplify 2027, Toronto (RBC); Developer, RBC Amplify 2027, Vancouver (RBC); Data Engineer, RBC Amplify 2027, Calgary (RBC) |
+| Jenkins | 36 | Wi-Fi Python Test Automation Developer (Syntronic); Associate Software Development Engineer in Test (SDET) (SOTI); Bioinformatics Specialist (UBC) |
+| MySQL | 34 | Bioinformatics Specialist (UBC); Software Engineer (Remote) (OPENLANE); Frontend/Web Developer (Konstruct Digital) |
+| GraphQL | 32 | iOS Developer (Konrad Group); Android Developer (Konrad Group); Frontend Engineer - Mobile (Betr) |
+| Grafana | 30 | Quality Assurance Engineer (Trulioo); Principle SRE (Merative); DevOps Engineer (Services Team) (StackAdapt) |
+| Kotlin | 27 | Software Developer Intern - SOTI XSight (May 2027 12 Months) (SOTI); iOS Developer (Konrad Group); Android Developer (Konrad Group) |
 | GitLab | 26 | Systems Engineering Specialist (Telesat); Automated Test Engineering Intern (16-Month Internship) (Trimble); Ecosystem Operations Specialist (GitLab) |
-| Grafana | 25 | Software Engineer (Kong); AppOps, Specialist (Interac); Software Engineer Full Stack / Backend I (Co-op) - United States (Cisco) |
-| Kotlin | 24 | Full Stack Developer, Investly (Fidelity Canada); Software Engineering Intern/Co-op (Canada) - Summer 2027 (Telus Digital); Application Development Technology Analyst (Citi) |
-| BigQuery | 22 | GTM Engineer - Growth (Gorgias); Associate Data Analyst (Konrad Group); Data Science Analyst (Loblaw) |
-| Kafka | 22 | Software Engineer (Kong); Backend Engineer, Knowledge Graph (Rust) (GitLab); Software Engineer, Stream Integrations (Cribl) |
-| Ansible | 21 | AppOps, Specialist (Interac); Software Engineer Full Stack / Backend I (Co-op) - United States (Cisco); DevOps/SRE (BMO) |
-| Spring | 21 | Application Development Technology Analyst (Citi); Cleared Software Engineer Intern - Summer 2027 (Caci); Software Engineer (Web) |
-| Vue | 20 | Backend Engineer, Knowledge Graph (Rust) (GitLab); Software Engineer Full Stack / Backend I (Co-op) - United States (Cisco); Junior Software Developer (Kraunelectric) |
+| Kafka | 26 | Principle SRE (Merative); WMS Software Developer [OPERATIONS TECHNOLOGY] (HelloFresh); IT Specialist, Integration & Automation (Saputo) |
+| Ansible | 25 | Principle SRE (Merative); Junior Cyber Incident Response Analyst (Hootsuite); Intern, Cybersecurity (Rockwellautomation) |
+| Vue | 25 | Advanced Deployment Technical Consultant (HPE); HPC & AI Software - Engineering Resolution Engineer (HPE); Pricing Analyst (Cardinalhealth) |
+| BigQuery | 24 | Forward - Data Visualization & Analytics Specialist (Shyftlabs); Full Stack Engineer, Agentic AI (Lazer); GTM Engineer - Growth (Gorgias) |
+| Ruby | 24 | Software Developer Intern - SOTI XSight (May 2027 12 Months) (SOTI); Backend Engineer, Source Code: Repository Services (Ruby) (GitLab); Software Developer (Cisco) |
