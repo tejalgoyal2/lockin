@@ -8,8 +8,9 @@ to triage. It runs on GitHub Actions. Design: [SPEC.md](SPEC.md).
 ## How a run works
 
 1. Read [Feashliaa/job-board-data](https://github.com/Feashliaa/job-board-data), the
-   [SimplifyJobs new-grad list](https://github.com/SimplifyJobs/New-Grad-Positions) and the employer boards in
-   `watchlist.yaml` (read live, so they are as fresh as the employer's own site).
+   [SimplifyJobs new-grad list](https://github.com/SimplifyJobs/New-Grad-Positions), the employer boards in
+   `watchlist.yaml` (read live, so they are as fresh as the employer's own site) and four job sites (see
+   "Job sites" below).
 2. Filter by freshness, Canadian location, company blocklist, language, title and seniority (`config.yaml`).
 3. Fetch each JD (Greenhouse, Lever, Ashby, Workday, BambooHR), apply the JD rules (3+ years, current
    enrollment, clearance) and score the fit against `skills.yaml` / `gaps.yaml`.
@@ -48,8 +49,8 @@ to triage. It runs on GitHub Actions. Design: [SPEC.md](SPEC.md).
    `NOTION_TOKEN` (the integration secret) and `NOTION_FEED_DATA_SOURCE_ID`.
 6. **Run it once by hand**: Actions > scan > Run workflow. Leave `dry_run` ticked first (it validates the Feed
    schema and shows what it would write), then run again with `dry_run` unticked and `max_rows` = 5.
-   After that the schedule takes over: twice a day, `17 15 * * *` and `17 23 * * *` UTC (08:17 and 16:17 in
-   Victoria, which is UTC-7 all year). A run only writes jobs not yet in `state/seen.json` or the Feed, so the
+   After that the schedule takes over: twice a day, `17 15 * * *` and `17 23 * * *` UTC (08:17 and 16:17 Pacific,
+   UTC-7 all year without DST). A run only writes jobs not yet in `state/seen.json` or the Feed, so the
    second run never duplicates the first. The workflow commits to the branch it runs on; if
    that branch is protected, allow GitHub Actions to push to it.
 
@@ -90,6 +91,24 @@ Not covered, and why: employers on Workday, SuccessFactors, Taleo, iCIMS, UltiPr
 different reader. Workday employers are already in the dataset when it lists them. The dataset carries about
 250,000 iCIMS postings with no location (the field says "Not specified"), so none can pass the Canadian filter;
 employers that use iCIMS (Vancouver Coastal Health among them) are not scanned.
+
+## Job sites
+
+| Source label | What is read | How |
+|---|---|---|
+| `YC` | Y Combinator's job pages for Canada, Toronto and Vancouver | JSON embedded in the page; postings asking 3+ years are skipped before anything else |
+| `Built In` | Built In Vancouver, entry-level cards for engineering and data (up to 3 pages each) | server-rendered cards |
+| `Bay Street Oracle` | capital-markets jobs; only postings whose URL words match a tech title are opened | sitemap, then each posting's schema.org data; linked to the employer's own ATS when the scanner reads it |
+| `HN` | the monthly "Ask HN: Who is hiring?" thread; top-level comments whose header line (`Company \| Role \| Location`) names a Canadian place and a role | Algolia HN API |
+
+All four read only what the sites publish to any visitor, at the same polite pace as the ATS fetchers, under the
+scanner's own name. A site that is down or has changed prints `WARNING <site>: not read (...)` and the run goes on.
+A job a site shares with an ATS board is kept once, with the ATS link. To turn one off set `enabled: false` under
+`sources.<name>` in `config.yaml`. The Feed's Source column needs the options `YC`, `Built In`, `Bay Street Oracle`
+and `HN` to show them (without the option the Source cell stays empty; nothing else changes).
+
+Not read: CivicJobs and CivicInfo BC answer an automated client with a Cloudflare bot challenge (HTTP 403, also on
+the RSS feed CivicInfo advertises), so they are left alone; Work at a Startup lists the same postings as the YC pages.
 
 ## Feedback
 

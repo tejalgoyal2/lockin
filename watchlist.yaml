@@ -27,7 +27,7 @@ boards:
   - {ats: greenhouse, slug: asana,          name: Asana}              # Vancouver office
   - {ats: greenhouse, slug: brex,           name: Brex}               # Vancouver office
   - {ats: greenhouse, slug: affirm,         name: Affirm}             # remote Canada
-  - {ats: greenhouse, slug: canonical,      name: Canonical}          # Victoria / remote
+  - {ats: greenhouse, slug: canonical,      name: Canonical}          # remote Canada
   # --- Canadian tech employers (Toronto, Waterloo, Calgary, remote) -------------------------------------------------
   - {ats: ashby,      slug: wealthsimple,   name: Wealthsimple}
   - {ats: ashby,      slug: cohere,         name: Cohere}

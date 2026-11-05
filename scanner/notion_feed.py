@@ -10,13 +10,14 @@ import re
 import time
 import unicodedata
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime
 
 import requests
 
 from scanner.company_names import company_cell
 from scanner.dedupe import canonical_url
 from scanner.models import Job
+from scanner.sources.listing import SITE_SOURCES
 from scanner.text import INVISIBLE
 
 log = logging.getLogger(__name__)
@@ -39,6 +40,9 @@ EXPECTED_TYPES = {
 # added in Notion before or after the code that writes it ships.
 OPTIONAL_TYPES = {"location": "rich_text"}
 SOURCE_OPTIONS = ("Workday", "Greenhouse", "Lever", "Ashby", "BambooHR", "Paylocity", "Simplify", "Watchlist")
+# Labels of the job sites. Used when the Feed's Source column has the option; a Feed without it leaves Source empty
+# for those rows (they are not required, so the sites can ship before the options exist).
+SITE_SOURCE_OPTIONS = SITE_SOURCES
 SIGNAL_OPTIONS = ("new grad", "recent graduate", "0-2 years", "entry level", "junior", "low signal",
                   "jd unavailable")
 
@@ -468,7 +472,8 @@ def _visible(text: str) -> str:
 def virtual_feed(names: dict[str, str]) -> Feed:
     """A Feed built from config alone, for dry runs that do not contact Notion."""
     return Feed(data_source_id="<NOTION_FEED_DATA_SOURCE_ID>", names=names,
-                ids={k: f"<{v} id>" for k, v in names.items()}, source_options=set(SOURCE_OPTIONS))
+                ids={k: f"<{v} id>" for k, v in names.items()},
+                source_options={*SOURCE_OPTIONS, *SITE_SOURCE_OPTIONS})
 
 
 def preview_page(page: dict, jd_prop: str) -> dict:

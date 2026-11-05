@@ -1,5 +1,3 @@
-import re
-
 import yaml
 
 from scanner.score import Scorer

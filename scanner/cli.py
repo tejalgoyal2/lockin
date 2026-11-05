@@ -20,7 +20,7 @@ from scanner.models import Job
 from scanner.net import PoliteClient
 from scanner.pipeline import run_stream
 from scanner.score import Scorer
-from scanner.sources import ats, feashliaa, simplify, watchlist
+from scanner.sources import ats, baystreet, builtin, feashliaa, hn, listing, simplify, watchlist, yc
 from scanner.state import GapsStore, SeenStore
 
 log = logging.getLogger("scanner")
@@ -68,6 +68,30 @@ def collect(cfg, args, filters, now, since):
         jobs += found
         held += hold
         blocks["Watchlist"] = stages
+    http = PoliteClient(delay=cfg["jd"]["request_delay"], per_ats=cfg["jd"]["max_per_ats"])
+    sites = [      # (label, config key, reader(config) -> records, pre-stages)
+        ("YC", "yc", lambda c: yc.fetch(c["pages"], http, now),
+         (("experience_ok", lambda r: yc.experience_ok(r, cfg["jd"]["min_years_drop"])),)),
+        ("Built In", "builtin", lambda c: builtin.fetch(c["base_url"], c["paths"], c["max_pages"], http, now, since), ()),
+        ("Bay Street Oracle", "baystreet",
+         lambda c: baystreet.fetch(c["sitemap_url"], http, now, lambda words: filters.title_tier(words) is not None,
+                                   lambda url: ats.detect_ats(url) in ats.SUPPORTED), ()),
+        ("HN", "hn", lambda c: hn.fetch(http, now), ()),
+    ]
+    for label, key, read, pre_stages in sites:
+        conf = src.get(key) or {}
+        if not conf.get("enabled"):
+            continue
+        try:
+            records = read(conf)
+        except Exception as exc:       # a site that is down or changed must not stop the run: say so and go on
+            print(f"WARNING {label}: not read ({type(exc).__name__}: {str(exc)[:120]})")
+            continue
+        print(f"{label}: {len(records):,} postings")
+        found, stages, hold = run_stream(iter(records), listing.raw_fields, filters, now, since, pre_stages=pre_stages)
+        jobs += found
+        held += hold
+        blocks[label] = stages
     return jobs, held, blocks, meta
 
 

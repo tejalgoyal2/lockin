@@ -12,9 +12,11 @@ import requests
 from urllib.parse import parse_qs, quote, unquote, urlsplit
 
 from scanner.models import Job
+from scanner.sources.listing import SITE_SOURCES
 from scanner.text import INVISIBLE, html_to_text
 
-SUPPORTED = ("Greenhouse", "Lever", "Ashby", "Workday", "BambooHR")
+SITES = SITE_SOURCES      # job sites (scanner/sources/*): their pages carry the JD
+SUPPORTED = ("Greenhouse", "Lever", "Ashby", "Workday", "BambooHR", *SITES)
 
 
 class NotFound(Exception):
@@ -43,6 +45,14 @@ def detect_ats(url: str) -> str | None:
         return "Workday"
     if host.endswith("bamboohr.com"):
         return "BambooHR"
+    if host == "news.ycombinator.com":
+        return "HN"
+    if host.endswith("ycombinator.com"):
+        return "YC"
+    if host.endswith("builtinvancouver.org"):
+        return "Built In"
+    if host.endswith("baystreetoracle.ca"):
+        return "Bay Street Oracle"
     return None
 
 
@@ -103,10 +113,22 @@ def _bamboohr(url: str) -> AtsRef | None:
     return AtsRef("BambooHR", f"{parts.scheme}://{parts.netloc}/careers/{m.group(1)}/detail")
 
 
+def _site(ats: str, url: str) -> AtsRef | None:
+    """A job-site posting: the page itself is fetched (HN: the comment through the Algolia item API)."""
+    if ats == "HN":
+        item = (parse_qs(urlsplit(url).query).get("id") or [""])[0]
+        return AtsRef(ats, f"https://hn.algolia.com/api/v1/items/{item}") if item.isdigit() else None
+    if ats == "YC" and "/jobs/" not in urlsplit(url).path:
+        return None                                  # a company or listing page, not a posting
+    return AtsRef(ats, url)
+
+
 def locate(job: Job) -> AtsRef | None:
     ats = detect_ats(job.url)
     if ats is None or ats not in SUPPORTED:
         return None
+    if ats in SITES:
+        return _site(ats, job.url)
     if ats == "Greenhouse":
         return _greenhouse(job.url, job.company)
     return {"Lever": _lever, "Ashby": _ashby, "Workday": _workday, "BambooHR": _bamboohr}[ats](job.url)
@@ -231,6 +253,26 @@ def _get_workday(ref: AtsRef, client) -> dict:
         return client.get_json_browser(ref.api_url, ref.ats, workday_career_site(ref.api_url))
 
 
+def _fetch_site(ref: AtsRef, client) -> Detail:
+    """Description, company and locations of a job-site posting (readers import ats for Detail's sake only)."""
+    from scanner.sources import baystreet, builtin, hn, yc
+    if ref.ats == "HN":
+        data = client.get_json(ref.api_url, ref.ats)
+        text = INVISIBLE.sub("", hn.comment_text(data))
+        company = re.split(r"\s*\|\s*", text.split("\n", 1)[0])[0].strip()[:60]
+        return Detail(text, company, [])
+    page = client.get(ref.api_url, ref.ats).text
+    if ref.ats == "YC":
+        text, company, where = yc.parse_detail(page)
+        return Detail(INVISIBLE.sub("", text), company, where)
+    if ref.ats == "Built In":
+        return Detail(INVISIBLE.sub("", builtin.parse_detail(page, builtin.job_id(ref.api_url))), "", [])
+    rec = baystreet.parse_detail(page, None)
+    if rec is None:
+        raise NotFound(ref.api_url)
+    return Detail(INVISIBLE.sub("", rec["description"]), rec["company_name"], [rec["location"]])
+
+
 def fetch_full(ref: AtsRef, client) -> Detail:
     """Fetch one job: description as plain text, readable company name ('' if none), locations.
 
@@ -240,6 +282,8 @@ def fetch_full(ref: AtsRef, client) -> Detail:
     "N Locations" rows, and the ATS's own location is authoritative over a Simplify row's looser list.
     Raises NotFound on 404.
     """
+    if ref.ats in SITES:
+        return _fetch_site(ref, client)
     if ref.ats == "Ashby":
         j = _ashby_job(ref, client)
         text = j.get("descriptionPlain") or html_to_text(j.get("descriptionHtml", ""))

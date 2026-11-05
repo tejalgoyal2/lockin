@@ -21,6 +21,19 @@ sources:
       - AI/ML/Data
       - Data Science, AI & Machine Learning
 
+  yc:                      # Y Combinator's job pages (ycombinator.com/jobs); postings asking 3+ years are skipped up front
+    enabled: true
+    pages: [canada, toronto, vancouver]     # /jobs/location/<page>
+  builtin:                 # Built In Vancouver: entry-level cards by category (builtinvancouver.org)
+    enabled: true
+    base_url: https://builtinvancouver.org
+    paths: [/jobs/dev-engineering/entry-level, /jobs/data-analytics/entry-level, /jobs/entry-level]
+    max_pages: 3           # per path; a page with nothing inside the freshness window ends the walk earlier
+  baystreet:               # Bay Street Oracle: capital-markets jobs (a few quant / data / software roles among them)
+    enabled: true
+    sitemap_url: https://www.baystreetoracle.ca/jobs/sitemap.xml
+  hn:                      # the monthly "Ask HN: Who is hiring?" thread (Algolia HN API)
+    enabled: true
   watchlist:               # employers read directly on every run (watchlist.yaml); see scanner/sources/watchlist.py
     enabled: true
     path: watchlist.yaml

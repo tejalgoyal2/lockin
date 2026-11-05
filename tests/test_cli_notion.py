@@ -1,12 +1,10 @@
 import argparse
-import json
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 
 import pytest
 
 from scanner import cli, notion_feed as nf
 from scanner.config import load_config
-from scanner.models import Job
 from scanner.state import SeenStore
 from tests.fakes import NAMES, FakeNotion, Resp
 from tests.test_notion_feed import NOW, make_job

@@ -6,6 +6,7 @@ from urllib.parse import parse_qsl, urlencode, urlsplit
 
 from scanner.models import Job
 from scanner.normalize import job_key, norm_location, norm_text
+from scanner.sources.listing import SITE_SOURCES
 
 COMPANY_RATIO = 0.85
 TITLE_JACCARD = 0.8
@@ -59,7 +60,8 @@ def company_match(a: str, b: str) -> bool:
 def _merge(a: Job, b: Job) -> Job:
     """Merge b into the preferred record. ATS rows win over Simplify (real URL/source);
     Simplify contributes the new-grad flag. Earliest first_seen is kept."""
-    primary, other = (b, a) if (a.source == "Simplify" and b.source != "Simplify") else (a, b)
+    weak = ("Simplify", *SITE_SOURCES)                  # a list or a job site: the ATS row has the real link
+    primary, other = (b, a) if (a.source in weak and b.source not in weak) else (a, b)
     primary.sources |= other.sources
     primary.new_grad = primary.new_grad or other.new_grad
     primary.weak_title = primary.weak_title and other.weak_title
@@ -108,11 +110,31 @@ def _pass_fuzzy(jobs: list[Job]) -> tuple[list[Job], int]:
     return [j for bucket in survivors.values() for j in bucket], merges
 
 
+def _pass_sites(jobs: list[Job]) -> tuple[list[Job], int]:
+    """A job-site posting repeats an ATS posting of the same company and a similar title, whatever city string the
+    site shows ("Seymour Heights, North Vancouver" for the ATS's "Vancouver"). The ATS row stays; the site's row only
+    adds its name to `sources`. A site posting with no ATS twin stays."""
+    real = [j for j in jobs if j.source not in SITE_SOURCES]
+    out, merges = [], 0
+    for job in jobs:
+        if job.source in SITE_SOURCES:
+            twin = next((o for o in real if title_jaccard(o.title, job.title) >= TITLE_JACCARD
+                         and company_match(o.company, job.company)), None)
+            if twin is not None:
+                _merge(twin, job)
+                merges += 1
+                continue
+        out.append(job)
+    return out, merges
+
+
 def dedupe(jobs: Iterable[Job]) -> tuple[list[Job], dict[str, int]]:
     """Returns (jobs newest first, {'url': merges, 'fuzzy': merges})."""
     jobs = list(jobs)
     jobs, url_merges = _pass_url(jobs)
     jobs, fuzzy_merges = _pass_fuzzy(jobs)
+    jobs, site_merges = _pass_sites(jobs)
+    fuzzy_merges += site_merges
     for job in jobs:
         # an unresolved Workday "N Locations" job is keyed by its URL until phase 2 reads the real location
         job.key = job_key(job.company, job.title, canonical_url(job.url) if job.location_pending else job.location)
