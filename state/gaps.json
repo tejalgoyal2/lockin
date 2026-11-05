@@ -1020,6 +1020,12 @@
    "gaps": [],
    "title": "Community Developer - Community and Social Services"
   },
+  "0f442756afb2dedf0cb6fdfc5fd9b61861c113ba": {
+   "company": "TELUS",
+   "date": "2026-11-05",
+   "gaps": [],
+   "title": "System Quality Analyst I - 100% Remote"
+  },
   "0f47995795472919b49a3c247f168a8f22d9a4dd": {
    "company": "LCBO",
    "date": "2026-10-07",
@@ -1281,6 +1287,14 @@
    ],
    "title": "Supplier Quality Engineer"
   },
+  "128490488cbf7cadb07b11db1014d3d5ae764f87": {
+   "company": "Benevity",
+   "date": "2026-11-05",
+   "gaps": [
+    "Salesforce"
+   ],
+   "title": "GTM Operations Analyst"
+  },
   "128bf035cf2b938f0471f82a02e1e92b439de2e1": {
    "company": "Sglottery",
    "date": "2026-10-07",
@@ -1390,6 +1404,12 @@
    "date": "2026-10-21",
    "gaps": [],
    "title": "Application Security Engineer"
+  },
+  "14458d64b44d9d42ff29b680d6bb53e781af5140": {
+   "company": "Aloe",
+   "date": "2026-11-05",
+   "gaps": [],
+   "title": "AI Research + AI Engineering roles"
   },
   "145c0225cfb430c95a9b58ec2bb496470841265f": {
    "company": "Companyofcars",
@@ -4131,6 +4151,12 @@
    "gaps": [],
    "title": "Molecular Clinical Scientist, Newborn Screening Ontario – Temporary (until March 2028)"
   },
+  "3bb2f0e74fafe6205427939c3de7bc73deb4e126": {
+   "company": "Asana",
+   "date": "2026-11-05",
+   "gaps": [],
+   "title": "Security Risk Engineer"
+  },
   "3bc07f0064e2057b2ef055200e0f669366e82061": {
    "company": "Canadian Tire",
    "date": "2026-10-07",
@@ -5369,6 +5395,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "NOFRILLS Customer Experience Specialist - Ontario"
+  },
+  "4ca6f4fc8b5a90537c1968cad6e498850bfe67e7": {
+   "company": "Benevity",
+   "date": "2026-11-05",
+   "gaps": [],
+   "title": "Learning Specialist"
   },
   "4cc1ac6c1a5119e5d7be424a826b37becf1d21c1": {
    "company": "CIBC",
@@ -14807,6 +14839,12 @@
    "gaps": [],
    "title": "Radiation Compliance Specialist"
   },
+  "cc41d08a64fb41ca964f15748ef4f92d3d37f5b5": {
+   "company": "Broadway Refrigeration",
+   "date": "2026-11-05",
+   "gaps": [],
+   "title": "Industrial Engineer / Business Intelligence Analyst"
+  },
   "cc45210c7a21e3b7308c7b699bd181d8bce2d152": {
    "company": "Navcanada",
    "date": "2026-11-03",
@@ -17935,6 +17973,14 @@
    "date": "2026-11-04",
    "gaps": [],
    "title": "Pump Tester - Afternoon"
+  },
+  "f7f0391aea199e8ab714ec653241554fd7635ce7": {
+   "company": "Benevity",
+   "date": "2026-11-05",
+   "gaps": [
+    "Salesforce"
+   ],
+   "title": "GTM Operations Analyst"
   },
   "f7f09015e0116f393d2e6aad7bc66f9782b40dfe": {
    "company": "Thoughtworks",

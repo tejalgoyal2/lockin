@@ -1,10 +1,10 @@
 # Canadian entry-level tech jobs: candidates
 
-- Generated: 2026-11-05 17:52 UTC
+- Generated: 2026-11-05 20:47 UTC
 - Window: first seen in the last 3 day(s)
 - Feashliaa dataset last updated: 2026-11-05T16:35:51.320969Z
-- Candidates after dedupe: **843**
-- Remaining after JD rules: **47** (ranked by Score)
+- Candidates after dedupe: **837**
+- Remaining after JD rules: **48** (ranked by Score)
 
 | First Seen | Company | Role | Location | Source | Tier | Fit % | Cluster | Signals | Gaps | URL |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -27,17 +27,18 @@
 | 2026-11-03 | pelmorex | Software Engineer, AI - 12 month Contract | Oakville, Canada | Lever | strong | 75.7 | ml |  | FastAPI, Go, microservices, integration testing | https://jobs.lever.co/pelmorex/2f343b64-b3c2-4d4f-ba13-b16f1f61b974 |
 | 2026-11-04 | navcanada | Junior Systems Analyst (18-month term) | Ottawa | Workday | weak | 83.3 | software | junior |  | https://navcanada.wd10.myworkdayjobs.com/nav_careers/job/Ottawa/Junior-Systems-Analyst--18-month-term-_JR-8484 |
 | 2026-11-03 | veeva | QA Engineer - Ostro | Canada - Toronto | Lever | weak | 78.9 | software |  | Postman | https://jobs.lever.co/veeva/b405acf8-fcdf-4b4d-b31b-0ccd7839c723 |
+| 2026-11-05 | telus | System Quality Analyst I - 100% Remote | Vancouver, BC, CAN | Built In | weak | 77.8 | software |  |  | https://builtinvancouver.org/job/system-quality-analyst-i/12094937 |
 | 2026-11-03 | axiscapital | Insights & Analytics Associate – Global Markets | Halifax, NS | Workday | strong | 81.8 | data |  |  | https://axiscapital.wd1.myworkdayjobs.com/axiscareers/job/Halifax-NS/Insights---Analytics-Associate---Global-Markets_REQ06820-1 |
 | 2026-11-03 | cae | Learning Technology Specialist | Ottawa | Workday | weak | 80 | data |  |  | https://cae.wd3.myworkdayjobs.com/career/job/Halifax/Learning-Technology-Specialist_124398 |
 | 2026-11-04 | poka | GTM Engineer | Canada (East) | Greenhouse | weak | 73.3 | data |  | Salesforce | https://job-boards.greenhouse.io/poka/jobs/6242198004 |
-| 2026-11-05 | corpay | DevOps Engineer | Vancouver - Gift | Workday | strong | 71.4 | software |  |  | https://corpay.wd103.myworkdayjobs.com/ext_001/job/Vancouver---Gift/DevOps-Engineer_14203-1 |
-| 2026-11-04 | xero | Engineer - Payments | CAN: Vancouver (333 Seymour St) | Ashby | weak | 64.3 | software |  | distributed systems, microservices | https://jobs.ashbyhq.com/xero/2e7bdf12-afc8-4047-8f67-023e2cd78211 |
+| 2026-11-05 | corpay | DevOps Engineer | Vancouver - Gift | Workday+Built In | strong | 71.4 | software |  |  | https://corpay.wd103.myworkdayjobs.com/ext_001/job/Vancouver---Gift/DevOps-Engineer_14203-1 |
+| 2026-11-03 | xero | Engineer - Payments | CAN: Vancouver (333 Seymour St) | Ashby+Built In | weak | 64.3 | software |  | distributed systems, microservices | https://jobs.ashbyhq.com/xero/2e7bdf12-afc8-4047-8f67-023e2cd78211 |
 | 2026-11-05 | rbc | Operations Analyst, Production Support | TORONTO, Ontario, Canada | Workday | weak | 69.2 | software |  |  | https://rbc.wd3.myworkdayjobs.com/rbcglobal1/job/TORONTO-Ontario-Canada/Operations-Analyst--Production-Support_R-0000190688-1 |
 | 2026-11-05 | rbc | Network Operations Analyst | TORONTO, Ontario, Canada | Workday | weak | 65.2 | software |  | Cisco | https://rbc.wd3.myworkdayjobs.com/rbcglobal1/job/TORONTO-Ontario-Canada/Network-Operations-Analyst_R-0000191399-1 |
 | 2026-11-05 | zyngacareers | Software Developer 1 | Toronto, Canada | Greenhouse | strong | 66.7 | software | 0-2 years | Maven, Java, Kotlin, Objective-C, Swift | https://job-boards.greenhouse.io/zyngacareers/jobs/6240735004 |
 | 2026-11-03 | robinhood | Software Engineer, International Expansion | Toronto, Canada | Greenhouse | strong | 64.7 | software | 2+ yrs | Kafka, distributed systems | https://boards.greenhouse.io/robinhood/jobs/8207701?t=gh_src=&gh_jid=8207701 |
 | 2026-11-05 | tailscale | Security Software Engineer | Remote (Canada) | Greenhouse | strong | 66.7 | security |  |  | https://job-boards.greenhouse.io/tailscale/jobs/4733116005 |
-| 2026-11-04 | lyft | Software Engineer, Backend | Toronto, Canada | Greenhouse | strong | 63.6 | software |  | Go, Java | https://app.careerpuck.com/job-board/lyft/job/8927268002?gh_jid=8927268002 |
+| 2026-11-03 | lyft | Software Engineer, Backend | Toronto, Canada | Greenhouse | strong | 63.6 | software |  | Go, Java | https://app.careerpuck.com/job-board/lyft/job/8927268002?gh_jid=8927268002 |
 | 2026-11-03 | masco | Supply Chain Analyst | CA - Ontario - Saint Thomas | Workday | weak | 63.6 | data | 2+ yrs | Oracle, SAP | https://masco.wd1.myworkdayjobs.com/masco/job/CA---Ontario---Saint-Thomas/Supply-Chain-Analyst_REQ54796-1 |
 | 2026-11-05 | tera | Data Analyst | Toronto | Workday | strong | 65.2 | data | 2+ yrs | Tableau | https://tera.wd3.myworkdayjobs.com/teranet/job/Toronto/Data-Analyst_R004897 |
 | 2026-11-03 | myview | Master Data Analyst | 1 Presidents Choice Circle, Brampton, ON | Workday | strong | 66.7 | data |  | SAP | https://myview.wd3.myworkdayjobs.com/paradox_careers/job/1-Presidents-Choice-Circle-Brampton-ON/Master-Data-Analyst_R2000726808 |
@@ -63,23 +64,23 @@
 | Stage | Remaining |
 |---|---:|
 | raw records | 1,446,392 |
-| first seen within window | 84,067 |
-| Canadian location | 7,878 |
-| not Quebec-only | 7,413 |
-| not on blocklist | 7,158 |
-| not French-only | 7,138 |
-| title matches tech roles | 1,994 |
-| not senior / non-software | 901 |
-| not student-only | 847 |
-|   of which weak_title | 569 |
+| first seen within window | 83,739 |
+| Canadian location | 7,871 |
+| not Quebec-only | 7,408 |
+| not on blocklist | 7,153 |
+| not French-only | 7,133 |
+| title matches tech roles | 1,992 |
+| not senior / non-software | 887 |
+| not student-only | 833 |
+|   of which weak_title | 561 |
 
 **Simplify**
 
 | Stage | Remaining |
 |---|---:|
 | raw records | 19,063 |
-| active, visible, tech category | 2,165 |
-| first seen within window | 99 |
+| active, visible, tech category | 2,156 |
+| first seen within window | 94 |
 | Canadian location | 7 |
 | not Quebec-only | 7 |
 | not on blocklist | 7 |
@@ -89,14 +90,90 @@
 | not student-only | 6 |
 |   of which weak_title | 0 |
 
+**Watchlist**
+
+| Stage | Remaining |
+|---|---:|
+| raw records | 6,507 |
+| first seen within window | 357 |
+| Canadian location | 80 |
+| not Quebec-only | 72 |
+| not on blocklist | 72 |
+| not French-only | 72 |
+| title matches tech roles | 38 |
+| not senior / non-software | 8 |
+| not student-only | 8 |
+|   of which weak_title | 4 |
+
+**YC**
+
+| Stage | Remaining |
+|---|---:|
+| raw records | 65 |
+| experience_ok | 28 |
+| first seen within window | 0 |
+| Canadian location | 0 |
+| not Quebec-only | 0 |
+| not on blocklist | 0 |
+| not French-only | 0 |
+| title matches tech roles | 0 |
+| not senior / non-software | 0 |
+| not student-only | 0 |
+|   of which weak_title | 0 |
+
+**Built In**
+
+| Stage | Remaining |
+|---|---:|
+| raw records | 69 |
+| first seen within window | 26 |
+| Canadian location | 23 |
+| not Quebec-only | 23 |
+| not on blocklist | 23 |
+| not French-only | 23 |
+| title matches tech roles | 8 |
+| not senior / non-software | 5 |
+| not student-only | 5 |
+|   of which weak_title | 4 |
+
+**Bay Street Oracle**
+
+| Stage | Remaining |
+|---|---:|
+| raw records | 33 |
+| first seen within window | 0 |
+| Canadian location | 0 |
+| not Quebec-only | 0 |
+| not on blocklist | 0 |
+| not French-only | 0 |
+| title matches tech roles | 0 |
+| not senior / non-software | 0 |
+| not student-only | 0 |
+|   of which weak_title | 0 |
+
+**HN**
+
+| Stage | Remaining |
+|---|---:|
+| raw records | 11 |
+| first seen within window | 4 |
+| Canadian location | 4 |
+| not Quebec-only | 4 |
+| not on blocklist | 4 |
+| not French-only | 4 |
+| title matches tech roles | 4 |
+| not senior / non-software | 2 |
+| not student-only | 2 |
+|   of which weak_title | 1 |
+
 **Combined**
 
 | Stage | Remaining |
 |---|---:|
-| before dedupe | 853 |
-|   merged by canonical URL | 0 |
-|   merged by fuzzy company+title | 10 |
-| after dedupe | 843 |
+| before dedupe | 854 |
+|   merged by canonical URL | 5 |
+|   merged by fuzzy company+title | 12 |
+| after dedupe | 837 |
 
 ## JD rules
 
@@ -104,20 +181,20 @@
 
 | Reason | Jobs |
 |---|---:|
-| location_not_canada | 543 |
-| experience_3plus | 93 |
-| weak_title_few_terms | 65 |
+| location_not_canada | 532 |
+| experience_3plus | 95 |
+| weak_title_few_terms | 64 |
 | requires_enrollment | 43 |
 | location_quebec_only | 20 |
+| location_unresolved_url_not_canadian | 18 |
 | two_years_no_fit | 17 |
-| location_unresolved_url_not_canadian | 15 |
 | student_title_not_rescued | 12 |
 | security_clearance | 11 |
-| requires_french | 11 |
+| requires_french | 10 |
 | weak_title_no_jd | 7 |
 | two_years_low_fit | 4 |
 | student_title_no_jd | 4 |
-| low_signal_not_dev_title | 2 |
+| low_signal_not_dev_title | 3 |
 
 Student-titled jobs held for JD check: 51; rescued: 0.
 
@@ -125,18 +202,20 @@ Student-titled jobs held for JD check: 51; rescued: 0.
 
 | Source:status | Jobs |
 |---|---:|
-| Ashby:ok | 4 |
+| Ashby:ok | 6 |
 | BambooHR:ok | 26 |
+| Built In:ok | 3 |
 | Greenhouse:not_found | 1 |
 | Greenhouse:ok | 33 |
+| HN:ok | 1 |
 | Lever:not_found | 1 |
 | Lever:ok | 14 |
 | Paylocity:unsupported | 1 |
 | Simplify:ok | 2 |
 | Simplify:unsupported | 3 |
-| Workday:error | 19 |
+| Workday:error | 21 |
 | Workday:not_found | 5 |
-| Workday:ok | 785 |
+| Workday:ok | 771 |
 
 **JD fetch HTTP 403 (permission denied) by host**
 
@@ -144,9 +223,11 @@ Student-titled jobs held for JD check: 51; rescued: 0.
 |---|---:|
 | bah.wd1.myworkdayjobs.com | 2 |
 | bmo.wd3.myworkdayjobs.com | 2 |
+| advisorgroup.wd1.myworkdayjobs.com | 1 |
+| cisco.wd5.myworkdayjobs.com | 1 |
 | 4flow.wd3.myworkdayjobs.com | 1 |
-| kiongroup.wd3.myworkdayjobs.com | 1 |
 | usaa.wd1.myworkdayjobs.com | 1 |
+| iqvia.wd1.myworkdayjobs.com | 1 |
 | dedalus.wd3.myworkdayjobs.com | 1 |
 | brenntag.wd3.myworkdayjobs.com | 1 |
 | fmr.wd1.myworkdayjobs.com | 1 |
@@ -184,7 +265,7 @@ Student-titled jobs held for JD check: 51; rescued: 0.
 | 0-19 | 0 |
 | 20-39 | 1 |
 | 40-59 | 2 |
-| 60-79 | 22 |
+| 60-79 | 23 |
 | 80-100 | 14 |
 | n/a (no JD or no tech terms) | 8 |
 
