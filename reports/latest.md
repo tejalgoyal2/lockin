@@ -1,6 +1,6 @@
 # Canadian entry-level tech jobs: candidates
 
-- Generated: 2026-11-05 20:47 UTC
+- Generated: 2026-11-05 20:59 UTC
 - Window: first seen in the last 3 day(s)
 - Feashliaa dataset last updated: 2026-11-05T16:35:51.320969Z
 - Candidates after dedupe: **837**
@@ -94,12 +94,12 @@
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 6,507 |
-| first seen within window | 357 |
-| Canadian location | 80 |
-| not Quebec-only | 72 |
-| not on blocklist | 72 |
-| not French-only | 72 |
+| raw records | 6,508 |
+| first seen within window | 361 |
+| Canadian location | 81 |
+| not Quebec-only | 73 |
+| not on blocklist | 73 |
+| not French-only | 73 |
 | title matches tech roles | 38 |
 | not senior / non-software | 8 |
 | not student-only | 8 |
@@ -131,7 +131,7 @@
 | not Quebec-only | 23 |
 | not on blocklist | 23 |
 | not French-only | 23 |
-| title matches tech roles | 8 |
+| title matches tech roles | 7 |
 | not senior / non-software | 5 |
 | not student-only | 5 |
 |   of which weak_title | 4 |
