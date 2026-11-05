@@ -190,6 +190,12 @@ title:
     - loss prevention
     - store
     - security agent
+    # sales, success and recruiting roles that the watchlist's employers post under "Engineer" / "Specialist"
+    - account executive
+    - account manager
+    - account specialist
+    - customer success
+    - talent acquisition
   exclude_words_cs:      # roman-numeral levels, case-sensitive
     - II
     - III

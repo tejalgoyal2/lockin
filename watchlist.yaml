@@ -1,2 +1,64 @@
+# Employer job boards read directly on every run (scanner/sources/watchlist.py; README "Watchlist").
+#
+# Why a board is here: the Feashliaa dataset refreshes once a day and does not list every employer, while a board
+# listed here is asked live, so the morning run sees today's postings. Every board below was checked on 2026-11-05
+# against its public API; the Canadian-job counts are from that day and only say why it was worth adding.
+#
+# To add one: open the employer's careers page and look at where "Apply" goes.
+#   boards.greenhouse.io/<slug> or job-boards.greenhouse.io/<slug>  ->  ats: greenhouse
+#   jobs.lever.co/<slug>                                             ->  ats: lever   (the slug can contain a dot)
+#   jobs.ashbyhq.com/<slug>                                          ->  ats: ashby
+# `name` is the readable company name shown in the Feed.
+#
+# Employers on Workday, SuccessFactors, Taleo, iCIMS, UltiPro or their own site cannot be listed here (see README).
+
 boards:
-  - {ats: lever, slug: geocomply-2, name: GeoComply}
+  # --- employers named by the owner, and BC employers ---------------------------------------------------------------
+  - {ats: lever,      slug: arcteryx.com,   name: "Arc'teryx"}        # North Vancouver; 99 Canadian postings; not in the dataset
+  - {ats: ashby,      slug: 1password,      name: 1Password}          # remote across Canada
+  - {ats: lever,      slug: geocomply-2,    name: GeoComply}          # Vancouver; graduate rotational program
+  - {ats: greenhouse, slug: hootsuite,      name: Hootsuite}          # Vancouver
+  - {ats: ashby,      slug: thinkific,      name: Thinkific}          # Vancouver, remote; not in the dataset
+  - {ats: ashby,      slug: visier,         name: Visier}             # Vancouver; not in the dataset
+  - {ats: ashby,      slug: trulioo,        name: Trulioo}            # Vancouver
+  - {ats: greenhouse, slug: later,          name: Later}              # Vancouver
+  - {ats: greenhouse, slug: abcellera,      name: AbCellera}          # Vancouver
+  - {ats: greenhouse, slug: appnovation,    name: Appnovation}        # Vancouver
+  - {ats: greenhouse, slug: asana,          name: Asana}              # Vancouver office
+  - {ats: greenhouse, slug: brex,           name: Brex}               # Vancouver office
+  - {ats: greenhouse, slug: affirm,         name: Affirm}             # remote Canada
+  - {ats: greenhouse, slug: canonical,      name: Canonical}          # Victoria / remote
+  # --- Canadian tech employers (Toronto, Waterloo, Calgary, remote) -------------------------------------------------
+  - {ats: ashby,      slug: wealthsimple,   name: Wealthsimple}
+  - {ats: ashby,      slug: cohere,         name: Cohere}
+  - {ats: ashby,      slug: neofinancial,   name: Neo Financial}      # Calgary
+  - {ats: ashby,      slug: benevity,       name: Benevity}           # Calgary; not in the dataset
+  - {ats: ashby,      slug: 7shifts,        name: 7shifts}            # not in the dataset
+  - {ats: ashby,      slug: float,          name: Float}
+  - {ats: ashby,      slug: jobber,         name: Jobber}
+  - {ats: ashby,      slug: lightspeedhq,   name: Lightspeed}
+  - {ats: ashby,      slug: miovision,      name: Miovision}          # Kitchener
+  - {ats: ashby,      slug: procurify,      name: Procurify}
+  - {ats: ashby,      slug: kindred,        name: Kindred}
+  - {ats: ashby,      slug: xenon,          name: Xenon}              # not in the dataset
+  - {ats: lever,      slug: magnetforensics, name: Magnet Forensics}  # Waterloo
+  - {ats: lever,      slug: waabi,          name: Waabi}              # Toronto
+  - {ats: lever,      slug: sophos,         name: Sophos}
+  - {ats: greenhouse, slug: d2l,            name: D2L}                # Kitchener
+  - {ats: greenhouse, slug: geotab,         name: Geotab}             # Oakville
+  - {ats: greenhouse, slug: carta,          name: Carta}
+  - {ats: greenhouse, slug: faire,          name: Faire}
+  # --- global employers with Canadian engineering teams -------------------------------------------------------------
+  - {ats: greenhouse, slug: stripe,         name: Stripe}
+  - {ats: greenhouse, slug: gitlab,         name: GitLab}
+  - {ats: greenhouse, slug: lyft,           name: Lyft}
+  - {ats: greenhouse, slug: robinhood,      name: Robinhood}
+  - {ats: greenhouse, slug: reddit,         name: Reddit}
+  - {ats: greenhouse, slug: coinbase,       name: Coinbase}
+  - {ats: greenhouse, slug: pinterest,      name: Pinterest}
+  - {ats: greenhouse, slug: mongodb,        name: MongoDB}
+  - {ats: greenhouse, slug: okta,           name: Okta}
+  - {ats: greenhouse, slug: databricks,     name: Databricks}
+  - {ats: greenhouse, slug: tenstorrent,    name: Tenstorrent}        # Toronto
+  - {ats: ashby,      slug: snowflake,      name: Snowflake}
+  - {ats: ashby,      slug: sentry,         name: Sentry}

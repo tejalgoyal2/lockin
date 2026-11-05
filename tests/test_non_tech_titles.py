@@ -24,6 +24,11 @@ LIVE = [   # (company, title) as they appeared in the Feed
     ("City of Hamilton", "Job ID #32279: Security Investigator, Corporate Security"),
     ("Markel", "Associate Underwriter - Cyber & Tech E&O"),
     ("Cineflix", "AI Artist"),
+    ("1Password", "Account Specialist, Growth"),                       # watchlist boards, 2026-11-05
+    ("Procurify", "Technical Customer Success Engineer"),
+    ("Miovision", "Account Executive, Data Collection and Traffic Solutions"),
+    ("Jobber", "Talent Acquisition Partner (Technical)"),
+    ("Acme", "Enterprise Account Manager, Security"),
 ]
 
 
@@ -70,3 +75,9 @@ def test_a_title_without_a_developer_noun_is_kept_when_fit_is_known():
                                         ("Automation Cell Operator", False), ("AI Artist", False)])
 def test_dev_title(title, dev):
     assert E.dev_title(title, CFG) is dev
+
+
+@pytest.mark.parametrize("title", ["Data Analyst", "Software Engineer, Accounts Platform", "Account Reconciliation Developer",
+                                   "Customer Data Platform Engineer", "Junior Developer, Talent Platform"])
+def test_the_new_excludes_do_not_catch_real_tech_titles(title):
+    assert FILTERS.title_tier(title) and FILTERS.title_not_excluded(title), title
