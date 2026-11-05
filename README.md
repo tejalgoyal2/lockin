@@ -45,7 +45,9 @@ to triage. It runs on GitHub Actions. Design: [SPEC.md](SPEC.md).
    `NOTION_TOKEN` (the integration secret) and `NOTION_FEED_DATA_SOURCE_ID`.
 6. **Run it once by hand**: Actions > scan > Run workflow. Leave `dry_run` ticked first (it validates the Feed
    schema and shows what it would write), then run again with `dry_run` unticked and `max_rows` = 5.
-   After that the schedule (`0 16 * * *` UTC) takes over. The workflow commits to the branch it runs on; if
+   After that the schedule takes over: twice a day, `17 15 * * *` and `17 23 * * *` UTC (08:17 and 16:17 in
+   Victoria, which is UTC-7 all year). A run only writes jobs not yet in `state/seen.json` or the Feed, so the
+   second run never duplicates the first. The workflow commits to the branch it runs on; if
    that branch is protected, allow GitHub Actions to push to it.
 
 Your own Notion automation can copy a ticked row to your main database and tick `done-del`; the next run trashes
