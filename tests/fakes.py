@@ -54,11 +54,12 @@ class FakeNotion:
         for r in rows:
             self.add_row(**r)
 
-    def add_row(self, link, created, interested=False, apply=False, jd="", done_del=False):
+    def add_row(self, link, created, interested=False, apply=False, jd="", done_del=False,
+                fit=None, source=None, signals=()):
         pid = f"page-{next(self._ids)}"
         self.pages[pid] = {"id": pid, "created_time": created, "in_trash": False,
                            "props": {"Link": link, "Interested": interested, "Apply": apply, "JD": jd,
-                                     "done-del": done_del}}
+                                     "done-del": done_del, "Fit %": fit, "Source": source, "Signals": list(signals)}}
         return pid
 
     def request(self, method, url, headers=None, json=None, params=None, timeout=None):
@@ -105,4 +106,8 @@ class FakeNotion:
             "Link": {"type": "url", "url": p["props"]["Link"]},
             "Interested": {"type": "checkbox", "checkbox": p["props"]["Interested"]},
             "Apply": {"type": "checkbox", "checkbox": p["props"]["Apply"]},
-            "done-del": {"type": "checkbox", "checkbox": p["props"].get("done-del", False)}}}
+            "done-del": {"type": "checkbox", "checkbox": p["props"].get("done-del", False)},
+            "Fit %": {"type": "number", "number": p["props"].get("Fit %")},
+            "Source": {"type": "select", "select": ({"name": p["props"]["Source"]} if p["props"].get("Source") else None)},
+            "Signals": {"type": "multi_select",
+                        "multi_select": [{"name": n} for n in p["props"].get("Signals") or []]}}}

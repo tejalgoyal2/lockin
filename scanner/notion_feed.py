@@ -35,6 +35,9 @@ EXPECTED_TYPES = {
     "signals": "multi_select", "jd": "rich_text", "interested": "checkbox", "apply": "checkbox",
     "done_del": "checkbox",
 }
+# Properties the scanner fills when the Feed has them and leaves alone when it does not, so a new column can be
+# added in Notion before or after the code that writes it ships.
+OPTIONAL_TYPES = {"location": "rich_text"}
 SOURCE_OPTIONS = ("Workday", "Greenhouse", "Lever", "Ashby", "BambooHR", "Paylocity", "Simplify", "Watchlist")
 SIGNAL_OPTIONS = ("new grad", "recent graduate", "0-2 years", "entry level", "junior", "low signal",
                   "jd unavailable")
@@ -129,6 +132,10 @@ class Feed:
     ids: dict[str, str] = field(default_factory=dict)   # logical name -> Notion property id
     source_options: set[str] = field(default_factory=set)
 
+    def has(self, logical: str) -> bool:
+        """The Feed has this (optional) property."""
+        return logical in self.ids and logical in self.names
+
 
 def validate_schema(schema: dict, names: dict[str, str]) -> list[str]:
     """Return human-readable problems (empty list = the Feed matches)."""
@@ -152,6 +159,10 @@ def validate_schema(schema: dict, names: dict[str, str]) -> list[str]:
                 missing = [o for o in wanted if o not in have]
                 if missing:
                     problems.append(f"property {name!r} is missing options: {', '.join(missing)}")
+    for logical, expected in OPTIONAL_TYPES.items():
+        prop = props.get(names.get(logical, ""))
+        if prop is not None and prop.get("type") != expected:
+            problems.append(f"property {names[logical]!r} has type {prop.get('type')!r}, expected {expected!r}")
     return problems
 
 
@@ -170,7 +181,7 @@ def load_feed(client: NotionClient, data_source_id: str, names: dict[str, str]) 
     return Feed(
         data_source_id=data_source_id,
         names=names,
-        ids={k: props[v]["id"] for k, v in names.items()},
+        ids={k: props[v]["id"] for k, v in names.items() if v in props},
         source_options={o["name"] for o in props[names["source"]]["select"]["options"]},
     )
 
@@ -217,6 +228,21 @@ def _rich(text: str) -> list[dict]:
     return [{"type": "text", "text": {"content": c}} for c in chunk_text(text)][:ARRAY_MAX]
 
 
+LEVEL_SIGNALS = ("new grad", "recent graduate", "0-2 years", "entry level", "junior")       # strongest first
+CAUTION_SIGNALS = ("2+ yrs", "P.Eng req", "jd unavailable", "low signal")                    # most important first
+
+
+def display_signals(signals: list[str]) -> list[str]:
+    """The tags shown in the Feed: the strongest level tag, then the most important warning. A row used to carry
+    up to five tags ("recent graduate, 0-2 years, junior, 2+ yrs"), more than the column shows; the rest say
+    nothing the first two do not, and the full set stays in reports/latest.md."""
+    level = next((s for s in LEVEL_SIGNALS if s in signals), None)
+    rest = [s for s in signals if s not in LEVEL_SIGNALS]
+    rank = lambda s: CAUTION_SIGNALS.index(s) if s in CAUTION_SIGNALS else len(CAUTION_SIGNALS)
+    caution = min(rest, key=rank) if rest else None
+    return [s for s in (level, caution) if s]
+
+
 def build_properties(job: Job, feed: Feed, overrides: dict[str, str]) -> tuple[dict, str]:
     """Notion `properties` for one job, plus the JD text actually sent.
 
@@ -228,11 +254,13 @@ def build_properties(job: Job, feed: Feed, overrides: dict[str, str]) -> tuple[d
         n["name"]: {"title": _rich(job.title)[:1] or [{"type": "text", "text": {"content": ""}}]},
         n["company"]: {"rich_text": _rich(company_cell(job, overrides))},
         n["link"]: {"url": job.url},
-        n["signals"]: {"multi_select": [{"name": s} for s in job.signals]},
+        n["signals"]: {"multi_select": [{"name": s} for s in display_signals(job.signals)]},
         n["jd"]: {"rich_text": jd_items},
     }
     if job.source in feed.source_options:
         props[n["source"]] = {"select": {"name": job.source}}
+    if feed.has("location") and job.location:
+        props[n["location"]] = {"rich_text": _rich(job.location[:200])}
     props[n["fit"]] = {"number": None if job.fit_pct is None else round(job.fit_pct / 100, 4)}
     return props, jd_sent
 
@@ -261,6 +289,13 @@ class FeedRow:
     interested: bool | None     # None: property absent from the response
     apply: bool | None
     done_del: bool | None = None   # ticked by the owner's automation once the row is copied to the main DB
+    fit: float | None = None       # the Feed's Fit % cell (a fraction); the next three feed reports/feedback.md
+    source: str = ""
+    signals: tuple[str, ...] = ()
+
+    @property
+    def picked(self) -> bool:
+        return bool(self.interested or self.apply)
 
 
 def _parse_ts(ts: str) -> datetime:
@@ -270,7 +305,8 @@ def _parse_ts(ts: str) -> datetime:
 def list_rows(client: NotionClient, feed: Feed) -> list[FeedRow]:
     """Every row in the Feed (paginated), fetching only Link / Interested / Apply / done-del."""
     n, ids = feed.names, feed.ids
-    params = {"filter_properties[]": [ids["link"], ids["interested"], ids["apply"], ids["done_del"]]}
+    wanted = ["link", "interested", "apply", "done_del", "fit", "source", "signals"]
+    params = {"filter_properties[]": [ids[k] for k in wanted if k in ids]}
     rows, cursor = [], None
     while True:
         body = {"page_size": 100}
@@ -287,6 +323,9 @@ def list_rows(client: NotionClient, feed: Feed) -> list[FeedRow]:
                 interested=(props.get(n["interested"]) or {}).get("checkbox"),
                 apply=(props.get(n["apply"]) or {}).get("checkbox"),
                 done_del=(props.get(n["done_del"]) or {}).get("checkbox"),
+                fit=(props.get(n["fit"]) or {}).get("number"),
+                source=((props.get(n["source"]) or {}).get("select") or {}).get("name") or "",
+                signals=tuple(o["name"] for o in (props.get(n["signals"]) or {}).get("multi_select") or []),
             ))
         if not data.get("has_more"):
             return rows
@@ -337,13 +376,16 @@ def moved_rows(rows: list[FeedRow]) -> list[FeedRow]:
     return [r for r in rows if r.done_del is True]
 
 
-def trash_rows(client: NotionClient, rows: list[FeedRow], *, dry_run: bool) -> int:
+def trash_rows(client: NotionClient, rows: list[FeedRow], *, dry_run: bool, on_trashed=None) -> int:
+    """Trash `rows`. `on_trashed(row)` runs after each row is really trashed (never on a dry run)."""
     done = 0
     for row in rows:
         if dry_run:
             log.info("[dry-run] would trash %s", row.page_id)
         else:
             client.request("PATCH", f"/v1/pages/{row.page_id}", json={"in_trash": True})
+            if on_trashed:
+                on_trashed(row)
         done += 1
     return done
 

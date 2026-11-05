@@ -171,6 +171,13 @@ _ashby_boards: dict[str, dict] = {}
 _ashby_lock = threading.Lock()
 
 
+def seed_ashby_board(api_url: str, board: dict) -> None:
+    """Hand over a board already downloaded (the watchlist reads every Ashby board for its job list), so the
+    JD fetch for one of its jobs does not download the same board again."""
+    with _ashby_lock:
+        _ashby_boards[api_url] = board
+
+
 def _ashby_job(ref: AtsRef, client, cache: dict | None = None) -> dict:
     """Ashby has no single-job endpoint: fetch the company board once and pick the job."""
     cache = _ashby_boards if cache is None else cache

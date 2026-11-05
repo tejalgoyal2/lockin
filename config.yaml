@@ -21,6 +21,11 @@ sources:
       - AI/ML/Data
       - Data Science, AI & Machine Learning
 
+  watchlist:               # employers read directly on every run (watchlist.yaml); see scanner/sources/watchlist.py
+    enabled: true
+    path: watchlist.yaml
+    workers: 6             # boards fetched at once; the client still paces requests per host
+
 location:
   # Names that are unambiguous on their own.
   include:
@@ -279,6 +284,7 @@ notion:
     source: Source
     fit: "Fit %"
     signals: Signals
+    location: Location        # optional: filled when the Feed has the column, ignored when it does not
     jd: JD
     interested: Interested
     apply: Apply
@@ -287,6 +293,9 @@ notion:
 state:
   dir: state                  # seen.json (rows already written) and gaps.json
   prune_days: 90
+
+feedback:
+  report_path: reports/feedback.md   # what was picked, by Fit band / source / tag (counts only), from state/feedback.json
 
 gaps:
   report_path: reports/gaps.md   # rewritten every Monday (UTC)

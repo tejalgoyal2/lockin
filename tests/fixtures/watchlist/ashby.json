@@ -1,0 +1,101 @@
+{
+ "apiVersion": "1",
+ "jobs": [
+  {
+   "id": "6d3c1adb-7100-4a28-9f3f-11af3427f71d",
+   "title": "Senior Developer Marketing Manager, Social & Content",
+   "department": "Technology",
+   "team": "Technology",
+   "employmentType": "FullTime",
+   "location": "Remote (United States | Canada)",
+   "secondaryLocations": [
+    {
+     "location": "San Francisco, CA",
+     "address": {
+      "postalAddress": {
+       "addressRegion": "California",
+       "addressCountry": "US",
+       "addressLocality": "San Francisco"
+      }
+     }
+    }
+   ],
+   "publishedAt": "2026-10-19T19:03:26.630+00:00",
+   "isListed": true,
+   "isRemote": true,
+   "workplaceType": "Remote",
+   "address": {
+    "postalAddress": {
+     "addressCountry": ""
+    }
+   },
+   "jobUrl": "https://jobs.ashbyhq.com/1password/6d3c1adb-7100-4a28-9f3f-11af3427f71d",
+   "applyUrl": "https://jobs.ashbyhq.com/1password/6d3c1adb-7100-4a28-9f3f-11af3427f71d/application",
+   "descriptionPlain": "Short description."
+  },
+  {
+   "id": "febe5d7f-25c9-4d77-a184-0f99e748fe7f",
+   "title": "Senior Commercial Account Executive (San Francisco/Bay Area)",
+   "department": "GTM",
+   "team": "Account Executive",
+   "employmentType": "FullTime",
+   "location": "United States",
+   "secondaryLocations": [
+    {
+     "location": "San Francisco, CA",
+     "address": {
+      "postalAddress": {
+       "addressRegion": "California",
+       "addressCountry": "US",
+       "addressLocality": "San Francisco"
+      }
+     }
+    }
+   ],
+   "publishedAt": "2026-10-29T16:56:07.691+00:00",
+   "isListed": true,
+   "isRemote": true,
+   "workplaceType": "Remote",
+   "address": {
+    "postalAddress": {
+     "addressCountry": "US"
+    }
+   },
+   "jobUrl": "https://jobs.ashbyhq.com/1password/febe5d7f-25c9-4d77-a184-0f99e748fe7f",
+   "applyUrl": "https://jobs.ashbyhq.com/1password/febe5d7f-25c9-4d77-a184-0f99e748fe7f/application",
+   "descriptionPlain": "Short description."
+  },
+  {
+   "id": "unlisted",
+   "title": "Unlisted Role",
+   "department": "GTM",
+   "team": "Account Executive",
+   "employmentType": "FullTime",
+   "location": "United States",
+   "secondaryLocations": [
+    {
+     "location": "San Francisco, CA",
+     "address": {
+      "postalAddress": {
+       "addressRegion": "California",
+       "addressCountry": "US",
+       "addressLocality": "San Francisco"
+      }
+     }
+    }
+   ],
+   "publishedAt": "2026-10-29T16:56:07.691+00:00",
+   "isListed": false,
+   "isRemote": true,
+   "workplaceType": "Remote",
+   "address": {
+    "postalAddress": {
+     "addressCountry": "US"
+    }
+   },
+   "jobUrl": "https://jobs.ashbyhq.com/1password/febe5d7f-25c9-4d77-a184-0f99e748fe7f",
+   "applyUrl": "https://jobs.ashbyhq.com/1password/febe5d7f-25c9-4d77-a184-0f99e748fe7f/application",
+   "descriptionPlain": "Short description."
+  }
+ ]
+}

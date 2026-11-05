@@ -42,6 +42,16 @@ jobs:
 
       - run: pip install --require-hashes -r requirements.txt   # every package pinned by hash (requirements.in)
 
+      # Job descriptions already downloaded (config.yaml jd.cache_dir, 7-day TTL). Without this every run downloads
+      # the JD of every candidate in the 3-day window again, twice a day. A new entry is saved per run; GitHub
+      # drops entries unused for 7 days.
+      - name: Restore the JD cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .cache/jd
+          key: jd-${{ github.run_id }}
+          restore-keys: jd-
+
       - name: Scan and write to the Notion Feed
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
@@ -57,6 +67,10 @@ jobs:
           [ -n "$MAX_ROWS" ] && args+=(--max-rows "$MAX_ROWS")
           [ -n "$SINCE_DAYS" ] && args+=(--since "$SINCE_DAYS")
           python -m scanner run "${args[@]}"
+
+      - name: Prune the JD cache
+        if: always()
+        run: find .cache/jd -type f -mtime +7 -delete 2>/dev/null || true     # past the TTL: never read again
 
       - name: Commit state and reports
         if: always()             # rows already written must reach seen.json even if the run failed later

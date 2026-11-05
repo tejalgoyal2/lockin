@@ -1,0 +1,2 @@
+boards:
+  - {ats: lever, slug: geocomply-2, name: GeoComply}

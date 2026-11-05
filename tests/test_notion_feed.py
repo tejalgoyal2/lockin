@@ -108,9 +108,45 @@ def test_source_outside_the_feed_options_is_left_empty(feed):
     assert "Source" not in props         # would otherwise create a new select option silently
 
 
-def test_signals_include_data_quality_values(feed):
+def test_data_quality_values_show_as_the_one_warning(feed):
     props = nf.build_page(make_job(signals=["low signal", "jd unavailable"]), feed, OVERRIDES)[0]["properties"]
-    assert [s["name"] for s in props["Signals"]["multi_select"]] == ["low signal", "jd unavailable"]
+    assert [s["name"] for s in props["Signals"]["multi_select"]] == ["jd unavailable"]
+
+
+@pytest.mark.parametrize("signals, shown", [
+    ([], []),
+    (["junior"], ["junior"]),
+    (["new grad", "recent graduate", "0-2 years", "junior"], ["new grad"]),            # the strongest level tag only
+    (["recent graduate", "0-2 years", "2+ yrs"], ["recent graduate", "2+ yrs"]),         # level, then the warning
+    (["2+ yrs", "P.Eng req"], ["2+ yrs"]),                                               # one warning: the first listed
+    (["entry level", "low signal"], ["entry level", "low signal"]),
+    (["jd unavailable", "junior"], ["junior", "jd unavailable"]),
+    (["something new"], ["something new"]),                                              # unknown tags are not lost
+])
+def test_display_signals_keeps_at_most_two_tags(signals, shown):
+    assert nf.display_signals(signals) == shown
+
+
+def test_location_is_written_when_the_feed_has_the_column(client, notion):
+    notion.schema["properties"]["Location"] = {"id": "p_loc", "type": "rich_text", "rich_text": {}}
+    names = {**NAMES, "location": "Location"}
+    feed = nf.load_feed(client, "ds-1", names)
+    props = nf.build_page(make_job(location="Burnaby, BC"), feed, OVERRIDES)[0]["properties"]
+    assert props["Location"]["rich_text"][0]["text"]["content"] == "Burnaby, BC"
+
+
+def test_a_feed_without_the_location_column_still_works(client):
+    feed = nf.load_feed(client, "ds-1", {**NAMES, "location": "Location"})      # configured, not in Notion
+    assert not feed.has("location")
+    props = nf.build_page(make_job(location="Burnaby, BC"), feed, OVERRIDES)[0]["properties"]
+    assert "Location" not in props
+
+
+def test_location_column_of_the_wrong_type_is_reported(client, notion):
+    notion.schema["properties"]["Location"] = {"id": "p_loc", "type": "number", "number": {}}
+    with pytest.raises(nf.SchemaError) as e:
+        nf.load_feed(client, "ds-1", {**NAMES, "location": "Location"})
+    assert "'Location' has type 'number'" in str(e.value)
 
 
 # --- JD chunking ----------------------------------------------------------------------
@@ -217,7 +253,8 @@ def test_feed_without_done_del_fails_the_schema_check():
 def test_list_rows_asks_only_for_the_needed_properties(notion, client, feed):
     rows_fixture(notion, client, feed)
     q = [r for r in notion.requests if r["path"].endswith("/query")][-1]
-    assert q["params"] == {"filter_properties[]": ["p_link", "p_int", "p_apply", "p_done"]}
+    assert q["params"] == {"filter_properties[]": ["p_link", "p_int", "p_apply", "p_done", "p_fit", "p_source",
+                                                                "p_signals"]}
 
 
 # --- writing + read-back --------------------------------------------------------------

@@ -14,12 +14,13 @@ from scanner.company_names import display_company, load_overrides, slug_names
 from scanner.config import load_config
 from scanner.dedupe import canonical_url, dedupe
 from scanner.enrich import enrich, fit_distribution
+from scanner.feedback import FeedbackStore
 from scanner.filters import Filters
 from scanner.models import Job
 from scanner.net import PoliteClient
 from scanner.pipeline import run_stream
 from scanner.score import Scorer
-from scanner.sources import ats, feashliaa, simplify
+from scanner.sources import ats, feashliaa, simplify, watchlist
 from scanner.state import GapsStore, SeenStore
 
 log = logging.getLogger("scanner")
@@ -30,7 +31,7 @@ class UsageError(Exception):
 
 
 def collect(cfg, args, filters, now, since):
-    """Run both sources through the phase-1 filters. Returns (jobs, held, stage blocks, feashliaa meta)."""
+    """Run every source through the phase-1 filters. Returns (jobs, held, stage blocks, feashliaa meta)."""
     src = cfg["sources"]
     jobs, held, blocks, meta = [], [], {}, None
     if src["feashliaa"]["enabled"]:
@@ -52,6 +53,21 @@ def collect(cfg, args, filters, now, since):
         jobs += found
         held += hold
         blocks["Simplify"] = stages
+    wl = src.get("watchlist") or {}
+    if wl.get("enabled"):
+        try:
+            boards = watchlist.load_boards(wl["path"])
+        except watchlist.WatchlistError as exc:
+            raise UsageError(str(exc)) from None
+        records, failed = watchlist.fetch_all(
+            boards, PoliteClient(delay=cfg["jd"]["request_delay"], per_ats=cfg["jd"]["max_per_ats"]),
+            workers=wl.get("workers", 6), seed_ashby=ats.seed_ashby_board)
+        print(f"Watchlist: {len(boards) - len(failed)} of {len(boards)} boards read, {len(records):,} postings"
+              + (f"; not read: {', '.join(f'{b.ats}/{b.slug}' for b, _ in failed)}" if failed else ""))
+        found, stages, hold = run_stream(iter(records), watchlist.raw_fields, filters, now, since)
+        jobs += found
+        held += hold
+        blocks["Watchlist"] = stages
     return jobs, held, blocks, meta
 
 
@@ -107,12 +123,17 @@ def connect_feed(cfg, token, ds_id, args):
     return client, feed
 
 
-def trash_moved_rows(client, feed, *, dry_run: bool) -> int:
+def trash_moved_rows(client, feed, *, dry_run: bool, feedback=None, feedback_report=None) -> int:
     """Start of the run: trash the Feed rows the owner's automation has copied to the main database (`done-del`
-    ticked). No other row is ever trashed by a run."""
+    ticked). No other row is ever trashed by a run. Each trashed row is first counted in `feedback` (what was
+    picked, by Fit band, source and tags); a dry run counts nothing."""
     rows = notion_feed.list_rows(client, feed)
     moved = notion_feed.moved_rows(rows)
-    done = notion_feed.trash_rows(client, moved, dry_run=dry_run)
+    done = notion_feed.trash_rows(client, moved, dry_run=dry_run, on_trashed=feedback.record if feedback else None)
+    if feedback and feedback.dirty:
+        feedback.save()
+        if feedback_report:
+            report.write(feedback_report, feedback.render())
     print(f"Notion: Feed has {len(rows)} rows; {'would trash' if dry_run else 'trashed'} {done} with done-del ticked")
     return done
 
@@ -181,7 +202,9 @@ def run(args: argparse.Namespace) -> int:
         token, ds_id = notion_credentials(args)
         client, feed = connect_feed(cfg, token, ds_id, args)
         if client:
-            trash_moved_rows(client, feed, dry_run=args.dry_run)
+            trash_moved_rows(client, feed, dry_run=args.dry_run,
+                             feedback=FeedbackStore(state_dir / "feedback.json"),
+                             feedback_report=cfg["feedback"]["report_path"])
 
     fresh = cfg["freshness"]
     since = args.since if args.since is not None else (
