@@ -79,7 +79,7 @@ def refresh(client, feed: notion_feed.Feed, items: list[FeedItem], cfg: dict, fi
             client.request("PATCH", f"/v1/pages/{item.page_id}", json={"properties": patch})
         taken.pop(canonical_url(item.link), None)
         rep.moved[canonical_url(live_url)] = canonical_url(item.link)
-        item.link, item.jd, item.signals = live_url, detail.text, list(job.signals)
+        item.link, item.jd, item.signals = live_url, detail.text, notion_feed.display_signals(job.signals)
         item.fit = None if job.fit_pct is None else round(job.fit_pct / 100, 4)
         taken[canonical_url(live_url)] = item
         rep.updated.append((item, live_url))

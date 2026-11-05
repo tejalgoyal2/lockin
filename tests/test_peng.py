@@ -1,7 +1,6 @@
 """`P.Eng req` Signal (SPEC §11 #72): a JD that requires a P.Eng licence is tagged, never dropped."""
 import pytest
 
-from scanner import enrich as E
 from scanner.jd_rules import requires_peng
 from tests.test_enrich import gh, run
 

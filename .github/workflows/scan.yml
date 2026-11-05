@@ -2,10 +2,10 @@ name: scan
 
 on:
   schedule:
-    # Two runs a day. GitHub cron is UTC only; Victoria BC is UTC-7 all year (Toronto is UTC-5 in winter).
+    # Two runs a day. GitHub cron is UTC only. 15:17 UTC is 08:17 Pacific (UTC-7, no DST) / 10:17 Eastern in winter.
     # Minute 17, not 0: runs scheduled on the hour are the ones GitHub delays most (ours have started 2-7 h late).
-    - cron: "17 15 * * *"       # 08:17 Victoria / 10:17 Toronto (winter). Feashliaa's dataset is ready by then on ~half the days
-    - cron: "17 23 * * *"       # 16:17 Victoria. The dataset has always finished by 18:15 UTC, so this run sees the day's data
+    - cron: "17 15 * * *"       # morning. Feashliaa's dataset is ready by then on ~half the days
+    - cron: "17 23 * * *"       # 16:17 Pacific. The dataset has always finished by 18:15 UTC, so this run sees the day's data
   workflow_dispatch:
     inputs:
       dry_run:
@@ -42,6 +42,16 @@ jobs:
 
       - run: pip install --require-hashes -r requirements.txt   # every package pinned by hash (requirements.in)
 
+      # Job descriptions already downloaded (config.yaml jd.cache_dir, 7-day TTL). Without this every run downloads
+      # the JD of every candidate in the 3-day window again, twice a day. A new entry is saved per run; GitHub
+      # drops entries unused for 7 days.
+      - name: Restore the JD cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .cache/jd
+          key: jd-${{ github.run_id }}
+          restore-keys: jd-
+
       - name: Scan and write to the Notion Feed
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
@@ -57,6 +67,10 @@ jobs:
           [ -n "$MAX_ROWS" ] && args+=(--max-rows "$MAX_ROWS")
           [ -n "$SINCE_DAYS" ] && args+=(--since "$SINCE_DAYS")
           python -m scanner run "${args[@]}"
+
+      - name: Prune the JD cache
+        if: always()
+        run: find .cache/jd -type f -mtime +7 -delete 2>/dev/null || true     # past the TTL: never read again
 
       - name: Commit state and reports
         if: always()             # rows already written must reach seen.json even if the run failed later

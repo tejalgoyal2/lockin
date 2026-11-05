@@ -318,8 +318,9 @@ def rescore(verdicts: list[Verdict], records: dict[str, Found], cfg: dict, filte
         new_fit = None if job.fit_pct is None else round(job.fit_pct / 100, 4)
         if (new_fit is None) != (it.fit is None) or (new_fit is not None and abs(new_fit - it.fit) > 0.0002):
             ch.fit = (it.fit, new_fit)
-        if sorted(job.signals) != sorted(it.signals):
-            ch.signals = (list(it.signals), list(job.signals))
+        shown = notion_feed.display_signals(job.signals)
+        if sorted(shown) != sorted(it.signals):
+            ch.signals = (list(it.signals), shown)
         if ch.company or ch.fit or ch.signals:
             changes.append(ch)
     return changes

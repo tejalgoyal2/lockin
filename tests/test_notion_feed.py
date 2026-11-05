@@ -6,7 +6,7 @@ import requests
 
 from scanner import notion_feed as nf
 from scanner.models import Job
-from tests.fakes import NAMES, FakeNotion, Resp, good_schema
+from tests.fakes import NAMES, FakeNotion, Resp
 
 NOW = datetime(2026, 10, 7, 16, 0, tzinfo=timezone.utc)
 OVERRIDES = {"rbc": "RBC"}
@@ -108,9 +108,45 @@ def test_source_outside_the_feed_options_is_left_empty(feed):
     assert "Source" not in props         # would otherwise create a new select option silently
 
 
-def test_signals_include_data_quality_values(feed):
+def test_data_quality_values_show_as_the_one_warning(feed):
     props = nf.build_page(make_job(signals=["low signal", "jd unavailable"]), feed, OVERRIDES)[0]["properties"]
-    assert [s["name"] for s in props["Signals"]["multi_select"]] == ["low signal", "jd unavailable"]
+    assert [s["name"] for s in props["Signals"]["multi_select"]] == ["jd unavailable"]
+
+
+@pytest.mark.parametrize("signals, shown", [
+    ([], []),
+    (["junior"], ["junior"]),
+    (["new grad", "recent graduate", "0-2 years", "junior"], ["new grad"]),            # the strongest level tag only
+    (["recent graduate", "0-2 years", "2+ yrs"], ["recent graduate", "2+ yrs"]),         # level, then the warning
+    (["2+ yrs", "P.Eng req"], ["2+ yrs"]),                                               # one warning: the first listed
+    (["entry level", "low signal"], ["entry level", "low signal"]),
+    (["jd unavailable", "junior"], ["junior", "jd unavailable"]),
+    (["something new"], ["something new"]),                                              # unknown tags are not lost
+])
+def test_display_signals_keeps_at_most_two_tags(signals, shown):
+    assert nf.display_signals(signals) == shown
+
+
+def test_location_is_written_when_the_feed_has_the_column(client, notion):
+    notion.schema["properties"]["Location"] = {"id": "p_loc", "type": "rich_text", "rich_text": {}}
+    names = {**NAMES, "location": "Location"}
+    feed = nf.load_feed(client, "ds-1", names)
+    props = nf.build_page(make_job(location="Burnaby, BC"), feed, OVERRIDES)[0]["properties"]
+    assert props["Location"]["rich_text"][0]["text"]["content"] == "Burnaby, BC"
+
+
+def test_a_feed_without_the_location_column_still_works(client):
+    feed = nf.load_feed(client, "ds-1", {**NAMES, "location": "Location"})      # configured, not in Notion
+    assert not feed.has("location")
+    props = nf.build_page(make_job(location="Burnaby, BC"), feed, OVERRIDES)[0]["properties"]
+    assert "Location" not in props
+
+
+def test_location_column_of_the_wrong_type_is_reported(client, notion):
+    notion.schema["properties"]["Location"] = {"id": "p_loc", "type": "number", "number": {}}
+    with pytest.raises(nf.SchemaError) as e:
+        nf.load_feed(client, "ds-1", {**NAMES, "location": "Location"})
+    assert "'Location' has type 'number'" in str(e.value)
 
 
 # --- JD chunking ----------------------------------------------------------------------
@@ -217,7 +253,8 @@ def test_feed_without_done_del_fails_the_schema_check():
 def test_list_rows_asks_only_for_the_needed_properties(notion, client, feed):
     rows_fixture(notion, client, feed)
     q = [r for r in notion.requests if r["path"].endswith("/query")][-1]
-    assert q["params"] == {"filter_properties[]": ["p_link", "p_int", "p_apply", "p_done"]}
+    assert q["params"] == {"filter_properties[]": ["p_link", "p_int", "p_apply", "p_done", "p_fit", "p_source",
+                                                                "p_signals"]}
 
 
 # --- writing + read-back --------------------------------------------------------------
@@ -354,30 +391,30 @@ def test_preview_shortens_the_jd(feed):
 
 # --- secrets and ids never reach output ----------------------------------------------
 
-REAL_LOOKING_ID = "ae49313a-01cd-4f8e-bd1e-2bf377f44383"
+FAKE_ID = "11111111-2222-4333-8444-555555555555"      # made up: never a real Notion id (CLAUDE.md)
 
 
 def test_error_text_hides_notion_ids():
-    err = nf.NotionError(404, "object_not_found", "x", "GET", f"/v1/data_sources/{REAL_LOOKING_ID}")
-    assert REAL_LOOKING_ID not in str(err) and "/v1/data_sources/<id>" in str(err)
-    assert nf.redact("/v1/pages/ae49313a01cd4f8ebd1e2bf377f44383/properties/p") == "/v1/pages/<id>/properties/p"
+    err = nf.NotionError(404, "object_not_found", "x", "GET", f"/v1/data_sources/{FAKE_ID}")
+    assert FAKE_ID not in str(err) and "/v1/data_sources/<id>" in str(err)
+    assert nf.redact("/v1/pages/11111111222243338444555555555555/properties/p") == "/v1/pages/<id>/properties/p"
 
 
 def test_unreadable_feed_error_does_not_contain_the_data_source_id(notion):
     client = nf.NotionClient("tok", "v", session=notion, sleep=lambda s: None, min_interval=0)
     notion.scripted = [Resp(404, {"code": "object_not_found", "message": "nope"})]
     with pytest.raises(nf.SchemaError) as e:
-        nf.load_feed(client, REAL_LOOKING_ID, NAMES)
-    assert REAL_LOOKING_ID not in str(e.value) and "tok" not in str(e.value).split()
+        nf.load_feed(client, FAKE_ID, NAMES)
+    assert FAKE_ID not in str(e.value) and "tok" not in str(e.value).split()
 
 
 def test_retry_warning_hides_ids_and_never_logs_the_token(notion, caplog):
     c = nf.NotionClient("secret-token", "v", session=notion, sleep=lambda s: None, min_interval=0)
     notion.scripted = [Resp(429, {"code": "rate_limited", "message": "x"}, {"Retry-After": "1"})]
     with caplog.at_level("DEBUG"):
-        c.request("GET", f"/v1/data_sources/{REAL_LOOKING_ID}")
+        c.request("GET", f"/v1/data_sources/{FAKE_ID}")
     assert "retrying" in caplog.text
-    assert REAL_LOOKING_ID not in caplog.text and "secret-token" not in caplog.text
+    assert FAKE_ID not in caplog.text and "secret-token" not in caplog.text
 
 
 def test_preview_hides_the_data_source_id(feed):

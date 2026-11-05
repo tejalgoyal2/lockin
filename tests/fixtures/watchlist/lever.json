@@ -1,0 +1,36 @@
+[
+ {
+  "categories": {
+   "commitment": "Intern",
+   "department": "Technology",
+   "location": "Vancouver, BC",
+   "team": "Engineering",
+   "allLocations": [
+    "Vancouver, BC"
+   ]
+  },
+  "createdAt": 1783631724871,
+  "id": "00000000-0000-4000-8000-000000000003",
+  "text": "Browser Security Engineer Intern, (Winter 2027)",
+  "country": "CA",
+  "workplaceType": "onsite",
+  "hostedUrl": "https://jobs.lever.co/geocomply-2/00000000-0000-4000-8000-000000000003"
+ },
+ {
+  "categories": {
+   "commitment": "Full-time",
+   "department": "Technology",
+   "location": "Ho Chi Minh, Vietnam",
+   "team": "Engineering",
+   "allLocations": [
+    "Ho Chi Minh, Vietnam"
+   ]
+  },
+  "createdAt": 1789553772816,
+  "id": "00000000-0000-4000-8000-000000000004",
+  "text": "Senior DevOps Engineer",
+  "country": "VN",
+  "workplaceType": "hybrid",
+  "hostedUrl": "https://jobs.lever.co/geocomply-2/00000000-0000-4000-8000-000000000004"
+ }
+]

@@ -1,5 +1,3 @@
-from datetime import datetime, timezone
-
 from scanner import feed_clean as FC
 from scanner import notion_feed
 from scanner.cluster import ClusterResolver
