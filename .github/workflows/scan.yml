@@ -2,7 +2,10 @@ name: scan
 
 on:
   schedule:
-    - cron: "0 16 * * *"        # 16:00 UTC, after Feashliaa's daily dataset finishes
+    # Two runs a day. GitHub cron is UTC only; Victoria BC is UTC-7 all year (Toronto is UTC-5 in winter).
+    # Minute 17, not 0: runs scheduled on the hour are the ones GitHub delays most (ours have started 2-7 h late).
+    - cron: "17 15 * * *"       # 08:17 Victoria / 10:17 Toronto (winter). Feashliaa's dataset is ready by then on ~half the days
+    - cron: "17 23 * * *"       # 16:17 Victoria. The dataset has always finished by 18:15 UTC, so this run sees the day's data
   workflow_dispatch:
     inputs:
       dry_run:

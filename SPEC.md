@@ -13,7 +13,7 @@ Out of scope: applying to jobs, resume generation, LinkedIn/Indeed/Glassdoor scr
 ## 2. Architecture
 
 ```
-GitHub Actions (daily cron, UTC)
+GitHub Actions (cron twice a day, UTC)
   ├─ sources/        fetch raw postings
   │    ├─ feashliaa.py   daily dataset (phase 1)
   │    ├─ simplify.py    SimplifyJobs new-grad listings (phase 1)
@@ -36,7 +36,7 @@ Stack: Python 3.11+ (3.12 in CI; nothing depends on 3.12), `requests`, `pyyaml`,
 - Job record example:
   `{"ats":"Ashby","title":"AI Platform Engineer","location":"China","skill_level":"mid","company":"0g","is_recruiter":false,"scraped_at":"2026-10-04T13:32:20Z","url":"https://jobs.ashbyhq.com/0g/<id>","salary":{...},"first_seen":"2026-09-11T12:24:28Z"}`
 - `skill_level` is title-only (intern/entry/mid/senior); "mid" is the default for untagged titles, so do NOT rely on it to find entry-level roles.
-- Their scrape starts 07:33 UTC and can take hours; `last_updated` on 2026-10-04 was 14:13 UTC. Schedule our run at **16:00 UTC** and log `last_updated`; if it is >36 h old, log a warning and continue with other sources.
+- Their scrape starts 07:33 UTC and can take hours; `last_updated` on 2026-10-04 was 14:13 UTC. Over 2026-10-11 to 11-04 `last_updated` fell between 12:34 and 18:15 UTC (usually 13:30-16:30). We run twice a day, at **15:17 UTC** (picks up the dataset on about half the days; otherwise it re-reads the previous one, which `seen.json` makes harmless) and **23:17 UTC** (always after it), and log `last_updated`; if it is >36 h old, log a warning and continue with other sources.
 - Measured 2026-10-04 with the filters in §4 (title + location + exclusions): **~249 new Canadian non-senior tech postings in the last 7 days from 169 companies**; ~3,047 companies currently show at least one Canadian job (BambooHR 1009, Workday 808, Greenhouse 670, Ashby 237, Lever 222, Paylocity 101).
 - No JD text in this dataset → phase 2 fetches it.
 
