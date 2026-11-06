@@ -1,25 +1,38 @@
 # lockin
 
-A zero-LLM, zero-cost scanner (twice a day) for **new-grad / entry-level tech jobs in Canada**. It reads two public
-job datasets and a watchlist of employer job boards, filters them, fetches each job description from the company's applicant tracking system (ATS),
-scores the fit against your skills, and writes the best new jobs to a **Notion "Job Feed"** database for you
-to triage. It runs on GitHub Actions. Design: [SPEC.md](SPEC.md).
+> *Finding a job....*
 
-## How a run works
+Job hunting is a full-time job that pays nothing. **lockin** is the intern that does the boring half of it, twice a
+day, for free, without ever asking for a coffee.
+
+It reads the public job lists, throws out everything that wants 7 years of experience in a technology invented 4
+years ago, scores what is left against your skills, and drops the best new **entry-level and new-grad tech jobs in
+Canada** into a Notion board. You tick a box. It never writes a cover letter, never calls a model, never costs a
+cent. It runs on GitHub Actions while you do something healthier, like refreshing the same Feed.
+
+Design notes live in [SPEC.md](SPEC.md). Opinions about the job market do not.
+
+## What a run does
 
 1. Read [Feashliaa/job-board-data](https://github.com/Feashliaa/job-board-data), the
    [SimplifyJobs new-grad list](https://github.com/SimplifyJobs/New-Grad-Positions), the employer boards in
    `watchlist.yaml` (read live, so they are as fresh as the employer's own site) and four job sites (see
    "Job sites" below).
 2. Filter by freshness, Canadian location, company blocklist, language, title and seniority (`config.yaml`).
+   "Senior", "Staff", "Principal" and "Director of Vibes" do not make it through.
 3. Fetch each JD (Greenhouse, Lever, Ashby, Workday, BambooHR), apply the JD rules (3+ years, current
    enrollment, clearance) and score the fit against `skills.yaml` / `gaps.yaml`.
 4. Write the top `notion.daily_cap` (40) new jobs to the Feed, skipping anything in `state/seen.json` or
    already in the Feed by Link. At the start of the run, Feed rows whose `done-del` box is ticked (your Notion
    automation ticks it after copying the row to your main database) are trashed; no other row is ever trashed.
 5. Commit `state/` and `reports/` back to the repo. `reports/latest.md` is the full candidate list;
-   `reports/gaps.md` (Mondays) lists the tech terms JDs ask for that you do not list yet; `reports/feedback.md`
-   shows what you pick by Fit band, source and tag (see below).
+   `reports/gaps.md` (Mondays) lists the tech terms JDs keep asking for that you do not have yet (a to-learn list that
+   writes itself, yay); `reports/feedback.md`
+   shows what you actually pick, by Fit band, source and tag (see "Feedback").
+
+It runs at 08:17 and 16:17 Pacific (`17 15 * * *` and `17 23 * * *` UTC). Minute 17, because GitHub delays jobs
+scheduled on the hour by up to a few hours, which is also how it feels waiting for a recruiter. A run only writes
+jobs not already seen, so the second run never duplicates the first.
 
 ## Setup
 
@@ -31,9 +44,9 @@ to triage. It runs on GitHub Actions. Design: [SPEC.md](SPEC.md).
    | Name | Title |
    | Company | Text |
    | Link | URL |
-   | Source | Select, options: Workday, Greenhouse, Lever, Ashby, BambooHR, Paylocity, Simplify, Watchlist |
+   | Source | Select: Workday, Greenhouse, Lever, Ashby, BambooHR, Paylocity, Simplify, Watchlist. Optional extras for the job sites: YC, Built In, Bay Street Oracle, HN |
    | Fit % | Number, format **Percent** |
-   | Signals | Multi-select, options: new grad, recent graduate, 0-2 years, entry level, junior, low signal, jd unavailable (`2+ yrs` is created on first use) |
+   | Signals | Multi-select, options: new grad, recent graduate, 0-2 years, entry level, junior, low signal, jd unavailable (`2+ yrs` and `P.Eng req` are created on first use) |
    | Location | Text (optional: filled when the column exists) |
    | JD | Text |
    | Interested | Checkbox |
@@ -43,23 +56,24 @@ to triage. It runs on GitHub Actions. Design: [SPEC.md](SPEC.md).
 2. **Create a Notion integration** (an internal connection) at <https://www.notion.so/profile/integrations>
    with read, update and insert content capabilities. Copy its secret.
 3. **Share the Feed database with the integration** (database menu `...` > Connections). Share nothing else:
-   the scanner never needs your main database.
-4. **Get the data source ID** of the Feed (database menu `...` > Manage data sources > copy the data source ID). It is not the ID in the database's URL.
+   the scanner never needs your main database, and you do not need a bot reading your life.
+4. **Get the data source ID** of the Feed (database menu `...` > Manage data sources > copy the data source ID).
+   It is not the ID in the database's URL. Yes, that one trips everybody.
 5. **Add two repository secrets** (Settings > Secrets and variables > Actions):
-   `NOTION_TOKEN` (the integration secret) and `NOTION_FEED_DATA_SOURCE_ID`.
+   `NOTION_TOKEN` (the integration secret) and `NOTION_FEED_DATA_SOURCE_ID`. Never commit either, and never paste a
+   Notion ID anywhere in the repo.
 6. **Run it once by hand**: Actions > scan > Run workflow. Leave `dry_run` ticked first (it validates the Feed
    schema and shows what it would write), then run again with `dry_run` unticked and `max_rows` = 5.
-   After that the schedule takes over: twice a day, `17 15 * * *` and `17 23 * * *` UTC (08:17 and 16:17 Pacific,
-   UTC-7 all year without DST). A run only writes jobs not yet in `state/seen.json` or the Feed, so the
-   second run never duplicates the first. The workflow commits to the branch it runs on; if
-   that branch is protected, allow GitHub Actions to push to it.
+   After that the schedule takes over. The workflow commits to the branch it runs on; if that branch is protected,
+   let GitHub Actions push to it.
 
-A row carries at most two Signals: the strongest level tag (new grad, recent graduate, 0-2 years, entry level,
+**Reading the Feed.** A row carries at most two Signals: the strongest level tag (new grad, recent graduate, 0-2 years, entry level,
 junior) and the most important warning (2+ yrs, P.Eng req, jd unavailable, low signal). The full set is in
-`reports/latest.md`.
+`reports/latest.md`. **Fit %** is a keyword match between the posting and your skills, not a prophecy: open the job
+before you fall in love.
 
-Your own Notion automation can copy a ticked row to your main database and tick `done-del`; the next run trashes
-that row, and `state/seen.json` stops the job from being written again.
+Your Notion automation copies a ticked row to your main database and ticks `done-del`; the next run trashes the row,
+and `state/seen.json` makes sure the job never comes back to haunt you.
 
 ## Run it locally
 
@@ -77,7 +91,7 @@ Dependencies: edit `requirements.in` / `requirements-dev.in`, then regenerate th
 
 Useful flags: `--since N`, `--max-rows N`, `--no-jd` (phase 1 only), `--no-notion`, `--gaps-report always`.
 
-## Watchlist
+## Watchlist: employers we stalk professionally
 
 `watchlist.yaml` lists employers whose Greenhouse, Lever or Ashby board is read directly on every run. Use it for
 employers the Feashliaa dataset does not carry (it is built from its author's company lists) and for employers you
@@ -85,12 +99,13 @@ want on the morning run: the dataset refreshes once a day, a watchlist board is 
 employer's careers page and look at where "Apply" goes: `boards.greenhouse.io/<slug>` or
 `job-boards.greenhouse.io/<slug>`, `jobs.lever.co/<slug>`, `jobs.ashbyhq.com/<slug>`. Add
 `- {ats: greenhouse|lever|ashby, slug: <slug>, name: Display Name}`. A board that cannot be read is reported and
-skipped; a malformed entry stops the run with a clear message.
+skipped; a malformed entry stops the run with a clear message, because a typo should not quietly un-stalk anyone.
 
 Not covered, and why: employers on Workday, SuccessFactors, Taleo, iCIMS, UltiPro or their own site need a
 different reader. Workday employers are already in the dataset when it lists them. The dataset carries about
 250,000 iCIMS postings with no location (the field says "Not specified"), so none can pass the Canadian filter;
-employers that use iCIMS (Vancouver Coastal Health among them) are not scanned.
+employers that use iCIMS (Vancouver Coastal Health among them) are not scanned. A known blind spot, written down
+so it stops lurking.
 
 ## Job sites
 
@@ -107,16 +122,17 @@ A job a site shares with an ATS board is kept once, with the ATS link. To turn o
 `sources.<name>` in `config.yaml`. The Feed's Source column needs the options `YC`, `Built In`, `Bay Street Oracle`
 and `HN` to show them (without the option the Source cell stays empty; nothing else changes).
 
-Not read: CivicJobs and CivicInfo BC answer an automated client with a Cloudflare bot challenge (HTTP 403, also on
-the RSS feed CivicInfo advertises), so they are left alone; Work at a Startup lists the same postings as the YC pages.
+**Not read, on purpose:** CivicJobs and CivicInfo BC answer an automated client with a Cloudflare bot challenge
+(HTTP 403, including on the RSS feed CivicInfo advertises). That is the sites saying no, so lockin says "fair
+enough" and leaves. No fake browsers, no challenge solvers. Work at a Startup lists the same postings as the YC pages.
 
-## Feedback
+## Feedback: teaching the robot your taste
 
 Before a `done-del` row is trashed, the run counts it in `state/feedback.json`: reviewed or picked (`Interested` /
 `Apply`), by Fit band, source and its two tags. Counts only, no titles or companies. `reports/feedback.md` prints
 the pick rate per band. If Fit % predicts your picks, the rate rises with the band; if a band is flat, that is
 where Fit % needs work. The first 120 reviewed rows were entered by hand when this started
-(`seeded_through` in the file), so those rows are never counted twice.
+(`seeded_through` in the file), so they are never counted twice.
 
 ## What you edit
 
@@ -132,8 +148,11 @@ where Fit % needs work. The first 120 reviewed rows were entered by hand when th
 
 - [Feashliaa/job-board-aggregator](https://github.com/Feashliaa/job-board-aggregator) and its daily dataset
   [Feashliaa/job-board-data](https://github.com/Feashliaa/job-board-data). The aggregator **code is MIT**; the
-  **company lists and data are CC BY-NC 4.0**, so this project is for non-commercial use only.
+  **company lists and data are CC BY-NC 4.0**, so this project is for non-commercial use only. Be nice to the
+  person whose data it is.
 - [SimplifyJobs/New-Grad-Positions](https://github.com/SimplifyJobs/New-Grad-Positions) for the curated new-grad
   listings.
 - ATS endpoint shapes were checked against the MIT-licensed providers in
   [career-ops-hq/career-ops](https://github.com/career-ops-hq/career-ops).
+
+*Built with spite, Python, and a mild fear of the word "synergy".*
