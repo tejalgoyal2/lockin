@@ -1,9 +1,9 @@
 # Canadian entry-level tech jobs: candidates
 
-- Generated: 2026-11-05 20:59 UTC
+- Generated: 2026-11-06 03:28 UTC
 - Window: first seen in the last 3 day(s)
 - Feashliaa dataset last updated: 2026-11-05T16:35:51.320969Z
-- Candidates after dedupe: **837**
+- Candidates after dedupe: **835**
 - Remaining after JD rules: **48** (ranked by Score)
 
 | First Seen | Company | Role | Location | Source | Tier | Fit % | Cluster | Signals | Gaps | URL |
@@ -15,6 +15,7 @@
 | 2026-11-03 | pointclickcare | Int Database Reliability Engineer (DBRE) | Remote or Mississauga | Lever | strong | 84.3 | data |  | Grafana | https://jobs.lever.co/pointclickcare/44f485fb-6d6f-44ed-a034-bb823a5caf1e |
 | 2026-11-03 | quadreal | Cyber Security Analyst | Vancouver | Workday | strong | 87.9 | security | 2+ yrs |  | https://quadreal.wd10.myworkdayjobs.com/quadreal/job/Vancouver/Cyber-Security-Analyst_R0007024 |
 | 2026-11-05 | ciena | Software Design/Engineer - New Grad | Ottawa | Workday | strong | 72.4 | software | new grad | Jenkins, unit testing | https://ciena.wd5.myworkdayjobs.com/careers/job/Ottawa/Software-Design-Engineer---New-Grad_R032059 |
+| 2026-11-05 | Capital Automotive Group | AI & Data Systems Specialist | Regina, SK, Canada | Simplify | strong | 68.4 | ml | recent graduate | GCP, BigQuery, Looker | https://capitalauto.wd3.myworkdayjobs.com/capitalautogroupcareers/job/Regina-SK/AI---Data-Systems-Specialist_R3010 |
 | 2026-11-05 | entrust | QA Specialist | Canada - Ottawa | Workday | weak | 87.1 | software | 2+ yrs | Postman, Selenium | https://entrust.wd1.myworkdayjobs.com/entrustcareers/job/Canada---Ottawa/XMLNAME--QA-Specialist_R004441 |
 | 2026-11-04 | tribalscale | Agentic QA Engineer | Toronto, Ontario, Canada | Greenhouse | weak | 84.6 | software |  | React Native, distributed systems | https://job-boards.greenhouse.io/tribalscale/jobs/4726999006 |
 | 2026-11-03 | jll | Analyst, Operational Performance | Toronto, ON | Workday | weak | 88.2 | data | 2+ yrs |  | https://jll.wd1.myworkdayjobs.com/jllcareers/job/Toronto-ON/Analyst--Operational-Performance---Hybrid_REQ543770 |
@@ -54,7 +55,6 @@
 | 2026-11-04 | clinchoice | Junior Statistical Programmer Analyst _Permanent Role_(CANADA) | Mississauga, Ontario , Canada | Greenhouse | strong | n/a | data | 0-2 years, junior, low signal | SAS | https://job-boards.eu.greenhouse.io/clinchoice/jobs/4989609101 |
 | 2026-11-03 | fccfac | Technical Analyst, Data, Compliance and Financial Solutions | Regina, Saskatchewan | Workday | strong | n/a | data | low signal |  | https://fccfac.wd3.myworkdayjobs.com/careers-carrieres/job/Regina-Saskatchewan/Technical-Analyst--Data--Compliance-and-Financial-Solutions_R-1008962 |
 | 2026-11-03 | Raydar | Full-Stack Software Engineer | Toronto, ON, Canada | Simplify | strong | n/a | software | jd unavailable |  | https://apply.workable.com/raydar/j/5CFE2097E4/apply |
-| 2026-11-02 | Microsoft | Software Engineer | Canada | Simplify | strong | n/a | software | jd unavailable |  | https://apply.careers.microsoft.com/careers/job/1970393557048150 |
 | 2026-11-05 | CATALIS | Data Migration Specialist | Edmonton, Alberta | Paylocity | strong | n/a | data | jd unavailable |  | https://recruiting.paylocity.com/recruiting/Jobs/Details/4642272 |
 
 ## Stage counts
@@ -78,9 +78,9 @@
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 19,063 |
-| active, visible, tech category | 2,156 |
-| first seen within window | 94 |
+| raw records | 19,016 |
+| active, visible, tech category | 2,167 |
+| first seen within window | 89 |
 | Canadian location | 7 |
 | not Quebec-only | 7 |
 | not on blocklist | 7 |
@@ -94,16 +94,16 @@
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 6,508 |
-| first seen within window | 361 |
-| Canadian location | 81 |
+| raw records | 6,511 |
+| first seen within window | 370 |
+| Canadian location | 80 |
 | not Quebec-only | 73 |
 | not on blocklist | 73 |
 | not French-only | 73 |
 | title matches tech roles | 38 |
-| not senior / non-software | 8 |
-| not student-only | 8 |
-|   of which weak_title | 4 |
+| not senior / non-software | 6 |
+| not student-only | 6 |
+|   of which weak_title | 3 |
 
 **YC**
 
@@ -125,16 +125,16 @@
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 69 |
-| first seen within window | 26 |
-| Canadian location | 23 |
-| not Quebec-only | 23 |
-| not on blocklist | 23 |
-| not French-only | 23 |
-| title matches tech roles | 7 |
-| not senior / non-software | 5 |
-| not student-only | 5 |
-|   of which weak_title | 4 |
+| raw records | 68 |
+| first seen within window | 23 |
+| Canadian location | 20 |
+| not Quebec-only | 20 |
+| not on blocklist | 20 |
+| not French-only | 20 |
+| title matches tech roles | 5 |
+| not senior / non-software | 4 |
+| not student-only | 4 |
+|   of which weak_title | 3 |
 
 **Bay Street Oracle**
 
@@ -156,24 +156,24 @@
 | Stage | Remaining |
 |---|---:|
 | raw records | 11 |
-| first seen within window | 4 |
-| Canadian location | 4 |
-| not Quebec-only | 4 |
-| not on blocklist | 4 |
-| not French-only | 4 |
-| title matches tech roles | 4 |
-| not senior / non-software | 2 |
-| not student-only | 2 |
-|   of which weak_title | 1 |
+| first seen within window | 2 |
+| Canadian location | 2 |
+| not Quebec-only | 2 |
+| not on blocklist | 2 |
+| not French-only | 2 |
+| title matches tech roles | 2 |
+| not senior / non-software | 1 |
+| not student-only | 1 |
+|   of which weak_title | 0 |
 
 **Combined**
 
 | Stage | Remaining |
 |---|---:|
-| before dedupe | 854 |
-|   merged by canonical URL | 5 |
+| before dedupe | 850 |
+|   merged by canonical URL | 3 |
 |   merged by fuzzy company+title | 12 |
-| after dedupe | 837 |
+| after dedupe | 835 |
 
 ## JD rules
 
@@ -182,12 +182,12 @@
 | Reason | Jobs |
 |---|---:|
 | location_not_canada | 532 |
-| experience_3plus | 95 |
+| experience_3plus | 94 |
 | weak_title_few_terms | 64 |
 | requires_enrollment | 43 |
 | location_quebec_only | 20 |
-| location_unresolved_url_not_canadian | 18 |
 | two_years_no_fit | 17 |
+| location_unresolved_url_not_canadian | 17 |
 | student_title_not_rescued | 12 |
 | security_clearance | 11 |
 | requires_french | 10 |
@@ -202,17 +202,17 @@ Student-titled jobs held for JD check: 51; rescued: 0.
 
 | Source:status | Jobs |
 |---|---:|
-| Ashby:ok | 6 |
+| Ashby:ok | 5 |
 | BambooHR:ok | 26 |
-| Built In:ok | 3 |
+| Built In:ok | 2 |
 | Greenhouse:not_found | 1 |
 | Greenhouse:ok | 33 |
 | HN:ok | 1 |
 | Lever:not_found | 1 |
 | Lever:ok | 14 |
 | Paylocity:unsupported | 1 |
-| Simplify:ok | 2 |
-| Simplify:unsupported | 3 |
+| Simplify:ok | 3 |
+| Simplify:unsupported | 2 |
 | Workday:error | 21 |
 | Workday:not_found | 5 |
 | Workday:ok | 771 |
@@ -265,7 +265,7 @@ Student-titled jobs held for JD check: 51; rescued: 0.
 | 0-19 | 0 |
 | 20-39 | 1 |
 | 40-59 | 2 |
-| 60-79 | 23 |
+| 60-79 | 24 |
 | 80-100 | 14 |
-| n/a (no JD or no tech terms) | 8 |
+| n/a (no JD or no tech terms) | 7 |
 

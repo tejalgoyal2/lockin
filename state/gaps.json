@@ -14029,6 +14029,16 @@
    "gaps": [],
    "title": "Technical Customer Service Representative 2"
   },
+  "c0b19bc9c55cf36dc21758e9a13985537b3edf2a": {
+   "company": "Capital Automotive Group",
+   "date": "2026-11-06",
+   "gaps": [
+    "BigQuery",
+    "GCP",
+    "Looker"
+   ],
+   "title": "AI & Data Systems Specialist"
+  },
   "c0c03dc41decbc0ded201742277cfc32898f9146": {
    "company": "Theocc",
    "date": "2026-10-21",
