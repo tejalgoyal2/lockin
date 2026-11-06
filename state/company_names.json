@@ -3,6 +3,10 @@
   "name": "1Password",
   "checked": "2026-10-31"
  },
+ "Ashby:aerovect": {
+  "name": "AeroVect",
+  "checked": "2026-11-06"
+ },
  "Ashby:cohere": {
   "name": "Cohere",
   "checked": "2026-10-28"
@@ -30,6 +34,14 @@
  "BambooHR:clearwaygroup": {
   "name": "Clearway",
   "checked": "2026-11-03"
+ },
+ "BambooHR:corinexcom": {
+  "name": "Corinex Technologies",
+  "checked": "2026-11-06"
+ },
+ "BambooHR:issbc": {
+  "name": "Immigrant Services Society of BC",
+  "checked": "2026-11-06"
  },
  "BambooHR:konstruct": {
   "name": "Konstruct Digital",
@@ -66,6 +78,10 @@
  "Workday:aimco.wd10.myworkdayjobs.com/aimcocareers": {
   "name": "",
   "checked": "2026-10-27"
+ },
+ "Workday:alfalaval.wd3.myworkdayjobs.com/alfa_laval_jobs": {
+  "name": "",
+  "checked": "2026-11-06"
  },
  "Workday:ameresco.wd5.myworkdayjobs.com/ameresco": {
   "name": "",
