@@ -49,12 +49,15 @@ def test_save_and_reload_round_trip(tmp_path):
     assert again.counts == st.counts and again.since == "2026-11-10"
 
 
-def test_committed_seed_is_consistent():
+def test_committed_counts_are_consistent():
+    """The file grows with every run, so no fixed totals: it started at 120 reviewed / 27 picked and can only go up,
+    and every dimension must add up to the same totals."""
     st = FeedbackStore("state/feedback.json")
-    assert st.reviewed == 120 and st.picked == 27 and st.seeded_through
+    assert st.reviewed >= 120 and st.picked >= 27 and st.seeded_through
     for dim in st.counts:
         assert sum(v[0] for v in st.counts[dim].values()) == st.reviewed
         assert sum(v[1] for v in st.counts[dim].values()) == st.picked
+        assert all(0 <= p <= n for n, p in st.counts[dim].values())
 
 
 def test_render_hides_rates_for_thin_bands(tmp_path):
