@@ -7916,6 +7916,15 @@
    "gaps": [],
    "title": "Analyst, Credit Risk (18 Month Contract)"
   },
+  "6b2bcfdf961d02a296cc9033d10bd5bfcaa853b9": {
+   "company": "Cohere",
+   "date": "2026-11-07",
+   "gaps": [
+    "Go",
+    "distributed systems"
+   ],
+   "title": "Software Engineer, ML Workload Platform"
+  },
   "6b2fef41943fce854775580f084de68fe6bdd194": {
    "company": "Manulife",
    "date": "2026-10-24",
@@ -8376,6 +8385,17 @@
     "SAP"
    ],
    "title": "Technical Group Leader"
+  },
+  "71a0fd016dd2816d12c1cb5c7fe5d3fa7fc1b48b": {
+   "company": "Genesys",
+   "date": "2026-11-07",
+   "gaps": [
+    "Java",
+    "Kotlin",
+    "Spring",
+    "Vue"
+   ],
+   "title": "Associate Software Developer"
   },
   "71a8225276c2214012112d1823719d32d17d88b7": {
    "company": "Lumentum",
@@ -14143,6 +14163,14 @@
    ],
    "title": "Maintenance Engineer"
   },
+  "bba9876ec6865a724c3f03677d23780f203f314e": {
+   "company": "Cohere",
+   "date": "2026-11-07",
+   "gaps": [
+    "Go"
+   ],
+   "title": "Software Engineer, GPU Infrastructure"
+  },
   "bbc32247751ace521fe8c88af54d8da3305a5441": {
    "company": "Medaviehs",
    "date": "2026-10-23",
@@ -14888,6 +14916,12 @@
     "dbt"
    ],
    "title": "Data Scientist"
+  },
+  "c5d796800ea069df8a6d71a8767036dbf8d99eab": {
+   "company": "SpryPoint",
+   "date": "2026-11-07",
+   "gaps": [],
+   "title": "Data Conversion Engineer"
   },
   "c5e1fd9012ef59be61c19b722fdd9bc6bb24591f": {
    "company": "Gehc",
