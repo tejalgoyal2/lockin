@@ -1,9 +1,9 @@
 # Canadian entry-level tech jobs: candidates
 
-- Generated: 2026-11-07 19:26 UTC
+- Generated: 2026-11-08 02:33 UTC
 - Window: first seen in the last 3 day(s)
 - Feashliaa dataset last updated: 2026-11-07T15:08:09.921671Z
-- Candidates after dedupe: **726**
+- Candidates after dedupe: **727**
 - Remaining after JD rules: **50** (ranked by Score)
 
 | First Seen | Company | Role | Location | Source | Tier | Fit % | Cluster | Signals | Gaps | URL |
@@ -16,7 +16,6 @@
 | 2026-11-06 | Lumentum | Process Automation Software Engineer - MEMS | Ottawa, ON, Canada | Simplify | strong | 72.7 | software | recent graduate | unit testing | https://lumentum.wd5.myworkdayjobs.com/LITE/job/Canada---Ottawa-Bill-Leathem/Process-Automation-Software-Engineer---MEMS_20261527 |
 | 2026-11-06 | capco | Developer | Canada - Toronto | Greenhouse | strong | 88.2 | software | 2+ yrs | microservices | https://job-boards.greenhouse.io/capco/jobs/8287605 |
 | 2026-11-05 | ciena | Software Design/Engineer - New Grad | Ottawa | Workday | strong | 72.4 | software | new grad | Jenkins, unit testing | https://ciena.wd5.myworkdayjobs.com/careers/job/Ottawa/Software-Design-Engineer---New-Grad_R032059 |
-| 2026-11-05 | capitalauto | AI & Data Systems Specialist | Regina, SK | Workday+Simplify | strong | 68.4 | ml | recent graduate | GCP, BigQuery, Looker | https://capitalauto.wd3.myworkdayjobs.com/capitalautogroupcareers/job/Regina-SK/AI---Data-Systems-Specialist_R3010 |
 | 2026-11-05 | entrust | QA Specialist | Canada - Ottawa | Workday | weak | 87.1 | software | 2+ yrs | Postman, Selenium | https://entrust.wd1.myworkdayjobs.com/entrustcareers/job/Canada---Ottawa/XMLNAME--QA-Specialist_R004441 |
 | 2026-11-06 | SpryPoint | Data Conversion Engineer | Remote in Canada | Simplify | strong | 81.8 | data |  |  | https://jobs.lever.co/sprypointservices/ea33fe62-4334-4eac-9b05-9eac7f6312cc/apply |
 | 2026-11-06 | corinexcom | Firmware QA Specialist | Vancouver, British Columbia | BambooHR | weak | 83.3 | software | 2+ yrs |  | https://corinexcom.bamboohr.com/careers/186 |
@@ -26,6 +25,7 @@
 | 2026-11-07 | ciena | Embedded Security Software Developer - New Grad | Ottawa | Workday | strong | 71.4 | security | new grad | unit testing | https://ciena.wd5.myworkdayjobs.com/careers/job/Ottawa/Embedded-Security-Software-Developer---New-Grad_R032066 |
 | 2026-11-06 | Genesys | Associate Software Developer | Prince Edward Island, Canada | Simplify | strong | 68.4 | software | 0-2 years | Java, Kotlin, Spring, Vue | https://genesys.wd1.myworkdayjobs.com/en-US/Genesys/job/Toronto-Flexible/Associate-Software-Developer_JR112811 |
 | 2026-11-07 | rbc | Full Stack Engineer | 745 THURLOW ST:VANCOUVER | Workday | strong | 72.7 | software | 2+ yrs | Java, Kafka, Splunk, integration testing | https://rbc.wd3.myworkdayjobs.com/rbcglobal1/job/745-THURLOW-STVANCOUVER/Full-Stack-Engineer_R-0000191969-1 |
+| 2026-11-06 | capitalauto | AI & Data Systems Specialist | Regina, SK | Workday | strong | 68.4 | ml | recent graduate | GCP, BigQuery, Looker | https://capitalauto.wd3.myworkdayjobs.com/capitalautogroupcareers/job/Regina-SK/AI---Data-Systems-Specialist_R3010 |
 | 2026-11-06 | aerovect | Software Engineer, ML Ops | Toronto | Ashby | strong | 84.6 | ml | 2+ yrs |  | https://jobs.ashbyhq.com/aerovect/6058be12-918f-4016-87d8-cdbeb0ecdfbf |
 | 2026-11-06 | lifeworks | System Quality Analyst I - 100% Remote | Toronto, Ontario, Canada | Workday | weak | 77.8 | software |  |  | https://lifeworks.wd3.myworkdayjobs.com/external/job/Toronto-Ontario-Canada/System-Quality-Analyst-I_R-23400 |
 | 2026-11-05 | spotify | Security Engineer - Product Security | Toronto | Lever | strong | 82.6 | security |  |  | https://jobs.lever.co/spotify/1ee5dcb7-a5fe-465b-91da-d42ebab374c8 |
@@ -80,32 +80,32 @@
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 18,941 |
-| active, visible, tech category | 2,166 |
-| first seen within window | 95 |
-| Canadian location | 10 |
-| not Quebec-only | 9 |
-| not on blocklist | 9 |
-| not French-only | 9 |
-| title matches tech roles | 7 |
-| not senior / non-software | 7 |
-| not student-only | 7 |
+| raw records | 18,866 |
+| active, visible, tech category | 2,164 |
+| first seen within window | 68 |
+| Canadian location | 9 |
+| not Quebec-only | 8 |
+| not on blocklist | 8 |
+| not French-only | 8 |
+| title matches tech roles | 6 |
+| not senior / non-software | 6 |
+| not student-only | 6 |
 |   of which weak_title | 0 |
 
 **Watchlist**
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 6,414 |
-| first seen within window | 244 |
-| Canadian location | 69 |
-| not Quebec-only | 62 |
-| not on blocklist | 62 |
-| not French-only | 62 |
-| title matches tech roles | 35 |
-| not senior / non-software | 7 |
-| not student-only | 5 |
-|   of which weak_title | 1 |
+| raw records | 6,412 |
+| first seen within window | 212 |
+| Canadian location | 59 |
+| not Quebec-only | 53 |
+| not on blocklist | 53 |
+| not French-only | 53 |
+| title matches tech roles | 30 |
+| not senior / non-software | 6 |
+| not student-only | 4 |
+|   of which weak_title | 0 |
 
 **YC**
 
@@ -127,13 +127,13 @@
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 68 |
-| first seen within window | 24 |
-| Canadian location | 21 |
-| not Quebec-only | 21 |
-| not on blocklist | 21 |
-| not French-only | 21 |
-| title matches tech roles | 7 |
+| raw records | 67 |
+| first seen within window | 21 |
+| Canadian location | 18 |
+| not Quebec-only | 18 |
+| not on blocklist | 18 |
+| not French-only | 18 |
+| title matches tech roles | 6 |
 | not senior / non-software | 3 |
 | not student-only | 3 |
 |   of which weak_title | 1 |
@@ -142,16 +142,16 @@
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 33 |
-| first seen within window | 0 |
-| Canadian location | 0 |
-| not Quebec-only | 0 |
-| not on blocklist | 0 |
-| not French-only | 0 |
-| title matches tech roles | 0 |
-| not senior / non-software | 0 |
-| not student-only | 0 |
-|   of which weak_title | 0 |
+| raw records | 32 |
+| first seen within window | 1 |
+| Canadian location | 1 |
+| not Quebec-only | 1 |
+| not on blocklist | 1 |
+| not French-only | 1 |
+| title matches tech roles | 1 |
+| not senior / non-software | 1 |
+| not student-only | 1 |
+|   of which weak_title | 1 |
 
 **HN**
 
@@ -172,10 +172,10 @@
 
 | Stage | Remaining |
 |---|---:|
-| before dedupe | 739 |
-|   merged by canonical URL | 5 |
+| before dedupe | 738 |
+|   merged by canonical URL | 3 |
 |   merged by fuzzy company+title | 8 |
-| after dedupe | 726 |
+| after dedupe | 727 |
 
 ## JD rules
 
@@ -185,7 +185,7 @@
 |---|---:|
 | location_not_canada | 458 |
 | experience_3plus | 81 |
-| weak_title_few_terms | 62 |
+| weak_title_few_terms | 63 |
 | requires_enrollment | 41 |
 | student_title_not_rescued | 27 |
 | two_years_no_fit | 26 |
@@ -205,6 +205,7 @@ Student-titled jobs held for JD check: 59; rescued: 0.
 |---|---:|
 | Ashby:ok | 5 |
 | BambooHR:ok | 28 |
+| Bay Street Oracle:ok | 1 |
 | Built In:ok | 2 |
 | Greenhouse:ok | 25 |
 | Lever:ok | 11 |
@@ -233,6 +234,7 @@ Student-titled jobs held for JD check: 59; rescued: 0.
 | alfalaval | Alfalaval |
 | algonquincollege | Algonquincollege |
 | altaml | Altaml |
+| capitalauto | Capitalauto |
 | entrust | Entrust |
 | lifeworks | Lifeworks |
 | lumentum | Lumentum |
