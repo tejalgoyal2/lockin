@@ -43,6 +43,8 @@ SOURCE_OPTIONS = ("Workday", "Greenhouse", "Lever", "Ashby", "BambooHR", "Payloc
 # Labels of the job sites. Used when the Feed's Source column has the option; a Feed without it leaves Source empty
 # for those rows (they are not required, so the sites can ship before the options exist).
 SITE_SOURCE_OPTIONS = SITE_SOURCES
+# Optional too: a watchlist ATS added after the Feed was built. Without the option in Notion, Source stays empty.
+EXTRA_SOURCE_OPTIONS = ("SmartRecruiters",)
 SIGNAL_OPTIONS = ("new grad", "recent graduate", "0-2 years", "entry level", "junior", "low signal",
                   "jd unavailable")
 
@@ -473,7 +475,7 @@ def virtual_feed(names: dict[str, str]) -> Feed:
     """A Feed built from config alone, for dry runs that do not contact Notion."""
     return Feed(data_source_id="<NOTION_FEED_DATA_SOURCE_ID>", names=names,
                 ids={k: f"<{v} id>" for k, v in names.items()},
-                source_options={*SOURCE_OPTIONS, *SITE_SOURCE_OPTIONS})
+                source_options={*SOURCE_OPTIONS, *SITE_SOURCE_OPTIONS, *EXTRA_SOURCE_OPTIONS})
 
 
 def preview_page(page: dict, jd_prop: str) -> dict:

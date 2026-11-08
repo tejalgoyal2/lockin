@@ -4,8 +4,11 @@ on:
   schedule:
     # Two runs a day. GitHub cron is UTC only. 15:17 UTC is 08:17 Pacific (UTC-7, no DST) / 10:17 Eastern in winter.
     # Minute 17, not 0: runs scheduled on the hour are the ones GitHub delays most (ours have started 2-7 h late).
-    - cron: "17 15 * * *"       # morning. Feashliaa's dataset is ready by then on ~half the days
+    - cron: "17 15 * * *"       # 08:17 Pacific
+    - cron: "43 18 * * *"       # 11:43 Pacific. Spare slot: GitHub drops or delays scheduled runs (observed: the 08:17 run never started,
+                                #   the evening one came 4 h late). A run only writes unseen jobs, so extra slots never duplicate.
     - cron: "17 23 * * *"       # 16:17 Pacific. The dataset has always finished by 18:15 UTC, so this run sees the day's data
+    - cron: "41 3 * * *"        # 20:41 Pacific. Spare slot for the evening
   workflow_dispatch:
     inputs:
       dry_run:

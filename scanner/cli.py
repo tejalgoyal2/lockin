@@ -7,7 +7,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-from scanner import feed_clean, feed_refresh, gaps_report, notion_feed, report
+from scanner import discover, feed_clean, feed_refresh, gaps_report, notion_feed, report
 from scanner.applied import AppliedKeyError, AppliedSet
 from scanner.ats_names import NameStore, ats_name, fill_names
 from scanner.company_names import display_company, load_overrides, slug_names
@@ -61,7 +61,7 @@ def collect(cfg, args, filters, now, since):
             raise UsageError(str(exc)) from None
         records, failed = watchlist.fetch_all(
             boards, PoliteClient(delay=cfg["jd"]["request_delay"], per_ats=cfg["jd"]["max_per_ats"]),
-            workers=wl.get("workers", 6), seed_ashby=ats.seed_ashby_board)
+            workers=wl.get("workers", 6), now=now, seed_ashby=ats.seed_ashby_board)
         print(f"Watchlist: {len(boards) - len(failed)} of {len(boards)} boards read, {len(records):,} postings"
               + (f"; not read: {', '.join(f'{b.ats}/{b.slug}' for b, _ in failed)}" if failed else ""))
         found, stages, hold = run_stream(iter(records), watchlist.raw_fields, filters, now, since)
@@ -365,6 +365,54 @@ def run_clean_feed(args: argparse.Namespace) -> int:
     return 0
 
 
+def run_discover(args: argparse.Namespace) -> int:
+    cfg = load_config(args.config)
+    filters, now = Filters.from_config(cfg), datetime.now(timezone.utc)
+    client = PoliteClient(delay=cfg["jd"]["request_delay"], per_ats=cfg["jd"]["max_per_ats"])
+    if not args.names and not args.workday:
+        raise UsageError("give at least one company name or --workday TENANT.WDN/SITE")
+    for item in args.workday:
+        slug, _, name = item.partition("=")
+        try:
+            hit = discover.probe_workday(slug.strip(), name.strip(), client, filters, now)
+        except Exception as exc:
+            print(f"# {slug}: not read ({type(exc).__name__}: {str(exc)[:100]})")
+            continue
+        print(hit.yaml_line() if hit else f"# {slug}: no postings")
+    for name in args.names:
+        hits = discover.probe(name, client, filters, now, slugs=[args.slug] if args.slug else None)
+        if not hits:
+            print(f"# {name}: no Greenhouse / Lever / Ashby / SmartRecruiters board found "
+                  "(try --slug, or --workday if the careers page is myworkdayjobs.com)")
+        for hit in hits:
+            print(hit.yaml_line())
+    return 0
+
+
+def run_why(args: argparse.Namespace) -> int:
+    cfg = load_config(args.config)
+    filters, now = Filters.from_config(cfg), datetime.now(timezone.utc)
+    since = args.since if args.since is not None else cfg["freshness"]["default_days"]
+    client = PoliteClient(delay=cfg["jd"]["request_delay"], per_ats=cfg["jd"]["max_per_ats"])
+    wanted = args.name.lower()
+    boards = [b for b in watchlist.load_boards(cfg["sources"]["watchlist"]["path"])
+              if wanted in (b.name or "").lower() or wanted in b.slug.lower()]
+    if boards:
+        print(f"On the watchlist: {', '.join(f'{b.ats}/{b.slug}' for b in boards)}")
+        hits = [discover.Hit(b, 0, 0, 0) for b in boards]
+    else:
+        print(f"{args.name}: not on the watchlist, so only the Feashliaa dataset (if it carries them) could have "
+              "found a posting. Looking for a board ...")
+        hits = discover.probe(args.name, client, filters, now)
+        for h in hits:
+            print("  found:", h.yaml_line().strip())
+        if not hits:
+            print("  no board found: try `discover --slug` or `discover --workday`")
+            return 0
+    print(discover.why(hits, client, filters, now, since))
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="scanner")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -399,10 +447,22 @@ def main(argv: list[str] | None = None) -> int:
                    help="do not look for live postings for Workday rows without a JD")
     c.add_argument("--config", help="path to config.yaml")
     c.add_argument("--feashliaa-dir", help="use this local job-board-data clone as-is (no git sync)")
+    d = sub.add_parser("discover", help="find the job board of an employer (Greenhouse, Lever, Ashby, SmartRecruiters, "
+                                        "Workday) and print the watchlist.yaml line; writes nothing")
+    d.add_argument("names", nargs="*", help="company names")
+    d.add_argument("--workday", action="append", default=[], metavar="TENANT.WDN/SITE[=Name]",
+                   help="check a Workday tenant, e.g. generalmotors.wd5/Careers_GM=General Motors")
+    d.add_argument("--slug", help="try this exact board slug instead of guessing from the name (one company)")
+    d.add_argument("--config", help="path to config.yaml")
+    w = sub.add_parser("why", help="read an employer's board live and say, per Canadian posting, which rule keeps "
+                                   "it out of the Feed (or that nothing does)")
+    w.add_argument("name", help="company name of a watchlist entry, or a name to discover")
+    w.add_argument("--since", type=float, help="freshness window in days (default from config.yaml)")
+    w.add_argument("--config", help="path to config.yaml")
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     try:
-        return run_clean_feed(args) if args.cmd == "clean-feed" else run(args)
+        return {"clean-feed": run_clean_feed, "discover": run_discover, "why": run_why}.get(args.cmd, run)(args)
     except UsageError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2

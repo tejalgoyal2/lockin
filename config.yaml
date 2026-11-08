@@ -3,7 +3,8 @@
 # all others are case-insensitive.
 
 freshness:
-  default_days: 3        # normal run: only jobs first seen in the last N days
+  default_days: 7        # normal run: only jobs first seen in the last N days (seen.json keeps a job from coming twice;
+                         # a week also covers a skipped or failed run, GitHub drops scheduled runs now and then)
   first_run_days: 14     # used instead when state/seen.json does not exist yet (the first run)
 
 sources:

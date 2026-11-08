@@ -16,7 +16,7 @@ from scanner.sources.listing import SITE_SOURCES
 from scanner.text import INVISIBLE, html_to_text
 
 SITES = SITE_SOURCES      # job sites (scanner/sources/*): their pages carry the JD
-SUPPORTED = ("Greenhouse", "Lever", "Ashby", "Workday", "BambooHR", *SITES)
+SUPPORTED = ("Greenhouse", "Lever", "Ashby", "Workday", "BambooHR", "SmartRecruiters", *SITES)
 
 
 class NotFound(Exception):
@@ -45,6 +45,8 @@ def detect_ats(url: str) -> str | None:
         return "Workday"
     if host.endswith("bamboohr.com"):
         return "BambooHR"
+    if host.endswith("smartrecruiters.com"):
+        return "SmartRecruiters"
     if host == "news.ycombinator.com":
         return "HN"
     if host.endswith("ycombinator.com"):
@@ -113,6 +115,18 @@ def _bamboohr(url: str) -> AtsRef | None:
     return AtsRef("BambooHR", f"{parts.scheme}://{parts.netloc}/careers/{m.group(1)}/detail")
 
 
+def _smartrecruiters(url: str) -> AtsRef | None:
+    """https://jobs.smartrecruiters.com/<company>/<id>[-slug] -> the public posting API."""
+    parts = urlsplit(url)
+    segs = [s for s in parts.path.split("/") if s]
+    if len(segs) < 2 or not parts.netloc.lower().endswith("smartrecruiters.com"):
+        return None
+    m = re.match(r"\d+", segs[1])
+    if not m:
+        return None
+    return AtsRef("SmartRecruiters", f"https://api.smartrecruiters.com/v1/companies/{quote(segs[0])}/postings/{m.group(0)}")
+
+
 def _site(ats: str, url: str) -> AtsRef | None:
     """A job-site posting: the page itself is fetched (HN: the comment through the Algolia item API)."""
     if ats == "HN":
@@ -131,7 +145,8 @@ def locate(job: Job) -> AtsRef | None:
         return _site(ats, job.url)
     if ats == "Greenhouse":
         return _greenhouse(job.url, job.company)
-    return {"Lever": _lever, "Ashby": _ashby, "Workday": _workday, "BambooHR": _bamboohr}[ats](job.url)
+    return {"Lever": _lever, "Ashby": _ashby, "Workday": _workday, "BambooHR": _bamboohr,
+            "SmartRecruiters": _smartrecruiters}[ats](job.url)
 
 
 # --- response → text -------------------------------------------------------
@@ -182,6 +197,19 @@ def _lever_text(data: dict) -> str:
 
 def _workday_text(data: dict) -> str:
     return html_to_text((data.get("jobPostingInfo") or {}).get("jobDescription", ""))
+
+
+def _sr_text(data: dict) -> str:
+    sections = ((data.get("jobAd") or {}).get("sections") or {}).values()
+    chunks = [f"{(sec or {}).get('title', '').strip()}\n{html_to_text((sec or {}).get('text', ''))}".strip()
+              for sec in sections if isinstance(sec, dict)]
+    return "\n\n".join(c for c in chunks if c)
+
+
+def _sr_locations(data: dict) -> list[str]:
+    loc = data.get("location") or {}
+    parts = [loc.get("city", ""), loc.get("region", ""), (loc.get("country") or "").upper()]
+    return _dedupe_locations([", ".join(p for p in parts if p)])
 
 
 def _bamboo_text(data: dict) -> str:
@@ -294,11 +322,12 @@ def fetch_full(ref: AtsRef, client) -> Detail:
         "Lever": _lever_text,
         "Workday": _workday_text,
         "BambooHR": _bamboo_text,
+        "SmartRecruiters": _sr_text,
     }[ref.ats](data)
     text = INVISIBLE.sub("", text)          # plain-text fields (Lever, Ashby) skip html_to_text
     company = (data.get("company_name") or "").strip() if ref.ats == "Greenhouse" else ""
     locations = {"Workday": _workday_locations, "Greenhouse": _greenhouse_locations, "Lever": _lever_locations,
-                 "BambooHR": _bamboo_locations}[ref.ats](data)
+                 "BambooHR": _bamboo_locations, "SmartRecruiters": _sr_locations}[ref.ats](data)
     return Detail(text, company, locations)
 
 

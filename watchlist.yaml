@@ -10,7 +10,12 @@
 #   jobs.ashbyhq.com/<slug>                                          ->  ats: ashby
 # `name` is the readable company name shown in the Feed.
 #
-# Employers on Workday, SuccessFactors, Taleo, iCIMS, UltiPro or their own site cannot be listed here (see README).
+#   <tenant>.wdN.myworkdayjobs.com/<site>                            ->  ats: workday, slug: <tenant>.wdN/<site>
+#   jobs.smartrecruiters.com/<company>                               ->  ats: smartrecruiters
+# Workday boards are read through the tenant's own country filter (Canada only) where it has one, else the whole
+# board (up to 1,000 postings). Find more employers with `python -m scanner discover "Name"` (or `--workday ...`).
+#
+# Employers on SuccessFactors, Taleo, iCIMS, UltiPro or their own site cannot be listed here (see README).
 
 boards:
   # --- employers named by the owner, and BC employers ---------------------------------------------------------------
@@ -62,3 +67,38 @@ boards:
   - {ats: greenhouse, slug: tenstorrent,    name: Tenstorrent}        # Toronto
   - {ats: ashby,      slug: snowflake,      name: Snowflake}
   - {ats: ashby,      slug: sentry,         name: Sentry}
+
+  # --- Workday employers, read live (added 2026-11-08 after General Motors' Canadian postings were missed) -------------
+  - {ats: workday, slug: generalmotors.wd5/Careers_GM,         name: General Motors}   # Markham (software), Oshawa
+  - {ats: workday, slug: td.wd3/TD_Bank_Careers,               name: TD}
+  - {ats: workday, slug: rbc.wd3/RBCGLOBAL1,                   name: RBC}
+  - {ats: workday, slug: bmo.wd3/External,                     name: BMO}
+  - {ats: workday, slug: cibc.wd3/search,                      name: CIBC}
+  - {ats: workday, slug: manulife.wd3/MFCJH_Jobs,              name: Manulife}
+  - {ats: workday, slug: sunlife.wd3/Experienced-Jobs,         name: Sun Life}
+  - {ats: workday, slug: thomsonreuters.wd5/External_Career_Site, name: Thomson Reuters}
+  - {ats: workday, slug: ciena.wd5/Careers,                    name: Ciena}
+  - {ats: workday, slug: workday.wd5/Workday,                  name: Workday}
+  - {ats: workday, slug: salesforce.wd12/External_Career_Site, name: Salesforce}
+  - {ats: workday, slug: hp.wd5/ExternalCareerSite,            name: HP}
+  - {ats: workday, slug: cisco.wd5/cisco_careers,              name: Cisco}
+  - {ats: workday, slug: intel.wd1/External,                   name: Intel}
+  - {ats: workday, slug: mastercard.wd1/CorporateCareers,      name: Mastercard}
+  - {ats: workday, slug: 3m.wd1/Search,                        name: 3M}
+
+  # --- found with `discover` (2026-11-08) ----------------------------------------------------------------------------
+  - {ats: smartrecruiters, slug: ServiceNow,   name: ServiceNow}
+  - {ats: ashby,      slug: cerebras,          name: Cerebras}
+  - {ats: ashby,      slug: ramp,              name: Ramp}
+  - {ats: ashby,      slug: sophos,            name: Sophos}
+  - {ats: ashby,      slug: telus-digital,     name: TELUS Digital}
+  - {ats: ashby,      slug: webflow,           name: Webflow}
+  - {ats: greenhouse, slug: airbnb,            name: Airbnb}
+  - {ats: greenhouse, slug: instacart,         name: Instacart}
+  - {ats: greenhouse, slug: mozilla,           name: Mozilla}
+  - {ats: greenhouse, slug: samsara,           name: Samsara}
+  - {ats: greenhouse, slug: twilio,            name: Twilio}
+  - {ats: greenhouse, slug: elastic,           name: Elastic}
+  - {ats: greenhouse, slug: toast,             name: Toast}
+  - {ats: greenhouse, slug: dropbox,           name: Dropbox}
+  - {ats: lever,      slug: veeva,             name: Veeva}

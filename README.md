@@ -20,7 +20,7 @@ Design notes live in [SPEC.md](SPEC.md). Opinions about the job market do not.
    "Job sites" below).
 2. Filter by freshness, Canadian location, company blocklist, language, title and seniority (`config.yaml`).
    "Senior", "Staff", "Principal" and "Director of Vibes" do not make it through.
-3. Fetch each JD (Greenhouse, Lever, Ashby, Workday, BambooHR), apply the JD rules (3+ years, current
+3. Fetch each JD (Greenhouse, Lever, Ashby, Workday, BambooHR, SmartRecruiters), apply the JD rules (3+ years, current
    enrollment, clearance) and score the fit against `skills.yaml` / `gaps.yaml`.
 4. Write the top `notion.daily_cap` (40) new jobs to the Feed, skipping anything in `state/seen.json` or
    already in the Feed by Link. At the start of the run, Feed rows whose `done-del` box is ticked (your Notion
@@ -30,9 +30,9 @@ Design notes live in [SPEC.md](SPEC.md). Opinions about the job market do not.
    writes itself, yay); `reports/feedback.md`
    shows what you actually pick, by Fit band, source and tag (see "Feedback").
 
-It runs at 08:17 and 16:17 Pacific (`17 15 * * *` and `17 23 * * *` UTC). Minute 17, because GitHub delays jobs
-scheduled on the hour by up to a few hours, which is also how it feels waiting for a recruiter. A run only writes
-jobs not already seen, so the second run never duplicates the first.
+It is scheduled four times a day (15:17, 18:43, 23:17 and 03:41 UTC). Odd minutes, because GitHub delays jobs
+scheduled on the hour by up to a few hours, which is also how it feels waiting for a recruiter. Four slots, because
+GitHub also simply forgets some scheduled runs. A run only writes jobs not already seen, so extra runs never duplicate.
 
 ## Setup
 
@@ -44,7 +44,7 @@ jobs not already seen, so the second run never duplicates the first.
    | Name | Title |
    | Company | Text |
    | Link | URL |
-   | Source | Select: Workday, Greenhouse, Lever, Ashby, BambooHR, Paylocity, Simplify, Watchlist. Optional extras for the job sites: YC, Built In, Bay Street Oracle, HN |
+   | Source | Select: Workday, Greenhouse, Lever, Ashby, BambooHR, Paylocity, Simplify, Watchlist. Optional extras: YC, Built In, Bay Street Oracle, HN, SmartRecruiters |
    | Fit % | Number, format **Percent** |
    | Signals | Multi-select, options: new grad, recent graduate, 0-2 years, entry level, junior, low signal, jd unavailable (`2+ yrs` and `P.Eng req` are created on first use) |
    | Location | Text (optional: filled when the column exists) |
@@ -93,19 +93,32 @@ Useful flags: `--since N`, `--max-rows N`, `--no-jd` (phase 1 only), `--no-notio
 
 ## Watchlist: employers we stalk professionally
 
-`watchlist.yaml` lists employers whose Greenhouse, Lever or Ashby board is read directly on every run. Use it for
+`watchlist.yaml` lists employers whose Greenhouse, Lever, Ashby, Workday or SmartRecruiters board is read directly on every run. Use it for
 employers the Feashliaa dataset does not carry (it is built from its author's company lists) and for employers you
 want on the morning run: the dataset refreshes once a day, a watchlist board is live. To add one, open the
 employer's careers page and look at where "Apply" goes: `boards.greenhouse.io/<slug>` or
 `job-boards.greenhouse.io/<slug>`, `jobs.lever.co/<slug>`, `jobs.ashbyhq.com/<slug>`. Add
-`- {ats: greenhouse|lever|ashby, slug: <slug>, name: Display Name}`. A board that cannot be read is reported and
+`- {ats: greenhouse|lever|ashby|smartrecruiters, slug: <slug>, name: Display Name}`; for Workday the slug is
+`<tenant>.<wdN>/<site>` (`generalmotors.wd5/Careers_GM`), and only the Canadian postings are asked for. A board that cannot be read is reported and
 skipped; a malformed entry stops the run with a clear message, because a typo should not quietly un-stalk anyone.
 
-Not covered, and why: employers on Workday, SuccessFactors, Taleo, iCIMS, UltiPro or their own site need a
-different reader. Workday employers are already in the dataset when it lists them. The dataset carries about
+Not covered, and why: employers on SuccessFactors, Taleo, iCIMS, UltiPro or their own site need a
+different reader. The dataset carries about
 250,000 iCIMS postings with no location (the field says "Not specified"), so none can pass the Canadian filter;
 employers that use iCIMS (Vancouver Coastal Health among them) are not scanned. A known blind spot, written down
 so it stops lurking.
+
+### Finding employers, and finding out why one was missed
+
+```bash
+python -m scanner discover "Wealthsimple" "Cohere"                       # guesses the board, prints the watchlist line
+python -m scanner discover --workday "generalmotors.wd5/Careers_GM=General Motors"
+python -m scanner why "General Motors"                                   # every Canadian posting: which rule stops it
+```
+
+`why` is for the moment you see a job on an employer's site that the Feed does not have. It says whether the employer
+is on the watchlist at all (a coverage gap: add it) or which rule drops the posting (title word, location, age).
+Neither command writes anything.
 
 ## Job sites
 
@@ -114,7 +127,7 @@ so it stops lurking.
 | `YC` | Y Combinator's job pages for Canada, Toronto and Vancouver | JSON embedded in the page; postings asking 3+ years are skipped before anything else |
 | `Built In` | Built In Vancouver, entry-level cards for engineering and data (up to 3 pages each) | server-rendered cards |
 | `Bay Street Oracle` | capital-markets jobs; only postings whose URL words match a tech title are opened | sitemap, then each posting's schema.org data; linked to the employer's own ATS when the scanner reads it |
-| `HN` | the monthly "Ask HN: Who is hiring?" thread; top-level comments whose header line (`Company \| Role \| Location`) names a Canadian place and a role | Algolia HN API |
+| `HN` | the monthly "Ask HN: Who is hiring?" thread; top-level comments whose header line (`Company \| Role \| Location`) names a Canadian place and a role (or whose first lines do) | Algolia HN API; a comment counts as new when first read, not when written |
 
 All four read only what the sites publish to any visitor, at the same polite pace as the ATS fetchers, under the
 scanner's own name. A site that is down or has changed prints `WARNING <site>: not read (...)` and the run goes on.
