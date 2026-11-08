@@ -2537,6 +2537,12 @@
    "gaps": [],
    "title": "AltaGas - Risk Analyst"
   },
+  "2197900188c1982b6ed1208fa84be79591e6c690": {
+   "company": "Ttmtech",
+   "date": "2026-11-08",
+   "gaps": [],
+   "title": "Quality Engineering Intern"
+  },
   "21a7c12dc74996e31187f37cc4bac4b1f07ceeec": {
    "company": "Mitel Networks",
    "date": "2026-10-31",
@@ -4952,6 +4958,18 @@
     "distributed systems"
    ],
    "title": "Software Engineer, Annotation Systems"
+  },
+  "41defaf06a9f8a9037f965b31c7bb7993399b373": {
+   "company": "Manulife",
+   "date": "2026-11-08",
+   "gaps": [
+    "Java",
+    "Jenkins",
+    "New Relic",
+    "Spring",
+    "microservices"
+   ],
+   "title": "Back-End Software Engineer"
   },
   "42265418f2d698e4cf7d6b066915f046db818a3c": {
    "company": "Sophos",
@@ -9506,6 +9524,14 @@
    "gaps": [],
    "title": "Software Development Engineer"
   },
+  "7a7bced3341a4483fe192f5ef8ec6fab494fa8a8": {
+   "company": "Nvidia",
+   "date": "2026-11-08",
+   "gaps": [
+    "Salesforce"
+   ],
+   "title": "Industry Development Specialist - Canada"
+  },
   "7a92a730eacea263c99578d2a9e4dfa830464054": {
    "company": "Saputo",
    "date": "2026-10-10",
@@ -12050,6 +12076,12 @@
    "date": "2026-11-03",
    "gaps": [],
    "title": "Information Security Engineer (DevSecOps)"
+  },
+  "9ab88f048a89caa4f7c1f2a92f3a4c54587d23b8": {
+   "company": "Pontosense",
+   "date": "2026-11-08",
+   "gaps": [],
+   "title": "SEO/AEO Specialist, Silvie"
   },
   "9ab8e9ff71713a7bca53a45522bdeefe61cf5038": {
    "company": "Intactfc",
@@ -19288,6 +19320,14 @@
     "unit testing"
    ],
    "title": "Software Development Co-op Student"
+  },
+  "f9d5f5234b733c0f7d562affbbb1a1cbb140a0e3": {
+   "company": "UR",
+   "date": "2026-11-08",
+   "gaps": [
+    "integration testing"
+   ],
+   "title": "Associate IT Business Analyst"
   },
   "f9dcdf9c264ef8830180fd9c9f83723a7bec7c3c": {
    "company": "RBC",

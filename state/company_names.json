@@ -206,5 +206,9 @@
  "Workday:tera.wd3.myworkdayjobs.com/teranet": {
   "name": "",
   "checked": "2026-11-05"
+ },
+ "Workday:ur.wd1.myworkdayjobs.com/urcareers": {
+  "name": "UR",
+  "checked": "2026-11-08"
  }
 }
