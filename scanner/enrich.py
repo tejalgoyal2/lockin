@@ -8,6 +8,7 @@ from collections import Counter
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -198,6 +199,10 @@ def _score(job: Job, cfg: dict, boost_re: re.Pattern) -> float:
         total += sc["boost"]["bc_or_remote"]
     if job.jd_status != "ok":
         total -= sc["penalty"]["no_jd"]
+    fresh = sc["boost"].get("fresh") or {}
+    if fresh.get("bonus") and fresh.get("days"):
+        age = max(0.0, (datetime.now(timezone.utc) - job.first_seen).total_seconds() / 86400)
+        total += fresh["bonus"] * max(0.0, 1 - age / fresh["days"])        # a posting from today is the one still open
     return round(total, 1)
 
 

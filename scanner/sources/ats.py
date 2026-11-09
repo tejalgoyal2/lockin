@@ -12,11 +12,12 @@ import requests
 from urllib.parse import parse_qs, quote, unquote, urlsplit
 
 from scanner.models import Job
+from scanner.sources import phenom, successfactors
 from scanner.sources.listing import SITE_SOURCES
 from scanner.text import INVISIBLE, html_to_text
 
 SITES = SITE_SOURCES      # job sites (scanner/sources/*): their pages carry the JD
-SUPPORTED = ("Greenhouse", "Lever", "Ashby", "Workday", "BambooHR", "SmartRecruiters", *SITES)
+SUPPORTED = ("Greenhouse", "Lever", "Ashby", "Workday", "BambooHR", "SmartRecruiters", "Phenom", "SuccessFactors", *SITES)
 
 
 class NotFound(Exception):
@@ -55,6 +56,14 @@ def detect_ats(url: str) -> str | None:
         return "Built In"
     if host.endswith("baystreetoracle.ca"):
         return "Bay Street Oracle"
+    if host.endswith("jobbank.gc.ca"):
+        return "Job Bank"
+    if host.endswith("bcpublicservice.hua.hrsmart.com"):
+        return "BC Gov"
+    if phenom.is_job_url(urlsplit(url or "").path):          # a Phenom careers site: any host, /<country>/<lang>/job/<id>
+        return "Phenom"
+    if successfactors.is_job_url(urlsplit(url or "").path):   # a SuccessFactors careers site: any host, /job/<words>/<number>/
+        return "SuccessFactors"
     return None
 
 
@@ -143,6 +152,8 @@ def locate(job: Job) -> AtsRef | None:
         return None
     if ats in SITES:
         return _site(ats, job.url)
+    if ats in ("Phenom", "SuccessFactors"):
+        return AtsRef(ats, job.url)
     if ats == "Greenhouse":
         return _greenhouse(job.url, job.company)
     return {"Lever": _lever, "Ashby": _ashby, "Workday": _workday, "BambooHR": _bamboohr,
@@ -283,7 +294,7 @@ def _get_workday(ref: AtsRef, client) -> dict:
 
 def _fetch_site(ref: AtsRef, client) -> Detail:
     """Description, company and locations of a job-site posting (readers import ats for Detail's sake only)."""
-    from scanner.sources import baystreet, builtin, hn, yc
+    from scanner.sources import baystreet, bcgov, builtin, hn, jobbank, yc
     if ref.ats == "HN":
         data = client.get_json(ref.api_url, ref.ats)
         text = INVISIBLE.sub("", hn.comment_text(data))
@@ -295,6 +306,10 @@ def _fetch_site(ref: AtsRef, client) -> Detail:
         return Detail(INVISIBLE.sub("", text), company, where)
     if ref.ats == "Built In":
         return Detail(INVISIBLE.sub("", builtin.parse_detail(page, builtin.job_id(ref.api_url))), "", [])
+    if ref.ats == "Job Bank":
+        return Detail(INVISIBLE.sub("", jobbank.parse_detail(page)), "", [])
+    if ref.ats == "BC Gov":
+        return Detail(INVISIBLE.sub("", bcgov.parse_detail(page)), "", [])
     rec = baystreet.parse_detail(page, None)
     if rec is None:
         raise NotFound(ref.api_url)
@@ -312,6 +327,11 @@ def fetch_full(ref: AtsRef, client) -> Detail:
     """
     if ref.ats in SITES:
         return _fetch_site(ref, client)
+    if ref.ats == "Phenom":
+        text, where = phenom.parse_detail(client.get(ref.api_url, ref.ats).text)
+        return Detail(INVISIBLE.sub("", text), "", where)
+    if ref.ats == "SuccessFactors":
+        return Detail(INVISIBLE.sub("", successfactors.parse_detail(client.get(ref.api_url, ref.ats).text)), "", [])
     if ref.ats == "Ashby":
         j = _ashby_job(ref, client)
         text = j.get("descriptionPlain") or html_to_text(j.get("descriptionHtml", ""))

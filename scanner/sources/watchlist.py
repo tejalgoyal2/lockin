@@ -10,6 +10,7 @@ record is the same as a dataset row and dedupes against it by URL.
 """
 import logging
 import re
+import time
 from collections.abc import Callable, Iterable
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
@@ -20,16 +21,19 @@ from urllib.parse import quote
 import yaml
 
 from scanner.normalize import clean_title, from_unix, parse_iso
+from scanner.sources import phenom, successfactors
 
 log = logging.getLogger(__name__)
 
 LABEL = {"greenhouse": "Greenhouse", "lever": "Lever", "ashby": "Ashby", "workday": "Workday",
-         "smartrecruiters": "SmartRecruiters"}
+         "smartrecruiters": "SmartRecruiters", "phenom": "Phenom", "successfactors": "SuccessFactors"}
 WORKDAY_PAGE = 20          # Workday's maximum page size
 WORKDAY_MAX_PAGES = 50     # 1,000 postings per tenant (TD lists ~950 Canadian ones)
 WORKDAY_MAX_PAGES_FULL = 50  # no country facet: read up to 1,000 postings (~20 s at the polite pace)
 SR_PAGE = 100
 SR_MAX_PAGES = 5
+BOARD_SECONDS = 150        # one board never holds the run longer than this: a big tenant is read newest first, so the
+                           # postings that matter are in the pages already read (the rest is logged, not waited for)
 
 
 class WatchlistError(Exception):
@@ -59,6 +63,10 @@ class Board:
         if self.ats == "workday":
             host, tenant, site = self.workday
             return f"https://{host}/wday/cxs/{tenant}/{site}/jobs"
+        if self.ats == "phenom":
+            return f"https://{phenom.split_slug(self.slug)[0]}/widgets"
+        if self.ats == "successfactors":
+            return successfactors.search_url(self.slug, 0)
         slug = quote(self.slug)
         return {
             "greenhouse": f"https://boards-api.greenhouse.io/v1/boards/{slug}/jobs",
@@ -68,27 +76,50 @@ class Board:
         }[self.ats]
 
 
-def load_boards(path: str | Path) -> list[Board]:
-    """Read watchlist.yaml. A bad entry is an error, not a skipped line: a typo would silently drop an employer."""
+def load_boards(path: str | Path, *extra: str | Path) -> list[Board]:
+    """Read watchlist.yaml, then the optional `extra` files (watchlist.auto.yaml: boards the scan found itself; a missing
+    one is fine, and a board already listed earlier is skipped there). A bad entry is an error, not a skipped line: a
+    typo would silently drop an employer."""
+    boards, seen = _read_file(path, [], set(), required=True)
+    for more in extra:
+        boards, seen = _read_file(more, boards, seen, required=False)
+    return boards
+
+
+def _read_file(path, boards: list[Board], seen: set, *, required: bool) -> tuple[list[Board], set]:
     try:
         with open(path, encoding="utf-8") as fh:
             data = yaml.safe_load(fh) or {}
     except FileNotFoundError:
-        raise WatchlistError(f"{path} not found (turn the watchlist off in config.yaml or restore the file)") from None
-    boards, seen = [], set()
+        if required:
+            raise WatchlistError(f"{path} not found (turn the watchlist off in config.yaml or restore the file)") from None
+        return boards, seen
+    boards, seen, earlier = list(boards), set(seen), set(seen)
     for i, entry in enumerate(data.get("boards") or [], 1):
         ats = str((entry or {}).get("ats", "")).strip().lower()
         slug = str((entry or {}).get("slug", "")).strip()
         if ats not in LABEL or not slug:
             raise WatchlistError(f"{path}: entry {i} needs ats ({', '.join(LABEL)}) and slug, got {entry!r}")
+        if (ats, slug.lower()) in earlier:
+            continue                                        # already listed in the hand-kept file: that line wins
         if (ats, slug.lower()) in seen:
             raise WatchlistError(f"{path}: {ats}/{slug} is listed twice")
         seen.add((ats, slug.lower()))
         board = Board(ats, slug, str(entry.get("name") or "").strip())
         if ats == "workday":
             board.workday                                   # raises WatchlistError on a malformed slug
+        if ats == "phenom":
+            try:
+                phenom.split_slug(slug)
+            except phenom.PhenomError as exc:
+                raise WatchlistError(f"{path}: {exc}") from None
+        if ats == "successfactors":
+            try:
+                successfactors.check_host(slug)
+            except successfactors.SuccessFactorsError as exc:
+                raise WatchlistError(f"{path}: {exc}") from None
         boards.append(board)
-    return boards
+    return boards, seen
 
 
 # --- one board -> uniform records -------------------------------------------------------------
@@ -200,7 +231,7 @@ def _canada_facet(facets) -> tuple[str, list[str]] | None:
     return None
 
 
-def _fetch_workday(board: Board, client, now: datetime) -> list[dict]:
+def _fetch_workday(board: Board, client, now: datetime, budget: float = BOARD_SECONDS) -> list[dict]:
     """Canada only where the tenant has a country facet (a 5,000-posting employer costs a few requests); otherwise
     the whole board, capped. Facet ids differ per tenant: the first (unfiltered) answer lists them."""
     first = client.post_json(board.url, board.label, json={"appliedFacets": {}, "limit": 1, "offset": 0, "searchText": ""})
@@ -209,7 +240,11 @@ def _fetch_workday(board: Board, client, now: datetime) -> list[dict]:
         return []
     applied, max_pages = ({found[0]: found[1]}, WORKDAY_MAX_PAGES) if found else ({}, WORKDAY_MAX_PAGES_FULL)
     postings: list[dict] = []
+    started = time.monotonic()
     for page in range(max_pages):
+        if time.monotonic() - started > budget:
+            log.warning("watchlist: %s/%s cut short after %d postings (%d s)", board.ats, board.slug, len(postings), budget)
+            break
         data = client.post_json(board.url, board.label, json={
             "appliedFacets": applied, "limit": WORKDAY_PAGE, "offset": page * WORKDAY_PAGE, "searchText": ""})
         got = data.get("jobPostings") or []
@@ -230,11 +265,17 @@ def _fetch_smartrecruiters(board: Board, client) -> list[dict]:
     return parse_smartrecruiters(board, postings)
 
 
-def fetch_board(board: Board, client, *, now: datetime | None = None, seed_ashby: Callable[[str, dict], None] | None = None) -> list[dict]:
+def fetch_board(board: Board, client, *, now: datetime | None = None, seed_ashby: Callable[[str, dict], None] | None = None,
+                budget: float = BOARD_SECONDS) -> list[dict]:
+    """`budget`: seconds a Workday board may take (it is read newest first); a probe asks for less than a full run."""
     if board.ats == "workday":
-        return _fetch_workday(board, client, now or datetime.now(timezone.utc))
+        return _fetch_workday(board, client, now or datetime.now(timezone.utc), budget)
     if board.ats == "smartrecruiters":
         return _fetch_smartrecruiters(board, client)
+    if board.ats == "phenom":
+        return phenom.fetch_board(board.slug, board.name, client)
+    if board.ats == "successfactors":
+        return successfactors.fetch_board(board.slug, board.name, client, now or datetime.now(timezone.utc))
     data = client.get_json(board.url, board.label)
     if board.ats == "ashby" and seed_ashby and isinstance(data, dict):
         seed_ashby(board.url, data)                         # the JD fetch needs this same board: do not ask twice
@@ -248,10 +289,14 @@ def fetch_all(boards: Iterable[Board], client, *, workers: int = 6, now: datetim
     boards = list(boards)
 
     def one(board: Board):
+        started = time.monotonic()
         try:
             return board, fetch_board(board, client, now=now, seed_ashby=seed_ashby), ""
         except Exception as exc:                            # network, HTTP error, bad JSON: report and carry on
             return board, [], f"{type(exc).__name__}: {str(exc)[:120]}"
+        finally:
+            if time.monotonic() - started > 45:
+                log.warning("watchlist: %s/%s took %d s", board.ats, board.slug, time.monotonic() - started)
 
     records, failed = [], []
     with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:

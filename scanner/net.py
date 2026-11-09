@@ -54,8 +54,10 @@ class PoliteClient:
     Thread-safe: callers may fan out across a thread pool.
     """
 
-    def __init__(self, delay: float = 0.3, per_ats: int = 5, retries: int = 3, timeout: int = 30):
+    def __init__(self, delay: float = 0.3, per_ats: int = 5, retries: int = 3, timeout: int = 30,
+                 host_delays: dict[str, float] | None = None):
         self.delay, self.retries, self.timeout = delay, retries, timeout
+        self.host_delays = host_delays or {}       # a host that asks for more (Job Bank: robots.txt Crawl-delay 5)
         self._ats_sem: dict[str, threading.BoundedSemaphore] = defaultdict(
             lambda: threading.BoundedSemaphore(per_ats))
         self._host_lock: dict[str, threading.Lock] = defaultdict(threading.Lock)
@@ -67,13 +69,16 @@ class PoliteClient:
         with self._guard:
             return self._ats_sem[ats], self._host_lock[host]
 
+    def _pace(self, host: str) -> None:
+        wait = self.host_delays.get(host, self.delay) - (time.monotonic() - self._host_last.get(host, 0.0))
+        if wait > 0:
+            time.sleep(wait)
+
     def get(self, url: str, ats: str, **kwargs) -> requests.Response:
         host = urlsplit(url).netloc
         sem, lock = self._slots(ats, host)
         with sem, lock:
-            wait = self.delay - (time.monotonic() - self._host_last.get(host, 0.0))
-            if wait > 0:
-                time.sleep(wait)
+            self._pace(host)
             try:
                 return http_get(url, retries=self.retries, timeout=self.timeout, **kwargs)
             finally:
@@ -88,9 +93,7 @@ class PoliteClient:
         host = urlsplit(url).netloc
         sem, lock = self._slots(ats, host)
         with sem, lock:
-            wait = self.delay - (time.monotonic() - self._host_last.get(host, 0.0))
-            if wait > 0:
-                time.sleep(wait)
+            self._pace(host)
             try:
                 for attempt in range(self.retries + 1):
                     resp = requests.post(url, json=json, timeout=self.timeout,
@@ -110,9 +113,7 @@ class PoliteClient:
         host = urlsplit(url).netloc
         sem, lock = self._slots(ats, host)
         with sem, lock:
-            wait = self.delay - (time.monotonic() - self._host_last.get(host, 0.0))
-            if wait > 0:
-                time.sleep(wait)
+            self._pace(host)
             try:
                 sess = self._sessions.get(host)
                 if sess is None:
@@ -131,6 +132,12 @@ class PoliteClient:
                 return resp.json()
             finally:
                 self._host_last[host] = time.monotonic()
+
+
+def client_from_config(jd_cfg: dict) -> PoliteClient:
+    """The one way the CLI builds a client: pacing, per-ATS limit and the hosts that ask for slower requests."""
+    return PoliteClient(delay=jd_cfg["request_delay"], per_ats=jd_cfg["max_per_ats"],
+                        host_delays=jd_cfg.get("host_delays"))
 
 
 def sync_git_repo(url: str, dest: Path) -> None:

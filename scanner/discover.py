@@ -23,6 +23,10 @@ from scanner.sources import watchlist
 from scanner.sources.watchlist import Board
 
 PROBE_ORDER = ("greenhouse", "lever", "ashby", "smartrecruiters")
+WD_HOSTS = (1, 3, 5, 10, 12, 103, 501)          # the data centres Workday tenants live in: <tenant>.wd<N>.myworkdayjobs.com
+# Paths a tenant's robots.txt disallows that are not career sites.
+_NOT_A_SITE = {"refreshfacet", "wday", "login", "externalprivateposting", "externalprivatepostingstudents", "static",
+               "assets", "api", "recruiting", "healthcheck", "pages"}
 
 
 @dataclass
@@ -52,8 +56,8 @@ def _summarise(board: Board, records: list[dict], filters: Filters, now: datetim
     canadian = candidates = 0
     for rec in records:
         status, _ = filters.location_status(rec["location"])
-        if status in ("not_canada", "quebec_only") or not filters.title_location_ok(rec["title"]):
-            continue
+        if status != "ok" or not filters.title_location_ok(rec["title"]):
+            continue                      # "N Locations" rows are not counted: a US employer lists hundreds of them
         canadian += 1
         if filters.title_tier(rec["title"]) and filters.title_not_excluded(rec["title"]):
             candidates += 1
@@ -61,10 +65,13 @@ def _summarise(board: Board, records: list[dict], filters: Filters, now: datetim
 
 
 def probe(name: str, client, filters: Filters, now: datetime, *, slugs: list[str] | None = None,
-          ats_list=PROBE_ORDER) -> list[Hit]:
-    """Every board that exists for this company and lists at least one posting."""
+          ats_list=PROBE_ORDER, workday: bool = True) -> list[Hit]:
+    """Every board that exists for this company and lists at least one posting (Workday too: the tenant is guessed
+    from the name, its career sites come from its robots.txt)."""
     hits = []
     for slug in slugs or slug_guesses(name):
+        if workday and re.fullmatch(r"[a-z0-9]+", slug):
+            hits += probe_workday_tenant(slug, name, client, filters, now)
         for ats in ats_list:
             board = Board(ats, slug, name)
             try:
@@ -76,9 +83,55 @@ def probe(name: str, client, filters: Filters, now: datetime, *, slugs: list[str
     return sorted(hits, key=lambda h: (-h.canadian, -h.total))
 
 
+def workday_sites(tenant: str, client, wds=WD_HOSTS) -> list[tuple[str, str]]:
+    """[(wdN, site)] of a Workday tenant. A tenant's robots.txt lists its career sites as `Allow:` / `Disallow: /<site>/` and `Sitemap:` lines; a
+    tenant that does not exist answers 422, so trying each data centre finds both the tenant's home and its sites."""
+    out = []
+    for n in wds:
+        try:
+            text = client.get(f"https://{tenant}.wd{n}.myworkdayjobs.com/robots.txt", "workday").text
+        except Exception:                                  # 422 / 404 / refused: not this data centre
+            continue
+        sites = re.findall(r"^\s*(?:Allow|Disallow):\s*/([A-Za-z0-9_.-]+)/?\s*$", text, re.M | re.I)
+        sites += re.findall(r"^\s*Sitemap:\s*\S+?\.com/([A-Za-z0-9_.-]+)/siteMap\.xml", text, re.M | re.I)
+        for site in dict.fromkeys(sites):
+            if site.lower() not in _NOT_A_SITE and "private" not in site.lower():
+                out.append((f"wd{n}", site))
+        if out:
+            break
+    return out
+
+
+def probe_workday_tenant(tenant: str, name: str, client, filters: Filters, now: datetime) -> list[Hit]:
+    """Every career site of a tenant that lists postings, found without knowing the site name."""
+    hits = []
+    for wd, site in workday_sites(tenant, client):
+        try:
+            hit = probe_workday(f"{tenant}.{wd}/{site}", name, client, filters, now)
+        except Exception:
+            continue
+        if hit:
+            hits.append(hit)
+    return sorted(hits, key=lambda h: (-h.canadian, -h.total))
+
+
 def probe_workday(slug: str, name: str, client, filters: Filters, now: datetime) -> Hit | None:
     board = Board("workday", slug, name)
     board.workday                                                  # validates the slug shape
+    records = watchlist.fetch_board(board, client, now=now)
+    return _summarise(board, records, filters, now) if records else None
+
+
+def probe_successfactors(host: str, name: str, client, filters: Filters, now: datetime) -> Hit | None:
+    """A SuccessFactors careers site: the slug is the host, e.g. careers.telus.com."""
+    board = Board("successfactors", host, name)
+    records = watchlist.fetch_board(board, client, now=now)
+    return _summarise(board, records, filters, now) if records else None
+
+
+def probe_phenom(slug: str, name: str, client, filters: Filters, now: datetime) -> Hit | None:
+    """A Phenom careers site: slug is <host>/<country>/<language>, e.g. jobs.bell.ca/ca/en."""
+    board = Board("phenom", slug, name)
     records = watchlist.fetch_board(board, client, now=now)
     return _summarise(board, records, filters, now) if records else None
 

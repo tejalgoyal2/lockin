@@ -16,23 +16,58 @@ Design notes live in [SPEC.md](SPEC.md). Opinions about the job market do not.
 
 1. Read [Feashliaa/job-board-data](https://github.com/Feashliaa/job-board-data), the
    [SimplifyJobs new-grad list](https://github.com/SimplifyJobs/New-Grad-Positions), the employer boards in
-   `watchlist.yaml` (read live, so they are as fresh as the employer's own site) and four job sites (see
-   "Job sites" below).
+   `watchlist.yaml` (read live, so they are as fresh as the employer's own site; boards the scanner finds by itself
+   go in `watchlist.auto.yaml`) and six job sites, Job Bank and the BC Public Service among them (see "Job sites" below).
 2. Filter by freshness, Canadian location, company blocklist, language, title and seniority (`config.yaml`).
    "Senior", "Staff", "Principal" and "Director of Vibes" do not make it through.
-3. Fetch each JD (Greenhouse, Lever, Ashby, Workday, BambooHR, SmartRecruiters), apply the JD rules (3+ years, current
+3. Fetch each JD (Greenhouse, Lever, Ashby, Workday, BambooHR, SmartRecruiters, Phenom, and the job sites), apply the JD rules (3+ years, current
    enrollment, clearance) and score the fit against `skills.yaml` / `gaps.yaml`.
 4. Write the top `notion.daily_cap` (40) new jobs to the Feed, skipping anything in `state/seen.json` or
    already in the Feed by Link. At the start of the run, Feed rows whose `done-del` box is ticked (your Notion
    automation ticks it after copying the row to your main database) are trashed; no other row is ever trashed.
 5. Commit `state/` and `reports/` back to the repo. `reports/latest.md` is the full candidate list;
+   `reports/boards.md` lists the employer boards the scanner added by itself and the ones resting after failed reads;
    `reports/gaps.md` (Mondays) lists the tech terms JDs keep asking for that you do not have yet (a to-learn list that
    writes itself, yay); `reports/feedback.md`
    shows what you actually pick, by Fit band, source and tag (see "Feedback").
 
-It is scheduled four times a day (15:17, 18:43, 23:17 and 03:41 UTC). Odd minutes, because GitHub delays jobs
-scheduled on the hour by up to a few hours, which is also how it feels waiting for a recruiter. Four slots, because
-GitHub also simply forgets some scheduled runs. A run only writes jobs not already seen, so extra runs never duplicate.
+It is scheduled twice a day, at 15:57 and 23:57 UTC. GitHub's cron has no time zones, so those slots sit between the
+two Pacific offsets (07:57 / 15:57 in winter, 08:57 / 16:57 in summer) and GitHub's usual delay of a few minutes to an
+hour lands the runs around 8-9 am and 4-5 pm Pacific. The odd minutes are on purpose: jobs scheduled on the hour are
+the ones GitHub delays most, which is also how it feels waiting for a recruiter. GitHub also forgets a scheduled run
+now and then; the 10-day window (`freshness.default_days`) makes the next run pick up what the lost one would have
+found, and a run only writes jobs not already seen, so nothing comes twice.
+
+## Running it from GitHub (Actions tab)
+
+Nothing needs installing: open the repo on GitHub, **Actions**, pick a workflow, **Run workflow**.
+
+**`scan`** is the real thing (the same run the schedule does). Its inputs:
+
+| Input | Leave blank / default | Use it to |
+|---|---|---|
+| `dry_run` | ticked | scan and report without touching Notion or `state/seen.json`. **Untick it for a real run**; keep it ticked to look first. |
+| `since_days` | `10` (`freshness.default_days`) | widen the net: `14` or `30` after a break, a new source or a fix. Safe any time: `state/seen.json` keeps a job from being written twice, so a wide window only costs a longer run. |
+| `max_rows` | `40` (`notion.daily_cap`) | how many new rows this run may write (the best-scoring ones go first; the rest wait for the next run while they are inside the window). `5` to try it, `100` to empty a backlog. |
+
+Typical recipes: *"did the last fix work?"* is `dry_run` ticked, `since_days` 14, then read the log and
+`reports/latest.md`. *"I was away for two weeks"* is `dry_run` unticked, `since_days` 14, `max_rows` 100. From a
+terminal with the GitHub CLI, the same things:
+
+```bash
+gh workflow run scan.yml -f dry_run=true  -f since_days=14                 # look first
+gh workflow run scan.yml -f dry_run=false -f since_days=14 -f max_rows=100 # catch up for real
+gh run watch                                                               # follow the run
+```
+
+**`tools`** are the read-only helpers (nothing is written to Notion or the repo; the answer is in the run's Summary and
+log). Pick `command` and write `args` the way you would in a terminal:
+
+| `command` | `args` | Answers |
+|---|---|---|
+| `audit` | `--days 30` (default 14) | Which filter rules stop the fresh Canadian postings, which discarded titles look like jobs you want, which title words the filter does not know. See "The filter audit". |
+| `why` | `"General Motors"` (add `--since 21`) | "I saw this employer post a job, why is it not in the Feed?" Names the first rule that stops each of its Canadian postings, or says the employer is not on the watchlist. |
+| `discover` | `"Telus" "Bell Canada"`, or `--workday rbc`, or `--phenom jobs.bell.ca/ca/en=Bell` | Finds an employer's job board and prints the `watchlist.yaml` line to add. |
 
 ## Setup
 
@@ -93,17 +128,28 @@ Useful flags: `--since N`, `--max-rows N`, `--no-jd` (phase 1 only), `--no-notio
 
 ## Watchlist: employers we stalk professionally
 
-`watchlist.yaml` lists employers whose Greenhouse, Lever, Ashby, Workday or SmartRecruiters board is read directly on every run. Use it for
+`watchlist.yaml` lists employers whose Greenhouse, Lever, Ashby, Workday, SmartRecruiters or Phenom board is read directly on every run. Use it for
 employers the Feashliaa dataset does not carry (it is built from its author's company lists) and for employers you
 want on the morning run: the dataset refreshes once a day, a watchlist board is live. To add one, open the
 employer's careers page and look at where "Apply" goes: `boards.greenhouse.io/<slug>` or
 `job-boards.greenhouse.io/<slug>`, `jobs.lever.co/<slug>`, `jobs.ashbyhq.com/<slug>`. Add
 `- {ats: greenhouse|lever|ashby|smartrecruiters, slug: <slug>, name: Display Name}`; for Workday the slug is
-`<tenant>.<wdN>/<site>` (`generalmotors.wd5/Careers_GM`), and only the Canadian postings are asked for. A board that cannot be read is reported and
-skipped; a malformed entry stops the run with a clear message, because a typo should not quietly un-stalk anyone.
+`<tenant>.<wdN>/<site>` (`generalmotors.wd5/Careers_GM`), and only the Canadian postings are asked for. For a Phenom People
+careers site (Bell, Air Canada and OpenText run on it) the slug is `<host>/<country>/<language>`
+(`jobs.bell.ca/ca/en`). A malformed entry stops the run with a clear message, because a typo should not quietly
+un-stalk anyone.
 
-Not covered, and why: employers on SuccessFactors, Taleo, iCIMS, UltiPro or their own site need a
-different reader. The dataset carries about
+**It grows by itself.** Every Canadian posting links to the employer's own board, and a link on Workday, Greenhouse,
+Lever, Ashby or SmartRecruiters names that board exactly. The run counts the boards it meets that are not listed, reads the
+busiest 12 once, and appends the ones that really list Canadian jobs to `watchlist.auto.yaml` (at most 150 lines); the
+next run reads them. Delete a line you do not want. `watchlist.yaml` wins when a board is in both files.
+
+**It does not waste time.** A board that cannot be read is retried on the next runs; after three failures in a row it
+rests for a week, then two, then four (a working read clears it), and a candidate that fails three probes is given up.
+`reports/boards.md` lists what is resting and why.
+
+Not covered, and why: employers on SuccessFactors (Telus, Scotiabank, Rogers, Canada Post, Celestica, ICBC), Taleo, iCIMS, UltiPro
+or their own site need a different reader. The dataset carries about
 250,000 iCIMS postings with no location (the field says "Not specified"), so none can pass the Canadian filter;
 employers that use iCIMS (Vancouver Coastal Health among them) are not scanned. A known blind spot, written down
 so it stops lurking.
@@ -113,12 +159,24 @@ so it stops lurking.
 ```bash
 python -m scanner discover "Wealthsimple" "Cohere"                       # guesses the board, prints the watchlist line
 python -m scanner discover --workday "generalmotors.wd5/Careers_GM=General Motors"
+python -m scanner discover --workday rbc                                 # just the tenant: its robots.txt names the career sites
+python -m scanner discover --phenom "jobs.bell.ca/ca/en=Bell"            # a Phenom People careers site
 python -m scanner why "General Motors"                                   # every Canadian posting: which rule stops it
+python -m scanner audit --days 30                                        # the whole funnel, see below
 ```
 
 `why` is for the moment you see a job on an employer's site that the Feed does not have. It says whether the employer
 is on the watchlist at all (a coverage gap: add it) or which rule drops the posting (title word, location, age).
 Neither command writes anything.
+
+### The filter audit
+
+`python -m scanner audit` (or `tools` > `audit` on Actions) reads the sources without any job description and, for every fresh
+Canadian posting, records the rule that stopped it, then writes `reports/audit.md`: the funnel (how many postings reach each
+rule), the title-exclude words ranked by jobs removed and by jobs they removed *alone* (the only ones changing a rule would bring back),
+**near misses** (discarded titles with a "junior / graduate / associate / entry" word, the jobs most likely lost by mistake) and
+the commonest words in titles with no tech-role word at all (candidates for `title.strong` / `title.weak`). Run it after
+changing a filter, or when a job you wanted never showed up.
 
 ## Job sites
 
@@ -128,12 +186,14 @@ Neither command writes anything.
 | `Built In` | Built In Vancouver, entry-level cards for engineering and data (up to 3 pages each) | server-rendered cards |
 | `Bay Street Oracle` | capital-markets jobs; only postings whose URL words match a tech title are opened | sitemap, then each posting's schema.org data; linked to the employer's own ATS when the scanner reads it |
 | `HN` | the monthly "Ask HN: Who is hiring?" thread; top-level comments whose header line (`Company \| Role \| Location`) names a Canadian place and a role (or whose first lines do) | Algolia HN API; a comment counts as new when first read, not when written |
+| `Job Bank` | the federal Job Bank (jobbank.gc.ca): `sources.jobbank.terms`, each asked for all of Canada, and per province when the 10-posting feed fills | Job Bank's own Atom feed; 5 seconds between requests, as its robots.txt asks; Quebec is never searched |
+| `BC Gov` | the BC Public Service (bcpublicservice.hua.hrsmart.com): every external posting, about 80 | one HTML table; the page shows the date opened, so the freshness window works |
 
-All four read only what the sites publish to any visitor, at the same polite pace as the ATS fetchers, under the
+All of them read only what the sites publish to any visitor, at the same polite pace as the ATS fetchers, under the
 scanner's own name. A site that is down or has changed prints `WARNING <site>: not read (...)` and the run goes on.
 A job a site shares with an ATS board is kept once, with the ATS link. To turn one off set `enabled: false` under
-`sources.<name>` in `config.yaml`. The Feed's Source column needs the options `YC`, `Built In`, `Bay Street Oracle`
-and `HN` to show them (without the option the Source cell stays empty; nothing else changes).
+`sources.<name>` in `config.yaml`. The Feed's Source column needs the options `YC`, `Built In`, `Bay Street Oracle`,
+`HN`, `Job Bank` and `BC Gov` (and `SmartRecruiters` / `Phenom` for those watchlist boards) to show them (without the option the Source cell stays empty; nothing else changes).
 
 **Not read, on purpose:** CivicJobs and CivicInfo BC answer an automated client with a Cloudflare bot challenge
 (HTTP 403, including on the RSS feed CivicInfo advertises). That is the sites saying no, so lockin says "fair
@@ -156,6 +216,7 @@ where Fit % needs work. The first 120 reviewed rows were entered by hand when th
 | `gaps.yaml` | common tech terms you do not have yet (shown as gaps) |
 | `company_names.yaml` | display names for the Feed's Company column (`rbc: RBC`) |
 | `watchlist.yaml` | employer job boards read directly on every run |
+| `watchlist.auto.yaml` | boards the scanner added by itself; delete a line to drop one |
 
 ## Credits
 

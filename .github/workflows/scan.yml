@@ -2,13 +2,15 @@ name: scan
 
 on:
   schedule:
-    # Two runs a day. GitHub cron is UTC only. 15:17 UTC is 08:17 Pacific (UTC-7, no DST) / 10:17 Eastern in winter.
-    # Minute 17, not 0: runs scheduled on the hour are the ones GitHub delays most (ours have started 2-7 h late).
-    - cron: "17 15 * * *"       # 08:17 Pacific
-    - cron: "43 18 * * *"       # 11:43 Pacific. Spare slot: GitHub drops or delays scheduled runs (observed: the 08:17 run never started,
-                                #   the evening one came 4 h late). A run only writes unseen jobs, so extra slots never duplicate.
-    - cron: "17 23 * * *"       # 16:17 Pacific. The dataset has always finished by 18:15 UTC, so this run sees the day's data
-    - cron: "41 3 * * *"        # 20:41 Pacific. Spare slot for the evening
+    # Two runs a day, morning and late afternoon. GitHub cron is UTC only and has no time zones, so the slots sit between
+    # the two Pacific offsets: 15:57 UTC is 07:57 PST (winter) / 08:57 PDT (summer); 23:57 UTC is 15:57 PST / 16:57 PDT.
+    # GitHub starts a scheduled run a few minutes to an hour after its slot (more on the hour: hence the odd minutes),
+    # which lands the morning run in 8-9 am and the afternoon one in 4-5 pm.
+    # The dataset (Feashliaa) always finishes by 18:15 UTC, so the afternoon run sees the day's data.
+    # GitHub also drops a scheduled run now and then; the 10-day window (config.yaml) picks the jobs up on the next one,
+    # and a run only writes jobs not already seen, so nothing comes twice.
+    - cron: "57 15 * * *"       # ~08:00 Pacific
+    - cron: "57 23 * * *"       # ~16:00 Pacific
   workflow_dispatch:
     inputs:
       dry_run:
@@ -20,7 +22,7 @@ on:
         type: string
         required: false
       since_days:
-        description: "Only jobs first seen in the last N days (blank = default)"
+        description: "Only jobs first seen in the last N days (blank = 10, from config.yaml; 14 or 30 to catch up after a break)"
         type: string
         required: false
 
@@ -45,8 +47,8 @@ jobs:
 
       - run: pip install --require-hashes -r requirements.txt   # every package pinned by hash (requirements.in)
 
-      # Job descriptions already downloaded (config.yaml jd.cache_dir, 7-day TTL). Without this every run downloads
-      # the JD of every candidate in the 3-day window again, twice a day. A new entry is saved per run; GitHub
+      # Job descriptions already downloaded (config.yaml jd.cache_dir, 10-day TTL). Without this every run downloads
+      # the JD of every candidate in the 10-day window again, twice a day. A new entry is saved per run; GitHub
       # drops entries unused for 7 days.
       - name: Restore the JD cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
@@ -73,14 +75,14 @@ jobs:
 
       - name: Prune the JD cache
         if: always()
-        run: find .cache/jd -type f -mtime +7 -delete 2>/dev/null || true     # past the TTL: never read again
+        run: find .cache/jd -type f -mtime +10 -delete 2>/dev/null || true     # past the TTL: never read again
 
       - name: Commit state and reports
         if: always()             # rows already written must reach seen.json even if the run failed later
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add state reports
+          git add state reports watchlist.auto.yaml
           if git diff --cached --quiet; then
             echo "nothing to commit"
           else

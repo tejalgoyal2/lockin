@@ -3,8 +3,9 @@
 # all others are case-insensitive.
 
 freshness:
-  default_days: 7        # normal run: only jobs first seen in the last N days (seen.json keeps a job from coming twice;
-                         # a week also covers a skipped or failed run, GitHub drops scheduled runs now and then)
+  default_days: 10       # normal run: only jobs first seen in the last N days (seen.json keeps a job from coming twice, so a wide
+                         # window costs JD fetches, not duplicates; ten days also covers a skipped or failed run: GitHub drops
+                         # scheduled runs now and then)
   first_run_days: 14     # used instead when state/seen.json does not exist yet (the first run)
 
 sources:
@@ -35,10 +36,40 @@ sources:
     sitemap_url: https://www.baystreetoracle.ca/jobs/sitemap.xml
   hn:                      # the monthly "Ask HN: Who is hiring?" thread (Algolia HN API)
     enabled: true
+  jobbank:                 # Job Bank (jobbank.gc.ca): the federal job board. Its Atom feed returns the 10 newest postings per
+                           # search, so each term is asked for all of Canada and, when its 10 slots fill, once per province
+    enabled: true
+    max_days: 3            # a normal run asks for the last 3 days only (the feed is newest first and runs are 12 h apart; seen.json
+                           # remembers the rest). --since N / the Actions input since_days asks for the full N days instead
+    max_queries: 60        # requests per run, 5 s apart
+    terms:
+      - software developer
+      - software engineer
+      - web developer
+      - programmer
+      - data analyst
+      - data scientist
+      - systems analyst
+      - devops
+      - cybersecurity
+      - database
+      - qa tester
+      - machine learning
+  bcgov:                   # BC Public Service: the provincial government's own job board (one table, about 80 postings)
+    enabled: true
   watchlist:               # employers read directly on every run (watchlist.yaml); see scanner/sources/watchlist.py
     enabled: true
     path: watchlist.yaml
+    extra_paths: [watchlist.auto.yaml]   # boards the scanner found by itself (read after watchlist.yaml, which wins on a repeat)
     workers: 6             # boards fetched at once; the client still paces requests per host
+    auto:                  # board discovery (scanner/boards.py): Canadian postings link to their employer's board; the busiest
+      enabled: true        # boards not on the watchlist are read once and, if they list Canadian jobs, added to the first extra path
+      per_run: 12          # boards read per run
+      max_boards: 150      # stop adding at this many auto boards (each costs a few requests per run)
+      min_candidates: 2    # ... and only boards with at least this many Canadian postings whose title passes the title filters
+      skip_pattern: 'recruit|staffing|talent|jobgether|survey|lensa|jobot|randstad|adecco|manpower|kforce|\bhays\b|workforce|\bgig\b|crowd'
+                           # job aggregators and agencies repost other employers' jobs: never added by themselves
+      report_path: reports/boards.md
 
 location:
   # Names that are unambiguous on their own.
@@ -123,6 +154,7 @@ title:
     - specialist
     - test
     - technical
+    - technology           # "Graduate Rotational Program (Technology)": a weak word, so the JD must show a skill fit
     - scientist
     - integration
   weak_words:
@@ -254,9 +286,11 @@ jd:
   enabled: true
   workers: 8                 # thread pool; the client still enforces per-host/per-ATS limits
   request_delay: 0.3         # seconds between requests to one host
+  host_delays:               # hosts that ask for more: Job Bank's robots.txt has Crawl-delay 5
+    www.jobbank.gc.ca: 5
   max_per_ats: 5
   cache_dir: .cache/jd       # successful fetches are cached by URL
-  cache_ttl_days: 7
+  cache_ttl_days: 10         # as long as the freshness window: a job still in the window is not downloaded again
   min_years_drop: 3          # drop when the minimum required experience (lower bound) is >= this
   two_year_signal: "2+ yrs"  # lower bound of 2 years: kept, with this Signal, unless a rule below drops it
   two_year_min_fit: 0.6      # ... Fit (a fraction, like the Feed's Fit % column) must reach this for a 2-year job
@@ -276,6 +310,9 @@ scoring:
     new_grad: 15             # JD/title has "new grad" or "recent graduate"
     simplify: 10             # listed by the Simplify new-grad feed
     bc_or_remote: 5
+    fresh:                   # a ten-day window lets an old posting outrank today's on Fit alone: favour the new ones.
+      days: 4                # +bonus when posted just now, fading to 0 at this age
+      bonus: 6
   penalty:
     no_jd: 10
   bc_or_remote_pattern: '\bBC\b|British Columbia|Vancouver|Burnaby|Victoria|Richmond|Surrey|\bremote\b'
