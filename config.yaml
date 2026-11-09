@@ -36,25 +36,44 @@ sources:
     sitemap_url: https://www.baystreetoracle.ca/jobs/sitemap.xml
   hn:                      # the monthly "Ask HN: Who is hiring?" thread (Algolia HN API)
     enabled: true
-  jobbank:                 # Job Bank (jobbank.gc.ca): the federal job board. Its Atom feed returns the 10 newest postings per
-                           # search, so each term is asked for all of Canada and, when its 10 slots fill, once per province
+  jobbank:                 # Job Bank (jobbank.gc.ca): the federal job board; its results also carry the partner sites' postings,
+                           # CivicJobs.ca (municipal jobs) among them. Each occupation and keyword is paged 25 at a time, newest first
     enabled: true
-    max_days: 3            # a normal run asks for the last 3 days only (the feed is newest first and runs are 12 h apart; seen.json
-                           # remembers the rest). --since N / the Actions input since_days asks for the full N days instead
-    max_queries: 60        # requests per run, 5 s apart
-    terms:
-      - software developer
-      - software engineer
-      - web developer
-      - programmer
+    max_days: 3            # a normal run asks for the last 3 days only (runs are 12 h apart; seen.json remembers the rest).
+                           # --since N / the Actions input since_days asks for the full N days instead
+    max_pages: 12          # results pages per search (300 postings)
+    max_queries: 200       # requests per run, 5 s apart (17 minutes at the very most)
+    nocs:                  # NOC 2021 occupation codes
+      - "21211"            # data scientists
+      - "21210"            # mathematicians, statisticians and actuaries
+      - "21220"            # cybersecurity specialists
+      - "21221"            # business systems specialists
+      - "21222"            # information systems specialists
+      - "21223"            # database analysts and data administrators
+      - "21230"            # computer systems developers and programmers
+      - "21231"            # software engineers and designers
+      - "21232"            # software developers and programmers
+      - "21233"            # web designers
+      - "21234"            # web developers and programmers
+      - "22220"            # computer network and web technicians
+      - "22221"            # user support technicians
+      - "22222"            # information systems testing technicians
+    terms:                 # keywords for roles filed under other occupations
       - data analyst
-      - data scientist
-      - systems analyst
+      - business intelligence
       - devops
-      - cybersecurity
-      - database
-      - qa tester
+      - cloud
       - machine learning
+      - qa analyst
+      - gis analyst
+      - technical analyst
+      - application
+      - programmer analyst
+  canadalist:              # a hand-curated GitHub list of Canadian junior / new-grad jobs, updated daily (README and FINANCE.md)
+    enabled: true
+    urls:
+      - https://raw.githubusercontent.com/hanzili/canada_sde_junior_new_grad_position/main/README.md
+      - https://raw.githubusercontent.com/hanzili/canada_sde_junior_new_grad_position/main/FINANCE.md
   bcgov:                   # BC Public Service: the provincial government's own job board (one table, about 80 postings)
     enabled: true
   watchlist:               # employers read directly on every run (watchlist.yaml); see scanner/sources/watchlist.py
@@ -214,7 +233,13 @@ title:
     - expert
     - phd
     - customer support specialist
-    - support specialist
+    - support specialist, data
+    - customer service
+    - client support
+    - sales support specialist
+    - member support specialist
+    # "IT Support Specialist" / "Technical Support Specialist" are entry-level tech jobs a new graduate applies to: they are
+    # a weak title, so the JD must show a skill fit (the audit found them dropped by the old plain "support specialist" rule).
     - data specialist
     - help improve ai
     - english speaker
@@ -295,6 +320,8 @@ jd:
   two_year_signal: "2+ yrs"  # lower bound of 2 years: kept, with this Signal, unless a rule below drops it
   two_year_min_fit: 0.6      # ... Fit (a fraction, like the Feed's Fit % column) must reach this for a 2-year job
   peng_signal: "P.Eng req"   # Signal when the JD requires a P.Eng licence (not when an EIT is accepted); never a drop
+  keep_without_jd: true      # a job whose description cannot be read (403, unsupported site, timeout) is still written to the Feed,
+                             # marked "jd unavailable" and ranked lower: you can open the link and read it yourself
   rescue_student_titles: true  # fetch JDs of student-titled jobs; keep those that welcome recent grads
 
 scoring:
@@ -308,7 +335,7 @@ scoring:
   matched_bonus_cap: 10      # ... counting at most this many skills
   boost:
     new_grad: 15             # JD/title has "new grad" or "recent graduate"
-    simplify: 10             # listed by the Simplify new-grad feed
+    simplify: 10             # listed by the Simplify new-grad feed or the curated Canada list
     bc_or_remote: 5
     fresh:                   # a ten-day window lets an old posting outrank today's on Fit alone: favour the new ones.
       days: 4                # +bonus when posted just now, fading to 0 at this age
@@ -329,7 +356,8 @@ cluster:
 
 notion:
   api_version: "2026-03-11"   # Notion-Version header; 2026-03-11 renamed `archived` to `in_trash`
-  daily_cap: 40               # at most this many rows written per run, highest Score first
+  daily_cap: 150              # at most this many rows written per run, highest Score first (a ten-day window and ~150 boards
+                              # find several hundred jobs; the owner wants them all, so the cap is a safety valve, not a filter)
   verify_readback_min_chars: 4000   # after writing, read back a JD at least this long and compare lengths
   # Property names exactly as they appear in the Feed. The scanner never writes `interested` / `apply` /
   # `done_del`. At the start of each run it trashes the rows whose `done_del` box is ticked (the owner's

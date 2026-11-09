@@ -167,3 +167,50 @@ boards:
   - {ats: lever,      slug: telesat,        name: Telesat}
   - {ats: greenhouse, slug: taketwo,        name: Take-Two Interactive}
   - {ats: greenhouse, slug: block,          name: Block}
+
+  # --- cities, regions, Crown corporations, utilities and universities (bulk check 2026-11-09). A city's own site lists no
+  # location, so `location` is given to its postings that state none. -------------------------------------------------------
+  - {ats: icims,          slug: careersen-victoria.icims.com, name: City of Victoria,   location: "Victoria, BC"}
+  - {ats: icims,          slug: careers-vch.icims.com,        name: Vancouver Coastal Health, location: "Vancouver, BC"}
+  - {ats: successfactors, slug: jobs.vancouver.ca,            name: City of Vancouver,   location: "Vancouver, BC"}
+  - {ats: successfactors, slug: jobs.toronto.ca/jobsatcity,   name: City of Toronto,     location: "Toronto, ON"}
+  - {ats: successfactors, slug: jobs.mississauga.ca,          name: City of Mississauga}
+  - {ats: successfactors, slug: careers.london.ca,            name: City of London}
+  - {ats: successfactors, slug: careers.regionofwaterloo.ca,  name: Region of Waterloo}
+  - {ats: successfactors, slug: jobs.regina.ca,               name: City of Regina}
+  - {ats: successfactors, slug: careers.saskatoon.ca,         name: City of Saskatoon}
+  - {ats: successfactors, slug: jobs.hydroone.com,            name: Hydro One}
+  - {ats: successfactors, slug: jobs.saskpower.com,           name: SaskPower}
+  - {ats: successfactors, slug: jobs.sasktel.com,             name: SaskTel}
+  - {ats: successfactors, slug: careers.bclc.com,             name: BCLC}
+  - {ats: successfactors, slug: careers.viarail.ca,           name: VIA Rail}
+  - {ats: successfactors, slug: careers.bankofcanada.ca,      name: Bank of Canada}
+  - {ats: successfactors, slug: jobs.utoronto.ca,             name: University of Toronto}
+  - {ats: workday,        slug: ubc.wd10/ubcstaffjobs,        name: UBC}
+  - {ats: workday,        slug: ubc.wd10/ubcfacultyjobs,      name: UBC}
+  - {ats: workday,        slug: uwaterloo.wd3/uw_careers_tis, name: University of Waterloo}
+  - {ats: workday,        slug: uwaterloo.wd3/uw_careers,     name: University of Waterloo}
+  - {ats: workday,        slug: algonquincollege.wd3/CareerOpportunities, name: Algonquin College}
+  - {ats: workday,        slug: enmax.wd3/ENMAXCareers,       name: ENMAX}
+  - {ats: workday,        slug: homedepot.wd5/CareerDepotCanada, name: Home Depot Canada}
+  - {ats: lever,          slug: sait,                         name: SAIT}
+
+  # --- more employers from the second bulk check (2026-11-09) ---------------------------------------------------------------
+  - {ats: icims,          slug: careers-kinaxis.icims.com,                 name: Kinaxis,   location: "Ottawa, ON"}
+  - {ats: icims,          slug: careersen-mackenzieinvestments.icims.com,  name: Mackenzie Investments, location: "Toronto, ON"}
+  - {ats: successfactors, slug: jobs.descartes.com,                        name: Descartes}
+  - {ats: successfactors, slug: jobs.wawanesa.com,                         name: Wawanesa}
+  - {ats: successfactors, slug: careers.sap.com,                           name: SAP}
+  - {ats: workday,        slug: foresters.wd3/ForestersFinancialCareers,   name: Foresters}
+  - {ats: workday,        slug: agf.wd3/AGF_Careers,                       name: AGF}
+  - {ats: workday,        slug: aig.wd1/aig,                               name: AIG}
+  - {ats: workday,        slug: canopygrowth.wd3/Canopy_Growth_External_Career_Site, name: Canopy Growth}
+  - {ats: workday,        slug: tilray.wd3/Tilray,                         name: Tilray}
+  - {ats: greenhouse,     slug: tribalscale,   name: TribalScale}
+  - {ats: greenhouse,     slug: mercury,       name: Mercury}
+  - {ats: greenhouse,     slug: ripple,        name: Ripple}
+  - {ats: lever,          slug: fullscript,    name: Fullscript}
+  - {ats: lever,          slug: spotify,       name: Spotify}
+  - {ats: ashby,          slug: docker,        name: Docker}
+  - {ats: ashby,          slug: ashby,         name: Ashby}
+  - {ats: ashby,          slug: sierra,        name: Sierra}

@@ -23,7 +23,7 @@ from scanner.models import Job
 from scanner.net import client_from_config
 from scanner.pipeline import run_stream
 from scanner.score import Scorer
-from scanner.sources import ats, baystreet, bcgov, builtin, feashliaa, hn, jobbank, listing, simplify, watchlist, yc
+from scanner.sources import ats, baystreet, bcgov, builtin, canadalist, feashliaa, hn, jobbank, listing, simplify, watchlist, yc
 from scanner.state import GapsStore, SeenStore
 
 log = logging.getLogger("scanner")
@@ -94,9 +94,12 @@ def collect(cfg, args, filters, now, since, store=None):
                                    lambda url: ats.detect_ats(url) in ats.SUPPORTED), ()),
         ("HN", "hn", lambda c: hn.fetch(http, now), ()),
         ("Job Bank", "jobbank",
-         lambda c: jobbank.fetch(http, c["terms"], since if getattr(args, "since", None) is not None
-                                 else min(since, c.get("max_days", 3)), max_queries=c.get("max_queries", jobbank.MAX_QUERIES)), ()),
+         lambda c: jobbank.fetch(http, c.get("nocs", []), c.get("terms", []),
+                                 since if getattr(args, "since", None) is not None else min(since, c.get("max_days", 3)),
+                                 max_pages=c.get("max_pages", jobbank.MAX_PAGES),
+                                 max_queries=c.get("max_queries", jobbank.MAX_QUERIES)), ()),
         ("BC Gov", "bcgov", lambda c: bcgov.fetch(http), ()),
+        ("Canada List", "canadalist", lambda c: canadalist.fetch(c["urls"], http, now), ()),
     ]
     for label, key, read, pre_stages in sites:
         conf = src.get(key) or {}
@@ -421,7 +424,7 @@ def run_discover(args: argparse.Namespace) -> int:
     cfg = load_config(args.config)
     filters, now = Filters.from_config(cfg), datetime.now(timezone.utc)
     client = client_from_config(cfg["jd"])
-    if not (args.names or args.workday or args.phenom or args.successfactors):
+    if not (args.names or args.workday or args.phenom or args.successfactors or args.icims):
         raise UsageError("give at least one company name, --workday TENANT[.WDN/SITE] or --phenom HOST/COUNTRY/LANG")
     for item in args.workday:
         slug, _, name = item.partition("=")
@@ -437,7 +440,8 @@ def run_discover(args: argparse.Namespace) -> int:
             print(f"# {slug}: not read ({type(exc).__name__}: {str(exc)[:100]})")
             continue
         print(hit.yaml_line() if hit else f"# {slug}: no postings")
-    for probe_one, items in ((discover.probe_phenom, args.phenom), (discover.probe_successfactors, args.successfactors)):
+    for probe_one, items in ((discover.probe_phenom, args.phenom), (discover.probe_successfactors, args.successfactors),
+                                (discover.probe_icims, args.icims)):
         for item in items:
             slug, _, name = item.partition("=")
             try:
@@ -557,6 +561,8 @@ def main(argv: list[str] | None = None) -> int:
                    help="check a Phenom People careers site (jobs.bell.ca/ca/en=Bell): Bell, Air Canada, OpenText ...")
     d.add_argument("--successfactors", action="append", default=[], metavar="HOST[=Name]",
                    help="check a SuccessFactors careers site (careers.telus.com=Telus): Telus, Scotiabank, Rogers ...")
+    d.add_argument("--icims", action="append", default=[], metavar="HOST[=Name]",
+                   help="check an iCIMS careers site (careersen-victoria.icims.com=City of Victoria): cities, hospitals ...")
     d.add_argument("--slug", help="try this exact board slug instead of guessing from the name (one company)")
     d.add_argument("--config", help="path to config.yaml")
     a = sub.add_parser("audit", help="which filter rules stop the fresh Canadian postings, which discarded titles look "

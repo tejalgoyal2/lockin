@@ -40,25 +40,65 @@ def test_dates_in_the_usual_spellings():
 
 
 class Pages:
+    """get() answers by the startrow in the URL: pages = {startrow: html}."""
+
     def __init__(self, pages):
         self.pages, self.urls = pages, []
 
     def get(self, url, label):
         self.urls.append(url)
-        n = int(url.split("startrow=")[1]) // sf.PAGE
-        return type("R", (), {"text": self.pages[n]})()
+        return type("R", (), {"text": self.pages.get(int(url.split("startrow=")[1]), "<html>no results</html>")})()
 
 
-def full_page(date, first=0):
-    return "<table>" + "".join(row(path=f"/job/x-{first + i}/{600000 + first + i}/", date=date) for i in range(sf.PAGE)) + "</table>"
+def table(n, date, first=0):
+    return "<table>" + "".join(row(path=f"/job/x-{first + i}/{600000 + first + i}/", date=date) for i in range(n)) + "</table>"
 
 
-def test_the_walk_stops_at_a_short_page_or_a_page_older_than_the_horizon():
-    short = Pages([full_page("Nov 8, 2026"), "<table>" + row(path="/job/y/700000/") + "</table>"])
-    assert len(sf.fetch_board("careers.telus.com", "Telus", short, NOW)) == sf.PAGE + 1
-    old = Pages([full_page("Nov 8, 2026"), full_page("Sep 1, 2026", 100), full_page("Sep 1, 2026", 200)])
-    assert len(sf.fetch_board("careers.telus.com", "Telus", old, NOW)) == 2 * sf.PAGE and len(old.urls) == 2
-    assert "locationsearch=Canada" in old.urls[0] and "sortDirection=desc" in old.urls[0]
+def test_the_walk_continues_after_the_rows_already_read_whatever_the_page_size_and_stops_when_a_page_adds_nothing():
+    pages = Pages({0: table(15, "Nov 8, 2026"), 15: table(15, "Nov 7, 2026", 15), 30: table(4, "Nov 6, 2026", 30)})
+    assert len(sf.fetch_board("careers.telus.com", "Telus", pages, NOW)) == 34
+    assert [u.split("startrow=")[1] for u in pages.urls] == ["0", "15", "30", "34"]       # 15-row pages, then the empty end
+    assert "locationsearch=Canada" in pages.urls[0] and "sortDirection=desc" in pages.urls[0]
+
+
+def test_the_walk_stops_at_a_page_older_than_the_horizon():
+    pages = Pages({0: table(25, "Nov 8, 2026"), 25: table(25, "Sep 1, 2026", 25), 50: table(25, "Sep 1, 2026", 50)})
+    assert len(sf.fetch_board("careers.telus.com", "Telus", pages, NOW)) == 50 and len(pages.urls) == 2
+
+
+def test_a_site_that_answers_the_canada_filter_with_nothing_is_asked_again_without_it():
+    class NoCanada(Pages):
+        def get(self, url, label):
+            self.urls.append(url)
+            text = "<html>none</html>" if "locationsearch" in url else table(3, "Nov 8, 2026")
+            return type("R", (), {"text": text})()
+
+    c = NoCanada({})
+    assert len(sf.fetch_board("jobs.toronto.ca/jobsatcity", "Toronto", c, NOW)) == 3
+    assert "locationsearch" in c.urls[0] and "locationsearch" not in c.urls[1] and c.urls[1].startswith("https://jobs.toronto.ca/jobsatcity/search/")
+
+
+TILE = ('<ul id="job-tile-list"><li class="job-tile job-id-1 job-row-index-1" data-url="/jobsatcity/job/Toronto-Developer-ON-M5V-0C4/607694717/">'
+        '<a class="jobTitle-link fontcolor" data-focus-tile=".x" href="/jobsatcity/job/Toronto-Developer-ON-M5V-0C4/607694717/"> Application Developer </a>'
+        '<div id="job-1-desktop-section-date-value">Nov 3, 2026 </div></li></ul>')
+CITY_ROW = ('<tr class="data-row"><td class="colTitle"><span class="jobTitle hidden-phone">'
+            '<a href="/job/Vancouver-Engineering-Technician-I-Brit-V6A-4K6/1433948200/" class="jobTitle-link">Engineering Technician I</a></span></td>'
+            '<td class="colDate"><span class="jobDate">Nov 7, 2026 </span></td></tr>')
+
+
+def test_tile_layout_and_a_row_without_a_location_column_take_the_place_from_the_link():
+    (tile,) = sf.parse_search("jobs.toronto.ca/jobsatcity", "City of Toronto", TILE)
+    assert tile["title"] == "Application Developer" and tile["location"] == "Toronto, ON"
+    assert tile["url"] == "https://jobs.toronto.ca/jobsatcity/job/Toronto-Developer-ON-M5V-0C4/607694717/"
+    assert tile["first_seen"] == datetime(2026, 11, 3, tzinfo=timezone.utc)
+    (city,) = sf.parse_search("jobs.vancouver.ca", "City of Vancouver", "<table>" + CITY_ROW + "</table>")
+    assert city["location"] == "Vancouver, BC" and city["company_name"] == "City of Vancouver"
+
+
+def test_place_from_a_link():
+    assert sf.location_from_url("/job/Victoria-Planner-BC-V8W-1P6/1/") == "Victoria, BC"
+    assert sf.location_from_url("/job/Calgary-Analyst-T2P-0A1/1/") == "Calgary, AB"
+    assert sf.location_from_url("/job/Remote-Analyst/1/") == ""
 
 
 JOB = ('<html><div><span class="jobdescription"><div><p>Build things with Python.</p>'
@@ -78,12 +118,14 @@ def test_a_malformed_successfactors_slug_stops_the_run(tmp_path):
     with pytest.raises(wl.WatchlistError, match="successfactors slug"):
         wl.load_boards(p)
     assert TELUS.label == "SuccessFactors" and TELUS.url.startswith("https://careers.telus.com/search/")
+    assert sf.split_slug("jobs.toronto.ca/jobsatcity") == ("jobs.toronto.ca", "/jobsatcity")
 
 
 def test_a_successfactors_posting_link_is_recognised_on_any_host():
     url = "https://jobs.rogers.com/job/Toronto-Developer-ON/605112/"
     job = Job("jobs.rogers.com", "Developer", "Toronto, ON, CA", url, "SuccessFactors", NOW)
     assert ats.detect_ats(url) == "SuccessFactors" and ats.locate(job).ats == "SuccessFactors"
+    assert ats.detect_ats("https://jobs.toronto.ca/jobsatcity/job/Toronto-Dev-ON/607694717/") == "SuccessFactors"
     for other in ("https://jobs.rogers.com/search/", "https://acme.wd5.myworkdayjobs.com/en-US/Careers/job/T/Dev_1",
                   "https://example.com/job/x/12"):
         assert ats.detect_ats(other) != "SuccessFactors"

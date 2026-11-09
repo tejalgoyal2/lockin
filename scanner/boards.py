@@ -51,6 +51,8 @@ def board_from_url(url: str) -> Board | None:
         return None
     if host in _GREENHOUSE_HOSTS and len(segs) >= 3 and segs[1] == "jobs":
         return Board("greenhouse", segs[0])
+    if host.endswith(".icims.com") and len(segs) >= 3 and segs[0] == "jobs" and segs[1].isdigit():
+        return Board("icims", host)
     if host == "jobs.lever.co" and len(segs) >= 2:
         return Board("lever", segs[0])
     if host == "jobs.ashbyhq.com" and len(segs) >= 2:

@@ -21,12 +21,13 @@ from urllib.parse import quote
 import yaml
 
 from scanner.normalize import clean_title, from_unix, parse_iso
-from scanner.sources import phenom, successfactors
+from scanner.sources import icims, phenom, successfactors
 
 log = logging.getLogger(__name__)
 
 LABEL = {"greenhouse": "Greenhouse", "lever": "Lever", "ashby": "Ashby", "workday": "Workday",
-         "smartrecruiters": "SmartRecruiters", "phenom": "Phenom", "successfactors": "SuccessFactors"}
+         "smartrecruiters": "SmartRecruiters", "phenom": "Phenom", "successfactors": "SuccessFactors",
+         "icims": "iCIMS"}
 WORKDAY_PAGE = 20          # Workday's maximum page size
 WORKDAY_MAX_PAGES = 50     # 1,000 postings per tenant (TD lists ~950 Canadian ones)
 WORKDAY_MAX_PAGES_FULL = 50  # no country facet: read up to 1,000 postings (~20 s at the polite pace)
@@ -45,6 +46,7 @@ class Board:
     ats: str          # greenhouse | lever | ashby | workday | smartrecruiters
     slug: str         # the id in the board's public URL. Workday: "<tenant>.<wdN>/<site>" (generalmotors.wd5/Careers_GM)
     name: str = ""    # readable company name for the Feed (blank: the ATS or the slug is used)
+    where: str = ""   # what a posting that states no location is given ("Victoria, BC": a city's own job site lists none)
 
     @property
     def label(self) -> str:
@@ -67,6 +69,8 @@ class Board:
             return f"https://{phenom.split_slug(self.slug)[0]}/widgets"
         if self.ats == "successfactors":
             return successfactors.search_url(self.slug, 0)
+        if self.ats == "icims":
+            return icims.search_url(self.slug, 0)
         slug = quote(self.slug)
         return {
             "greenhouse": f"https://boards-api.greenhouse.io/v1/boards/{slug}/jobs",
@@ -105,7 +109,7 @@ def _read_file(path, boards: list[Board], seen: set, *, required: bool) -> tuple
         if (ats, slug.lower()) in seen:
             raise WatchlistError(f"{path}: {ats}/{slug} is listed twice")
         seen.add((ats, slug.lower()))
-        board = Board(ats, slug, str(entry.get("name") or "").strip())
+        board = Board(ats, slug, str(entry.get("name") or "").strip(), str(entry.get("location") or "").strip())
         if ats == "workday":
             board.workday                                   # raises WatchlistError on a malformed slug
         if ats == "phenom":
@@ -117,6 +121,11 @@ def _read_file(path, boards: list[Board], seen: set, *, required: bool) -> tuple
             try:
                 successfactors.check_host(slug)
             except successfactors.SuccessFactorsError as exc:
+                raise WatchlistError(f"{path}: {exc}") from None
+        if ats == "icims":
+            try:
+                icims.check_host(slug)
+            except icims.IcimsError as exc:
                 raise WatchlistError(f"{path}: {exc}") from None
         boards.append(board)
     return boards, seen
@@ -267,6 +276,16 @@ def _fetch_smartrecruiters(board: Board, client) -> list[dict]:
 
 def fetch_board(board: Board, client, *, now: datetime | None = None, seed_ashby: Callable[[str, dict], None] | None = None,
                 budget: float = BOARD_SECONDS) -> list[dict]:
+    """The board's postings; one with no location is given the entry's `location` (a city's own site lists none)."""
+    records = _fetch_board(board, client, now=now, seed_ashby=seed_ashby, budget=budget)
+    if board.where:
+        for rec in records:
+            rec["location"] = rec.get("location") or board.where
+    return records
+
+
+def _fetch_board(board: Board, client, *, now: datetime | None = None, seed_ashby: Callable[[str, dict], None] | None = None,
+                 budget: float = BOARD_SECONDS) -> list[dict]:
     """`budget`: seconds a Workday board may take (it is read newest first); a probe asks for less than a full run."""
     if board.ats == "workday":
         return _fetch_workday(board, client, now or datetime.now(timezone.utc), budget)
@@ -276,6 +295,8 @@ def fetch_board(board: Board, client, *, now: datetime | None = None, seed_ashby
         return phenom.fetch_board(board.slug, board.name, client)
     if board.ats == "successfactors":
         return successfactors.fetch_board(board.slug, board.name, client, now or datetime.now(timezone.utc))
+    if board.ats == "icims":
+        return icims.fetch_board(board.slug, board.name, client, now or datetime.now(timezone.utc), board.where)
     data = client.get_json(board.url, board.label)
     if board.ats == "ashby" and seed_ashby and isinstance(data, dict):
         seed_ashby(board.url, data)                         # the JD fetch needs this same board: do not ask twice

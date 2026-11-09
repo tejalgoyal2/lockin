@@ -1,18 +1,19 @@
 """Job Bank (https://www.jobbank.gc.ca): the Government of Canada's national job board.
 
-Job Bank publishes an Atom feed for every search (the "RSS" link of a results page, meant for readers like this
-one). A feed carries at most 10 postings, newest first, so the reader asks many narrow questions instead of one big
-one: every search term for the whole country, and when a term fills the 10 slots, once more per province. Job Bank's
-robots.txt asks for a 5-second `Crawl-delay`; the client paces this host accordingly (`jd.host_delays`).
+Job Bank's search results are public pages, 25 postings a page, newest first (`sort=D`), paged with `page=N`. They
+carry far more than the Atom feed of the same search (the feed holds only the employer-posted jobs and is capped at
+10 for a keyword search): a search for one occupation shows the jobs employers posted on Job Bank *and* the ones
+partner sites send it, among them **CivicJobs.ca**, the municipal job board (Capital Regional District, city halls,
+regional districts). So the reader asks for each tech occupation by its NOC code (`fn21=21232` is "software
+developers and programmers") and for a few keywords, and pages through each answer until it runs out.
 
-A feed entry has the NOC-style job title ("software developer"), the employer, the location ("Vancouver (BC)") and
-the date; the posting page has the description. Quebec is never searched (the owner cannot work in French).
+robots.txt asks for a 5-second `Crawl-delay`; the client paces this host accordingly (`jd.host_delays`). Quebec is not
+searched specially: its postings fail the location filter like any other.
 """
 import html
 import math
 import re
 import string
-import xml.etree.ElementTree as ET
 from collections import deque
 from datetime import datetime, timezone
 from urllib.parse import urlencode
@@ -21,19 +22,23 @@ from scanner.text import html_to_text
 
 SOURCE = "Job Bank"
 HOST = "www.jobbank.gc.ca"
-FEED = f"https://{HOST}/jobsearch/feed/jobSearchRSSfeed"
+RESULTS = f"https://{HOST}/jobsearch/jobsearch"
 CRAWL_DELAY = 5.0                      # seconds between requests (robots.txt)
-FEED_CAP = 10                          # postings in one feed: a full feed may hide older ones
-PROVINCES = ("BC", "AB", "ON", "SK", "MB", "NS", "NB", "NL", "PE", "YT", "NT", "NU")      # no QC
-MAX_QUERIES = 60                       # per run: 60 x 5 s = 5 minutes at the very most
+PAGE = 25                              # postings per results page
+MAX_PAGES = 12                         # per search: 300 postings
+MAX_QUERIES = 200                      # per run: 200 x 5 s = 17 minutes at the very most
 
-_NS = {"a": "http://www.w3.org/2005/Atom"}
-_FIELD = re.compile(r"<strong>\s*(.*?)\s*:\s*</strong>\s*(.*?)\s*(?=<br\s*/?>|<strong>|$)", re.S | re.I)
+_ARTICLE = re.compile(r'<article id="article-(\d+)".*?</article>', re.S)
+_TITLE = re.compile(r'class="noctitle">\s*(.*?)\s*</span>', re.S)
+_DATE = re.compile(r'<li class="date">\s*(.*?)\s*</li>', re.S)
+_BUSINESS = re.compile(r'<li class="business">(.*?)</li>', re.S)
+_WHERE = re.compile(r'<span class="wb-inv">Location</span>\s*(.*?)\s*</li>', re.S)
+_VIA = re.compile(r'<li class="source">\s*<span class="job-source[^"]*"><span class="wb-inv">(.*?)</span>', re.S)
 _PLACE = re.compile(r"^(?P<city>.*?)\s*\((?P<prov>[A-Z]{2})\)\s*$")
 
 
 class JobBankError(Exception):
-    """The feed or a posting page is not what it used to be."""
+    """The results page or a posting page is not what it used to be."""
 
 
 def _text(fragment: str) -> str:
@@ -53,64 +58,66 @@ def title_case(title: str) -> str:
     return string.capwords(title) if title and title == title.lower() else title
 
 
-def _when(text: str | None) -> datetime | None:
-    try:
-        return datetime.fromisoformat((text or "").replace("Z", "+00:00")).astimezone(timezone.utc)
-    except ValueError:
-        return None
-
-
-def parse_feed(xml_text: str) -> list[dict]:
-    """An Atom feed -> records. Raises JobBankError when the XML is broken or entries have none of the usual fields."""
-    try:
-        root = ET.fromstring((xml_text or "").encode("utf-8"))
-    except ET.ParseError as exc:
-        raise JobBankError(f"feed is not XML: {exc}") from None
-    entries = root.findall("a:entry", _NS)
-    out = []
-    for entry in entries:
-        link = next((l.get("href") for l in entry.findall("a:link", _NS) if l.get("rel") in (None, "alternate")), "")
-        title = entry.findtext("a:title", default="", namespaces=_NS)
-        summary = entry.findtext("a:summary", default="", namespaces=_NS)
-        fields = {_text(k).lower(): _text(v) for k, v in _FIELD.findall(summary)}
-        when = _when(entry.findtext("a:updated", namespaces=_NS))
-        if not (link and title and when):
+def _when(text: str) -> datetime | None:
+    for fmt in ("%B %d, %Y", "%b %d, %Y", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(_text(text), fmt).replace(tzinfo=timezone.utc)
+        except ValueError:
             continue
-        employer = fields.get("employer", "")
+    return None
+
+
+def parse_results(page_html: str) -> list[dict]:
+    """A results page -> records. Raises JobBankError when the page has postings but none can be read."""
+    articles, out = _ARTICLE.findall(page_html or ""), []
+    for m in _ARTICLE.finditer(page_html or ""):
+        art = m.group(0)
+        title, date, where = _TITLE.search(art), _DATE.search(art), _WHERE.search(art)
+        when = _when(date.group(1)) if date else None
+        if not (title and when):
+            continue
+        business = _BUSINESS.search(art)
+        employer = _text(business.group(1)) if business else ""
+        via = _VIA.search(art)
         out.append({
             "company": employer or "Job Bank employer", "company_name": employer,
-            "title": title_case(title), "location": place(fields.get("location", "")),
-            "url": link.split("?")[0], "source": SOURCE, "first_seen": when,
+            "title": title_case(title.group(1)), "location": place(where.group(1)) if where else "",
+            "url": f"https://{HOST}/jobsearch/jobposting/{m.group(1)}", "source": SOURCE, "first_seen": when,
+            "via": _text(via.group(1)) if via else "",
         })
-    if entries and not out:
-        raise JobBankError(f"{len(entries)} feed entries, none readable: the feed changed")
+    if articles and not out:
+        raise JobBankError(f"{len(articles)} postings on the page, none readable: the markup changed")
     return out
 
 
-def feed_url(term: str, days: int, province: str | None = None) -> str:
-    params = {"searchstring": term, "fage": days, "sort": "D"}
-    if province:
-        params["fprov"] = province
-    return f"{FEED}?{urlencode(params)}"
+def results_url(days: int, page: int, *, noc: str | None = None, term: str | None = None) -> str:
+    params = {"fage": days, "sort": "D", "page": page}
+    if noc:
+        params["fn21"] = noc
+    if term:
+        params["searchstring"] = term
+    return f"{RESULTS}?{urlencode(params)}"
 
 
-def fetch(client, terms: list[str], window_days: float, *, provinces=PROVINCES, max_queries: int = MAX_QUERIES) -> list[dict]:
-    """Every term for the whole country; a term whose feed is full is asked again per province."""
+def fetch(client, nocs: list[str], terms: list[str], window_days: float, *, max_pages: int = MAX_PAGES,
+          max_queries: int = MAX_QUERIES) -> list[dict]:
+    """Every NOC code and keyword, page by page until a page is short (the last one) or `max_pages` is reached."""
     days = max(1, min(30, math.ceil(window_days)))
-    queue = deque((t, None) for t in terms)
+    queue = deque([("noc", n) for n in nocs] + [("term", t) for t in terms])
     seen, out, asked = set(), [], 0
     while queue and asked < max_queries:
-        term, prov = queue.popleft()
-        asked += 1
-        xml_text = client.get(feed_url(term, days, prov), SOURCE).text
-        recs = parse_feed(xml_text)
-        full = xml_text.count("<entry>") >= FEED_CAP
-        for rec in recs:
-            if rec["url"] not in seen:
-                seen.add(rec["url"])
-                out.append(rec)
-        if full and prov is None:
-            queue.extend((term, p) for p in provinces)
+        kind, value = queue.popleft()
+        for page in range(1, max_pages + 1):
+            if asked >= max_queries:
+                break
+            asked += 1
+            recs = parse_results(client.get(results_url(days, page, **{"noc" if kind == "noc" else "term": value}), SOURCE).text)
+            for rec in recs:
+                if rec["url"] not in seen:
+                    seen.add(rec["url"])
+                    out.append(rec)
+            if len(recs) < PAGE:
+                break
     return out
 
 

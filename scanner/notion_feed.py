@@ -44,7 +44,7 @@ SOURCE_OPTIONS = ("Workday", "Greenhouse", "Lever", "Ashby", "BambooHR", "Payloc
 # for those rows (they are not required, so the sites can ship before the options exist).
 SITE_SOURCE_OPTIONS = SITE_SOURCES
 # Optional too: a watchlist ATS added after the Feed was built. Without the option in Notion, Source stays empty.
-EXTRA_SOURCE_OPTIONS = ("SmartRecruiters", "Phenom", "SuccessFactors")
+EXTRA_SOURCE_OPTIONS = ("SmartRecruiters", "Phenom", "SuccessFactors", "iCIMS")
 SIGNAL_OPTIONS = ("new grad", "recent graduate", "0-2 years", "entry level", "junior", "low signal",
                   "jd unavailable")
 

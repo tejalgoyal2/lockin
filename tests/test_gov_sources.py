@@ -11,28 +11,33 @@ from scanner.sources.listing import SITE_SOURCES
 NOW = datetime(2026, 11, 8, 16, 0, tzinfo=timezone.utc)
 
 
-def feed(*entries):
-    body = "".join(entries)
-    return ('<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>x</title>'
-            f"{body}</feed>")
+def article(title="software developer", where="Vancouver (BC)", employer="Corinex", jid=50678526,
+            date="November 06, 2026", via="Job Bank"):
+    return (f'<article id="article-{jid}" class="action-buttons"><a href="/jobsearch/jobposting/{jid};jsessionid=ABC.js76?source=searchresults" '
+            f'class="resultJobItem"><h3 class="title"><span class="flag"><span class="new"> New </span></span>'
+            f'<span class="noctitle"> {title} </span></h3><ul class="list-unstyled"><li class="date">{date} </li>'
+            f'<li class="business">{employer}</li><li class="location"><span class="fas fa-map-marker-alt"></span> '
+            f'<span class="wb-inv">Location</span> {where} </li><li class="salary">Salary $55 hourly</li>'
+            f'<li class="source"><span class="job-source job-source-icon-24"><span class="wb-inv">{via}</span></span> '
+            f'<span class="wb-inv">Job number:</span> 117243</li></ul></a></article>')
 
 
-def entry(title="software developer", where="Vancouver (BC)", employer="Corinex", jid=50678526,
-          updated="2026-11-06T13:23:00Z"):
-    return (f'<entry><title type="html"><![CDATA[{title}]]></title>'
-            f'<link rel="alternate" type="text/html" href="https://www.jobbank.gc.ca/jobsearch/jobposting/{jid}?source=x"/>'
-            f"<updated>{updated}</updated>"
-            f'<summary type="html"><![CDATA[<strong>Job number:</strong> 1<br /><strong>Location:</strong> {where}  <br />'
-            f"<strong>Employer:</strong> {employer}<br /><strong>Salary:</strong> $96,000.00 annually]]></summary></entry>")
+def page(*articles):
+    return "<html><body>" + "".join(articles) + "</body></html>"
 
 
 # --- Job Bank --------------------------------------------------------------------------------
 
-def test_job_bank_entry_becomes_a_record():
-    (rec,) = jobbank.parse_feed(feed(entry()))
+def test_job_bank_article_becomes_a_record():
+    (rec,) = jobbank.parse_results(page(article()))
     assert rec == {"company": "Corinex", "company_name": "Corinex", "title": "Software Developer",
                    "location": "Vancouver, BC", "url": "https://www.jobbank.gc.ca/jobsearch/jobposting/50678526",
-                   "source": "Job Bank", "first_seen": datetime(2026, 11, 6, 13, 23, tzinfo=timezone.utc)}
+                   "source": "Job Bank", "first_seen": datetime(2026, 11, 6, tzinfo=timezone.utc), "via": "Job Bank"}
+
+
+def test_job_bank_keeps_the_partner_site_a_posting_came_from_municipal_jobs_included():
+    (rec,) = jobbank.parse_results(page(article(employer="Capital Regional District", where="Victoria (BC)", via="CivicJobs.ca")))
+    assert rec["via"] == "CivicJobs.ca" and rec["company"] == "Capital Regional District" and rec["location"] == "Victoria, BC"
 
 
 def test_job_bank_province_in_brackets_gets_the_comma_the_location_filter_wants():
@@ -47,54 +52,57 @@ def test_job_bank_keeps_a_title_that_already_has_capitals():
 
 
 def test_job_bank_without_an_employer_is_still_a_record():
-    (rec,) = jobbank.parse_feed(feed(entry(employer="")))
+    (rec,) = jobbank.parse_results(page(article(employer="")))
     assert rec["company"] == "Job Bank employer" and rec["company_name"] == ""
 
 
-def test_job_bank_feed_that_is_not_xml_or_unreadable_says_so():
-    with pytest.raises(jobbank.JobBankError, match="not XML"):
-        jobbank.parse_feed("<html>")
-    broken = '<entry><title>x</title></entry>'
+def test_job_bank_unreadable_page_says_so_and_an_empty_one_is_quiet():
     with pytest.raises(jobbank.JobBankError, match="none readable"):
-        jobbank.parse_feed(feed(broken))
-    assert jobbank.parse_feed(feed()) == []                      # an empty feed is a quiet day, not an error
+        jobbank.parse_results('<article id="article-1"><p>nothing</p></article>')
+    assert jobbank.parse_results("<html>no results</html>") == []
 
 
-class FeedClient:
+class ResultsClient:
+    """get() answers by the search it is asked: {(kind, value, page): [articles]}."""
+
     def __init__(self, answers):
         self.answers, self.urls = answers, []
 
     def get(self, url, ats_label):
         self.urls.append(url)
-        key = ("fprov=" + url.split("fprov=")[1].split("&")[0]) if "fprov=" in url else "all"
-        term = url.split("searchstring=")[1].split("&")[0]
-        body = self.answers.get((term, key), feed())
-        return type("R", (), {"text": body})()
+        from urllib.parse import parse_qs, urlsplit
+        q = {k: v[0] for k, v in parse_qs(urlsplit(url).query).items()}
+        key = ("noc", q["fn21"], int(q["page"])) if "fn21" in q else ("term", q["searchstring"], int(q["page"]))
+        return type("R", (), {"text": page(*self.answers.get(key, []))})()
 
 
-def test_a_full_feed_is_asked_again_per_province_and_a_short_one_is_not():
-    full = feed(*[entry(jid=1000 + i) for i in range(10)])
-    client = FeedClient({("developer", "all"): full, ("developer", "fprov=BC"): feed(entry(jid=5), entry(jid=1000)),
-                         ("analyst", "all"): feed(entry(jid=7))})
-    out = jobbank.fetch(client, ["developer", "analyst"], 10, provinces=("BC", "AB"))
-    urls = " ".join(client.urls)
-    assert "searchstring=developer&fage=10&sort=D&fprov=BC" in urls and "fprov=AB" in urls
-    assert "analyst&fage=10&sort=D&fprov" not in urls                      # 1 entry: not full, so not split
-    assert len(out) == 12 and len({r["url"] for r in out}) == 12            # the repeat of jid 1000 is dropped
+def full(start):
+    return [article(jid=start + i) for i in range(jobbank.PAGE)]
 
 
-def test_job_bank_never_asks_more_than_the_query_budget():
-    full = feed(*[entry(jid=i) for i in range(10)])
-    client = FeedClient({(t, k): full for t in ("a", "b") for k in ["all"] + [f"fprov={p}" for p in jobbank.PROVINCES]})
-    jobbank.fetch(client, ["a", "b"], 10, max_queries=5)
-    assert len(client.urls) == 5
+def test_each_occupation_is_paged_until_a_short_page_and_repeats_across_searches_are_dropped():
+    client = ResultsClient({("noc", "21232", 1): full(1000), ("noc", "21232", 2): full(2000)[:5] + [article(jid=1000)],
+                            ("term", "devops", 1): [article(jid=7), article(jid=2000)]})
+    out = jobbank.fetch(client, ["21232", "21231"], ["devops"], 10)
+    assert len(client.urls) == 4                                   # 21232 pages 1 and 2, 21231 page 1, devops page 1
+    assert "fn21=21232" in client.urls[0] and "page=2" in client.urls[1] and "fn21=21231" in client.urls[2]
+    assert "searchstring=devops" in client.urls[3] and all("fage=10" in u and "sort=D" in u for u in client.urls)
+    assert len(out) == 25 + 5 + 1 and len({r["url"] for r in out}) == len(out)
+
+
+def test_job_bank_never_asks_more_than_the_query_budget_or_pages():
+    client = ResultsClient({("noc", "1", p): full(p * 100) for p in range(1, 30)})
+    jobbank.fetch(client, ["1"], [], 10, max_pages=4)
+    assert len(client.urls) == 4
+    client = ResultsClient({("noc", str(n), 1): full(n * 100) for n in range(1, 7)})
+    jobbank.fetch(client, [str(n) for n in range(1, 7)], [], 10, max_queries=3)
+    assert len(client.urls) == 3
 
 
 def test_job_bank_window_becomes_fage_days_within_1_to_30():
-    assert "fage=1&" in jobbank.feed_url("x", 1) and "fage=3" in jobbank.feed_url("x", 3)
-    c = FeedClient({})
-    jobbank.fetch(c, ["x"], 0.2)
-    jobbank.fetch(c, ["x"], 99)
+    c = ResultsClient({})
+    jobbank.fetch(c, [], ["x"], 0.2)
+    jobbank.fetch(c, [], ["x"], 99)
     assert "fage=1&" in c.urls[0] and "fage=30&" in c.urls[1]
 
 
@@ -204,3 +212,36 @@ def test_job_bank_free_text_description_is_unescaped_and_cut_before_the_metadata
 def test_job_bank_page_with_an_empty_free_text_block_raises():
     with pytest.raises(jobbank.JobBankError):
         jobbank.parse_detail('<div class="job-posting-details-body"><h2>Job details</h2></div>')
+
+
+# --- the curated Canada list --------------------------------------------------------------------------------
+
+LIST = """# 2026 Canadian CS new Grad/Junior Jobs
+| Title | Company | Role | Company Info | Details | Location | Apply |
+|-------|---------|------|--------------|---------|----------|:-----:|
+| 💤 Fresh Graduate – Java Full Stack Developer <!--id:875727899--> | KTek Resourcing | Develop Java features | IT staffing | Full-time | Toronto, Ontario (Onsite) | [Apply](<https://www.linkedin.com/jobs/view/1>) |
+| 🔥 Junior Software Developer <!--id:874610920--> | KEV Group | Build React features | K-12 fintech | Full-time · $80K | Toronto, Ontario (Hybrid) | [Apply](https://example.com/jobs/2) |
+## Security
+_No roles currently_
+"""
+
+
+def test_curated_list_rows_become_records_without_emoji_or_id_markers():
+    from scanner.sources import canadalist
+    recs = canadalist.parse(LIST, NOW)
+    assert [(r["title"], r["company"], r["location"], r["url"]) for r in recs] == [
+        ("Fresh Graduate – Java Full Stack Developer", "KTek Resourcing", "Toronto, Ontario (Onsite)", "https://www.linkedin.com/jobs/view/1"),
+        ("Junior Software Developer", "KEV Group", "Toronto, Ontario (Hybrid)", "https://example.com/jobs/2")]
+    assert all(r["source"] == "Canada List" and r["first_seen"] == NOW for r in recs)
+    assert canadalist.parse("no tables here", NOW) == []
+
+
+def test_curated_list_is_a_site_the_feed_knows_and_two_files_do_not_repeat_a_link():
+    from scanner.sources import canadalist
+    assert "Canada List" in SITE_SOURCES
+
+    class Files:
+        def get(self, url, label):
+            return type("R", (), {"text": LIST})()
+
+    assert len(canadalist.fetch(["a", "b"], Files(), NOW)) == 2

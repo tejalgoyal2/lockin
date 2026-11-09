@@ -12,12 +12,12 @@ import requests
 from urllib.parse import parse_qs, quote, unquote, urlsplit
 
 from scanner.models import Job
-from scanner.sources import phenom, successfactors
+from scanner.sources import icims, phenom, successfactors
 from scanner.sources.listing import SITE_SOURCES
 from scanner.text import INVISIBLE, html_to_text
 
 SITES = SITE_SOURCES      # job sites (scanner/sources/*): their pages carry the JD
-SUPPORTED = ("Greenhouse", "Lever", "Ashby", "Workday", "BambooHR", "SmartRecruiters", "Phenom", "SuccessFactors", *SITES)
+SUPPORTED = ("Greenhouse", "Lever", "Ashby", "Workday", "BambooHR", "SmartRecruiters", "Phenom", "SuccessFactors", "iCIMS", *SITES)
 
 
 class NotFound(Exception):
@@ -60,6 +60,8 @@ def detect_ats(url: str) -> str | None:
         return "Job Bank"
     if host.endswith("bcpublicservice.hua.hrsmart.com"):
         return "BC Gov"
+    if icims.is_job_url(url):
+        return "iCIMS"
     if phenom.is_job_url(urlsplit(url or "").path):          # a Phenom careers site: any host, /<country>/<lang>/job/<id>
         return "Phenom"
     if successfactors.is_job_url(urlsplit(url or "").path):   # a SuccessFactors careers site: any host, /job/<words>/<number>/
@@ -154,6 +156,8 @@ def locate(job: Job) -> AtsRef | None:
         return _site(ats, job.url)
     if ats in ("Phenom", "SuccessFactors"):
         return AtsRef(ats, job.url)
+    if ats == "iCIMS":
+        return AtsRef(ats, job.url.split("?")[0] + "?in_iframe=1")
     if ats == "Greenhouse":
         return _greenhouse(job.url, job.company)
     return {"Lever": _lever, "Ashby": _ashby, "Workday": _workday, "BambooHR": _bamboohr,
@@ -329,6 +333,9 @@ def fetch_full(ref: AtsRef, client) -> Detail:
         return _fetch_site(ref, client)
     if ref.ats == "Phenom":
         text, where = phenom.parse_detail(client.get(ref.api_url, ref.ats).text)
+        return Detail(INVISIBLE.sub("", text), "", where)
+    if ref.ats == "iCIMS":
+        text, where = icims.parse_detail(client.get(ref.api_url, ref.ats).text)
         return Detail(INVISIBLE.sub("", text), "", where)
     if ref.ats == "SuccessFactors":
         return Detail(INVISIBLE.sub("", successfactors.parse_detail(client.get(ref.api_url, ref.ats).text)), "", [])

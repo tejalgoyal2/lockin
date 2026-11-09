@@ -14,29 +14,45 @@ import re
 import time
 from datetime import datetime, timedelta, timezone
 from html.parser import HTMLParser
+from urllib.parse import unquote
 
 from scanner.text import html_to_text
 
 SOURCE = "SuccessFactors"
-PAGE = 25
-MAX_PAGES = 20            # 500 postings
-BOARD_SECONDS = 150      # newest first: what is read in this time is what matters
+MAX_PAGES = 40            # pages of whatever size the site uses (15, 25 ...): 600 to 1,000 postings
+BOARD_SECONDS = 150       # newest first: what is read in this time is what matters
 HORIZON_DAYS = 31         # older than this is never wanted (the widest window anyone asks for is a month)
-_HOST = re.compile(r"^[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")
-_JOB_PATH = re.compile(r"^/job/[^/]+/\d{5,}/?$")
+_SLUG = re.compile(r"^(?P<host>[A-Za-z0-9.-]+\.[A-Za-z]{2,})(?P<prefix>/[A-Za-z0-9_-]+)?$")
+_JOB_PATH = re.compile(r"^(?:/[^/]+)?/job/[^/]+/\d{5,}/?$")
 _ROW = re.compile(r'<tr class="data-row">(.*?)</tr>', re.S)
-_TITLE = re.compile(r'<a href="(/job/[^"]+)" class="jobTitle-link">(.*?)</a>', re.S)
+_TILE = re.compile(r'<li class="job-tile[^"]*"[^>]*data-url="([^"]+)"(.*?)(?=<li class="job-tile|</ul>|$)', re.S)
+_TITLE = re.compile(r'<a (?:[^>]*?)href="((?:/[^/"]+)?/job/[^"]+)"[^>]*class="jobTitle-link[^"]*"[^>]*>(.*?)</a>'
+                    r'|<a [^>]*class="jobTitle-link[^"]*"[^>]*href="((?:/[^/"]+)?/job/[^"]+)"[^>]*>(.*?)</a>', re.S)
 _WHERE = re.compile(r'<td class="colLocation[^>]*>.*?<span class="jobLocation">(.*?)</span>', re.S)
+_TILE_WHERE = re.compile(r'section-location-value"[^>]*>(.*?)</div>', re.S)
 _DATE = re.compile(r'<span class="jobDate">(.*?)</span>', re.S)
+_TILE_DATE = re.compile(r'section-date-value"[^>]*>(.*?)</div>', re.S)
+_PROVINCE = re.compile(r"(?:^|-)(ON|BC|AB|QC|MB|SK|NS|NB|NL|PE|YT|NT|NU)(?:-|$)")
+_POSTAL = re.compile(r"(?:^|-)([ABCEGHJKLMNPRSTVXY])\d[A-Z]-\d[A-Z]\d(?:-|$)")
+_POSTAL_PROVINCE = {"A": "NL", "B": "NS", "C": "PE", "E": "NB", "G": "QC", "H": "QC", "J": "QC", "K": "ON", "L": "ON",
+                    "M": "ON", "N": "ON", "P": "ON", "R": "MB", "S": "SK", "T": "AB", "V": "BC", "X": "NT", "Y": "YT"}
 
 
 class SuccessFactorsError(Exception):
     """The search page or a posting page is not what it used to be."""
 
 
+def split_slug(slug: str) -> tuple[str, str]:
+    """"careers.telus.com" -> ("careers.telus.com", ""); "jobs.toronto.ca/jobsatcity" -> ("jobs.toronto.ca", "/jobsatcity")."""
+    m = _SLUG.match(slug or "")
+    if not m:
+        raise SuccessFactorsError(f"successfactors slug must be the careers host (and its path if it has one), e.g. "
+                                  f"careers.telus.com or jobs.toronto.ca/jobsatcity, got {slug!r}")
+    return m.group("host"), m.group("prefix") or ""
+
+
 def check_host(slug: str) -> str:
-    if not _HOST.match(slug or ""):
-        raise SuccessFactorsError(f"successfactors slug must be the careers host, e.g. careers.telus.com, got {slug!r}")
+    split_slug(slug)
     return slug
 
 
@@ -57,35 +73,76 @@ def _day(text: str) -> datetime | None:
     return None
 
 
-def search_url(host: str, offset: int) -> str:
-    return f"https://{host}/search/?q=&locationsearch=Canada&sortColumn=referencedate&sortDirection=desc&startrow={offset}"
+def location_from_url(href: str) -> str:
+    """Some sites show no location column: the link carries it ("/job/Vancouver-Engineering-Technician-I-Brit-V6A-4K6/123/"
+    or ".../Toronto-Division-Chief-ON-M5V-0C4/..."). The city is the first word, the province an explicit code or the
+    postal code's first letter. "" when neither is there."""
+    m = re.search(r"/job/([^/]+)/", unquote(href or ""))
+    slug = m.group(1) if m else ""
+    prov = _PROVINCE.search(slug)
+    code = prov.group(1) if prov else None
+    if not code:
+        postal = _POSTAL.search(slug)
+        code = _POSTAL_PROVINCE.get(postal.group(1)) if postal else None
+    city = slug.split("-")[0]
+    return f"{city}, {code}" if code and city else ""
 
 
-def parse_search(host: str, name: str, page_html: str) -> list[dict]:
-    """A search page -> records. Raises SuccessFactorsError when it has rows but none can be read."""
-    rows, out = _ROW.findall(page_html or ""), []
-    for row in rows:
-        link, where, date = _TITLE.search(row), _WHERE.search(row), _DATE.search(row)
+def search_url(slug: str, offset: int, *, canada: bool = True) -> str:
+    host, prefix = split_slug(slug)
+    where = "&locationsearch=Canada" if canada else ""
+    return f"https://{host}{prefix}/search/?q={where}&sortColumn=referencedate&sortDirection=desc&startrow={offset}"
+
+
+def parse_search(slug: str, name: str, page_html: str) -> list[dict]:
+    """A search page (table or tile layout) -> records. Raises SuccessFactorsError when it has rows but none can be read."""
+    host, _ = split_slug(slug)
+    blocks = [(m.group(0), _where_date(m.group(0), tile=False)) for m in _ROW.finditer(page_html or "")]
+    blocks += [(m.group(0), _where_date(m.group(0), tile=True)) for m in _TILE.finditer(page_html or "")]
+    out, seen = [], set()
+    for block, (where, date) in blocks:
+        link = _TITLE.search(block)
         if not link:
             continue
-        out.append({"company": host, "company_name": name, "title": _text(link.group(2)),
-                    "location": _text(where.group(1)) if where else "", "url": f"https://{host}{link.group(1)}",
-                    "source": SOURCE, "first_seen": _day(_text(date.group(1))) if date else None})
-    if rows and not out:
-        raise SuccessFactorsError(f"{len(rows)} rows on the page, none readable: the markup changed")
+        href, title = (link.group(1), link.group(2)) if link.group(1) else (link.group(3), link.group(4))
+        if href in seen:
+            continue
+        seen.add(href)
+        out.append({"company": slug, "company_name": name, "title": _text(title),
+                    "location": where or location_from_url(href), "url": f"https://{host}{href}",
+                    "source": SOURCE, "first_seen": _day(date) if date else None})
+    if blocks and not out:
+        raise SuccessFactorsError(f"{len(blocks)} rows on the page, none readable: the markup changed")
     return out
 
 
-def fetch_board(host: str, name: str, client, now: datetime) -> list[dict]:
-    check_host(host)
-    cutoff, out, started = now - timedelta(days=HORIZON_DAYS), [], time.monotonic()
-    for page in range(MAX_PAGES):
+def _where_date(block: str, *, tile: bool) -> tuple[str, str]:
+    where = (_TILE_WHERE if tile else _WHERE).search(block)
+    date = (_TILE_DATE if tile else _DATE).search(block)
+    return (_text(where.group(1)) if where else "", _text(date.group(1)) if date else "")
+
+
+def fetch_board(slug: str, name: str, client, now: datetime) -> list[dict]:
+    """Page by page (the next page starts after the rows already read: sites use 15, 25 ... per page) until a page adds
+    nothing, is older than the horizon, or the time budget is spent. Asks for Canada first; a site that answers that with
+    nothing is asked again without the filter (a city's list has no country in it)."""
+    split_slug(slug)
+    cutoff, out, started, canada = now - timedelta(days=HORIZON_DAYS), [], time.monotonic(), True
+    urls = set()
+    for _ in range(MAX_PAGES):
         if time.monotonic() - started > BOARD_SECONDS:
             break
-        recs = parse_search(host, name, client.get(search_url(host, page * PAGE), SOURCE).text)
-        out += recs
-        dated = [r["first_seen"] for r in recs if r["first_seen"]]
-        if len(recs) < PAGE or (dated and max(dated) < cutoff):
+        recs = parse_search(slug, name, client.get(search_url(slug, len(urls), canada=canada), SOURCE).text)
+        if not recs and canada and not urls:
+            canada = False
+            recs = parse_search(slug, name, client.get(search_url(slug, 0, canada=False), SOURCE).text)
+        new = [r for r in recs if r["url"] not in urls]
+        if not new:
+            break
+        urls |= {r["url"] for r in new}
+        out += new
+        dated = [r["first_seen"] for r in new if r["first_seen"]]
+        if dated and max(dated) < cutoff:
             break
     return out
 

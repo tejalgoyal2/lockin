@@ -22,7 +22,7 @@ Design notes live in [SPEC.md](SPEC.md). Opinions about the job market do not.
    "Senior", "Staff", "Principal" and "Director of Vibes" do not make it through.
 3. Fetch each JD (Greenhouse, Lever, Ashby, Workday, BambooHR, SmartRecruiters, Phenom, and the job sites), apply the JD rules (3+ years, current
    enrollment, clearance) and score the fit against `skills.yaml` / `gaps.yaml`.
-4. Write the top `notion.daily_cap` (40) new jobs to the Feed, skipping anything in `state/seen.json` or
+4. Write the top `notion.daily_cap` (150) new jobs to the Feed, skipping anything in `state/seen.json` or
    already in the Feed by Link. At the start of the run, Feed rows whose `done-del` box is ticked (your Notion
    automation ticks it after copying the row to your main database) are trashed; no other row is ever trashed.
 5. Commit `state/` and `reports/` back to the repo. `reports/latest.md` is the full candidate list;
@@ -48,7 +48,7 @@ Nothing needs installing: open the repo on GitHub, **Actions**, pick a workflow,
 |---|---|---|
 | `dry_run` | ticked | scan and report without touching Notion or `state/seen.json`. **Untick it for a real run**; keep it ticked to look first. |
 | `since_days` | `10` (`freshness.default_days`) | widen the net: `14` or `30` after a break, a new source or a fix. Safe any time: `state/seen.json` keeps a job from being written twice, so a wide window only costs a longer run. |
-| `max_rows` | `40` (`notion.daily_cap`) | how many new rows this run may write (the best-scoring ones go first; the rest wait for the next run while they are inside the window). `5` to try it, `100` to empty a backlog. |
+| `max_rows` | `150` (`notion.daily_cap`) | how many new rows this run may write (the best-scoring ones go first; the rest wait for the next run while they are inside the window). `5` to try it, `100` to empty a backlog. |
 
 Typical recipes: *"did the last fix work?"* is `dry_run` ticked, `since_days` 14, then read the log and
 `reports/latest.md`. *"I was away for two weeks"* is `dry_run` unticked, `since_days` 14, `max_rows` 100. From a
@@ -67,7 +67,7 @@ log). Pick `command` and write `args` the way you would in a terminal:
 |---|---|---|
 | `audit` | `--days 30` (default 14) | Which filter rules stop the fresh Canadian postings, which discarded titles look like jobs you want, which title words the filter does not know. See "The filter audit". |
 | `why` | `"General Motors"` (add `--since 21`) | "I saw this employer post a job, why is it not in the Feed?" Names the first rule that stops each of its Canadian postings, or says the employer is not on the watchlist. |
-| `discover` | `"Telus" "Bell Canada"`, or `--workday rbc`, or `--phenom jobs.bell.ca/ca/en=Bell` | Finds an employer's job board and prints the `watchlist.yaml` line to add. |
+| `discover` | `"Telus" "Bell Canada"`, or `--workday rbc`, `--phenom jobs.bell.ca/ca/en=Bell`, `--successfactors careers.telus.com=Telus` or `--icims careersen-victoria.icims.com=City of Victoria` | Finds an employer's job board and prints the `watchlist.yaml` line to add. |
 
 ## Setup
 
@@ -136,7 +136,8 @@ employer's careers page and look at where "Apply" goes: `boards.greenhouse.io/<s
 `- {ats: greenhouse|lever|ashby|smartrecruiters, slug: <slug>, name: Display Name}`; for Workday the slug is
 `<tenant>.<wdN>/<site>` (`generalmotors.wd5/Careers_GM`), and only the Canadian postings are asked for. For a Phenom People
 careers site (Bell, Air Canada and OpenText run on it) the slug is `<host>/<country>/<language>`
-(`jobs.bell.ca/ca/en`). A malformed entry stops the run with a clear message, because a typo should not quietly
+(`jobs.bell.ca/ca/en`). A SuccessFactors careers site is its host (`careers.telus.com`, or with its path: `jobs.toronto.ca/jobsatcity`); an iCIMS one is its host
+(`careersen-victoria.icims.com`). A city's own site lists no location, so an entry can carry one: `location: "Victoria, BC"` is given to every posting that states none. A malformed entry stops the run with a clear message, because a typo should not quietly
 un-stalk anyone.
 
 **It grows by itself.** Every Canadian posting links to the employer's own board, and a link on Workday, Greenhouse,
@@ -148,11 +149,8 @@ next run reads them. Delete a line you do not want. `watchlist.yaml` wins when a
 rests for a week, then two, then four (a working read clears it), and a candidate that fails three probes is given up.
 `reports/boards.md` lists what is resting and why.
 
-Not covered, and why: employers on SuccessFactors (Telus, Scotiabank, Rogers, Canada Post, Celestica, ICBC), Taleo, iCIMS, UltiPro
-or their own site need a different reader. The dataset carries about
-250,000 iCIMS postings with no location (the field says "Not specified"), so none can pass the Canadian filter;
-employers that use iCIMS (Vancouver Coastal Health among them) are not scanned. A known blind spot, written down
-so it stops lurking.
+Not covered, and why: employers on Taleo, UltiPro, Oracle Recruiting or their own site need a different reader (Taleo: the Corporation of Delta and some other municipalities; its
+list is drawn by JavaScript, which lockin does not run). Tell `why` or the audit about a missed one and it can be added.
 
 ### Finding employers, and finding out why one was missed
 
@@ -186,18 +184,21 @@ changing a filter, or when a job you wanted never showed up.
 | `Built In` | Built In Vancouver, entry-level cards for engineering and data (up to 3 pages each) | server-rendered cards |
 | `Bay Street Oracle` | capital-markets jobs; only postings whose URL words match a tech title are opened | sitemap, then each posting's schema.org data; linked to the employer's own ATS when the scanner reads it |
 | `HN` | the monthly "Ask HN: Who is hiring?" thread; top-level comments whose header line (`Company \| Role \| Location`) names a Canadian place and a role (or whose first lines do) | Algolia HN API; a comment counts as new when first read, not when written |
-| `Job Bank` | the federal Job Bank (jobbank.gc.ca): `sources.jobbank.terms`, each asked for all of Canada, and per province when the 10-posting feed fills | Job Bank's own Atom feed; 5 seconds between requests, as its robots.txt asks; Quebec is never searched |
+| `Job Bank` | the federal Job Bank (jobbank.gc.ca): each tech occupation (NOC code) and a few keywords, paged 25 at a time, newest first | Job Bank's public results pages. They carry the employers' postings **and the partner sites' ones: CivicJobs.ca (the municipal board: city halls, regional districts), Talent.com, Indeed ...** The Atom feed was dropped: it holds only the employer-posted jobs and 10 per keyword. 5 seconds between requests, as its robots.txt asks |
 | `BC Gov` | the BC Public Service (bcpublicservice.hua.hrsmart.com): every external posting, about 80 | one HTML table; the page shows the date opened, so the freshness window works |
 
 All of them read only what the sites publish to any visitor, at the same polite pace as the ATS fetchers, under the
 scanner's own name. A site that is down or has changed prints `WARNING <site>: not read (...)` and the run goes on.
 A job a site shares with an ATS board is kept once, with the ATS link. To turn one off set `enabled: false` under
 `sources.<name>` in `config.yaml`. The Feed's Source column needs the options `YC`, `Built In`, `Bay Street Oracle`,
-`HN`, `Job Bank` and `BC Gov` (and `SmartRecruiters` / `Phenom` for those watchlist boards) to show them (without the option the Source cell stays empty; nothing else changes).
+`HN`, `Job Bank` and `BC Gov` (and `SmartRecruiters` / `Phenom` / `SuccessFactors` / `iCIMS` for those watchlist boards) to show them (without the option the Source cell stays empty; nothing else changes).
 
-**Not read, on purpose:** CivicJobs and CivicInfo BC answer an automated client with a Cloudflare bot challenge
-(HTTP 403, including on the RSS feed CivicInfo advertises). That is the sites saying no, so lockin says "fair
-enough" and leaves. No fake browsers, no challenge solvers. Work at a Startup lists the same postings as the YC pages.
+**Municipal jobs.** CivicJobs and CivicInfo BC answer an automated client with a Cloudflare bot challenge (HTTP 403, including
+on the RSS feed CivicInfo advertises). That is the sites saying no, so lockin does not go there: no fake browsers, no challenge
+solvers. Two honest routes instead: Job Bank republishes CivicJobs.ca postings (the `Job Bank` source above), and the cities,
+regional districts, health authorities and Crown corporations are read from their **own** job sites when those are iCIMS or
+SuccessFactors (City of Victoria, City of Vancouver, City of Toronto, ICBC ...: see `watchlist.yaml`). Work at a Startup lists the
+same postings as the YC pages.
 
 ## Feedback: teaching the robot your taste
 

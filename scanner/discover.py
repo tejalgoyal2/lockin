@@ -38,7 +38,8 @@ class Hit:
 
     def yaml_line(self) -> str:
         b = self.board
-        return (f"  - {{ats: {b.ats}, slug: {b.slug}, name: {b.name or b.slug!r}}}"
+        where = f", location: {b.where!r}" if b.where else ""
+        return (f"  - {{ats: {b.ats}, slug: {b.slug}, name: {b.name or b.slug!r}{where}}}"
                 f"        # {self.canadian} Canadian postings, {self.candidates} pass the title filters")
 
 
@@ -64,11 +65,37 @@ def _summarise(board: Board, records: list[dict], filters: Filters, now: datetim
     return Hit(board, len(records), canadian, candidates)
 
 
+def host_guesses(slug: str) -> list[tuple[str, str]]:
+    """[(ats, host)] for the careers sites whose address follows from the company name: iCIMS (careers-victoria.icims.com
+    ...) and SuccessFactors (careers.telus.com, jobs.vancouver.ca ...). Each is only a guess: the reader returns nothing
+    for a host that is not that kind of site."""
+    s = re.sub(r"[^a-z0-9]", "", slug.lower())
+    if not s:
+        return []
+    icims = [f"{p}-{s}.icims.com" for p in ("careers", "jobs", "careersen", "external")] + [f"{s}.icims.com"]
+    sf = [f"{p}.{s}.{tld}" for p in ("careers", "jobs") for tld in ("com", "ca")]
+    return [("icims", h) for h in icims] + [("successfactors", h) for h in sf]
+
+
+def probe_hosts(name: str, slugs: list[str], client, filters: Filters, now: datetime) -> list[Hit]:
+    hits = []
+    for slug in slugs:
+        for ats_name, host in host_guesses(slug):
+            board = Board(ats_name, host, name)
+            try:
+                records = watchlist.fetch_board(board, client, now=now)
+            except Exception:                                  # no such host / not that kind of site
+                continue
+            if records:
+                hits.append(_summarise(board, records, filters, now))
+    return hits
+
+
 def probe(name: str, client, filters: Filters, now: datetime, *, slugs: list[str] | None = None,
-          ats_list=PROBE_ORDER, workday: bool = True) -> list[Hit]:
+          ats_list=PROBE_ORDER, workday: bool = True, hosts: bool = False) -> list[Hit]:
     """Every board that exists for this company and lists at least one posting (Workday too: the tenant is guessed
     from the name, its career sites come from its robots.txt)."""
-    hits = []
+    hits = probe_hosts(name, slugs or slug_guesses(name), client, filters, now) if hosts else []
     for slug in slugs or slug_guesses(name):
         if workday and re.fullmatch(r"[a-z0-9]+", slug):
             hits += probe_workday_tenant(slug, name, client, filters, now)
@@ -125,6 +152,15 @@ def probe_workday(slug: str, name: str, client, filters: Filters, now: datetime)
 def probe_successfactors(host: str, name: str, client, filters: Filters, now: datetime) -> Hit | None:
     """A SuccessFactors careers site: the slug is the host, e.g. careers.telus.com."""
     board = Board("successfactors", host, name)
+    records = watchlist.fetch_board(board, client, now=now)
+    return _summarise(board, records, filters, now) if records else None
+
+
+def probe_icims(host: str, name: str, client, filters: Filters, now: datetime) -> Hit | None:
+    """An iCIMS careers site: the slug is the host, e.g. careersen-victoria.icims.com. `name` may end in "|Victoria, BC",
+    the location given to postings that state none."""
+    name, _, where = name.partition("|")
+    board = Board("icims", host, name.strip(), where.strip())
     records = watchlist.fetch_board(board, client, now=now)
     return _summarise(board, records, filters, now) if records else None
 

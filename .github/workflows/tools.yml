@@ -5,7 +5,8 @@ name: tools
 #   audit     which filter rules stop the fresh Canadian postings, which discarded titles look like jobs you want
 #   why       why a company's posting is not in the Feed (args: the company name, e.g. General Motors; optional --since 14)
 #   discover  find an employer's job board and print the watchlist.yaml line (args: company names in quotes, or
-#             --workday TENANT, or --phenom HOST/ca/en, e.g.  "Bell Canada" --workday generalmotors)
+#             --workday TENANT, --phenom HOST/ca/en, --successfactors HOST or --icims HOST, e.g.
+#             "Bell Canada" --workday generalmotors --icims "careersen-victoria.icims.com=City of Victoria|Victoria, BC")
 
 on:
   workflow_dispatch:
