@@ -2,12 +2,15 @@ import argparse
 import json
 import logging
 import os
+import re
 import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-from scanner import feed_clean, feed_refresh, gaps_report, notion_feed, report
+from scanner import audit as audit_mod
+from scanner import boards as boards_mod
+from scanner import discover, feed_clean, feed_refresh, gaps_report, notion_feed, report
 from scanner.applied import AppliedKeyError, AppliedSet
 from scanner.ats_names import NameStore, ats_name, fill_names
 from scanner.company_names import display_company, load_overrides, slug_names
@@ -17,10 +20,10 @@ from scanner.enrich import enrich, fit_distribution
 from scanner.feedback import FeedbackStore
 from scanner.filters import Filters
 from scanner.models import Job
-from scanner.net import PoliteClient
+from scanner.net import client_from_config
 from scanner.pipeline import run_stream
 from scanner.score import Scorer
-from scanner.sources import ats, baystreet, builtin, feashliaa, hn, listing, simplify, watchlist, yc
+from scanner.sources import ats, baystreet, bcgov, builtin, canadalist, feashliaa, hn, jobbank, listing, simplify, watchlist, yc
 from scanner.state import GapsStore, SeenStore
 
 log = logging.getLogger("scanner")
@@ -30,7 +33,7 @@ class UsageError(Exception):
     """Bad configuration or arguments: reported without a traceback, exit code 2."""
 
 
-def collect(cfg, args, filters, now, since):
+def collect(cfg, args, filters, now, since, store=None):
     """Run every source through the phase-1 filters. Returns (jobs, held, stage blocks, feashliaa meta)."""
     src = cfg["sources"]
     jobs, held, blocks, meta = [], [], {}, None
@@ -39,7 +42,8 @@ def collect(cfg, args, filters, now, since):
         meta = feashliaa.read_metadata(data_dir)
         age = feashliaa.check_freshness(meta, src["feashliaa"]["stale_after_hours"], now)
         print(f"Feashliaa last_updated={meta['last_updated']} ({age:.1f} h old), total_jobs={meta['total_jobs']:,}")
-        found, stages, hold = run_stream(feashliaa.iter_raw(data_dir), feashliaa.raw_fields, filters, now, since)
+        found, stages, hold = run_stream(feashliaa.iter_raw(data_dir), feashliaa.raw_fields, filters, now, since,
+                                         tap=store.tap if store else None)
         jobs += found
         held += hold
         blocks["Feashliaa"] = stages
@@ -49,26 +53,38 @@ def collect(cfg, args, filters, now, since):
         cats = src["simplify"]["categories"]
         found, stages, hold = run_stream(
             simplify.iter_raw(listings), simplify.raw_fields, filters, now, since,
-            pre_stages=(("active_category", lambda r: simplify.is_listed(r, cats)),))
+            pre_stages=(("active_category", lambda r: simplify.is_listed(r, cats)),), tap=store.tap if store else None)
         jobs += found
         held += hold
         blocks["Simplify"] = stages
     wl = src.get("watchlist") or {}
     if wl.get("enabled"):
         try:
-            boards = watchlist.load_boards(wl["path"])
+            boards = watchlist.load_boards(wl["path"], *wl.get("extra_paths", []))
         except watchlist.WatchlistError as exc:
             raise UsageError(str(exc)) from None
+        today = now.date()
+        resting = [b for b in boards if store and not store.due(b, today)]
+        if resting:
+            boards = [b for b in boards if b not in resting]
+            print(f"Watchlist: {len(resting)} boards resting after {boards_mod.MAX_FAILS} failed reads in a row "
+                  f"(retried later; see reports/boards.md)")
         records, failed = watchlist.fetch_all(
-            boards, PoliteClient(delay=cfg["jd"]["request_delay"], per_ats=cfg["jd"]["max_per_ats"]),
-            workers=wl.get("workers", 6), seed_ashby=ats.seed_ashby_board)
+            boards, client_from_config(cfg["jd"]),
+            workers=wl.get("workers", 6), now=now, seed_ashby=ats.seed_ashby_board)
+        if store:
+            failed_by = {boards_mod.key(b): err for b, err in failed}
+            for b in boards:
+                store.record_read(b, failed_by.get(boards_mod.key(b), ""), today)
         print(f"Watchlist: {len(boards) - len(failed)} of {len(boards)} boards read, {len(records):,} postings"
               + (f"; not read: {', '.join(f'{b.ats}/{b.slug}' for b, _ in failed)}" if failed else ""))
+        if store:
+            store.watched = boards_mod.known_keys(boards + resting)
         found, stages, hold = run_stream(iter(records), watchlist.raw_fields, filters, now, since)
         jobs += found
         held += hold
         blocks["Watchlist"] = stages
-    http = PoliteClient(delay=cfg["jd"]["request_delay"], per_ats=cfg["jd"]["max_per_ats"])
+    http = client_from_config(cfg["jd"])
     sites = [      # (label, config key, reader(config) -> records, pre-stages)
         ("YC", "yc", lambda c: yc.fetch(c["pages"], http, now),
          (("experience_ok", lambda r: yc.experience_ok(r, cfg["jd"]["min_years_drop"])),)),
@@ -77,6 +93,13 @@ def collect(cfg, args, filters, now, since):
          lambda c: baystreet.fetch(c["sitemap_url"], http, now, lambda words: filters.title_tier(words) is not None,
                                    lambda url: ats.detect_ats(url) in ats.SUPPORTED), ()),
         ("HN", "hn", lambda c: hn.fetch(http, now), ()),
+        ("Job Bank", "jobbank",
+         lambda c: jobbank.fetch(http, c.get("nocs", []), c.get("terms", []),
+                                 since if getattr(args, "since", None) is not None else min(since, c.get("max_days", 3)),
+                                 max_pages=c.get("max_pages", jobbank.MAX_PAGES),
+                                 max_queries=c.get("max_queries", jobbank.MAX_QUERIES)), ()),
+        ("BC Gov", "bcgov", lambda c: bcgov.fetch(http), ()),
+        ("Canada List", "canadalist", lambda c: canadalist.fetch(c["urls"], http, now), ()),
     ]
     for label, key, read, pre_stages in sites:
         conf = src.get(key) or {}
@@ -93,6 +116,25 @@ def collect(cfg, args, filters, now, since):
         held += hold
         blocks[label] = stages
     return jobs, held, blocks, meta
+
+
+def boards_step(cfg, store, filters, now, *, dry_run: bool) -> None:
+    """Board memory after the scan: read the busiest boards the scan met that are not on the watchlist, add the ones
+    with Canadian postings to watchlist.auto.yaml, write reports/boards.md and save state/boards.json."""
+    wl = cfg["sources"]["watchlist"]
+    auto = wl.get("auto") or {}
+    added = []
+    if auto.get("enabled") and wl.get("extra_paths"):
+        added = boards_mod.promote(store, client_from_config(cfg["jd"]), filters, now, auto_path=wl["extra_paths"][0],
+                                   limit=auto.get("per_run", 12), auto_max=auto.get("max_boards", 150), dry_run=dry_run,
+                                   min_candidates=auto.get("min_candidates", 2),
+                                   skip=re.compile(auto["skip_pattern"], re.IGNORECASE) if auto.get("skip_pattern") else None)
+    verb = "would add" if dry_run else "added"
+    print(f"Boards: {verb} {len(added)} new employer boards to {wl['extra_paths'][0] if wl.get('extra_paths') else 'nothing'}"
+          + "".join(f"\n  + {boards_mod.key(f.board)} ({f.name}): {h.canadian} Canadian postings, {h.candidates} pass the title filters" for f, h in added))
+    if not dry_run:
+        store.save()
+        report.write(auto.get("report_path", "reports/boards.md"), boards_mod.render(store, added, now.date()))
 
 
 def print_phase2(result, n_candidates, final, phase2):
@@ -236,7 +278,12 @@ def run(args: argparse.Namespace) -> int:
     print(f"Window: first seen in the last {since:g} day(s)"
           + ("" if args.since is not None or seen.existed else " (first run: no state/seen.json yet)"))
 
-    jobs, held, blocks, meta = collect(cfg, args, filters, now, since)
+    store = (boards_mod.BoardStore(state_dir / "boards.json",
+                                   relevant=lambda t: filters.title_tier(t) is not None and filters.title_not_excluded(t))
+             if cfg["sources"].get("watchlist", {}).get("enabled") else None)
+    jobs, held, blocks, meta = collect(cfg, args, filters, now, since, store)
+    if store:
+        boards_step(cfg, store, filters, now, dry_run=args.dry_run)
     deduped, merges = dedupe(jobs)
     blocks["Combined"] = [("before dedupe", len(jobs)), ("merged_url", merges["url"]),
                           ("merged_fuzzy", merges["fuzzy"]), ("after dedupe", len(deduped))]
@@ -251,8 +298,16 @@ def run(args: argparse.Namespace) -> int:
         held_deduped, _ = dedupe(held)
         keys = {d.key for d in deduped}
         held_deduped = [h for h in held_deduped if h.key not in keys]
+        # A job already written to the Feed (seen.json) is skipped when the Feed rows are chosen, so its description is
+        # not fetched, scored or counted again: with a ten-day window that is most of the candidates on most runs.
+        # (A Workday "N Locations" job gets its final key only after its detail is read, so it is not skipped here.)
+        n_all = len(deduped)
+        deduped = [d for d in deduped if d.key not in seen.seen]
+        held_deduped = [h for h in held_deduped if h.key not in seen.seen]
+        print(f"Already in the Feed (state/seen.json): {n_all - len(deduped):,} of {n_all:,} candidates skipped, "
+              f"{len(deduped):,} new", flush=True)
         jdcfg = cfg["jd"]
-        client_jd = PoliteClient(delay=jdcfg["request_delay"], per_ats=jdcfg["max_per_ats"])
+        client_jd = client_from_config(jdcfg)
         scorer = Scorer.load()
         result = enrich(deduped, held_deduped, cfg, filters, scorer, client_jd,
                         progress=lambda m: print(m, flush=True))
@@ -320,7 +375,7 @@ def run_clean_feed(args: argparse.Namespace) -> int:
     items = feed_clean.list_items(client, feed)
     print(f"Feed: {len(items)} rows read", flush=True)
     scorer = Scorer.load()
-    http = PoliteClient(delay=cfg["jd"]["request_delay"], per_ats=cfg["jd"]["max_per_ats"])
+    http = client_from_config(cfg["jd"])
     refreshed = None
     if not args.skip_refresh:                      # Workday rows without a JD: find the live posting first
         refreshed = feed_refresh.refresh(client, feed, items, cfg, filters, scorer, http, dry_run=args.dry_run)
@@ -365,12 +420,109 @@ def run_clean_feed(args: argparse.Namespace) -> int:
     return 0
 
 
+def run_discover(args: argparse.Namespace) -> int:
+    cfg = load_config(args.config)
+    filters, now = Filters.from_config(cfg), datetime.now(timezone.utc)
+    client = client_from_config(cfg["jd"])
+    if not (args.names or args.workday or args.phenom or args.successfactors or args.icims):
+        raise UsageError("give at least one company name, --workday TENANT[.WDN/SITE] or --phenom HOST/COUNTRY/LANG")
+    for item in args.workday:
+        slug, _, name = item.partition("=")
+        slug = slug.strip()
+        if "/" not in slug:                         # just the tenant ("rbc" or "rbc.wd3"): its robots.txt names the sites
+            tenant = slug.split(".")[0]
+            hits = discover.probe_workday_tenant(tenant, name.strip(), client, filters, now)
+            print("\n".join(h.yaml_line() for h in hits) if hits else f"# {slug}: no Workday tenant with postings found")
+            continue
+        try:
+            hit = discover.probe_workday(slug, name.strip(), client, filters, now)
+        except Exception as exc:
+            print(f"# {slug}: not read ({type(exc).__name__}: {str(exc)[:100]})")
+            continue
+        print(hit.yaml_line() if hit else f"# {slug}: no postings")
+    for probe_one, items in ((discover.probe_phenom, args.phenom), (discover.probe_successfactors, args.successfactors),
+                                (discover.probe_icims, args.icims)):
+        for item in items:
+            slug, _, name = item.partition("=")
+            try:
+                hit = probe_one(slug.strip(), name.strip(), client, filters, now)
+            except Exception as exc:
+                print(f"# {slug}: not read ({type(exc).__name__}: {str(exc)[:100]})")
+                continue
+            print(hit.yaml_line() if hit else f"# {slug}: no postings")
+    for name in args.names:
+        hits = discover.probe(name, client, filters, now, slugs=[args.slug] if args.slug else None)
+        if not hits:
+            print(f"# {name}: no Workday / Greenhouse / Lever / Ashby / SmartRecruiters board found "
+                  "(try --slug, --workday TENANT, or --phenom HOST/ca/en for a Phenom careers site)")
+        for hit in hits:
+            print(hit.yaml_line())
+    return 0
+
+
+def run_audit(args: argparse.Namespace) -> int:
+    """Which phase-1 rule stops the fresh Canadian postings, and which discarded titles look wrong (scanner.audit)."""
+    from datetime import timedelta
+    cfg = load_config(args.config)
+    filters, now = Filters.from_config(cfg), datetime.now(timezone.utc)
+    src, audit = cfg["sources"], audit_mod.Audit(filters, now, args.days)
+    cutoff = (now - timedelta(days=args.days)).isoformat()
+    if src["feashliaa"]["enabled"]:
+        data_dir = Path(args.feashliaa_dir) if args.feashliaa_dir else feashliaa.fetch(src["feashliaa"])
+        for rec in feashliaa.iter_raw(data_dir):
+            if (rec.get("first_seen") or "") < cutoff:              # ISO strings compare in time order: skip old rows unparsed
+                audit.funnel["records"] += 1
+                continue
+            audit.add(feashliaa.raw_fields(rec))
+    if src["simplify"]["enabled"]:
+        for rec in simplify.fetch(src["simplify"]):
+            if simplify.is_listed(rec, src["simplify"]["categories"]):
+                audit.add(simplify.raw_fields(rec))
+    wl = src.get("watchlist") or {}
+    if wl.get("enabled"):
+        boards = watchlist.load_boards(wl["path"], *wl.get("extra_paths", []))
+        records, _ = watchlist.fetch_all(boards, client_from_config(cfg["jd"]), workers=wl.get("workers", 6), now=now,
+                                         seed_ashby=ats.seed_ashby_board)
+        for rec in records:
+            audit.add(watchlist.raw_fields(rec))
+    text = audit.render()
+    report.write(args.out, text)
+    print(text)
+    print(f"Wrote {args.out}")
+    return 0
+
+
+def run_why(args: argparse.Namespace) -> int:
+    cfg = load_config(args.config)
+    filters, now = Filters.from_config(cfg), datetime.now(timezone.utc)
+    since = args.since if args.since is not None else cfg["freshness"]["default_days"]
+    client = client_from_config(cfg["jd"])
+    wanted = args.name.lower()
+    wl = cfg["sources"]["watchlist"]
+    boards = [b for b in watchlist.load_boards(wl["path"], *wl.get("extra_paths", []))
+              if wanted in (b.name or "").lower() or wanted in b.slug.lower()]
+    if boards:
+        print(f"On the watchlist: {', '.join(f'{b.ats}/{b.slug}' for b in boards)}")
+        hits = [discover.Hit(b, 0, 0, 0) for b in boards]
+    else:
+        print(f"{args.name}: not on the watchlist, so only the Feashliaa dataset (if it carries them) could have "
+              "found a posting. Looking for a board ...")
+        hits = discover.probe(args.name, client, filters, now)
+        for h in hits:
+            print("  found:", h.yaml_line().strip())
+        if not hits:
+            print("  no board found: try `discover --slug` or `discover --workday`")
+            return 0
+    print(discover.why(hits, client, filters, now, since))
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="scanner")
     sub = parser.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("run", help="scan sources, score, and write the best new jobs to the Notion Feed")
     p.add_argument("--since", type=float,
-                   help="only jobs first seen in the last N days (default: 3, or 14 on the first run)")
+                   help="only jobs first seen in the last N days (default: freshness.default_days = 10, or 14 on the first run)")
     p.add_argument("--dry-run", action="store_true",
                    help="no Notion writes or trashing, no seen.json update; print what would be written")
     p.add_argument("--max-rows", type=int, help="rows to write this run (default notion.daily_cap)")
@@ -399,10 +551,36 @@ def main(argv: list[str] | None = None) -> int:
                    help="do not look for live postings for Workday rows without a JD")
     c.add_argument("--config", help="path to config.yaml")
     c.add_argument("--feashliaa-dir", help="use this local job-board-data clone as-is (no git sync)")
+    d = sub.add_parser("discover", help="find the job board of an employer (Greenhouse, Lever, Ashby, SmartRecruiters, "
+                                        "Workday) and print the watchlist.yaml line; writes nothing")
+    d.add_argument("names", nargs="*", help="company names")
+    d.add_argument("--workday", action="append", default=[], metavar="TENANT[.WDN/SITE][=Name]",
+                   help="check a Workday tenant: generalmotors.wd5/Careers_GM=General Motors, or just the tenant name (generalmotors) "
+                        "to find its career sites")
+    d.add_argument("--phenom", action="append", default=[], metavar="HOST/COUNTRY/LANG[=Name]",
+                   help="check a Phenom People careers site (jobs.bell.ca/ca/en=Bell): Bell, Air Canada, OpenText ...")
+    d.add_argument("--successfactors", action="append", default=[], metavar="HOST[=Name]",
+                   help="check a SuccessFactors careers site (careers.telus.com=Telus): Telus, Scotiabank, Rogers ...")
+    d.add_argument("--icims", action="append", default=[], metavar="HOST[=Name]",
+                   help="check an iCIMS careers site (careersen-victoria.icims.com=City of Victoria): cities, hospitals ...")
+    d.add_argument("--slug", help="try this exact board slug instead of guessing from the name (one company)")
+    d.add_argument("--config", help="path to config.yaml")
+    a = sub.add_parser("audit", help="which filter rules stop the fresh Canadian postings, which discarded titles look "
+                                     "like jobs you want, and which title words the filter does not know; writes reports/audit.md")
+    a.add_argument("--days", type=float, default=14, help="postings first seen in the last N days (default 14)")
+    a.add_argument("--out", default="reports/audit.md", help="where to write the report")
+    a.add_argument("--config", help="path to config.yaml")
+    a.add_argument("--feashliaa-dir", help="use this local job-board-data clone as-is (no git sync)")
+    w = sub.add_parser("why", help="read an employer's board live and say, per Canadian posting, which rule keeps "
+                                   "it out of the Feed (or that nothing does)")
+    w.add_argument("name", help="company name of a watchlist entry, or a name to discover")
+    w.add_argument("--since", type=float, help="freshness window in days (default from config.yaml)")
+    w.add_argument("--config", help="path to config.yaml")
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     try:
-        return run_clean_feed(args) if args.cmd == "clean-feed" else run(args)
+        return {"clean-feed": run_clean_feed, "discover": run_discover, "why": run_why,
+                "audit": run_audit}.get(args.cmd, run)(args)
     except UsageError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2

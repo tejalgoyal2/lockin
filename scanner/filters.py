@@ -27,6 +27,11 @@ def _words(terms, flags=re.IGNORECASE):
     return [re.compile(r"\b" + re.escape(t) + r"\b", flags) for t in terms or []]
 
 
+def _label(pattern: re.Pattern) -> str:
+    """The word a title rule was written as: re.compile(r"\\bsenior") -> "senior"."""
+    return re.sub(r"\\b|\\", "", pattern.pattern)
+
+
 def _any(patterns, text):
     return any(p.search(text) for p in patterns)
 
@@ -162,6 +167,24 @@ class Filters:
             return False
         folded = fold(title)
         return not _any(self.title_exclude_phrases, folded)
+
+    def exclusion_reason(self, title: str) -> str | None:
+        """The first title-exclude rule that matches, as the word or phrase written in config.yaml ("senior", "lead",
+        "director"); None when the title is not excluded. title_not_excluded() says whether, this says why."""
+        for pat in self.title_exclude:
+            if pat.search(title or ""):
+                return _label(pat)
+        folded = fold(title)
+        for pat in self.title_exclude_phrases:
+            if pat.search(folded):
+                return _label(pat)
+        return None
+
+    def all_exclusion_reasons(self, title: str) -> list[str]:
+        """Every title-exclude rule that matches (a rule that is the only one is the one a change would free the job from)."""
+        out = [_label(p) for p in self.title_exclude if p.search(title or "")]
+        folded = fold(title)
+        return out + [_label(p) for p in self.title_exclude_phrases if p.search(folded)]
 
     def not_student_only(self, title: str) -> bool:
         return not _any(self.student, title)

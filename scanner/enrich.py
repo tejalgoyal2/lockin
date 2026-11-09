@@ -8,6 +8,7 @@ from collections import Counter
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -183,8 +184,17 @@ def fetch_all(jobs: list[Job], client, cache: JDCache, workers: int, filters: Fi
             job.url = r.live_url
         job.company_name = job.company_name or r.company_name
 
-    with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
-        list(pool.map(work, jobs))
+    # A host that asks for slow requests (Job Bank: 5 s apart) gets a lane of its own. In the shared pool its jobs would each
+    # hold a worker while waiting for the host's turn, and a few hundred of them would leave no worker for anyone else.
+    slow_hosts = {h for h, d in (getattr(client, "host_delays", None) or {}).items() if d >= 1}
+    slow = [j for j in jobs if urlsplit(j.url).netloc in slow_hosts]
+    slow_ids = {id(j) for j in slow}
+    fast = [j for j in jobs if id(j) not in slow_ids]
+    with ThreadPoolExecutor(max_workers=max(1, workers)) as pool, ThreadPoolExecutor(max_workers=1) as lane:
+        lane_futures = [lane.submit(work, j) for j in slow]
+        list(pool.map(work, fast))
+        for fut in lane_futures:
+            fut.result()
 
 
 def _score(job: Job, cfg: dict, boost_re: re.Pattern) -> float:
@@ -192,12 +202,16 @@ def _score(job: Job, cfg: dict, boost_re: re.Pattern) -> float:
     total = (job.fit_pct or 0.0) + min(len(job.matched), sc["matched_bonus_cap"]) * sc["matched_bonus_per_skill"]
     if "new grad" in job.signals or "recent graduate" in job.signals:
         total += sc["boost"]["new_grad"]
-    if job.new_grad or "Simplify" in job.sources:
+    if job.new_grad or "Simplify" in job.sources or "Canada List" in job.sources:
         total += sc["boost"]["simplify"]
     if boost_re.search(job.location) or re.search(r"\bremote\b", job.title, re.IGNORECASE):
         total += sc["boost"]["bc_or_remote"]
     if job.jd_status != "ok":
         total -= sc["penalty"]["no_jd"]
+    fresh = sc["boost"].get("fresh") or {}
+    if fresh.get("bonus") and fresh.get("days"):
+        age = max(0.0, (datetime.now(timezone.utc) - job.first_seen).total_seconds() / 86400)
+        total += fresh["bonus"] * max(0.0, 1 - age / fresh["days"])        # a posting from today is the one still open
     return round(total, 1)
 
 
@@ -327,8 +341,9 @@ def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer,
         if fit.fit_pct is None and not dev_title(job.title, cfg):
             return R_LOW_SIGNAL_TITLE          # "Automation Cell Operator", "Associate Underwriter - Cyber"
     else:
-        # No JD: a strong title stays (with the penalty); a weak one has nothing to vouch for it.
-        if job.weak_title:
+        # No JD: the job stays, with the penalty and the "jd unavailable" signal: the owner can open the link and read it
+        # himself. (jd.keep_without_jd: false brings back the old rule that dropped a generic title nothing vouches for.)
+        if job.weak_title and not jdcfg.get("keep_without_jd", True):
             return R_WEAK_NO_JD
         job.signals = jd_rules.detect_signals(job.title, "", jd_rules.Experience(None))
         job.signals.append(jd_rules.JD_UNAVAILABLE)

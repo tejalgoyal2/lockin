@@ -90,13 +90,30 @@ def _pass_url(jobs: list[Job]) -> tuple[list[Job], int]:
     return out, merges
 
 
+def pending_key(url: str) -> str:
+    """Key of an unresolved Workday "N Locations" job: tenant + requisition id, whatever the career-site name or
+    the URL's case ("/experienced/", "/Experienced-Jobs/") and a "-1" variant suffix. Sun Life lists one requisition
+    under three site names; keyed by URL they were three Feed rows. No requisition id in the URL: the URL itself."""
+    parts = urlsplit(url or "")
+    last = parts.path.rstrip("/").rsplit("/", 1)[-1]
+    m = re.search(r"_([A-Za-z]{1,4}-?\d{3,})(?:-\d+)?$", last)
+    if not m or not parts.netloc:
+        return canonical_url(url)
+    return f"{parts.netloc.lower().split('.')[0]}:{m.group(1).lower()}"
+
+
 def _pass_fuzzy(jobs: list[Job]) -> tuple[list[Job], int]:
     """Same city (SPEC §7 key includes location) + similar company + similar title."""
     survivors: dict[str, list[Job]] = {}
     merges = 0
     for job in jobs:
         if job.location_pending:                 # "2 Locations" names no city: merging on it would join unrelated jobs
-            survivors.setdefault(f"pending:{canonical_url(job.url)}", []).append(job)
+            bucket = survivors.setdefault(f"pending:{pending_key(job.url)}", [])
+            if bucket:
+                bucket[0] = _merge(bucket[0], job)
+                merges += 1
+            else:
+                bucket.append(job)
             continue
         city = norm_location(job.location)
         bucket = survivors.setdefault(city, [])
@@ -137,6 +154,6 @@ def dedupe(jobs: Iterable[Job]) -> tuple[list[Job], dict[str, int]]:
     fuzzy_merges += site_merges
     for job in jobs:
         # an unresolved Workday "N Locations" job is keyed by its URL until phase 2 reads the real location
-        job.key = job_key(job.company, job.title, canonical_url(job.url) if job.location_pending else job.location)
+        job.key = job_key(job.company, job.title, pending_key(job.url) if job.location_pending else job.location)
     jobs.sort(key=lambda j: j.first_seen, reverse=True)
     return jobs, {"url": url_merges, "fuzzy": fuzzy_merges}

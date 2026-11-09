@@ -1,0 +1,6 @@
+# Boards the scanner found by itself (scanner/boards.py): every line is an employer whose Canadian postings the scan met
+# through a Workday / Greenhouse / Lever / Ashby / SmartRecruiters link, and whose board was then read and listed Canadian
+# jobs. The runs add lines here; delete a line you do not want (it is not added again once it is in state/boards.json),
+# or move it to watchlist.yaml to keep it for good. Same format as watchlist.yaml.
+
+boards:

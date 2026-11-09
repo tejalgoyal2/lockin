@@ -302,7 +302,8 @@ def test_a_failing_site_is_reported_and_the_others_still_run(monkeypatch, capsys
     cfg = load_config()
     for name in ("feashliaa", "simplify", "watchlist", "baystreet"):
         cfg["sources"][name]["enabled"] = False
-    cfg["sources"]["builtin"]["enabled"] = False
+    for name in ("builtin", "jobbank", "bcgov", "canadalist"):
+        cfg["sources"][name]["enabled"] = False
     monkeypatch.setattr(yc, "fetch", lambda *a, **k: (_ for _ in ()).throw(yc.YcPageError("no data-page JSON in the page")))
     rec = {"company": "acme", "company_name": "Acme", "title": "Software Developer", "location": "Toronto, ON",
            "url": "https://news.ycombinator.com/item?id=1", "source": "HN", "first_seen": NOW - timedelta(hours=3)}

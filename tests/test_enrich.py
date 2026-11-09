@@ -133,7 +133,19 @@ def test_strong_title_is_not_dropped_for_low_fit():
     assert len(res.kept) == 1 and res.kept[0].fit_pct == 0.0
 
 
-def test_missing_jd_strong_titles_kept_with_penalty_weak_titles_dropped():
+@pytest.fixture
+def strict_no_jd(monkeypatch):
+    """The old rule: a generic title with no JD to vouch for it is dropped (jd.keep_without_jd: false)."""
+    monkeypatch.setitem(CFG["jd"], "keep_without_jd", False)
+
+
+def test_missing_jd_keeps_every_job_by_default_weak_titles_included():
+    res = run([gh(1, weak_title=True), gh(2, title="Data Analyst")], jds={"1": http_error(500), "2": http_error(404)})
+    assert sorted(j.title for j in res.kept) == ["Data Analyst", "Software Engineer"] and res.drops == {}
+    assert all(j.signals == ["jd unavailable"] and j.score == -10.0 for j in res.kept)
+
+
+def test_missing_jd_strong_titles_kept_with_penalty_weak_titles_dropped(strict_no_jd):
     res = run([job(url="https://recruiting.paylocity.com/recruiting/Jobs/Details/1", source="Paylocity"),
                gh(2, weak_title=True), gh(3, weak_title=True), gh(4, title="Data Analyst")],
               jds={"2": http_error(500), "3": http_error(404), "4": http_error(500)})
@@ -144,7 +156,7 @@ def test_missing_jd_strong_titles_kept_with_penalty_weak_titles_dropped():
     assert res.fetch == {"Paylocity:unsupported": 1, "Greenhouse:error": 2, "Greenhouse:not_found": 1}
 
 
-def test_weak_title_on_unsupported_ats_is_dropped_too():
+def test_weak_title_on_unsupported_ats_is_dropped_too(strict_no_jd):
     res = run([job(url="https://recruiting.paylocity.com/recruiting/Jobs/Details/1", source="Paylocity",
                    weak_title=True)])
     assert res.kept == [] and res.drops == {E.R_WEAK_NO_JD: 1}
@@ -210,7 +222,7 @@ def test_cluster_title_first_then_jd_terms_then_software():
     assert clusters == {"1": "data", "2": "ml", "3": "software", "4": "software"}
 
 
-def test_http_403_tenants_are_listed_and_strong_titles_kept():
+def test_http_403_tenants_are_listed_and_strong_titles_kept(strict_no_jd):
     wd = [job(url=f"https://{t}.wd3.myworkdayjobs.com/site/job/Toronto/Dev_R{i}", source="Workday",
               title="Software Developer") for i, t in enumerate(["bmo", "bmo", "equifax"])]
 
@@ -278,3 +290,32 @@ def test_simplify_name_wins_over_the_ats_name():
     j = gh(1, company_name="Simplify Name")
     E.enrich([j], [], CFG, FILTERS, SCORER, GH(), cache=NOCACHE)
     assert j.company_name == "Simplify Name"
+
+
+def test_a_slow_host_gets_its_own_lane_and_does_not_hold_up_the_others():
+    import threading
+    import time as _time
+    started = []
+
+    class Slow(FakeClient):
+        host_delays = {"www.jobbank.gc.ca": 5}
+
+        def _hit(self, url):
+            started.append((threading.current_thread().name, url, _time.monotonic()))
+            if "jobbank" in url:
+                _time.sleep(0.2)                                   # the host's turn
+            raise requests.HTTPError(response=type("R", (), {"status_code": 500})())
+
+        def get(self, url, ats_name, **kw):
+            self._hit(url)
+
+        def get_json(self, url, ats_name, **kw):
+            self._hit(url)
+
+    jobs = [job(url=f"https://www.jobbank.gc.ca/jobsearch/jobposting/{i}", source="Job Bank") for i in range(5)]
+    jobs += [gh(i) for i in range(20, 26)]
+    t0 = _time.monotonic()
+    E.fetch_all(jobs, Slow({}), NOCACHE, workers=4)
+    fast_done = max(t for _, u, t in started if "jobbank" not in u) - t0
+    slow_threads = {n for n, u, _ in started if "jobbank" in u}
+    assert len(slow_threads) == 1 and fast_done < 0.5            # one lane for Job Bank; the Greenhouse jobs did not wait for it

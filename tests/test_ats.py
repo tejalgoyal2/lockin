@@ -56,7 +56,7 @@ def test_locate_builds_endpoint(url, api_url):
 @pytest.mark.parametrize("url", [
     "https://recruiting.paylocity.com/recruiting/Jobs/Details/4557390",
     "https://apply.workable.com/financeit/j/D3CF97088A/apply",
-    "https://careers-48forty.icims.com/jobs/5728/warehouse-associate/job",
+    "https://acme.taleo.net/careersection/ex/jobdetail.ftl?job=5728",
     "https://example.com/careers/1",
     "",
 ])

@@ -1,0 +1,56 @@
+name: tools
+
+# The scanner's read-only helpers, run from the Actions tab so no local setup is needed (README: "Running it from GitHub").
+# Nothing here writes to Notion or to the repo; the answer is in the run's Summary and log.
+#   audit     which filter rules stop the fresh Canadian postings, which discarded titles look like jobs you want
+#   why       why a company's posting is not in the Feed (args: the company name, e.g. General Motors; optional --since 14)
+#   discover  find an employer's job board and print the watchlist.yaml line (args: company names in quotes, or
+#             --workday TENANT, --phenom HOST/ca/en, --successfactors HOST or --icims HOST, e.g.
+#             "Bell Canada" --workday generalmotors --icims "careersen-victoria.icims.com=City of Victoria|Victoria, BC")
+
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: "What to run"
+        type: choice
+        options: [audit, why, discover]
+        default: audit
+      args:
+        description: 'Arguments, written as in a terminal (quote names with spaces): audit: --days 30 | why: "General Motors" | discover: Telus --workday rbc'
+        type: string
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  tool:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install --require-hashes -r requirements.txt
+
+      - name: Run
+        env:
+          COMMAND: ${{ inputs.command }}
+          ARGS: ${{ inputs.args }}          # through env vars, never straight into the script; split with shlex, not the shell
+        run: |
+          python - <<'PY'
+          import os, shlex, subprocess, sys
+          cmd = ["python", "-m", "scanner", os.environ["COMMAND"], *shlex.split(os.environ.get("ARGS", ""))]
+          print("+", " ".join(shlex.quote(c) for c in cmd), flush=True)
+          sys.exit(subprocess.call(cmd))
+          PY
+
+      - name: Summary
+        if: always()
+        run: |
+          if [ -f reports/audit.md ]; then cat reports/audit.md >> "$GITHUB_STEP_SUMMARY"; fi

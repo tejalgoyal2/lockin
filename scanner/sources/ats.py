@@ -12,11 +12,12 @@ import requests
 from urllib.parse import parse_qs, quote, unquote, urlsplit
 
 from scanner.models import Job
+from scanner.sources import icims, phenom, successfactors
 from scanner.sources.listing import SITE_SOURCES
 from scanner.text import INVISIBLE, html_to_text
 
 SITES = SITE_SOURCES      # job sites (scanner/sources/*): their pages carry the JD
-SUPPORTED = ("Greenhouse", "Lever", "Ashby", "Workday", "BambooHR", *SITES)
+SUPPORTED = ("Greenhouse", "Lever", "Ashby", "Workday", "BambooHR", "SmartRecruiters", "Phenom", "SuccessFactors", "iCIMS", *SITES)
 
 
 class NotFound(Exception):
@@ -45,6 +46,8 @@ def detect_ats(url: str) -> str | None:
         return "Workday"
     if host.endswith("bamboohr.com"):
         return "BambooHR"
+    if host.endswith("smartrecruiters.com"):
+        return "SmartRecruiters"
     if host == "news.ycombinator.com":
         return "HN"
     if host.endswith("ycombinator.com"):
@@ -53,6 +56,16 @@ def detect_ats(url: str) -> str | None:
         return "Built In"
     if host.endswith("baystreetoracle.ca"):
         return "Bay Street Oracle"
+    if host.endswith("jobbank.gc.ca"):
+        return "Job Bank"
+    if host.endswith("bcpublicservice.hua.hrsmart.com"):
+        return "BC Gov"
+    if icims.is_job_url(url):
+        return "iCIMS"
+    if phenom.is_job_url(urlsplit(url or "").path):          # a Phenom careers site: any host, /<country>/<lang>/job/<id>
+        return "Phenom"
+    if successfactors.is_job_url(urlsplit(url or "").path):   # a SuccessFactors careers site: any host, /job/<words>/<number>/
+        return "SuccessFactors"
     return None
 
 
@@ -113,6 +126,18 @@ def _bamboohr(url: str) -> AtsRef | None:
     return AtsRef("BambooHR", f"{parts.scheme}://{parts.netloc}/careers/{m.group(1)}/detail")
 
 
+def _smartrecruiters(url: str) -> AtsRef | None:
+    """https://jobs.smartrecruiters.com/<company>/<id>[-slug] -> the public posting API."""
+    parts = urlsplit(url)
+    segs = [s for s in parts.path.split("/") if s]
+    if len(segs) < 2 or not parts.netloc.lower().endswith("smartrecruiters.com"):
+        return None
+    m = re.match(r"\d+", segs[1])
+    if not m:
+        return None
+    return AtsRef("SmartRecruiters", f"https://api.smartrecruiters.com/v1/companies/{quote(segs[0])}/postings/{m.group(0)}")
+
+
 def _site(ats: str, url: str) -> AtsRef | None:
     """A job-site posting: the page itself is fetched (HN: the comment through the Algolia item API)."""
     if ats == "HN":
@@ -129,9 +154,14 @@ def locate(job: Job) -> AtsRef | None:
         return None
     if ats in SITES:
         return _site(ats, job.url)
+    if ats in ("Phenom", "SuccessFactors"):
+        return AtsRef(ats, job.url)
+    if ats == "iCIMS":
+        return AtsRef(ats, job.url.split("?")[0] + "?in_iframe=1")
     if ats == "Greenhouse":
         return _greenhouse(job.url, job.company)
-    return {"Lever": _lever, "Ashby": _ashby, "Workday": _workday, "BambooHR": _bamboohr}[ats](job.url)
+    return {"Lever": _lever, "Ashby": _ashby, "Workday": _workday, "BambooHR": _bamboohr,
+            "SmartRecruiters": _smartrecruiters}[ats](job.url)
 
 
 # --- response → text -------------------------------------------------------
@@ -182,6 +212,19 @@ def _lever_text(data: dict) -> str:
 
 def _workday_text(data: dict) -> str:
     return html_to_text((data.get("jobPostingInfo") or {}).get("jobDescription", ""))
+
+
+def _sr_text(data: dict) -> str:
+    sections = ((data.get("jobAd") or {}).get("sections") or {}).values()
+    chunks = [f"{(sec or {}).get('title', '').strip()}\n{html_to_text((sec or {}).get('text', ''))}".strip()
+              for sec in sections if isinstance(sec, dict)]
+    return "\n\n".join(c for c in chunks if c)
+
+
+def _sr_locations(data: dict) -> list[str]:
+    loc = data.get("location") or {}
+    parts = [loc.get("city", ""), loc.get("region", ""), (loc.get("country") or "").upper()]
+    return _dedupe_locations([", ".join(p for p in parts if p)])
 
 
 def _bamboo_text(data: dict) -> str:
@@ -255,7 +298,7 @@ def _get_workday(ref: AtsRef, client) -> dict:
 
 def _fetch_site(ref: AtsRef, client) -> Detail:
     """Description, company and locations of a job-site posting (readers import ats for Detail's sake only)."""
-    from scanner.sources import baystreet, builtin, hn, yc
+    from scanner.sources import baystreet, bcgov, builtin, hn, jobbank, yc
     if ref.ats == "HN":
         data = client.get_json(ref.api_url, ref.ats)
         text = INVISIBLE.sub("", hn.comment_text(data))
@@ -267,6 +310,10 @@ def _fetch_site(ref: AtsRef, client) -> Detail:
         return Detail(INVISIBLE.sub("", text), company, where)
     if ref.ats == "Built In":
         return Detail(INVISIBLE.sub("", builtin.parse_detail(page, builtin.job_id(ref.api_url))), "", [])
+    if ref.ats == "Job Bank":
+        return Detail(INVISIBLE.sub("", jobbank.parse_detail(page)), "", [])
+    if ref.ats == "BC Gov":
+        return Detail(INVISIBLE.sub("", bcgov.parse_detail(page)), "", [])
     rec = baystreet.parse_detail(page, None)
     if rec is None:
         raise NotFound(ref.api_url)
@@ -284,6 +331,14 @@ def fetch_full(ref: AtsRef, client) -> Detail:
     """
     if ref.ats in SITES:
         return _fetch_site(ref, client)
+    if ref.ats == "Phenom":
+        text, where = phenom.parse_detail(client.get(ref.api_url, ref.ats).text)
+        return Detail(INVISIBLE.sub("", text), "", where)
+    if ref.ats == "iCIMS":
+        text, where = icims.parse_detail(client.get(ref.api_url, ref.ats).text)
+        return Detail(INVISIBLE.sub("", text), "", where)
+    if ref.ats == "SuccessFactors":
+        return Detail(INVISIBLE.sub("", successfactors.parse_detail(client.get(ref.api_url, ref.ats).text)), "", [])
     if ref.ats == "Ashby":
         j = _ashby_job(ref, client)
         text = j.get("descriptionPlain") or html_to_text(j.get("descriptionHtml", ""))
@@ -294,11 +349,12 @@ def fetch_full(ref: AtsRef, client) -> Detail:
         "Lever": _lever_text,
         "Workday": _workday_text,
         "BambooHR": _bamboo_text,
+        "SmartRecruiters": _sr_text,
     }[ref.ats](data)
     text = INVISIBLE.sub("", text)          # plain-text fields (Lever, Ashby) skip html_to_text
     company = (data.get("company_name") or "").strip() if ref.ats == "Greenhouse" else ""
     locations = {"Workday": _workday_locations, "Greenhouse": _greenhouse_locations, "Lever": _lever_locations,
-                 "BambooHR": _bamboo_locations}[ref.ats](data)
+                 "BambooHR": _bamboo_locations, "SmartRecruiters": _sr_locations}[ref.ats](data)
     return Detail(text, company, locations)
 
 

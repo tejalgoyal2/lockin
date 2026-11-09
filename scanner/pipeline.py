@@ -15,12 +15,14 @@ def run_stream(
     now: datetime,
     since_days: float,
     pre_stages: tuple = (),
+    tap=None,
 ) -> tuple[list[Job], list[tuple[str, int]], list[Job]]:
     """Push each raw record through the stages in order.
 
     Returns (kept Jobs not yet deduped, ordered [(stage, count_after_stage)], student_held).
     A record is counted at stage N only if it passed every earlier stage.
     `pre_stages` are (name, predicate(raw_record)) pairs applied before normalisation.
+    `tap(fields)` sees every fresh Canadian record, whatever its title (board discovery: scanner.boards).
     `student_held` are jobs that cleared every stage except the student-only title
     filter; phase 2 may rescue them from their JD text.
     """
@@ -43,6 +45,8 @@ def run_stream(
         if status == "not_canada" or not filters.title_location_ok(f["title"]):
             continue                    # the title can name the real place: "(Washington, D.C.)" listed as "Remote Canada"
         counts["location"] += 1
+        if tap is not None:
+            tap(f)
         if status == "quebec_only":
             continue
         counts["not_quebec_only"] += 1

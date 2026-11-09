@@ -36,14 +36,27 @@ def header(comment_html: str) -> str:
     return ""
 
 
-def parse_comment(comment: dict) -> dict | None:
-    """A top-level comment -> a record, or None when its header is not a Canadian posting with a role."""
+_BODY_ROLE = re.compile(r"\b(software|developer|engineer|devops|data (?:scientist|engineer|analyst)|machine learning)\b", re.I)
+THREAD_MAX_AGE_DAYS = 40
+
+
+def parse_comment(comment: dict, now: datetime | None = None) -> dict | None:
+    """A top-level comment -> a record, or None when its header is not a Canadian posting with a role.
+
+    A header that names a Canadian place but no role ("Strello Health | Toronto", "Stream | Multiple Positions | ...
+    Toronto (Canada)") is still a lead: the role is read from the first lines of the comment, and when that names a
+    tech role the posting is kept under the generic title "Engineer" (phase 2 decides from the full text).
+    With `now`, the posting counts as first seen now: an "Ask HN" comment is written once, for a month, so its
+    age says nothing about whether we have shown it; seen.json does that."""
+    text = html_to_text(comment.get("comment_text") or "")
     head = header(comment.get("comment_text") or "")
     parts = [p.strip() for p in head.split("|") if p.strip()]
     if len(parts) < 2:
         return None
     where = [p for p in parts[1:] if _CANADA.search(p)]
     roles = [p for p in parts[1:] if _ROLE.search(p) and not _CANADA.search(p) and len(p) < 120]
+    if where and not roles and _BODY_ROLE.search(text[:600]):
+        roles = ["Engineer"]
     if not (where and roles):
         return None
     company = re.sub(r"\s*\(?https?://\S+\)?", "", parts[0]).strip(" -–")
@@ -53,6 +66,8 @@ def parse_comment(comment: dict) -> dict | None:
         posted = parse_iso(comment["created_at"].replace("Z", "+00:00"))
     except (KeyError, ValueError):
         return None
+    if now is not None:
+        posted = now
     return {"company": company, "company_name": company, "title": ", ".join(roles)[:150],
             "location": " ; ".join(where), "source": SOURCE,
             "url": f"https://news.ycombinator.com/item?id={comment['objectID']}", "first_seen": posted}
@@ -62,13 +77,19 @@ def fetch(client, now: datetime) -> list[dict]:
     thread = latest_thread(client)
     if thread is None:
         return []
+    try:
+        age = (now - parse_iso(thread["created_at"].replace("Z", "+00:00"))).days
+    except (KeyError, ValueError):
+        age = 0
+    if age > THREAD_MAX_AGE_DAYS:
+        return []                                           # the new month's thread is not up yet and this one is stale
     out, page = [], 0
     while True:
         data = client.get_json(f"{API}/search_by_date?tags=comment,story_{thread['objectID']}&hitsPerPage=1000&page={page}",
                                SOURCE)
         for c in data.get("hits", []):
             if str(c.get("parent_id")) == str(thread["objectID"]):
-                rec = parse_comment(c)
+                rec = parse_comment(c, now)
                 if rec:
                     out.append(rec)
         page += 1
