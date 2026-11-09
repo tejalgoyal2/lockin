@@ -218,6 +218,10 @@ title:
     - security officer
     - custodian
     - teacher
+    - recreation          # city halls: "Recreation Programmer" is a recreation job, not a developer
+    - lecturer
+    - sessional
+    - professor
   exclude_words:
     - sr
     - guard
