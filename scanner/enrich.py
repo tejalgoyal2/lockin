@@ -55,6 +55,11 @@ class EnrichResult:
     forbidden_jobs: list[Job] = field(default_factory=list)  # the jobs behind `forbidden`
     held_total: int = 0
     rescued: int = 0
+    dropped: list = field(default_factory=list)            # (reason, Job): the jobs behind `drops`, for reports/dropped.md
+
+    def drop(self, reason: str, job: Job) -> None:
+        self.drops[reason] += 1
+        self.dropped.append((reason, job))
 
 
 class JDCache:
@@ -279,8 +284,18 @@ def _ats_location(job: Job, filters: Filters) -> str | None:
     return None
 
 
+def _tech_flavoured(title: str, sc: dict) -> bool:
+    """A generic title that still names a tech word ("Founding Engineer", "IT Analyst", "Technical Support Agent") is never
+    dropped for naming few skills: recall matters more than a clean Feed."""
+    pats = sc.get("weak_few_terms_keep") or []
+    return any(re.search(p, title or "", re.I) for p in pats)
+
+
 def two_year_reason(exp: jd_rules.Experience, fit_pct: float | None, jdcfg: dict) -> str | None:
-    """A 2-year requirement is kept only with a strong, evidenced fit and when internships count."""
+    """A 2-year requirement is kept only with a strong, evidenced fit and when internships count (`jd.two_year_drops`;
+    off by default: a posting asking 2 years is shown with the "2+ yrs" Signal and the owner decides)."""
+    if not jdcfg.get("two_year_drops", False):
+        return None
     if exp.excludes_internships:
         return R_TWO_YEAR_INTERN
     if fit_pct is None:
@@ -294,6 +309,13 @@ def dev_title(title: str, cfg: dict) -> bool:
     """The title names a developer role (engineer, developer, programmer, scientist, analyst; plural allowed)."""
     nouns = cfg["scoring"].get("low_signal_title_nouns") or []
     return not nouns or bool(re.search(r"\b(?:" + "|".join(map(re.escape, nouns)) + r")s?\b", title or "", re.IGNORECASE))
+
+
+def _no_jd_junk(title: str, jdcfg: dict) -> bool:
+    """A generic title ("Specialist", "Analyst") naming a clearly non-tech field, with no JD to say otherwise. Applies only
+    to jobs whose JD could not be read: a readable JD decides on its own skills."""
+    words = jdcfg.get("no_jd_title_exclude") or []
+    return bool(words) and bool(re.search(r"\b(?:" + "|".join(re.escape(w) for w in words) + ")", title or "", re.IGNORECASE))
 
 
 def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer,
@@ -326,24 +348,39 @@ def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer,
         if jd_rules.requires_us_authorization(jd) and filters.canadian_location(job.location) is None:
             return R_US_AUTH
         if exp.min_years is not None and exp.min_years >= jdcfg["min_years_drop"]:
+            job.drop_note = f"asks {exp.min_years:g}+ years"
             return R_EXPERIENCE
         if exp.min_years is not None and exp.min_years >= 2:
             reason = two_year_reason(exp, fit.fit_pct, jdcfg)
             if reason:
+                job.drop_note = f"asks 2 years, Fit {fit.fit_pct if fit.fit_pct is not None else 'n/a'}"
                 return reason
             job.signals.append(jdcfg["two_year_signal"])
         if job.weak_title:
-            # A generic title must be vouched for by the JD: >= min_terms distinct skill / gap terms, and a real fit.
-            if fit.n_core < cfg["scoring"]["min_terms_for_fit"]:
+            sc = cfg["scoring"]
+            if sc.get("weak_title_strict", False):
+                # The old rule: a generic title must be vouched for by the JD: >= min_terms distinct skill / gap terms, and a real fit.
+                if fit.n_core < sc["min_terms_for_fit"]:
+                    job.drop_note = f"{fit.n_core} skill terms in the JD"
+                    return R_WEAK_FEW_TERMS
+                if not job.matched or (job.fit_pct or 0) < sc["weak_title_min_fit"]:
+                    job.drop_note = f"Fit {job.fit_pct if job.fit_pct is not None else 'n/a'}, {len(job.matched)} skills matched"
+                    return R_WEAK
+            elif (len(jd) >= jdcfg.get("min_judge_chars", 600) and fit.n_core < sc.get("weak_title_min_terms", 1)
+                  and not _tech_flavoured(job.title, sc)):
+                # Default: a generic title is dropped only when a full-length JD names no skill at all. A short JD is too thin
+                # to judge by ("Founding Engineer" had a 3-line posting), and one or two skills are enough to keep it.
+                job.drop_note = f"{fit.n_core} skill terms in a {len(jd):,}-character JD"
                 return R_WEAK_FEW_TERMS
-            if not job.matched or (job.fit_pct or 0) < cfg["scoring"]["weak_title_min_fit"]:
-                return R_WEAK
-        if fit.fit_pct is None and not dev_title(job.title, cfg):
+        if fit.fit_pct is None and cfg["scoring"].get("low_signal_title_drop", False) and not dev_title(job.title, cfg):
             return R_LOW_SIGNAL_TITLE          # "Automation Cell Operator", "Associate Underwriter - Cyber"
     else:
         # No JD: the job stays, with the penalty and the "jd unavailable" signal: the owner can open the link and read it
         # himself. (jd.keep_without_jd: false brings back the old rule that dropped a generic title nothing vouches for.)
         if job.weak_title and not jdcfg.get("keep_without_jd", True):
+            return R_WEAK_NO_JD
+        if job.weak_title and _no_jd_junk(job.title, jdcfg):
+            job.drop_note = "generic title in a non-tech field, and no JD to show otherwise"
             return R_WEAK_NO_JD
         job.signals = jd_rules.detect_signals(job.title, "", jd_rules.Experience(None))
         job.signals.append(jd_rules.JD_UNAVAILABLE)
@@ -371,24 +408,24 @@ def enrich(candidates: list[Job], held: list[Job], cfg: dict, filters: Filters, 
     for job in candidates:
         reason = apply_rules(job, cfg, filters, scorer, clusters)
         if reason:
-            res.drops[reason] += 1
+            res.drop(reason, job)
             continue
         job.score = _score(job, cfg, boost_re)
         res.kept.append(job)
 
     for job in held:
         if job.jd_status != "ok":
-            res.drops[R_STUDENT_NO_JD] += 1
+            res.drop(R_STUDENT_NO_JD, job)
             continue
         if jd_rules.requires_enrollment(job.jd):
-            res.drops[R_ENROLLMENT] += 1
+            res.drop(R_ENROLLMENT, job)
             continue
         if not jd_rules.welcomes_recent_grads(job.jd):
-            res.drops[R_STUDENT] += 1
+            res.drop(R_STUDENT, job)
             continue
         reason = apply_rules(job, cfg, filters, scorer, clusters)
         if reason:
-            res.drops[reason] += 1
+            res.drop(reason, job)
             continue
         res.rescued += 1
         job.score = _score(job, cfg, boost_re)

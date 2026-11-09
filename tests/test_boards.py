@@ -276,11 +276,11 @@ def test_the_audit_counts_the_funnel_and_the_rules_that_kill_alone():
 def test_near_misses_are_entry_level_titles_the_filters_dropped():
     a = audit.Audit(Filters.from_config(load_config()), NOW, 14)
     a.add(fields("Junior Plumber", company="a"))                      # entry word, no tech word, nothing technical
-    a.add(fields("Junior Systems Technologist", company="e"))        # entry word, no tech-role word, but it sounds technical
+    a.add(fields("Junior Digital Technologist", company="e"))        # entry word, no tech-role word, but it sounds technical
     a.add(fields("Associate Software Developer Lead", company="b"))  # entry word, excluded by "lead"
     a.add(fields("Senior Associate Developer", company="c"))          # senior: right to lose, not a near miss
     a.add(fields("Software Developer", company="d"))                  # kept
-    assert sorted(t for t, *_ in a.near) == ["Associate Software Developer Lead", "Junior Systems Technologist"]
+    assert sorted(t for t, *_ in a.near) == ["Associate Software Developer Lead", "Junior Digital Technologist"]
     text = a.render()
     assert "Near misses (2)" in text and "Funnel" in text and "| lead |" in text
 
@@ -288,10 +288,10 @@ def test_near_misses_are_entry_level_titles_the_filters_dropped():
 def test_unknown_title_words_are_ranked_with_examples():
     a = audit.Audit(Filters.from_config(load_config()), NOW, 14)
     for i in range(3):
-        a.add(fields("Firmware Technologist", company=str(i)))
+        a.add(fields("Digital Technologist", company=str(i)))
     a.add(fields("Toronto Barista", company="z"))
-    assert a.unknown_words["firmware"] == 3 and "toronto" not in a.unknown_words
-    assert "| firmware | 3 |" in a.render()
+    assert a.unknown_words["technologist"] == 3 and "toronto" not in a.unknown_words
+    assert "| technologist | 3 |" in a.render()
 
 
 # --- the ranking favours the newest postings -----------------------------------------------------------------

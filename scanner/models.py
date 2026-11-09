@@ -18,6 +18,7 @@ class Job:
     location_pending: bool = False   # Workday "N Locations": phase 2 reads the real list from the job detail
     location_unresolved: bool = False  # ... and could not (kept anyway, reported)
     relocation: str = ""             # Workday id that stopped resolving: "matched" (url replaced) or "no_match"
+    drop_note: str = ""              # why a JD rule dropped it, in a few words (reports/dropped.md)
     location_dropped: bool = False   # dropped in phase 2 for its resolved locations (not a Canadian job)
     # phase 2 (filled by scanner.enrich)
     jd: str = ""

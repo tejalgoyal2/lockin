@@ -121,3 +121,50 @@ def write(path: str | Path, text: str) -> None:
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(text, encoding="utf-8")
+
+
+DROP_NOTES = {
+    "experience_3plus": "the JD asks 3+ years of experience",
+    "two_years_no_fit": "the JD asks 2 years and the skills do not fit",
+    "two_years_low_fit": "the JD asks 2 years and Fit % is low",
+    "two_years_excludes_internships": "2 years, internships do not count",
+    "weak_title_few_terms": "a generic title (Analyst, Specialist, Engineer ...) whose JD names too few tech skills",
+    "weak_title_low_fit": "a generic title whose JD matches none of your skills",
+    "weak_title_no_jd": "a generic title with no JD (only when jd.keep_without_jd is false)",
+    "low_signal_not_dev_title": "the JD has too few tech terms for a Fit % and the title is not a developer role",
+    "requires_enrollment": "the JD asks for a currently enrolled student",
+    "student_title_not_rescued": "an intern / co-op title whose JD does not welcome recent graduates",
+    "student_title_no_jd": "an intern / co-op title with no JD to show it welcomes graduates",
+    "requires_french": "the JD requires French",
+    "security_clearance": "the JD requires a security clearance",
+    "us_work_authorization": "the JD requires US work authorization",
+    "location_quebec_only": "every location it lists is in Quebec",
+    "location_ats_not_canada": "the employer's own location list has no Canadian place",
+    "location_unresolved_url_not_canadian": "\"N Locations\", the description could not be read and the place in the link is not Canadian",
+}
+LOCATION_REASONS = ("location_not_canada",)          # the unresolved-location drops are listed: a Canadian job could hide there
+
+
+def render_dropped(dropped: list, per_reason: int = 40) -> str:
+    """reports/dropped.md: the jobs the JD rules dropped, by reason, so a wrong rule can be seen instead of guessed at. The
+    location drops are only counted (thousands of foreign postings); every other reason lists its jobs, newest first."""
+    from collections import defaultdict
+    by: dict[str, list] = defaultdict(list)
+    for reason, job in dropped:
+        by[reason].append(job)
+    lines = ["# Dropped by the JD rules", "",
+             "Read this when you suspect a good job is being lost: each reason names the rule, then lists the jobs it dropped "
+             f"(up to {per_reason}, newest first). A reason that drops a job you wanted is a rule to loosen in `config.yaml`.", ""]
+    for reason, jobs in sorted(by.items(), key=lambda kv: -len(kv[1])):
+        lines += [f"## {reason}: {len(jobs):,}", ""]
+        if reason in LOCATION_REASONS:
+            lines += ["Not a Canadian posting; not listed.", ""]
+            continue
+        if DROP_NOTES.get(reason):
+            lines += [f"_{DROP_NOTES[reason]}_", ""]
+        for job in sorted(jobs, key=lambda j: j.first_seen, reverse=True)[:per_reason]:
+            years = f" ({job.drop_note})" if getattr(job, "drop_note", "") else ""
+            lines.append(f"- [{_cell(job.title)}]({job.url}) | {_cell(job.company_name or job.company)} | "
+                         f"{_cell(job.location)} | {job.first_seen:%Y-%m-%d}{years}")
+        lines.append("")
+    return "\n".join(lines) + "\n"

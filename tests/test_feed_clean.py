@@ -31,14 +31,15 @@ def test_rules_in_the_order_a_new_job_meets_them():
     assert verdict(item(title="Développeur de logiciels / Software Developer")).rule == FC.RULE_FRENCH_TITLE
     assert verdict(item(title="Directeur technique - Cloud natif, IA et DevOps")).rule == FC.RULE_TITLE
     assert verdict(item(title="Grafana - Expert Observability Engineer")).rule == FC.RULE_TITLE
-    assert verdict(item(title="Data Specialist")).rule == FC.RULE_TITLE
+    assert verdict(item(title="Customer Support Specialist")).rule == FC.RULE_TITLE
     assert verdict(item(), "Montréal, QC").rule == FC.RULE_QUEBEC
     assert verdict(item(jd="Bilingual (English/French) is required. " + GOOD_JD)).rule == "requires_french"
     assert verdict(item(jd="Python, SQL, Docker, Git. 3+ years of experience.")).rule == "experience_3plus"
     assert verdict(item(jd="Python, SQL, Docker, Git. Five years of experience.")).rule == "experience_3plus"
 
 
-def test_two_year_rows_need_a_fit_and_internships_to_count():
+def test_two_year_rows_need_a_fit_and_internships_to_count(monkeypatch):
+    monkeypatch.setitem(CFG["jd"], "two_year_drops", True)
     ok = "Python, SQL, Docker, Git. 2 years of experience."
     assert verdict(item(jd=ok)).rule is None
     assert verdict(item(jd=ok + " Internships do not count.")).rule == "two_years_excludes_internships"
@@ -74,10 +75,10 @@ def test_workday_multi_location_rows_use_the_detail_list():
 
 
 def test_rows_with_a_ticked_or_unreadable_checkbox_are_never_trashed():
-    bad = [item(title="Data Specialist", page="a"),
-           item(title="Data Specialist", page="b", interested=True),
-           item(title="Data Specialist", page="c", apply=True),
-           item(title="Data Specialist", page="d", interested=None)]
+    bad = [item(title="Customer Support Specialist", page="a"),
+           item(title="Customer Support Specialist", page="b", interested=True),
+           item(title="Customer Support Specialist", page="c", apply=True),
+           item(title="Customer Support Specialist", page="d", interested=None)]
     rep = FC.CleanReport([verdict(i) for i in bad])
     assert [v.item.page_id for v in rep.trashable()] == ["a"]
     assert [v.item.page_id for v in rep.protected()] == ["b", "c", "d"]
@@ -119,13 +120,13 @@ def feed():
 def test_list_items_and_trash_only_rows_that_fail_and_are_unticked():
     sess = Notion([
         page("good", "Software Engineer", "Acme · oct6", "https://boards.greenhouse.io/acme/jobs/1", GOOD_JD),
-        page("bad", "Data Specialist", "McKesson · oct8", "https://boards.greenhouse.io/mck/jobs/2", GOOD_JD),
+        page("bad", "Customer Support Specialist", "McKesson · oct8", "https://boards.greenhouse.io/mck/jobs/2", GOOD_JD),
         page("kept", "Directeur technique", "Valtech · oct7", "https://boards.greenhouse.io/val/jobs/3", GOOD_JD,
              interested=True),
     ])
     client = notion_feed.NotionClient("secret", "2026-03-11", session=sess, sleep=lambda s: None)
     items = FC.list_items(client, feed())
-    assert [(i.title, i.company) for i in items] == [("Software Engineer", "Acme"), ("Data Specialist", "McKesson"),
+    assert [(i.title, i.company) for i in items] == [("Software Engineer", "Acme"), ("Customer Support Specialist", "McKesson"),
                                                       ("Directeur technique", "Valtech")]
     rep = FC.clean(items, {}, CFG, FILTERS, SCORER)
     assert FC.trash(client, rep, dry_run=True) == 1 and sess.patched == []
@@ -135,9 +136,9 @@ def test_list_items_and_trash_only_rows_that_fail_and_are_unticked():
 
 def test_rows_marked_done_del_or_without_a_done_del_value_are_never_trashed():
     sess = Notion([
-        page("moved", "Data Specialist", "McKesson · oct8", "https://boards.greenhouse.io/mck/jobs/2", GOOD_JD,
+        page("moved", "Customer Support Specialist", "McKesson · oct8", "https://boards.greenhouse.io/mck/jobs/2", GOOD_JD,
              done_del=True),
-        page("unknown", "Data Specialist", "McKesson · oct8", "https://boards.greenhouse.io/mck/jobs/3", GOOD_JD,
+        page("unknown", "Customer Support Specialist", "McKesson · oct8", "https://boards.greenhouse.io/mck/jobs/3", GOOD_JD,
              done_del=None),
     ])
     client = notion_feed.NotionClient("secret", "2026-03-11", session=sess, sleep=lambda s: None)
@@ -147,11 +148,11 @@ def test_rows_marked_done_del_or_without_a_done_del_value_are_never_trashed():
 
 
 def test_render_has_a_table_per_rule_and_never_prints_ids():
-    rep = FC.CleanReport([verdict(item(title="Data Specialist", company="McKesson", page="secret-page-id")),
+    rep = FC.CleanReport([verdict(item(title="Customer Support Specialist", company="McKesson", page="secret-page-id")),
                           verdict(item(title="Directeur", page="x2", interested=True)),
                           verdict(item(), "Austin, TX")])
     text = FC.render(rep, dry_run=True)
-    assert "| title exclude | Data Specialist | McKesson |" in text
+    assert "| title exclude | Customer Support Specialist | McKesson |" in text
     assert "NOT trashed" in text and "Directeur" in text
     assert "| location_not_canada | Software Engineer | Acme |" in text
     assert "secret-page-id" not in text and "dry run" in text

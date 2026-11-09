@@ -65,24 +65,27 @@ def test_two_to_four_years_uses_the_lower_bound_of_two():
     assert "2+ yrs" in j.signals
 
 
-def test_two_years_dropped_when_internships_do_not_count():
+def test_two_years_dropped_when_internships_do_not_count(monkeypatch):
+    monkeypatch.setitem(CFG["jd"], "two_year_drops", True)
     res = run([job()], {"1": STRONG.format(exp="2 years of experience (does not include internships or co-ops).")})
     assert res.kept == [] and res.drops == {E.R_TWO_YEAR_INTERN: 1}
 
 
-def test_two_years_dropped_without_a_fit_percent():
+def test_two_years_dropped_without_a_fit_percent(monkeypatch):
+    monkeypatch.setitem(CFG["jd"], "two_year_drops", True)
     # three terms only -> Fit n/a ("low signal")
     res = run([job()], {"1": "Python, SQL and Docker. 2 years of experience."})
     assert res.kept == [] and res.drops == {E.R_TWO_YEAR_NO_FIT: 1}
 
 
-def test_two_years_dropped_below_the_fit_threshold():
+def test_two_years_dropped_below_the_fit_threshold(monkeypatch):
+    monkeypatch.setitem(CFG["jd"], "two_year_drops", True)
     res = run([job()], {"1": WEAK_FIT.format(exp="2 years of experience.")})
     assert res.kept == [] and res.drops == {E.R_TWO_YEAR_LOW_FIT: 1}
 
 
 def test_two_year_fit_threshold_comes_from_config(monkeypatch):
-    cfg = {**CFG, "jd": {**CFG["jd"], "two_year_min_fit": 0.9}}
+    cfg = {**CFG, "jd": {**CFG["jd"], "two_year_min_fit": 0.9, "two_year_drops": True}}
     res = E.enrich([job()], [], cfg, FILTERS, SCORER, FakeClient({"1": STRONG.format(exp="2 years of experience.")}),
                    cache=NOCACHE)
     assert res.drops == {E.R_TWO_YEAR_LOW_FIT: 1}            # 80 % < 90 %
@@ -185,7 +188,8 @@ def test_location_dropped_jobs_leave_the_gaps_report_alone():
 
 # --- weak titles still need four skill / gap terms (context terms do not count) ----------
 
-def test_weak_title_needs_four_core_terms_not_context_terms():
+def test_weak_title_needs_four_core_terms_not_context_terms(monkeypatch):
+    monkeypatch.setitem(CFG["scoring"], "weak_title_strict", True)
     jd = "Python and SQL. Backend, frontend, DevOps and automated testing, with a database."
     res = run([job(title="Technical Specialist", weak_title=True)], {"1": jd})
     assert res.drops == {E.R_WEAK_FEW_TERMS: 1}
@@ -317,3 +321,10 @@ def test_report_lists_forbidden_unresolved_and_slug_names():
     assert "Kept without a JD" in text and "BDO | DevOps \\| Engineer" in text
     assert "unresolved location" in text and WD_URL in text
     assert "raw slugs" in text and "| intouchinsight | Intouchinsight |" in text
+
+
+def test_two_year_jobs_are_kept_by_default_whatever_the_fit_and_the_internship_wording():
+    for jd in ("Python, SQL and Docker. 2 years of experience.", WEAK_FIT.format(exp="2 years of experience."),
+               STRONG.format(exp="2 years of experience (does not include internships or co-ops).")):
+        res = run([job()], {"1": jd})
+        assert len(res.kept) == 1 and "2+ yrs" in res.kept[0].signals and res.drops == {}

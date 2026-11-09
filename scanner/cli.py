@@ -343,6 +343,9 @@ def run(args: argparse.Namespace) -> int:
         print(report.format_counts(name, stages))
     if result:
         print_phase2(result, len(deduped), final, phase2)
+    if result and (not args.dry_run or args.out):         # a dry run writes it only next to an explicit --out
+        dropped_path = str(Path(args.out).with_name("dropped.md")) if args.out else cfg["report"].get("dropped_path", "reports/dropped.md")
+        report.write(dropped_path, report.render_dropped(result.dropped))
     out_path = args.out or cfg["report"]["path"]
     report.write(out_path, report.render(final, since, now, meta, blocks, len(deduped), phase2))
     print(f"\nWrote {out_path} ({len(final)} jobs) in {time.monotonic() - started:.0f}s")

@@ -8,7 +8,7 @@ from scanner.cluster import ClusterResolver
 from scanner.config import load_config
 from scanner.filters import Filters
 from scanner.score import Scorer
-from tests.test_enrich import gh, run
+from tests.test_enrich import CFG as ENRICH_CFG, gh, run
 
 CFG = load_config()
 FILTERS = Filters.from_config(CFG)
@@ -54,7 +54,8 @@ def test_tech_titles_survive_the_new_excludes(title):
     assert FILTERS.title_not_excluded(title), title
 
 
-def test_low_signal_job_needs_a_developer_noun_in_its_title():
+def test_low_signal_job_needs_a_developer_noun_in_its_title(monkeypatch):
+    monkeypatch.setitem(ENRICH_CFG["scoring"], "low_signal_title_drop", True)
     sparse = "We value teamwork and punctuality. Python is a plus."             # one term: Fit n/a, `low signal`
     planner = run([gh(1, title="Automation Planner")], jds={"1": sparse})
     engineer = run([gh(2, title="Software Engineer")], jds={"2": sparse})
@@ -81,3 +82,8 @@ def test_dev_title(title, dev):
                                    "Customer Data Platform Engineer", "Junior Developer, Talent Platform"])
 def test_the_new_excludes_do_not_catch_real_tech_titles(title):
     assert FILTERS.title_tier(title) and FILTERS.title_not_excluded(title), title
+
+
+def test_a_low_signal_job_with_any_title_is_kept_by_default():
+    res = run([gh(1, title="Automation Planner")], jds={"1": "We value teamwork and punctuality. Python is a plus."})
+    assert len(res.kept) == 1 and "low signal" in res.kept[0].signals and res.drops == {}
