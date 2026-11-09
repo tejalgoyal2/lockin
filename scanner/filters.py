@@ -55,6 +55,9 @@ class Filters:
     title_exclude_phrases: list
     french_first: re.Pattern
     title_foreign: list = field(default_factory=list)
+    title_exclude_weak: list = field(default_factory=list)
+    student_season: list = field(default_factory=list)
+    grad_signal: list = field(default_factory=list)
 
     @classmethod
     def from_config(cls, cfg: dict) -> "Filters":
@@ -64,17 +67,16 @@ class Filters:
             loc_include=_compile(loc["include"]) + _compile(loc.get("include_cs"), 0),
             loc_exclude=_compile(loc.get("exclude")) + _compile(loc.get("exclude_cs"), 0),
             loc_split=re.compile(loc.get("split_on", "[;|]")),
-            title_strong=_prefix(title["strong"]) + _words(title.get("strong_words")),
-            title_weak=_prefix(title["weak"]) + _words(title.get("weak_words")),
+            title_strong=_prefix(title["strong"]) + _words(title.get("strong_words")) + _words(title.get("strong_words_cs"), 0),
+            title_weak=_prefix(title["weak"]) + _words(title.get("weak_words")) + _words(title.get("weak_words_cs"), 0),
             title_exclude=(
                 _prefix(title["exclude"])
                 + _words(title.get("exclude_words"))
                 + _words(title.get("exclude_words_cs"), 0)
             ),
-            student=(
-                _words(title["student"])
-                + _compile(title.get("student_regex"))
-            ),
+            student=_words(title["student"]),
+            student_season=_compile(title.get("student_regex")),
+            grad_signal=_compile(title.get("grad_signal")),
             blocklist=[norm_text(c) for c in cfg["company"]["blocklist"]],
             drop_french=lang.get("drop_french_titles", False),
             french=re.compile(lang.get("french_pattern", "$^"), re.IGNORECASE),
@@ -83,6 +85,7 @@ class Filters:
             country_only=_compile(loc.get("country_only", [r"\bCanada\b"])),
             unresolved=re.compile(loc["unresolved"], re.IGNORECASE) if loc.get("unresolved") else None,
             title_exclude_phrases=[re.compile(r"\b" + re.escape(fold(p)) + r"\b") for p in title.get("exclude_phrases") or []],
+            title_exclude_weak=_prefix(title.get("exclude_if_weak")),
             french_first=re.compile(lang.get("french_first_segment_pattern", "$^"), re.IGNORECASE),
             title_foreign=([re.compile(rf"(?<![\w.])(?:{p})(?![\w])", re.IGNORECASE) for p in loc.get("title_foreign") or []]
                            + [re.compile(rf"(?<![\w.])(?:{p})(?![\w])") for p in loc.get("title_foreign_cs") or []]),
@@ -166,7 +169,11 @@ class Filters:
         if _any(self.title_exclude, title):
             return False
         folded = fold(title)
-        return not _any(self.title_exclude_phrases, folded)
+        if _any(self.title_exclude_phrases, folded):
+            return False
+        # "soft" excludes (coordinator, marketing, technician ...) only count when the title's only tech match is a generic
+        # word: "IT Coordinator" and "Data Coordinator" have a strong one and pass, "Event Coordinator" does not.
+        return not (_any(self.title_exclude_weak, title) and not _any(self.title_strong, title))
 
     def exclusion_reason(self, title: str) -> str | None:
         """The first title-exclude rule that matches, as the word or phrase written in config.yaml ("senior", "lead",
@@ -178,13 +185,23 @@ class Filters:
         for pat in self.title_exclude_phrases:
             if pat.search(folded):
                 return _label(pat)
+        if not _any(self.title_strong, title):
+            for pat in self.title_exclude_weak:
+                if pat.search(title or ""):
+                    return _label(pat)
         return None
 
     def all_exclusion_reasons(self, title: str) -> list[str]:
         """Every title-exclude rule that matches (a rule that is the only one is the one a change would free the job from)."""
         out = [_label(p) for p in self.title_exclude if p.search(title or "")]
         folded = fold(title)
-        return out + [_label(p) for p in self.title_exclude_phrases if p.search(folded)]
+        out += [_label(p) for p in self.title_exclude_phrases if p.search(folded)]
+        if not _any(self.title_strong, title):
+            out += [_label(p) for p in self.title_exclude_weak if p.search(title or "")]
+        return out
 
     def not_student_only(self, title: str) -> bool:
-        return not _any(self.student, title)
+        if _any(self.student, title):
+            return False                      # intern, co-op, student: held for the JD
+        # "Summer 2027" alone says the job starts then; "New Grad Field Engineer I - Summer 2027" is a graduate job
+        return not (_any(self.student_season, title) and not _any(self.grad_signal, title))

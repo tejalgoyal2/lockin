@@ -1,9 +1,12 @@
 name: tools
 
 # The scanner's read-only helpers, run from the Actions tab so no local setup is needed (README: "Running it from GitHub").
-# Nothing here writes to Notion or to the repo; the answer is in the run's Summary and log.
+# Nothing here writes to the repo; the answer is in the run's Summary and log. Only `clean-feed` touches Notion: it applies the
+# current rules to the rows already in the Feed and trashes the ones that fail (never a row with Interested / Apply / done-del
+# ticked; Notion keeps trashed rows for 30 days). Run it with `--dry-run` first: it lists what it would trash.
 #   audit     which filter rules stop the fresh Canadian postings, which discarded titles look like jobs you want
 #   why       why a company's posting is not in the Feed (args: the company name, e.g. General Motors; optional --since 14)
+#   clean-feed  re-check the Feed's rows against today's rules (args: --dry-run first, then nothing; add --rescore to refresh Fit %)
 #   discover  find an employer's job board and print the watchlist.yaml line (args: company names in quotes, or
 #             --workday TENANT, --phenom HOST/ca/en, --successfactors HOST or --icims HOST, e.g.
 #             "Bell Canada" --workday generalmotors --icims "careersen-victoria.icims.com=City of Victoria|Victoria, BC")
@@ -14,7 +17,7 @@ on:
       command:
         description: "What to run"
         type: choice
-        options: [audit, why, discover]
+        options: [audit, why, discover, clean-feed]
         default: audit
       args:
         description: 'Arguments, written as in a terminal (quote names with spaces): audit: --days 30 | why: "General Motors" | discover: Telus --workday rbc'
@@ -40,6 +43,8 @@ jobs:
 
       - name: Run
         env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}                    # only clean-feed reads them
+          NOTION_FEED_DATA_SOURCE_ID: ${{ secrets.NOTION_FEED_DATA_SOURCE_ID }}
           COMMAND: ${{ inputs.command }}
           ARGS: ${{ inputs.args }}          # through env vars, never straight into the script; split with shlex, not the shell
         run: |

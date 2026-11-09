@@ -25,7 +25,8 @@ Design notes live in [SPEC.md](SPEC.md). Opinions about the job market do not.
 4. Write the top `notion.daily_cap` (150) new jobs to the Feed, skipping anything in `state/seen.json` or
    already in the Feed by Link. At the start of the run, Feed rows whose `done-del` box is ticked (your Notion
    automation ticks it after copying the row to your main database) are trashed; no other row is ever trashed.
-5. Commit `state/` and `reports/` back to the repo. `reports/latest.md` is the full candidate list;
+5. Commit `state/` and `reports/` back to the repo. `reports/latest.md` is the full candidate list; `reports/dropped.md` lists every job
+   the JD rules dropped, by reason (years asked, too few skills, French required ...): read it when you suspect a good job was lost;
    `reports/boards.md` lists the employer boards the scanner added by itself and the ones resting after failed reads;
    `reports/gaps.md` (Mondays) lists the tech terms JDs keep asking for that you do not have yet (a to-learn list that
    writes itself, yay); `reports/feedback.md`
@@ -60,13 +61,14 @@ gh workflow run scan.yml -f dry_run=false -f since_days=14 -f max_rows=100 # cat
 gh run watch                                                               # follow the run
 ```
 
-**`tools`** are the read-only helpers (nothing is written to Notion or the repo; the answer is in the run's Summary and
+**`tools`** are the helpers (nothing is written to the repo, and only `clean-feed` touches Notion; the answer is in the run's Summary and
 log). Pick `command` and write `args` the way you would in a terminal:
 
 | `command` | `args` | Answers |
 |---|---|---|
 | `audit` | `--days 30` (default 14) | Which filter rules stop the fresh Canadian postings, which discarded titles look like jobs you want, which title words the filter does not know. See "The filter audit". |
 | `why` | `"General Motors"` (add `--since 21`) | "I saw this employer post a job, why is it not in the Feed?" Names the first rule that stops each of its Canadian postings, or says the employer is not on the watchlist. |
+| `clean-feed` | `--dry-run` (then run again without it) | Re-checks the rows already in your Feed against today's rules and trashes the ones that now fail, never a row with Interested / Apply / done-del ticked (Notion keeps trashed rows 30 days). `--rescore` also refreshes Fit % and Signals. |
 | `discover` | `"Telus" "Bell Canada"`, or `--workday rbc`, `--phenom jobs.bell.ca/ca/en=Bell`, `--successfactors careers.telus.com=Telus` or `--icims careersen-victoria.icims.com=City of Victoria` | Finds an employer's job board and prints the `watchlist.yaml` line to add. |
 
 ## Setup

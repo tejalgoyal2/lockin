@@ -58,7 +58,7 @@ def test_the_date_tag_is_kept_and_a_row_without_a_source_record_keeps_its_name()
 
 def test_ticked_unreadable_and_failing_rows_are_skipped():
     rows = [item(interested=True, page="a"), item(apply=True, page="b"), item(interested=None, page="c"),
-            item(title="Data Specialist", page="d"),                  # fails a title rule
+            item(title="Customer Support Specialist", page="d"),                  # fails a title rule
             item(done_del=True, page="e"), item(done_del=None, page="f")]
     assert rescore(rows) == []
 

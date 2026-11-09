@@ -54,8 +54,7 @@ def place(raw: str) -> str:
 
 def title_case(title: str) -> str:
     """Job Bank titles are lower case ("software developer"); anything with a capital is left as the employer wrote it."""
-    title = _text(title)
-    return string.capwords(title) if title and title == title.lower() else title
+    return " ".join(w[:1].upper() + w[1:] if w.islower() else w for w in _text(title).split())
 
 
 def _when(text: str) -> datetime | None:
@@ -132,7 +131,26 @@ _AFTER_DESCRIPTION = re.compile(r"\n(?:Location|Work location|Salary|Who can app
                                 r"|\s-\s(?:Location|Work location|Salary)\b")
 
 
+_PARTNER = re.compile(r'View the full job posting on</span>\s*(?:<span[^>]*></span>)?\s*([^<]+?)\s*<', re.S)
+
+
+def partner_note(page_html: str) -> str:
+    """A posting Job Bank received from a partner site (Talent.com, Indeed ...) shows only an excerpt and a button to the
+    partner's page. That page refuses automated readers (HTTP 403), so lockin does not follow it; the note tells the reader
+    of the Feed row what to do instead."""
+    m = _PARTNER.search(page_html or "")
+    if not m:
+        return ""
+    name = _text(m.group(1))
+    return (f"[Job Bank shows only an excerpt of this posting, which {name} supplied. Open the link and press "
+            f"\"View the full job posting on {name}\" for all of it.]\n\n")
+
+
 def parse_detail(page_html: str) -> str:
+    return partner_note(page_html) + _parse_detail(page_html)
+
+
+def _parse_detail(page_html: str) -> str:
     """A posting's page -> the description as plain text. Two layouts: the structured "Job details" block (education,
     experience, tasks, skills, work conditions), or a free-text description the employer typed (stored as escaped HTML,
     so it is unescaped and read again). Raises JobBankError when neither is on the page."""

@@ -58,6 +58,7 @@ sources:
       - "22220"            # computer network and web technicians
       - "22221"            # user support technicians
       - "22222"            # information systems testing technicians
+      - "21311"            # computer engineers (except software engineers and designers)
     terms:                 # keywords for roles filed under other occupations
       - data analyst
       - business intelligence
@@ -69,6 +70,18 @@ sources:
       - technical analyst
       - application
       - programmer analyst
+      - software
+      - programmer
+      - web developer
+      - database
+      - network administrator
+      - cybersecurity
+      - it support
+      - help desk
+      - quality assurance
+      - embedded
+      - python
+      - java
   canadalist:              # a hand-curated GitHub list of Canadian junior / new-grad jobs, updated daily (README and FINANCE.md)
     enabled: true
     urls:
@@ -109,7 +122,10 @@ location:
   exclude:
     - 'Vancouver,?\s+(Washington|WA)\b'
     - 'Ottawa,?\s+(Illinois|IL)\b'
-    - '\b(Waterloo|Markham|Edmonton),?\s+(Wisconsin|WI|Iowa|IA|Illinois|IL|Kentucky|KY|Nebraska|NE)\b'
+    - '\b(Waterloo|Markham|Edmonton),?\s+(Wisconsin|WI|Iowa|IA|Illinois|IL|Kentucky|KY|Nebraska|NE|Belgium|BE|Brussels)\b'
+    # "Ontario, CA" and nothing else is Ontario, California (an Owens & Minor warehouse job reached the Feed); "Toronto, Ontario,
+    # CA" keeps its city and passes. The whole-string anchors keep "Remote, Ontario, CA" (Canada) alone.
+    - '^\s*Ontario,\s*(?:CA|California)\s*$'
   exclude_cs:
     - ',\s*WA\b'
   split_on: '[;|]'   # multi-location strings are split on this; first Canadian part is used
@@ -174,12 +190,50 @@ title:
     - test
     - technical
     - technology           # "Graduate Rotational Program (Technology)": a weak word, so the JD must show a skill fit
+    - network              # "Network Administrator" / "Network Operations": entry-level IT the audit showed was lost
+    - systems
+    - sysadmin
+    - help desk
+    - helpdesk
+    - service desk
+    - desktop support
+    - information technology
+    - information systems
+    - computer
+    - informatics
+    - firmware
+    - embedded
+    - hardware
+    - robotics
+    - system administrator
+    - systems administrator
+    - network administrator
+    - server administrator
+    - linux administrator
+    - windows administrator
     - scientist
     - integration
   weak_words:
     - QA
+    - web                  # "Web Designer", "CMS and Web Administrator" (whole word: not "Webber")
+  weak_words_cs:         # short acronyms, upper case only ("IT Support", not "it")
+    - IT
+    - SQL
+    - API
+    - ETL
+    - DBA
+    - UX
+    - UI
+    - SDET
+    - NOC
   exclude:
     - senior
+    - marketing
+    - supervisor
+    - superviseur
+    - administrative
+    - clerk
+    - facilities
     - staff
     - principal
     - manager
@@ -196,17 +250,9 @@ title:
     - manufacturing
     - HVAC
     - field service
-    - technician
     - sales
     - security guard
-    - clerk
-    - facilities
-    - coordinator
-    - marketing
-    - supervisor
-    - superviseur
     - team leader
-    - administrative
     - recruiter
     - vice president
     - vice-president
@@ -222,6 +268,10 @@ title:
     - lecturer
     - sessional
     - professor
+  exclude_if_weak:       # excluded only when the title's tech match is a generic word (engineer, analyst, specialist ...);
+    - coordinator
+    - technician
+                         # a strong one ("IT Coordinator", "Data Coordinator", "Cloud Technician") passes
   exclude_words:
     - sr
     - guard
@@ -244,7 +294,6 @@ title:
     - member support specialist
     # "IT Support Specialist" / "Technical Support Specialist" are entry-level tech jobs a new graduate applies to: they are
     # a weak title, so the JD must show a skill fit (the audit found them dropped by the old plain "support specialist" rule).
-    - data specialist
     - help improve ai
     - english speaker
     - flexible work
@@ -287,6 +336,13 @@ title:
     - PEY
   student_regex:
     - '\b(summer|winter|fall)\s+20\d\d\b'
+  grad_signal:           # ... unless the title also says it is for graduates (the season only says when it starts)
+    - '\bnew[\s-]?grad'
+    - '\brecent\s+grad'
+    - '\bgraduate\s+(?:program|programme|role|rotation|developer|engineer|analyst|scientist)'
+    - '\bearly[\s-]career'
+    - '\bentry[\s-]level'
+    - '\brotational'
 
 company:
   blocklist:             # normalised (lowercase, alphanumeric) substring match
@@ -310,6 +366,7 @@ language:
 
 report:
   path: reports/latest.md
+  dropped_path: reports/dropped.md   # the jobs the JD rules dropped, by reason (so a wrong rule can be seen)
 
 jd:
   enabled: true
@@ -322,17 +379,42 @@ jd:
   cache_ttl_days: 10         # as long as the freshness window: a job still in the window is not downloaded again
   min_years_drop: 3          # drop when the minimum required experience (lower bound) is >= this
   two_year_signal: "2+ yrs"  # lower bound of 2 years: kept, with this Signal, unless a rule below drops it
+  two_year_drops: false      # true: drop a 2-year job unless Fit reaches two_year_min_fit and internships count. False: keep it with the
+                             # signal above (a posting that asks 2 years often takes a new graduate; a missed good job costs more than an extra row)
   two_year_min_fit: 0.6      # ... Fit (a fraction, like the Feed's Fit % column) must reach this for a 2-year job
   peng_signal: "P.Eng req"   # Signal when the JD requires a P.Eng licence (not when an EIT is accepted); never a drop
+  min_judge_chars: 600       # a JD shorter than this is too thin to judge a generic title by
   keep_without_jd: true      # a job whose description cannot be read (403, unsupported site, timeout) is still written to the Feed,
                              # marked "jd unavailable" and ranked lower: you can open the link and read it yourself
+  no_jd_title_exclude:       # for a job whose JD could not be read AND whose title is generic ("Specialist", "Analyst"): these words
+    - warehouse              # name a field that is not tech, so there is nothing to vouch for it. Everything else with no JD is kept.
+    - retail
+    - greenlight
+    - f&i
+    - events
+    - member services
+    - client service
+    - shoring
+    - library
+    - regional engagement
+    - pharmac
+    - nurs
+    - dental hygien
   rescue_student_titles: true  # fetch JDs of student-titled jobs; keep those that welcome recent grads
 
 scoring:
-  weak_title_min_fit: 20     # a weak_title job is dropped if Fit % is below this or no skill matches
+  weak_title_strict: false   # true: the old rule below (a generic title needs min_terms_for_fit skill terms and weak_title_min_fit % Fit)
+  weak_title_min_terms: 1    # default rule: a generic title (Analyst, Specialist, Engineer ...) is dropped only when a JD of at least
+                             # jd.min_judge_chars names fewer skill terms than this (so: none at all)
+  weak_few_terms_keep:       # a generic title that also matches one of these is never dropped by the rule above
+    - '\bengineer'
+    - '\b(?:it|information technology|technology|technical support|software|developer|data|devops|cloud|cyber|security|automation|programmer)\b'
+  weak_title_min_fit: 20     # (strict rule) a weak_title job is dropped if Fit % is below this or no skill matches
   # A `low signal` job (JD found, Fit % n/a) is kept only when its title names a developer role: a JD with too few
   # tech terms and a title like "Cell Operator" or "Underwriter" is not a tech job. Whole words, plural allowed.
   low_signal_title_nouns: [engineer, developer, programmer, scientist, analyst]
+  low_signal_title_drop: false    # true: apply the rule above. False (default): such a job is kept and shown as "low signal"; the rule had
+                                  # dropped "Information Security Specialist - PCI DSS" and "Consultant, Data Risk"
   min_terms_for_fit: 4       # Fit % needs this many distinct terms (matched + gaps + context); fewer -> n/a + `low signal`
   min_core_terms_for_fit: 2  # ... of which at least this many skills or gaps (one skill and three generic words is not a fit)
   matched_bonus_per_skill: 2 # ranking Score += this per matched skill ...

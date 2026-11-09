@@ -47,8 +47,9 @@ def test_job_bank_province_in_brackets_gets_the_comma_the_location_filter_wants(
 
 
 def test_job_bank_keeps_a_title_that_already_has_capitals():
-    assert jobbank.title_case("Web developer") == "Web developer"
+    assert jobbank.title_case("Web developer") == "Web Developer"
     assert jobbank.title_case("data analyst") == "Data Analyst"
+    assert jobbank.title_case("information technology (IT) analyst") == "Information Technology (IT) Analyst"
 
 
 def test_job_bank_without_an_employer_is_still_a_record():

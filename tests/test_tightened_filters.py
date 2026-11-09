@@ -67,7 +67,7 @@ def test_french_first_segment_of_a_bilingual_title(filters, title, ok):
     "Directeur technique - Cloud natif, IA et DevOps", "DIRECTEUR, Plateforme", "Directrice des données",
     "Director of Engineering", "Expert Observability Engineer", "Grafana - Expert Observability Engineer",
     "PhD Researcher, AI Research", "Customer Support Specialist", "Support Specialist, Data",
-    "Data Specialist", "Flexible Work - Help Improve AI - English Speakers", "Help Improve AI",
+    "Customer Support Specialist", "Flexible Work - Help Improve AI - English Speakers", "Help Improve AI",
     "English Speaker Wanted", "Data Annotation Analyst", "Data Labeling Engineer", "AI Trainer",
     "Spécialiste des données Directrice adjointe",
 ])
@@ -124,7 +124,7 @@ def test_quebec_only_stage_and_workday_multi_location_pass_through(filters):
         rec(loc="Austin, TX", url="https://x/us"),
         rec(title="Développeur de logiciels / Software Developer", url="https://x/fr"),
         rec(company="mthree Recruiting Portal", url="https://x/mthree"),
-        rec(title="Data Specialist", url="https://x/ds"),
+        rec(title="Customer Support Specialist", url="https://x/ds"),
     ]
     jobs, stages, _ = run_stream(recs, feashliaa.raw_fields, filters, NOW, since_days=3)
     assert sorted(j.url for j in jobs) == sorted([

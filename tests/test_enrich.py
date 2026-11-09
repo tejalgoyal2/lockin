@@ -81,7 +81,7 @@ def test_us_authorization_only_drops_without_canadian_location():
     assert res.drops == {E.R_US_AUTH: 1}
 
 
-def test_weak_title_dropped_when_few_terms_no_match_or_low_fit():
+def test_weak_title_dropped_when_few_terms_no_match_or_low_fit(strict_weak):
     none = run([gh(1, title="Technical Specialist", weak_title=True)], jds={"1": "Greet customers."})
     low = run([gh(2, title="Technical Specialist", weak_title=True)],
               jds={"2": "Python. Java, Kafka, Golang, Kotlin, Scala, Spring Boot, Elasticsearch."})
@@ -121,7 +121,7 @@ def test_matched_count_breaks_fit_ties_and_is_capped():
     assert [j.url[-1] for j in res.kept] == ["3", "2", "1"]
 
 
-def test_weak_title_with_sparse_or_unmatched_jd_is_dropped():
+def test_weak_title_with_sparse_or_unmatched_jd_is_dropped(strict_weak):
     sparse = run([gh(1, title="Technical Specialist", weak_title=True)], jds={"1": "Python and SQL."})
     none = run([gh(2, title="Technical Specialist", weak_title=True)], jds={"2": "Java, Kafka, Golang, Kotlin and Scala."})
     assert sparse.drops == {E.R_WEAK_FEW_TERMS: 1}
@@ -131,6 +131,12 @@ def test_weak_title_with_sparse_or_unmatched_jd_is_dropped():
 def test_strong_title_is_not_dropped_for_low_fit():
     res = run([gh(1, title="Data Analyst")], jds={"1": "Java, Kafka, Go, Kotlin, Scala."})
     assert len(res.kept) == 1 and res.kept[0].fit_pct == 0.0
+
+
+@pytest.fixture
+def strict_weak(monkeypatch):
+    """The old rule: a generic title needs 4+ skill terms and a Fit (scoring.weak_title_strict: true)."""
+    monkeypatch.setitem(CFG["scoring"], "weak_title_strict", True)
 
 
 @pytest.fixture
@@ -250,7 +256,7 @@ def test_fetch_error_details():
     assert E.fetch_one(job(url="https://recruiting.paylocity.com/x"), FakeClient({}), NOCACHE)[0] == "unsupported"
 
 
-def test_weak_title_needs_four_terms_even_when_it_has_a_match():
+def test_weak_title_needs_four_terms_even_when_it_has_a_match(strict_weak):
     few = run([gh(1, title="Technical Specialist", weak_title=True)], jds={"1": "Python, SQL and Docker."})
     enough = run([gh(2, title="Technical Specialist", weak_title=True)], jds={"2": "Python, SQL, Docker and Git."})
     gap_terms_count = run([gh(3, title="Technical Specialist", weak_title=True)],
@@ -319,3 +325,42 @@ def test_a_slow_host_gets_its_own_lane_and_does_not_hold_up_the_others():
     fast_done = max(t for _, u, t in started if "jobbank" not in u) - t0
     slow_threads = {n for n, u, _ in started if "jobbank" in u}
     assert len(slow_threads) == 1 and fast_done < 0.5            # one lane for Job Bank; the Greenhouse jobs did not wait for it
+
+
+def test_a_generic_title_in_a_non_tech_field_is_dropped_only_when_there_is_no_jd():
+    jds = {"1": http_error(500), "2": http_error(500), "3": "Python, SQL, Docker, Git and Kafka for the warehouse systems team."}
+    res = run([gh(1, title="Warehouse Specialist", weak_title=True), gh(2, title="IT Support Specialist", weak_title=True),
+               gh(3, title="Warehouse Systems Specialist", weak_title=True)], jds=jds)
+    assert sorted(j.title for j in res.kept) == ["IT Support Specialist", "Warehouse Systems Specialist"]
+    assert res.drops == {E.R_WEAK_NO_JD: 1} and res.dropped[0][1].title == "Warehouse Specialist"
+    assert "non-tech field" in res.dropped[0][1].drop_note
+
+
+def test_every_drop_is_kept_with_its_job_for_the_report():
+    from scanner import report
+    res = run([gh(1, title="Software Engineer")], jds={"1": "We need 5+ years of experience with Python."})
+    (reason, job), = res.dropped
+    assert reason == E.R_EXPERIENCE and job.drop_note == "asks 5+ years"
+    text = report.render_dropped(res.dropped)
+    assert "experience_3plus: 1" in text and "asks 5+ years" in text and "asks 3+ years of experience" in text
+
+
+LONG_FILLER = "We are a friendly team that values collaboration, ownership and clear communication in everything we do. " * 8
+
+
+def test_by_default_a_generic_title_is_dropped_only_when_a_full_length_jd_names_no_skill():
+    none = run([gh(1, title="Technical Specialist", weak_title=True)], jds={"1": LONG_FILLER})
+    one = run([gh(2, title="Technical Specialist", weak_title=True)], jds={"2": LONG_FILLER + " Python is an asset."})
+    unmatched = run([gh(3, title="Technical Specialist", weak_title=True)], jds={"3": LONG_FILLER + " Java and Kafka."})
+    thin = run([gh(4, title="Founding Engineer", weak_title=True)], jds={"4": "Build the product with us."})
+    assert none.drops == {E.R_WEAK_FEW_TERMS: 1} and "0 skill terms" in none.dropped[0][1].drop_note
+    assert len(one.kept) == len(unmatched.kept) == len(thin.kept) == 1
+
+
+def test_tech_flavoured_generic_title_is_not_dropped_for_few_terms():
+    from scanner.enrich import _tech_flavoured
+    sc = ENRICH_CFG["scoring"]
+    assert _tech_flavoured("Founding Engineer", sc)
+    assert _tech_flavoured("Information Technology (IT) Analyst", sc)
+    assert not _tech_flavoured("Mobile Mortgage Specialist", sc)
+    assert not _tech_flavoured("Fraud Analyst", sc)
