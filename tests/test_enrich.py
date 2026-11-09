@@ -359,7 +359,7 @@ def test_by_default_a_generic_title_is_dropped_only_when_a_full_length_jd_names_
 
 def test_tech_flavoured_generic_title_is_not_dropped_for_few_terms():
     from scanner.enrich import _tech_flavoured
-    sc = ENRICH_CFG["scoring"]
+    sc = CFG["scoring"]
     assert _tech_flavoured("Founding Engineer", sc)
     assert _tech_flavoured("Information Technology (IT) Analyst", sc)
     assert not _tech_flavoured("Mobile Mortgage Specialist", sc)
