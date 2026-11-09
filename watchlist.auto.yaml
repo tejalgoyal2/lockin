@@ -4,3 +4,5 @@
 # or move it to watchlist.yaml to keep it for good. Same format as watchlist.yaml.
 
 boards:
+  - {ats: workday, slug: capitalone.wd12/capital_one, name: "capitalone"}        # 21 Canadian postings when found, 2026-11-09
+  - {ats: workday, slug: globalhr.wd5/rec_rtx_ext_gateway, name: "globalhr"}        # 6 Canadian postings when found, 2026-11-09

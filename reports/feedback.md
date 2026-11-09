@@ -1,13 +1,13 @@
 # What gets picked
 
-Reviewed rows (ticked `done-del`) since 2026-10-06: **171**, picked (`Interested` or `Apply`): **47** (27%). Counts only; a rate needs 10+ rows. If Fit % predicts your picks, the rate rises down the Fit table.
+Reviewed rows (ticked `done-del`) since 2026-10-06: **172**, picked (`Interested` or `Apply`): **48** (28%). Counts only; a rate needs 10+ rows. If Fit % predicts your picks, the rate rises down the Fit table.
 
 ## Fit %
 
 | Fit % | Reviewed | Picked | Pick rate |
 |---|---:|---:|---:|
 | <60 | 16 | 1 | 6% |
-| 60-69 | 34 | 5 | 15% |
+| 60-69 | 35 | 6 | 17% |
 | 70-79 | 30 | 10 | 33% |
 | 80-89 | 47 | 15 | 32% |
 | 90+ | 13 | 6 | 46% |
@@ -17,7 +17,7 @@ Reviewed rows (ticked `done-del`) since 2026-10-06: **171**, picked (`Interested
 
 | Source | Reviewed | Picked | Pick rate |
 |---|---:|---:|---:|
-| Workday | 68 | 16 | 24% |
+| Workday | 69 | 17 | 25% |
 | Greenhouse | 35 | 7 | 20% |
 | Ashby | 21 | 3 | 14% |
 | Simplify | 18 | 12 | 67% |
@@ -30,7 +30,7 @@ Reviewed rows (ticked `done-del`) since 2026-10-06: **171**, picked (`Interested
 
 | Level tag | Reviewed | Picked | Pick rate |
 |---|---:|---:|---:|
-| none | 134 | 31 | 23% |
+| none | 135 | 32 | 24% |
 | 0-2 years | 15 | 4 | 27% |
 | recent graduate | 9 | 5 | - |
 | new grad | 7 | 3 | - |
@@ -42,7 +42,7 @@ Reviewed rows (ticked `done-del`) since 2026-10-06: **171**, picked (`Interested
 | Warning tag | Reviewed | Picked | Pick rate |
 |---|---:|---:|---:|
 | none | 111 | 30 | 27% |
-| 2+ yrs | 28 | 7 | 25% |
+| 2+ yrs | 29 | 8 | 28% |
 | jd unavailable | 23 | 8 | 35% |
 | low signal | 8 | 2 | - |
 | P.Eng req | 1 | 0 | - |

@@ -23,9 +23,17 @@
   "name": "Jane",
   "checked": "2026-10-26"
  },
+ "Ashby:lime": {
+  "name": "Lime",
+  "checked": "2026-11-09"
+ },
  "Ashby:npx": {
   "name": "Nuclear Promise X",
   "checked": "2026-10-28"
+ },
+ "Ashby:plasma": {
+  "name": "Plasma",
+  "checked": "2026-11-09"
  },
  "BambooHR:amii": {
   "name": "Alberta Machine Intelligence Institute",
@@ -35,13 +43,29 @@
   "name": "Blanc Labs",
   "checked": "2026-10-28"
  },
+ "BambooHR:cityofhamilton": {
+  "name": "City of Hamilton",
+  "checked": "2026-11-09"
+ },
  "BambooHR:clearwaygroup": {
   "name": "Clearway",
   "checked": "2026-11-03"
  },
+ "BambooHR:cmhabc": {
+  "name": "Canadian Mental Health Association BC Division",
+  "checked": "2026-11-09"
+ },
  "BambooHR:corinexcom": {
   "name": "Corinex Technologies",
   "checked": "2026-11-06"
+ },
+ "BambooHR:geospectrum": {
+  "name": "GeoSpectrum Technologies",
+  "checked": "2026-11-09"
+ },
+ "BambooHR:innfromthecold": {
+  "name": "Inn From The Cold",
+  "checked": "2026-11-09"
  },
  "BambooHR:issbc": {
   "name": "Immigrant Services Society of BC",
@@ -63,6 +87,10 @@
   "name": "Offworld industries",
   "checked": "2026-10-28"
  },
+ "BambooHR:pontosense": {
+  "name": "Pontosense",
+  "checked": "2026-11-09"
+ },
  "BambooHR:samsters": {
   "name": "samdesk Canada",
   "checked": "2026-10-28"
@@ -78,6 +106,14 @@
  "Greenhouse:dept": {
   "name": "DEPT®",
   "checked": "2026-11-03"
+ },
+ "Greenhouse:gomotive": {
+  "name": "Motive",
+  "checked": "2026-11-09"
+ },
+ "Greenhouse:robinhood": {
+  "name": "Robinhood",
+  "checked": "2026-11-09"
  },
  "Workday:agilent.wd5.myworkdayjobs.com/agilent_careers": {
   "name": "",
@@ -98,6 +134,10 @@
  "Workday:ameresco.wd5.myworkdayjobs.com/ameresco": {
   "name": "",
   "checked": "2026-11-04"
+ },
+ "Workday:amynta.wd5.myworkdayjobs.com/global": {
+  "name": "",
+  "checked": "2026-11-09"
  },
  "Workday:analogdevices.wd1.myworkdayjobs.com/external": {
   "name": "",
@@ -123,6 +163,14 @@
   "name": "",
   "checked": "2026-11-08"
  },
+ "Workday:cc.wd3.myworkdayjobs.com/chanelcareers": {
+  "name": "",
+  "checked": "2026-11-09"
+ },
+ "Workday:cheo.wd10.myworkdayjobs.com/external_site": {
+  "name": "",
+  "checked": "2026-11-09"
+ },
  "Workday:ci.wd3.myworkdayjobs.com/ci_financial_external_career-site": {
   "name": "",
   "checked": "2026-10-30"
@@ -135,13 +183,29 @@
   "name": "",
   "checked": "2026-10-28"
  },
+ "Workday:dentalcorp.wd3.myworkdayjobs.com/dentalcorp": {
+  "name": "",
+  "checked": "2026-11-09"
+ },
  "Workday:dentsuaegis.wd3.myworkdayjobs.com/dan_global": {
   "name": "dentsu",
   "checked": "2026-10-26"
  },
+ "Workday:enbridge.wd3.myworkdayjobs.com/enbridge_careers": {
+  "name": "",
+  "checked": "2026-11-09"
+ },
  "Workday:entrust.wd1.myworkdayjobs.com/entrustcareers": {
   "name": "",
   "checked": "2026-11-05"
+ },
+ "Workday:evercommerce.wd1.myworkdayjobs.com/evercommerce_careers": {
+  "name": "",
+  "checked": "2026-11-09"
+ },
+ "Workday:fiserv.wd5.myworkdayjobs.com/ext": {
+  "name": "",
+  "checked": "2026-11-09"
  },
  "Workday:flir.wd1.myworkdayjobs.com/flircareers": {
   "name": "",
@@ -150,6 +214,30 @@
  "Workday:genesys.wd1.myworkdayjobs.com/genesys": {
   "name": "Genesys",
   "checked": "2026-11-04"
+ },
+ "Workday:gilead.wd1.myworkdayjobs.com/gileadcareers": {
+  "name": "",
+  "checked": "2026-11-09"
+ },
+ "Workday:hrsystem.wd1.myworkdayjobs.com/careers": {
+  "name": "",
+  "checked": "2026-11-09"
+ },
+ "Workday:hubinternational.wd1.myworkdayjobs.com/hubinternational": {
+  "name": "",
+  "checked": "2026-11-09"
+ },
+ "Workday:ia.wd3.myworkdayjobs.com/professional": {
+  "name": "",
+  "checked": "2026-11-09"
+ },
+ "Workday:jci.wd5.myworkdayjobs.com/jci": {
+  "name": "",
+  "checked": "2026-11-09"
+ },
+ "Workday:jj.wd5.myworkdayjobs.com/displacedemployees": {
+  "name": "",
+  "checked": "2026-11-09"
  },
  "Workday:jll.wd1.myworkdayjobs.com/jllcareers": {
   "name": "",
@@ -179,9 +267,25 @@
   "name": "",
   "checked": "2026-10-29"
  },
+ "Workday:oakvalleyhealth.wd10.myworkdayjobs.com/oakvalleyhealth": {
+  "name": "",
+  "checked": "2026-11-09"
+ },
+ "Workday:onehealthineers.wd3.myworkdayjobs.com/shsjb": {
+  "name": "",
+  "checked": "2026-11-09"
+ },
+ "Workday:owensminor.wd1.myworkdayjobs.com/omcareers": {
+  "name": "",
+  "checked": "2026-11-09"
+ },
  "Workday:petronascanada.wd3.myworkdayjobs.com/petronascanada": {
   "name": "",
   "checked": "2026-10-31"
+ },
+ "Workday:primerica.wd1.myworkdayjobs.com/pri": {
+  "name": "",
+  "checked": "2026-11-09"
  },
  "Workday:quadreal.wd10.myworkdayjobs.com/quadreal": {
   "name": "",
@@ -191,9 +295,17 @@
   "name": "",
   "checked": "2026-11-07"
  },
+ "Workday:relx.wd3.myworkdayjobs.com/relx": {
+  "name": "RELX",
+  "checked": "2026-11-09"
+ },
  "Workday:sandvik.wd3.myworkdayjobs.com/sandvik-jobs": {
   "name": "",
   "checked": "2026-10-30"
+ },
+ "Workday:suncor.wd1.myworkdayjobs.com/suncor_external": {
+  "name": "",
+  "checked": "2026-11-09"
  },
  "Workday:synechron.wd1.myworkdayjobs.com/synechroncareers": {
   "name": "",
@@ -207,8 +319,16 @@
   "name": "",
   "checked": "2026-11-05"
  },
+ "Workday:toyota.wd503.myworkdayjobs.com/toyota_ca": {
+  "name": "",
+  "checked": "2026-11-09"
+ },
  "Workday:ur.wd1.myworkdayjobs.com/urcareers": {
   "name": "UR",
   "checked": "2026-11-08"
+ },
+ "Workday:uwaterloo.wd3.myworkdayjobs.com/uw_careers": {
+  "name": "",
+  "checked": "2026-11-09"
  }
 }
