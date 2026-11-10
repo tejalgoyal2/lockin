@@ -60,6 +60,10 @@ def detect_ats(url: str) -> str | None:
         return "Job Bank"
     if host.endswith("bcpublicservice.hua.hrsmart.com"):
         return "BC Gov"
+    if host.endswith("jobicy.com"):
+        return "Jobicy"
+    if host.endswith("adzuna.ca"):
+        return "Adzuna"
     if icims.is_job_url(url):
         return "iCIMS"
     if phenom.is_job_url(urlsplit(url or "").path):          # a Phenom careers site: any host, /<country>/<lang>/job/<id>
@@ -145,6 +149,8 @@ def _site(ats: str, url: str) -> AtsRef | None:
         return AtsRef(ats, f"https://hn.algolia.com/api/v1/items/{item}") if item.isdigit() else None
     if ats == "YC" and "/jobs/" not in urlsplit(url).path:
         return None                                  # a company or listing page, not a posting
+    if ats == "Adzuna":
+        return None                                  # Adzuna's page redirects to the employer's; the Feed row carries the link
     return AtsRef(ats, url)
 
 
@@ -298,7 +304,7 @@ def _get_workday(ref: AtsRef, client) -> dict:
 
 def _fetch_site(ref: AtsRef, client) -> Detail:
     """Description, company and locations of a job-site posting (readers import ats for Detail's sake only)."""
-    from scanner.sources import baystreet, bcgov, builtin, hn, jobbank, yc
+    from scanner.sources import baystreet, bcgov, builtin, hn, jobbank, jobicy, yc
     if ref.ats == "HN":
         data = client.get_json(ref.api_url, ref.ats)
         text = INVISIBLE.sub("", hn.comment_text(data))
@@ -314,6 +320,8 @@ def _fetch_site(ref: AtsRef, client) -> Detail:
         return Detail(INVISIBLE.sub("", jobbank.parse_detail(page)), "", [])
     if ref.ats == "BC Gov":
         return Detail(INVISIBLE.sub("", bcgov.parse_detail(page)), "", [])
+    if ref.ats == "Jobicy":
+        return Detail(INVISIBLE.sub("", jobicy.parse_detail(page)), "", [])
     rec = baystreet.parse_detail(page, None)
     if rec is None:
         raise NotFound(ref.api_url)

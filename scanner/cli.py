@@ -23,7 +23,7 @@ from scanner.models import Job
 from scanner.net import client_from_config
 from scanner.pipeline import run_stream
 from scanner.score import Scorer
-from scanner.sources import ats, baystreet, bcgov, builtin, canadalist, feashliaa, hn, jobbank, listing, simplify, watchlist, yc
+from scanner.sources import ats, baystreet, bcgov, builtin, canadalist, feashliaa, hn, jobbank, jobicy, adzuna, listing, simplify, watchlist, yc
 from scanner.state import GapsStore, SeenStore
 
 log = logging.getLogger("scanner")
@@ -99,6 +99,8 @@ def collect(cfg, args, filters, now, since, store=None):
                                  max_pages=c.get("max_pages", jobbank.MAX_PAGES),
                                  max_queries=c.get("max_queries", jobbank.MAX_QUERIES)), ()),
         ("BC Gov", "bcgov", lambda c: bcgov.fetch(http), ()),
+        ("Jobicy", "jobicy", lambda c: jobicy.fetch(http, now), ()),
+        ("Adzuna", "adzuna", lambda c: adzuna.fetch(http, c.get("terms", []), since, now, max_pages=c.get("max_pages", adzuna.MAX_PAGES)), ()),
         ("Canada List", "canadalist", lambda c: canadalist.fetch(c["urls"], http, now), ()),
     ]
     for label, key, read, pre_stages in sites:

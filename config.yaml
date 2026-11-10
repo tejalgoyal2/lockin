@@ -87,6 +87,15 @@ sources:
     urls:
       - https://raw.githubusercontent.com/hanzili/canada_sde_junior_new_grad_position/main/README.md
       - https://raw.githubusercontent.com/hanzili/canada_sde_junior_new_grad_position/main/FINANCE.md
+  jobicy:                  # Jobicy: remote jobs open to Canada (public JSON API, no key; one request an hour per query is its limit)
+    enabled: true
+  adzuna:                  # Adzuna Canada search engine (free API key: developer.adzuna.com -> secrets ADZUNA_APP_ID / ADZUNA_APP_KEY;
+                           # skipped with a note when the keys are not set)
+    enabled: true
+    max_pages: 4           # 50 results a page per term
+    terms: [software developer, software engineer, data analyst, data scientist, devops, cloud engineer, machine learning,
+            qa analyst, it support, systems administrator, network administrator, cybersecurity, web developer, business intelligence,
+            junior developer, new grad software, full stack developer, backend developer, frontend developer, python developer]
   bcgov:                   # BC Public Service: the provincial government's own job board (one table, about 80 postings)
     enabled: true
   watchlist:               # employers read directly on every run (watchlist.yaml); see scanner/sources/watchlist.py
