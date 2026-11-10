@@ -96,9 +96,9 @@
    "first": "2026-11-10",
    "last": "2026-11-10",
    "name": "desjardins",
-   "probes": 2,
-   "seen": 8,
-   "status": "empty"
+   "probes": 3,
+   "seen": 10,
+   "status": "dead"
   },
   "workday/desjardins.wd10/desjardins2": {
    "canadian": 0,
@@ -136,6 +136,24 @@
    "seen": 9,
    "status": "added"
   },
+  "workday/geaerospace.wd5/ge_externalsite": {
+   "canadian": 0,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "geaerospace",
+   "probes": 1,
+   "seen": 7,
+   "status": "empty"
+  },
+  "workday/gehc.wd5/gehc_externalsite": {
+   "canadian": 0,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "gehc",
+   "probes": 1,
+   "seen": 7,
+   "status": "empty"
+  },
   "workday/gevernova.wd5/vernova_externalsite": {
    "canadian": 14,
    "first": "2026-11-09",
@@ -168,6 +186,15 @@
    "first": "2026-11-10",
    "last": "2026-11-10",
    "name": "guidehouse",
+   "probes": 2,
+   "seen": 8,
+   "status": "empty"
+  },
+  "workday/highmarkhealth.wd1/highmark": {
+   "canadian": 0,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "highmarkhealth",
    "probes": 1,
    "seen": 7,
    "status": "empty"
@@ -213,9 +240,18 @@
    "first": "2026-11-10",
    "last": "2026-11-10",
    "name": "jj",
-   "probes": 2,
+   "probes": 3,
    "seen": 7,
-   "status": "empty"
+   "status": "dead"
+  },
+  "workday/jll.wd1/jllcareers": {
+   "canadian": 56,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "jll",
+   "probes": 0,
+   "seen": 8,
+   "status": "added"
   },
   "workday/ledcor.wd3/ledcor_external": {
    "canadian": 161,
@@ -240,7 +276,7 @@
    "first": "2026-11-10",
    "last": "2026-11-10",
    "name": "maxar",
-   "probes": 1,
+   "probes": 2,
    "seen": 7,
    "status": "empty"
   },
@@ -249,7 +285,7 @@
    "first": "2026-11-10",
    "last": "2026-11-10",
    "name": "micron",
-   "probes": 1,
+   "probes": 2,
    "seen": 8,
    "status": "empty"
   },
@@ -258,8 +294,8 @@
    "first": "2026-11-10",
    "last": "2026-11-10",
    "name": "msd",
-   "probes": 1,
-   "seen": 7,
+   "probes": 2,
+   "seen": 8,
    "status": "empty"
   },
   "workday/myview.wd3/paradox_careers": {
@@ -280,6 +316,15 @@
    "seen": 9,
    "status": "added"
   },
+  "workday/nttlimited.wd3/ntt_careers": {
+   "canadian": 0,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "nttlimited",
+   "probes": 1,
+   "seen": 7,
+   "status": "empty"
+  },
   "workday/petronascanada.wd3/petronascanada": {
    "canadian": 28,
    "first": "2026-11-10",
@@ -296,6 +341,15 @@
    "name": "pwc",
    "probes": 1,
    "seen": 7,
+   "status": "empty"
+  },
+  "workday/regions.wd5/regions_careers": {
+   "canadian": 0,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "regions",
+   "probes": 1,
+   "seen": 9,
    "status": "empty"
   },
   "workday/roche.wd3/roche-ext": {

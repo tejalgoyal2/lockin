@@ -119,6 +119,10 @@
   "name": "LBMX",
   "checked": "2026-11-07"
  },
+ "BambooHR:marsdd": {
+  "name": "MaRS Discovery District",
+  "checked": "2026-11-10"
+ },
  "BambooHR:martello": {
   "name": "Martello Technologies",
   "checked": "2026-10-28"
@@ -146,6 +150,10 @@
  "BambooHR:torontobluejays": {
   "name": "Toronto Blue Jays",
   "checked": "2026-11-09"
+ },
+ "BambooHR:tractionrec": {
+  "name": "Traction Rec",
+  "checked": "2026-11-10"
  },
  "BambooHR:wesley": {
   "name": "Wesley",
@@ -299,6 +307,10 @@
   "name": "",
   "checked": "2026-11-09"
  },
+ "Workday:fairstone.wd3.myworkdayjobs.com/fairstonecareers": {
+  "name": "",
+  "checked": "2026-11-10"
+ },
  "Workday:fiserv.wd5.myworkdayjobs.com/ext": {
   "name": "",
   "checked": "2026-11-09"
@@ -379,6 +391,14 @@
   "name": "",
   "checked": "2026-11-03"
  },
+ "Workday:medaviehs.wd10.myworkdayjobs.com/blue_cross_life_external": {
+  "name": "",
+  "checked": "2026-11-10"
+ },
+ "Workday:medaviehs.wd10.myworkdayjobs.com/medavie_external": {
+  "name": "",
+  "checked": "2026-11-10"
+ },
  "Workday:mitel.wd3.myworkdayjobs.com/mitelcareers": {
   "name": "",
   "checked": "2026-11-02"
@@ -422,6 +442,10 @@
  "Workday:petvalu.wd3.myworkdayjobs.com/external_career_site_pet_valu_canada": {
   "name": "PetValu",
   "checked": "2026-11-09"
+ },
+ "Workday:priceline.wd1.myworkdayjobs.com/priceline": {
+  "name": "",
+  "checked": "2026-11-10"
  },
  "Workday:primerica.wd1.myworkdayjobs.com/pri": {
   "name": "",
@@ -514,6 +538,10 @@
  "Workday:uwaterloo.wd3.myworkdayjobs.com/uw_careers": {
   "name": "",
   "checked": "2026-11-09"
+ },
+ "Workday:vaderstad.wd3.myworkdayjobs.com/external_careers": {
+  "name": "",
+  "checked": "2026-11-10"
  },
  "Workday:wasteconnections.wd1.myworkdayjobs.com/careers": {
   "name": "",
