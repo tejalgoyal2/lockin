@@ -20,7 +20,7 @@ from scanner.text import html_to_text
 
 SOURCE = "SuccessFactors"
 MAX_PAGES = 40            # pages of whatever size the site uses (15, 25 ...): 600 to 1,000 postings
-BOARD_SECONDS = 150       # newest first: what is read in this time is what matters
+BOARD_SECONDS = 300       # newest first: what is read in this time is what matters
 HORIZON_DAYS = 31         # older than this is never wanted (the widest window anyone asks for is a month)
 _SLUG = re.compile(r"^(?P<host>[A-Za-z0-9.-]+\.[A-Za-z]{2,})(?P<prefix>/[A-Za-z0-9_-]+)?$")
 _JOB_PATH = re.compile(r"^(?:/[^/]+)?/job/[^/]+/\d{5,}/?$")

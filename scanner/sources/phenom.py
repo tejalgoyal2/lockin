@@ -16,7 +16,7 @@ from scanner.text import html_to_text
 
 PAGE = 40                 # postings per request (the endpoint accepts at least 40)
 MAX_PAGES = 25            # 1,000 postings per site
-BOARD_SECONDS = 150       # newest first: what is read in this time is what matters
+BOARD_SECONDS = 300       # newest first: what is read in this time is what matters
 _SLUG = re.compile(r"^(?P<host>[A-Za-z0-9.-]+)/(?P<country>[a-z]{2})/(?P<lang>[a-z]{2})$")
 _JOB_PATH = re.compile(r"^/[a-z]{2}/[a-z]{2}/job/[A-Za-z0-9_-]+")
 
