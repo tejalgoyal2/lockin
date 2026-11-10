@@ -39,7 +39,7 @@ sources:
   jobbank:                 # Job Bank (jobbank.gc.ca): the federal job board; its results also carry the partner sites' postings,
                            # CivicJobs.ca (municipal jobs) among them. Each occupation and keyword is paged 25 at a time, newest first
     enabled: true
-    max_days: 3            # a normal run asks for the last 3 days only (runs are 12 h apart; seen.json remembers the rest).
+    max_days: 5            # a normal run asks for the last 5 days only (runs are 8 h apart; seen.json remembers the rest, and 5 days survives a dropped run or two).
                            # --since N / the Actions input since_days asks for the full N days instead
     max_pages: 12          # results pages per search (300 postings)
     max_queries: 200       # requests per run, 5 s apart (17 minutes at the very most)
@@ -451,7 +451,7 @@ cluster:
 
 notion:
   api_version: "2026-03-11"   # Notion-Version header; 2026-03-11 renamed `archived` to `in_trash`
-  daily_cap: 150              # at most this many rows written per run, highest Score first (a ten-day window and ~150 boards
+  daily_cap: 500              # at most this many rows written per run, highest Score first (a ten-day window and ~150 boards
                               # find several hundred jobs; the owner wants them all, so the cap is a safety valve, not a filter)
   verify_readback_min_chars: 4000   # after writing, read back a JD at least this long and compare lengths
   # Property names exactly as they appear in the Feed. The scanner never writes `interested` / `apply` /

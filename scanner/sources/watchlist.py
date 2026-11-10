@@ -29,11 +29,11 @@ LABEL = {"greenhouse": "Greenhouse", "lever": "Lever", "ashby": "Ashby", "workda
          "smartrecruiters": "SmartRecruiters", "phenom": "Phenom", "successfactors": "SuccessFactors",
          "icims": "iCIMS"}
 WORKDAY_PAGE = 20          # Workday's maximum page size
-WORKDAY_MAX_PAGES = 50     # 1,000 postings per tenant (TD lists ~950 Canadian ones)
+WORKDAY_MAX_PAGES = 100    # 1,000 postings per tenant (TD lists ~950 Canadian ones)
 WORKDAY_MAX_PAGES_FULL = 50  # no country facet: read up to 1,000 postings (~20 s at the polite pace)
 SR_PAGE = 100
 SR_MAX_PAGES = 5
-BOARD_SECONDS = 150        # one board never holds the run longer than this: a big tenant is read newest first, so the
+BOARD_SECONDS = 300        # one board never holds the run longer than this: a big tenant is read newest first, so the
                            # postings that matter are in the pages already read (the rest is logged, not waited for)
 
 

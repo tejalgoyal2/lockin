@@ -22,7 +22,7 @@ Design notes live in [SPEC.md](SPEC.md). Opinions about the job market do not.
    "Senior", "Staff", "Principal" and "Director of Vibes" do not make it through.
 3. Fetch each JD (Greenhouse, Lever, Ashby, Workday, BambooHR, SmartRecruiters, Phenom, and the job sites), apply the JD rules (3+ years, current
    enrollment, clearance) and score the fit against `skills.yaml` / `gaps.yaml`.
-4. Write the top `notion.daily_cap` (150) new jobs to the Feed, skipping anything in `state/seen.json` or
+4. Write the top `notion.daily_cap` (500) new jobs to the Feed, skipping anything in `state/seen.json` or
    already in the Feed by Link. At the start of the run, Feed rows whose `done-del` box is ticked (your Notion
    automation ticks it after copying the row to your main database) are trashed; no other row is ever trashed.
 5. Commit `state/` and `reports/` back to the repo. `reports/latest.md` is the full candidate list; `reports/dropped.md` lists every job
@@ -49,7 +49,7 @@ Nothing needs installing: open the repo on GitHub, **Actions**, pick a workflow,
 |---|---|---|
 | `dry_run` | ticked | scan and report without touching Notion or `state/seen.json`. **Untick it for a real run**; keep it ticked to look first. |
 | `since_days` | `10` (`freshness.default_days`) | widen the net: `14` or `30` after a break, a new source or a fix. Safe any time: `state/seen.json` keeps a job from being written twice, so a wide window only costs a longer run. |
-| `max_rows` | `150` (`notion.daily_cap`) | how many new rows this run may write (the best-scoring ones go first; the rest wait for the next run while they are inside the window). `5` to try it, `100` to empty a backlog. |
+| `max_rows` | `500` (`notion.daily_cap`) | how many new rows this run may write (the best-scoring ones go first; the rest wait for the next run while they are inside the window). `5` to try it, `100` to empty a backlog. |
 
 Typical recipes: *"did the last fix work?"* is `dry_run` ticked, `since_days` 14, then read the log and
 `reports/latest.md`. *"I was away for two weeks"* is `dry_run` unticked, `since_days` 14, `max_rows` 100. From a

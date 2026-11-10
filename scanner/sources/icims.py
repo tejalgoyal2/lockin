@@ -22,7 +22,7 @@ from scanner.text import html_to_text
 
 SOURCE = "iCIMS"
 MAX_PAGES = 40
-BOARD_SECONDS = 150
+BOARD_SECONDS = 300
 _HOST = re.compile(r"^[A-Za-z0-9.-]+\.icims\.com$")
 _JOB_PATH = re.compile(r"^/jobs/\d+/[^/]*/job/?$")
 _ROW = re.compile(r'<div class="row">(?:(?!<div class="row">).)*?class="iCIMS_Anchor".*?(?=<div class="row">|</li>|$)', re.S)
