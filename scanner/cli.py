@@ -379,6 +379,12 @@ def run_clean_feed(args: argparse.Namespace) -> int:
         raise UsageError(str(exc)) from None
     items = feed_clean.list_items(client, feed)
     print(f"Feed: {len(items)} rows read", flush=True)
+    if args.wipe_all:                              # a fresh start: every row the owner has not touched goes (Notion keeps them 30 days)
+        rep = feed_clean.CleanReport([feed_clean.Verdict(i, "wipe (fresh start)") for i in items])
+        print(feed_clean.render(rep, dry_run=args.dry_run))
+        if not args.dry_run:
+            print(f"Trashed {feed_clean.trash(client, rep, dry_run=False)} rows")
+        return 0
     scorer = Scorer.load()
     http = client_from_config(cfg["jd"])
     refreshed = None
@@ -550,6 +556,9 @@ def main(argv: list[str] | None = None) -> int:
     c = sub.add_parser("clean-feed", help="apply the current rules to the rows already in the Notion Feed "
                                          "and trash the ones that fail (never a row with Interested / Apply / done-del ticked)")
     c.add_argument("--dry-run", action="store_true", help="report what would be trashed; trash nothing")
+    c.add_argument("--wipe-all", action="store_true",
+                   help="trash every row, whatever the rules say, except those with Interested / Apply / done-del ticked "
+                        "(then a scan with an empty state/seen.json refills the Feed from scratch)")
     c.add_argument("--rescore", action="store_true",
                    help="also recompute Company, Fit % and Signals of the rows that stay (all boxes unticked)")
     c.add_argument("--skip-refresh", action="store_true",

@@ -168,3 +168,10 @@ def test_unknown_location_does_not_trigger_the_us_authorization_rule():
     jd = GOOD_JD + " Must be authorized to work in the United States."
     assert verdict(item(jd=jd), "").rule is None
     assert verdict(item(jd=jd), "Austin, TX").rule == "location_not_canada"       # the location rule comes first
+
+
+def test_wipe_all_trashes_every_untouched_row_but_never_a_ticked_one():
+    rows = [item(page="a"), item(page="b", interested=True), item(page="c", apply=True), item(page="d")]
+    rep = FC.CleanReport([FC.Verdict(i, "wipe (fresh start)") for i in rows])
+    assert [v.item.page_id for v in rep.trashable()] == ["a", "d"]
+    assert [v.item.page_id for v in rep.protected()] == ["b", "c"]
