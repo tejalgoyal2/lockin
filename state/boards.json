@@ -27,6 +27,24 @@
    "seen": 11,
    "status": "added"
   },
+  "workday/astrazeneca.wd3/broadbean_external": {
+   "canadian": 0,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "astrazeneca",
+   "probes": 1,
+   "seen": 7,
+   "status": "empty"
+  },
+  "workday/astrazeneca.wd3/careers": {
+   "canadian": 0,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "astrazeneca",
+   "probes": 1,
+   "seen": 7,
+   "status": "empty"
+  },
   "workday/bah.wd1/bah_jobs": {
    "canadian": 0,
    "first": "2026-11-09",
@@ -78,7 +96,7 @@
    "first": "2026-11-10",
    "last": "2026-11-10",
    "name": "desjardins",
-   "probes": 1,
+   "probes": 2,
    "seen": 8,
    "status": "empty"
   },
@@ -96,9 +114,9 @@
    "first": "2026-11-10",
    "last": "2026-11-10",
    "name": "elevancehealth",
-   "probes": 2,
-   "seen": 11,
-   "status": "empty"
+   "probes": 3,
+   "seen": 8,
+   "status": "dead"
   },
   "workday/ensemblehp.wd5/ensemblehealthpartnerscareers": {
    "canadian": 0,
@@ -145,6 +163,15 @@
    "seen": 23,
    "status": "added"
   },
+  "workday/guidehouse.wd1/external": {
+   "canadian": 0,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "guidehouse",
+   "probes": 1,
+   "seen": 7,
+   "status": "empty"
+  },
   "workday/hp.wd5/exteu-ac-careersite": {
    "canadian": 17,
    "first": "2026-11-10",
@@ -186,8 +213,8 @@
    "first": "2026-11-10",
    "last": "2026-11-10",
    "name": "jj",
-   "probes": 1,
-   "seen": 9,
+   "probes": 2,
+   "seen": 7,
    "status": "empty"
   },
   "workday/ledcor.wd3/ledcor_external": {
@@ -208,6 +235,33 @@
    "seen": 8,
    "status": "added"
   },
+  "workday/maxar.wd1/vantor": {
+   "canadian": 0,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "maxar",
+   "probes": 1,
+   "seen": 7,
+   "status": "empty"
+  },
+  "workday/micron.wd1/external": {
+   "canadian": 0,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "micron",
+   "probes": 1,
+   "seen": 8,
+   "status": "empty"
+  },
+  "workday/msd.wd5/searchjobs": {
+   "canadian": 0,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "msd",
+   "probes": 1,
+   "seen": 7,
+   "status": "empty"
+  },
   "workday/myview.wd3/paradox_careers": {
    "canadian": 550,
    "first": "2026-11-09",
@@ -226,6 +280,24 @@
    "seen": 9,
    "status": "added"
   },
+  "workday/petronascanada.wd3/petronascanada": {
+   "canadian": 28,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "petronascanada",
+   "probes": 0,
+   "seen": 7,
+   "status": "added"
+  },
+  "workday/pwc.wd3/crm_experienced_careers_site": {
+   "canadian": 0,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "pwc",
+   "probes": 1,
+   "seen": 7,
+   "status": "empty"
+  },
   "workday/roche.wd3/roche-ext": {
    "canadian": 7,
    "first": "2026-11-10",
@@ -233,6 +305,15 @@
    "name": "roche",
    "probes": 0,
    "seen": 11,
+   "status": "added"
+  },
+  "workday/slihrms.wd3/careers": {
+   "canadian": 266,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "slihrms",
+   "probes": 0,
+   "seen": 7,
    "status": "added"
   },
   "workday/synechron.wd1/synechroncareers": {
