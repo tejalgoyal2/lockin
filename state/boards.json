@@ -1,5 +1,14 @@
 {
  "found": {
+  "workday/abb.wd3/external_career_page": {
+   "canadian": 14,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "abb",
+   "probes": 0,
+   "seen": 10,
+   "status": "added"
+  },
   "workday/aero.wd5/external": {
    "canadian": 0,
    "first": "2026-11-09",
@@ -28,13 +37,13 @@
    "status": "dead"
   },
   "workday/bmo.wd3/privileged": {
-   "canadian": 0,
+   "canadian": 27,
    "first": "2026-11-09",
-   "last": "2026-11-09",
+   "last": "2026-11-10",
    "name": "bmo",
    "probes": 1,
-   "seen": 19,
-   "status": "empty"
+   "seen": 10,
+   "status": "added"
   },
   "workday/boeing.wd1/external_subsidiary": {
    "canadian": 2,
@@ -64,21 +73,30 @@
    "seen": 46,
    "status": "added"
   },
+  "workday/desjardins.wd10/desjardins": {
+   "canadian": 0,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "desjardins",
+   "probes": 1,
+   "seen": 8,
+   "status": "empty"
+  },
   "workday/desjardins.wd10/desjardins2": {
    "canadian": 0,
    "first": "2026-11-09",
    "last": "2026-11-10",
    "name": "desjardins",
-   "probes": 2,
+   "probes": 3,
    "seen": 15,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/elevancehealth.wd1/ant": {
    "canadian": 0,
    "first": "2026-11-10",
    "last": "2026-11-10",
    "name": "elevancehealth",
-   "probes": 1,
+   "probes": 2,
    "seen": 11,
    "status": "empty"
   },
@@ -90,6 +108,15 @@
    "probes": 3,
    "seen": 28,
    "status": "dead"
+  },
+  "workday/fil.wd3/fidelitycanada": {
+   "canadian": 116,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "fil",
+   "probes": 0,
+   "seen": 9,
+   "status": "added"
   },
   "workday/gevernova.wd5/vernova_externalsite": {
    "canadian": 14,
@@ -116,6 +143,15 @@
    "name": "globalhr",
    "probes": 0,
    "seen": 23,
+   "status": "added"
+  },
+  "workday/hp.wd5/exteu-ac-careersite": {
+   "canadian": 17,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "hp",
+   "probes": 0,
+   "seen": 8,
    "status": "added"
   },
   "workday/hpe.wd5/acjobsite": {
@@ -145,6 +181,33 @@
    "seen": 13,
    "status": "dead"
   },
+  "workday/jj.wd5/displacedemployees": {
+   "canadian": 0,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "jj",
+   "probes": 1,
+   "seen": 9,
+   "status": "empty"
+  },
+  "workday/ledcor.wd3/ledcor_external": {
+   "canadian": 161,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "ledcor",
+   "probes": 0,
+   "seen": 8,
+   "status": "added"
+  },
+  "workday/mars.wd3/external": {
+   "canadian": 24,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "mars",
+   "probes": 0,
+   "seen": 8,
+   "status": "added"
+  },
   "workday/myview.wd3/paradox_careers": {
    "canadian": 550,
    "first": "2026-11-09",
@@ -154,6 +217,15 @@
    "seen": 12,
    "status": "added"
   },
+  "workday/navcanada.wd10/nav_careers": {
+   "canadian": 26,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "navcanada",
+   "probes": 0,
+   "seen": 9,
+   "status": "added"
+  },
   "workday/roche.wd3/roche-ext": {
    "canadian": 7,
    "first": "2026-11-10",
@@ -161,6 +233,15 @@
    "name": "roche",
    "probes": 0,
    "seen": 11,
+   "status": "added"
+  },
+  "workday/synechron.wd1/synechroncareers": {
+   "canadian": 8,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "synechron",
+   "probes": 0,
+   "seen": 9,
    "status": "added"
   }
  },

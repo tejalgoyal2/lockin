@@ -11,3 +11,11 @@ boards:
   - {ats: workday, slug: myview.wd3/paradox_careers, name: "myview"}        # 550 Canadian postings when found, 2026-11-09
   - {ats: workday, slug: ag.wd3/airbus, name: "ag"}        # 16 Canadian postings when found, 2026-11-10
   - {ats: workday, slug: roche.wd3/roche-ext, name: "roche"}        # 7 Canadian postings when found, 2026-11-10
+  - {ats: workday, slug: abb.wd3/external_career_page, name: "abb"}        # 14 Canadian postings when found, 2026-11-10
+  - {ats: workday, slug: bmo.wd3/privileged, name: "bmo"}        # 27 Canadian postings when found, 2026-11-10
+  - {ats: workday, slug: fil.wd3/fidelitycanada, name: "fil"}        # 116 Canadian postings when found, 2026-11-10
+  - {ats: workday, slug: navcanada.wd10/nav_careers, name: "navcanada"}        # 26 Canadian postings when found, 2026-11-10
+  - {ats: workday, slug: synechron.wd1/synechroncareers, name: "synechron"}        # 8 Canadian postings when found, 2026-11-10
+  - {ats: workday, slug: hp.wd5/exteu-ac-careersite, name: "hp"}        # 17 Canadian postings when found, 2026-11-10
+  - {ats: workday, slug: ledcor.wd3/ledcor_external, name: "ledcor"}        # 161 Canadian postings when found, 2026-11-10
+  - {ats: workday, slug: mars.wd3/external, name: "mars"}        # 24 Canadian postings when found, 2026-11-10
