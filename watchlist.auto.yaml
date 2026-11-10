@@ -6,3 +6,6 @@
 boards:
   - {ats: workday, slug: capitalone.wd12/capital_one, name: "capitalone"}        # 21 Canadian postings when found, 2026-11-09
   - {ats: workday, slug: globalhr.wd5/rec_rtx_ext_gateway, name: "globalhr"}        # 6 Canadian postings when found, 2026-11-09
+  - {ats: workday, slug: boeing.wd1/external_subsidiary, name: "boeing"}        # 2 Canadian postings when found, 2026-11-09
+  - {ats: workday, slug: gevernova.wd5/vernova_externalsite, name: "gevernova"}        # 14 Canadian postings when found, 2026-11-09
+  - {ats: workday, slug: myview.wd3/paradox_careers, name: "myview"}        # 550 Canadian postings when found, 2026-11-09
