@@ -9,3 +9,5 @@ boards:
   - {ats: workday, slug: boeing.wd1/external_subsidiary, name: "boeing"}        # 2 Canadian postings when found, 2026-11-09
   - {ats: workday, slug: gevernova.wd5/vernova_externalsite, name: "gevernova"}        # 14 Canadian postings when found, 2026-11-09
   - {ats: workday, slug: myview.wd3/paradox_careers, name: "myview"}        # 550 Canadian postings when found, 2026-11-09
+  - {ats: workday, slug: ag.wd3/airbus, name: "ag"}        # 16 Canadian postings when found, 2026-11-10
+  - {ats: workday, slug: roche.wd3/roche-ext, name: "roche"}        # 7 Canadian postings when found, 2026-11-10

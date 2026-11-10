@@ -141,6 +141,12 @@
    ],
    "title": "EverPro - Android Engineer"
   },
+  "01700722a1b053d5ef926d34af999753315b6dee": {
+   "company": "Scotiabank",
+   "date": "2026-11-10",
+   "gaps": [],
+   "title": "Mortgage Specialist - Kitchener, Cambridge, Waterloo"
+  },
   "0175fd673885aab1186ba21fbe6dcdbc59f7b242": {
    "company": "TD Bank",
    "date": "2026-11-09",
@@ -2079,6 +2085,12 @@
    "gaps": [],
    "title": "Capital Project Engineer"
   },
+  "1594b36e2a4d5887cdef054704fe4748a28ef0c8": {
+   "company": "gevernova",
+   "date": "2026-11-10",
+   "gaps": [],
+   "title": "GE Vernova Pivot to Value (P2V) Value Engineering Internship 2027"
+  },
   "15a0692a11549aedb23ebf9d4721a9fe08b6c0b0": {
    "company": "Slihrms",
    "date": "2026-11-07",
@@ -3004,6 +3016,14 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Analyst, Regulatory Compliance"
+  },
+  "1f83df9e8c88ce2f0d58ade57f74bb251b7bf58b": {
+   "company": "Sophos",
+   "date": "2026-11-10",
+   "gaps": [
+    "GCP"
+   ],
+   "title": "AI and Automation Engineer"
   },
   "1f91de0165e459e90e288b6a7f091a6eb396c5d4": {
    "company": "CIBC",
@@ -5135,6 +5155,12 @@
    "gaps": [],
    "title": "Distribution Specialist (12 Month Contract)"
   },
+  "361ae60fcdc5d01baf76f1505cf40f1c35aa171b": {
+   "company": "Ooma",
+   "date": "2026-11-10",
+   "gaps": [],
+   "title": "Support Desk Analyst"
+  },
   "3636b383ace98dc869b9930a3d34e70ec027d348": {
    "company": "Nutreco",
    "date": "2026-10-07",
@@ -5200,6 +5226,12 @@
     "Perl"
    ],
    "title": "EDA Software Engineer"
+  },
+  "36e8dcdc2602d72da295490d1aaa7500284539a0": {
+   "company": "gevernova",
+   "date": "2026-11-10",
+   "gaps": [],
+   "title": "Nuclear – Engineering Interns"
   },
   "36fd309ba8cdb642375ff72be246904994588a6f": {
    "company": "BMO",
@@ -6196,6 +6228,12 @@
    "date": "2026-11-09",
    "gaps": [],
    "title": "Mortgage Specialist Associate"
+  },
+  "40712cd57c90326cf3eb9b66ab6208e1358293eb": {
+   "company": "gevernova",
+   "date": "2026-11-10",
+   "gaps": [],
+   "title": "Executive Compensation Analyst"
   },
   "4080bcde93c8b8713dcb9b456d622318eb32c82e": {
    "company": "Gsk",
@@ -9238,6 +9276,15 @@
    "gaps": [],
    "title": "IT Services Specialist"
   },
+  "5e9623e6162fc24239bea013c8c3e97745441411": {
+   "company": "Air Canada",
+   "date": "2026-11-10",
+   "gaps": [
+    "Cisco",
+    "Splunk"
+   ],
+   "title": "IT Operations Centre Analyst - ITOC"
+  },
   "5ea21993e6ac25112f0328cce29164e4e953d9fd": {
    "company": "Enigma Key Inc",
    "date": "2026-11-09",
@@ -10390,6 +10437,12 @@
     "Tableau"
    ],
    "title": "Pricing - Products & Partnerships Analyst"
+  },
+  "6baf0d1df44caf766be118f31fe13aa9bb607bef": {
+   "company": "Scotiabank",
+   "date": "2026-11-10",
+   "gaps": [],
+   "title": "Mortgage Specialist - Port Elgin/Hanover"
   },
   "6bd88099aa0da6df2d810b3d32d1e023180ab296": {
    "company": "Slrconsulting",
@@ -12225,6 +12278,12 @@
    "date": "2026-11-09",
    "gaps": [],
    "title": "Textile Engineer Intern"
+  },
+  "7cf18f83a9a7e29c076e7b0b35a4a851b7b2433c": {
+   "company": "Ontario Northland",
+   "date": "2026-11-10",
+   "gaps": [],
+   "title": "Information Technology (IT) Analyst"
   },
   "7cfa051ef77c11f2f982d96a97e49fadf40aa886": {
    "company": "Slihrms",
@@ -17956,6 +18015,12 @@
    ],
    "title": "Customer Service Analyst"
   },
+  "b8966b5d2f0383678f0334d6127e0eeab1d13998": {
+   "company": "Schneider's Computing Ltd.",
+   "date": "2026-11-10",
+   "gaps": [],
+   "title": "Graphic Designer, Web"
+  },
   "b8a048203bb02f8a0f12254a620e4715ac49dc75": {
    "company": "Fedex",
    "date": "2026-10-16",
@@ -19852,6 +19917,12 @@
    "date": "2026-11-03",
    "gaps": [],
    "title": "Infrastructure Analyst"
+  },
+  "cc6c4aa616ca2351cf65d62f5e902980b6525fb5": {
+   "company": "Loblaw",
+   "date": "2026-11-10",
+   "gaps": [],
+   "title": "Front End Trainer"
   },
   "cc7ed4d51ae141f269fb9f2cd4cfb6a8d465b708": {
    "company": "Everbridge",
@@ -24129,6 +24200,14 @@
    "date": "2026-10-27",
    "gaps": [],
    "title": "Client Data Steward"
+  },
+  "f983b80faea89557a16cfbc03e50af5539b7ba20": {
+   "company": "gevernova",
+   "date": "2026-11-10",
+   "gaps": [
+    "integration testing"
+   ],
+   "title": "Nuclear Engineering – Direct Hire"
   },
   "f98474fecfb389ca94bd1932f9b69b0d0fe6dd0e": {
    "company": "Aviva",

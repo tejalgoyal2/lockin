@@ -3,20 +3,29 @@
   "workday/aero.wd5/external": {
    "canadian": 0,
    "first": "2026-11-09",
-   "last": "2026-11-09",
+   "last": "2026-11-10",
    "name": "aero",
-   "probes": 2,
+   "probes": 3,
    "seen": 14,
-   "status": "empty"
+   "status": "dead"
+  },
+  "workday/ag.wd3/airbus": {
+   "canadian": 16,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "ag",
+   "probes": 0,
+   "seen": 11,
+   "status": "added"
   },
   "workday/bah.wd1/bah_jobs": {
    "canadian": 0,
    "first": "2026-11-09",
-   "last": "2026-11-09",
+   "last": "2026-11-10",
    "name": "bah",
-   "probes": 2,
+   "probes": 3,
    "seen": 25,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/bmo.wd3/privileged": {
    "canadian": 0,
@@ -40,11 +49,11 @@
    "canadian": 0,
    "error": "HTTPError: 502 Server Error: Bad Gateway for url: https://caci.wd1.myworkdayjobs.com/wday/cxs/caci/external/jobs",
    "first": "2026-11-09",
-   "last": "2026-11-09",
+   "last": "2026-11-10",
    "name": "caci",
-   "probes": 2,
+   "probes": 3,
    "seen": 14,
-   "status": "error"
+   "status": "dead"
   },
   "workday/capitalone.wd12/capital_one": {
    "canadian": 21,
@@ -58,20 +67,29 @@
   "workday/desjardins.wd10/desjardins2": {
    "canadian": 0,
    "first": "2026-11-09",
-   "last": "2026-11-09",
+   "last": "2026-11-10",
    "name": "desjardins",
-   "probes": 1,
+   "probes": 2,
    "seen": 15,
+   "status": "empty"
+  },
+  "workday/elevancehealth.wd1/ant": {
+   "canadian": 0,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "elevancehealth",
+   "probes": 1,
+   "seen": 11,
    "status": "empty"
   },
   "workday/ensemblehp.wd5/ensemblehealthpartnerscareers": {
    "canadian": 0,
    "first": "2026-11-09",
-   "last": "2026-11-09",
+   "last": "2026-11-10",
    "name": "ensemblehp",
-   "probes": 2,
+   "probes": 3,
    "seen": 28,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/gevernova.wd5/vernova_externalsite": {
    "canadian": 14,
@@ -85,11 +103,11 @@
   "workday/ghr.wd1/us-emplsv": {
    "canadian": 0,
    "first": "2026-11-09",
-   "last": "2026-11-09",
+   "last": "2026-11-10",
    "name": "ghr",
-   "probes": 2,
+   "probes": 3,
    "seen": 12,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/globalhr.wd5/rec_rtx_ext_gateway": {
    "canadian": 6,
@@ -103,29 +121,29 @@
   "workday/hpe.wd5/acjobsite": {
    "canadian": 0,
    "first": "2026-11-09",
-   "last": "2026-11-09",
+   "last": "2026-11-10",
    "name": "hpe",
-   "probes": 2,
+   "probes": 3,
    "seen": 12,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/hpe.wd5/jobsathpe": {
    "canadian": 0,
    "first": "2026-11-09",
-   "last": "2026-11-09",
+   "last": "2026-11-10",
    "name": "hpe",
-   "probes": 2,
+   "probes": 3,
    "seen": 14,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/hpe.wd5/wfmathpe": {
    "canadian": 0,
    "first": "2026-11-09",
-   "last": "2026-11-09",
+   "last": "2026-11-10",
    "name": "hpe",
-   "probes": 2,
+   "probes": 3,
    "seen": 13,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/myview.wd3/paradox_careers": {
    "canadian": 550,
@@ -134,6 +152,15 @@
    "name": "myview",
    "probes": 0,
    "seen": 12,
+   "status": "added"
+  },
+  "workday/roche.wd3/roche-ext": {
+   "canadian": 7,
+   "first": "2026-11-10",
+   "last": "2026-11-10",
+   "name": "roche",
+   "probes": 0,
+   "seen": 11,
    "status": "added"
   }
  },
