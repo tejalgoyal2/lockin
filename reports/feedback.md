@@ -1,6 +1,6 @@
 # What gets picked
 
-Reviewed rows (ticked `done-del`) since 2026-10-06: **189**, picked (`Interested` or `Apply`): **51** (27%). Counts only; a rate needs 10+ rows. If Fit % predicts your picks, the rate rises down the Fit table.
+Reviewed rows (ticked `done-del`) since 2026-10-06: **274**, picked (`Interested` or `Apply`): **80** (29%). Counts only; a rate needs 10+ rows. If Fit % predicts your picks, the rate rises down the Fit table.
 
 ## Fit %
 
@@ -8,42 +8,45 @@ Reviewed rows (ticked `done-del`) since 2026-10-06: **189**, picked (`Interested
 |---|---:|---:|---:|
 | <60 | 16 | 1 | 6% |
 | 60-69 | 35 | 6 | 17% |
-| 70-79 | 30 | 10 | 33% |
-| 80-89 | 58 | 18 | 31% |
-| 90+ | 19 | 6 | 32% |
+| 70-79 | 45 | 14 | 31% |
+| 80-89 | 118 | 41 | 35% |
+| 90+ | 29 | 8 | 28% |
 | n/a | 31 | 10 | 32% |
 
 ## Source
 
 | Source | Reviewed | Picked | Pick rate |
 |---|---:|---:|---:|
-| Workday | 76 | 20 | 26% |
-| Greenhouse | 35 | 7 | 20% |
-| Ashby | 21 | 3 | 14% |
-| Simplify | 18 | 12 | 67% |
-| BambooHR | 14 | 4 | 29% |
-| Lever | 11 | 3 | 27% |
+| Workday | 106 | 31 | 29% |
+| Greenhouse | 43 | 9 | 21% |
+| Ashby | 26 | 4 | 15% |
+| BambooHR | 21 | 6 | 29% |
+| Simplify | 20 | 12 | 60% |
+| Job Bank | 18 | 6 | 33% |
+| Lever | 17 | 4 | 24% |
 | none | 8 | 0 | - |
-| Built In | 5 | 1 | - |
+| Built In | 6 | 2 | - |
+| Jobicy | 6 | 4 | - |
+| SuccessFactors | 2 | 1 | - |
 | Paylocity | 1 | 1 | - |
 
 ## Level tag
 
 | Level tag | Reviewed | Picked | Pick rate |
 |---|---:|---:|---:|
-| none | 152 | 35 | 23% |
-| 0-2 years | 15 | 4 | 27% |
-| recent graduate | 9 | 5 | - |
+| none | 231 | 61 | 26% |
+| 0-2 years | 17 | 5 | 29% |
+| recent graduate | 10 | 6 | 60% |
+| junior | 7 | 4 | - |
 | new grad | 7 | 3 | - |
-| junior | 5 | 3 | - |
-| entry level | 1 | 1 | - |
+| entry level | 2 | 1 | - |
 
 ## Warning tag
 
 | Warning tag | Reviewed | Picked | Pick rate |
 |---|---:|---:|---:|
-| none | 123 | 31 | 25% |
-| 2+ yrs | 34 | 10 | 29% |
+| none | 176 | 51 | 29% |
+| 2+ yrs | 66 | 19 | 29% |
 | jd unavailable | 23 | 8 | 35% |
 | low signal | 8 | 2 | - |
 | P.Eng req | 1 | 0 | - |
