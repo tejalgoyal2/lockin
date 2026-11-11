@@ -12,6 +12,8 @@ cent. It runs on GitHub Actions while you do something healthier, like refreshin
 
 Design notes live in [SPEC.md](SPEC.md). Opinions about the job market do not.
 
+**Using the Feed to get hired, and the keys worth adding:** [docs/IDEAS.md](docs/IDEAS.md).
+
 ## What a run does
 
 1. Read [Feashliaa/job-board-data](https://github.com/Feashliaa/job-board-data), the
