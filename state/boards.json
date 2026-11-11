@@ -27,6 +27,15 @@
    "seen": 11,
    "status": "added"
   },
+  "workday/alfalaval.wd3/alfa_laval_jobs": {
+   "canadian": 0,
+   "first": "2026-11-11",
+   "last": "2026-11-11",
+   "name": "alfalaval",
+   "probes": 1,
+   "seen": 5,
+   "status": "empty"
+  },
   "workday/astrazeneca.wd3/broadbean_external": {
    "canadian": 0,
    "first": "2026-11-10",
@@ -91,6 +100,15 @@
    "seen": 46,
    "status": "added"
   },
+  "workday/corpay.wd103/ext_001": {
+   "canadian": 11,
+   "first": "2026-11-11",
+   "last": "2026-11-11",
+   "name": "corpay",
+   "probes": 0,
+   "seen": 6,
+   "status": "added"
+  },
   "workday/desjardins.wd10/desjardins": {
    "canadian": 0,
    "first": "2026-11-10",
@@ -127,6 +145,15 @@
    "seen": 28,
    "status": "dead"
   },
+  "workday/eversource.wd1/externalsite": {
+   "canadian": 0,
+   "first": "2026-11-11",
+   "last": "2026-11-11",
+   "name": "eversource",
+   "probes": 1,
+   "seen": 5,
+   "status": "empty"
+  },
   "workday/fil.wd3/fidelitycanada": {
    "canadian": 116,
    "first": "2026-11-10",
@@ -136,14 +163,23 @@
    "seen": 9,
    "status": "added"
   },
+  "workday/flir.wd1/flircareers": {
+   "canadian": 47,
+   "first": "2026-11-11",
+   "last": "2026-11-11",
+   "name": "flir",
+   "probes": 0,
+   "seen": 5,
+   "status": "added"
+  },
   "workday/geaerospace.wd5/ge_externalsite": {
    "canadian": 0,
    "first": "2026-11-10",
    "last": "2026-11-11",
    "name": "geaerospace",
-   "probes": 2,
-   "seen": 7,
-   "status": "empty"
+   "probes": 3,
+   "seen": 6,
+   "status": "dead"
   },
   "workday/gehc.wd5/gehc_externalsite": {
    "canadian": 0,
@@ -195,9 +231,9 @@
    "first": "2026-11-10",
    "last": "2026-11-11",
    "name": "highmarkhealth",
-   "probes": 2,
-   "seen": 7,
-   "status": "empty"
+   "probes": 3,
+   "seen": 5,
+   "status": "dead"
   },
   "workday/hp.wd5/exteu-ac-careersite": {
    "canadian": 17,
@@ -339,18 +375,18 @@
    "first": "2026-11-10",
    "last": "2026-11-11",
    "name": "pwc",
-   "probes": 2,
-   "seen": 7,
-   "status": "empty"
+   "probes": 3,
+   "seen": 6,
+   "status": "dead"
   },
   "workday/regions.wd5/regions_careers": {
    "canadian": 0,
    "first": "2026-11-10",
    "last": "2026-11-11",
    "name": "regions",
-   "probes": 2,
-   "seen": 9,
-   "status": "empty"
+   "probes": 3,
+   "seen": 6,
+   "status": "dead"
   },
   "workday/roche.wd3/roche-ext": {
    "canadian": 7,
@@ -370,6 +406,24 @@
    "seen": 7,
    "status": "added"
   },
+  "workday/soti.wd3/soti-next-gen": {
+   "canadian": 21,
+   "first": "2026-11-11",
+   "last": "2026-11-11",
+   "name": "soti",
+   "probes": 0,
+   "seen": 6,
+   "status": "added"
+  },
+  "workday/spgi.wd5/spgi_careers": {
+   "canadian": 6,
+   "first": "2026-11-11",
+   "last": "2026-11-11",
+   "name": "spgi",
+   "probes": 0,
+   "seen": 6,
+   "status": "added"
+  },
   "workday/synechron.wd1/synechroncareers": {
    "canadian": 8,
    "first": "2026-11-10",
@@ -377,6 +431,24 @@
    "name": "synechron",
    "probes": 0,
    "seen": 9,
+   "status": "added"
+  },
+  "workday/terminix.wd1/steritech": {
+   "canadian": 0,
+   "first": "2026-11-11",
+   "last": "2026-11-11",
+   "name": "terminix",
+   "probes": 1,
+   "seen": 7,
+   "status": "empty"
+  },
+  "workday/thermofisher.wd5/thermofishercareers": {
+   "canadian": 11,
+   "first": "2026-11-11",
+   "last": "2026-11-11",
+   "name": "thermofisher",
+   "probes": 0,
+   "seen": 6,
    "status": "added"
   }
  },

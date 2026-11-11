@@ -22,3 +22,8 @@ boards:
   - {ats: workday, slug: petronascanada.wd3/petronascanada, name: "petronascanada"}        # 28 Canadian postings when found, 2026-11-10
   - {ats: workday, slug: slihrms.wd3/careers, name: "slihrms"}        # 266 Canadian postings when found, 2026-11-10
   - {ats: workday, slug: jll.wd1/jllcareers, name: "jll"}        # 56 Canadian postings when found, 2026-11-10
+  - {ats: workday, slug: corpay.wd103/ext_001, name: "corpay"}        # 11 Canadian postings when found, 2026-11-11
+  - {ats: workday, slug: soti.wd3/soti-next-gen, name: "soti"}        # 21 Canadian postings when found, 2026-11-11
+  - {ats: workday, slug: spgi.wd5/spgi_careers, name: "spgi"}        # 6 Canadian postings when found, 2026-11-11
+  - {ats: workday, slug: thermofisher.wd5/thermofishercareers, name: "thermofisher"}        # 11 Canadian postings when found, 2026-11-11
+  - {ats: workday, slug: flir.wd1/flircareers, name: "flir"}        # 47 Canadian postings when found, 2026-11-11
