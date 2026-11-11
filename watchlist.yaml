@@ -214,3 +214,11 @@ boards:
   - {ats: ashby,          slug: docker,        name: Docker}
   - {ats: ashby,          slug: ashby,         name: Ashby}
   - {ats: ashby,          slug: sierra,        name: Sierra}
+  # Vancouver tech added 2026-11-11 (scanner discover): boards that list Canadian postings, or Vancouver employers
+  # whose board answers but has nothing open today
+  - {ats: greenhouse,     slug: globalrelay,   name: Global Relay}
+  - {ats: greenhouse,     slug: dialpad,       name: Dialpad}
+  - {ats: lever,          slug: kabam,         name: Kabam}
+  - {ats: ashby,          slug: klue,          name: Klue}
+  - {ats: ashby,          slug: koho,          name: KOHO}
+  - {ats: ashby,          slug: dapper,        name: Dapper Labs}

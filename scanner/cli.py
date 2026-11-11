@@ -23,7 +23,7 @@ from scanner.models import Job
 from scanner.net import client_from_config
 from scanner.pipeline import run_stream
 from scanner.score import Scorer
-from scanner.sources import (ats, baystreet, bcgov, builtin, canadalist, feashliaa, googlealerts, googlejobs, hn, jobbank,
+from scanner.sources import (ats, baystreet, bcgov, builtin, canadalist, feashliaa, googlealerts, googlejobs, hn, jobbank, sitesearch,
                              jobicy, adzuna, listing, simplify, supplied, watchlist, yc)
 from scanner.state import GapsStore, SeenStore
 
@@ -107,6 +107,9 @@ def collect(cfg, args, filters, now, since, store=None):
                                     per_run=c.get("queries_per_run", googlejobs.QUERIES_PER_RUN),
                                     prefer=lambda url: ats.detect_ats(url) in ats.SUPPORTED and ats.detect_ats(url) not in ats.SITES), ()),
         ("Google Alerts", "googlealerts", lambda c: googlealerts.fetch(http, now), ()),
+        ("Site Search", "sitesearch",
+         lambda c: sitesearch.fetch(http, c.get("hosts", []), c.get("titles", []), c.get("where", ""), now,
+                                    brave_per_run=c.get("brave_per_run", 15), serpapi_per_run=c.get("serpapi_per_run", 2)), ()),
         ("Canada List", "canadalist", lambda c: canadalist.fetch(c["urls"], http, now), ()),
     ]
     for label, key, read, pre_stages in sites:
@@ -387,6 +390,18 @@ def run_clean_feed(args: argparse.Namespace) -> int:
         raise UsageError(str(exc)) from None
     items = feed_clean.list_items(client, feed)
     print(f"Feed: {len(items)} rows read", flush=True)
+    if args.people_links:                          # fill the two people-search links on every row (a new column)
+        if not (feed.has("recruiter") or feed.has("manager")):
+            print("The Feed has neither a Recruiter nor a Hiring Manager URL column: nothing to fill")
+            return 0
+        done = 0
+        for item in items:
+            props = notion_feed.people_properties(feed, item.company, item.title)
+            if not args.dry_run:
+                client.request("PATCH", f"/v1/pages/{item.page_id}", json={"properties": props})
+            done += 1
+        print(f"People links: {'would fill' if args.dry_run else 'filled'} {done} rows")
+        return 0
     if args.wipe_all:                              # a fresh start: every row the owner has not touched goes (Notion keeps them 30 days)
         rep = feed_clean.CleanReport([feed_clean.Verdict(i, "wipe (fresh start)") for i in items])
         print(feed_clean.render(rep, dry_run=args.dry_run))
@@ -567,6 +582,8 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("--wipe-all", action="store_true",
                    help="trash every row, whatever the rules say, except those with Interested / Apply / done-del ticked "
                         "(then a scan with an empty state/seen.json refills the Feed from scratch)")
+    c.add_argument("--people-links", action="store_true",
+                   help="fill the Recruiter / Hiring Manager search links on every row, then stop")
     c.add_argument("--rescore", action="store_true",
                    help="also recompute Company, Fit % and Signals of the rows that stay (all boxes unticked)")
     c.add_argument("--skip-refresh", action="store_true",

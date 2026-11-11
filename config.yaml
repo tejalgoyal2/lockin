@@ -92,7 +92,8 @@ sources:
   adzuna:                  # Adzuna Canada search engine (free API key: developer.adzuna.com -> secrets ADZUNA_APP_ID / ADZUNA_APP_KEY;
                            # skipped with a note when the keys are not set)
     enabled: true
-    max_pages: 4           # 50 results a page per term
+    max_pages: 2           # 50 results a page per term: at most 20 x 2 = 40 calls a run, 80 a day, ~2,400 a month (Adzuna's
+                           # default limits: 250 a day, 1,000 a week, 2,500 a month)
     terms: [software developer, software engineer, data analyst, data scientist, devops, cloud engineer, machine learning,
             qa analyst, it support, systems administrator, network administrator, cybersecurity, web developer, business intelligence,
             junior developer, new grad software, full stack developer, backend developer, frontend developer, python developer]
@@ -100,13 +101,28 @@ sources:
                            # description. Free key (serpapi.com, 250 searches a month) -> secret SERPAPI_KEY; skipped without it
     enabled: true
     location: British Columbia, Canada     # Google's place for the search (remote jobs open to it come too)
-    queries_per_run: 4     # 4 x 2 runs a day x 30 days = 240 of the free plan's 250; terms are taken in turn, all of them every 3 days
+    queries_per_run: 2     # SerpApi's free 250 a month is shared with Site Search: (2 + 2) x 2 runs a day x 30 days = 240
     terms: [junior software developer, software engineer new grad, entry level software engineer, junior data analyst,
             data engineer, junior python developer, full stack developer, cybersecurity analyst, IT support analyst,
             machine learning engineer, devops engineer, QA automation engineer, business intelligence analyst,
             junior web developer, cloud engineer, software developer co-op new graduate, systems analyst, AI engineer,
             technical support engineer, application support analyst, data scientist, junior backend developer,
             database administrator, network engineer]
+  sitesearch:              # the recruiter's Boolean trick on the ATS sites (site:jobs.ashbyhq.com ("software engineer" OR ...) Canada),
+                           # run through a search API: Brave (BRAVE_SEARCH_API_KEY, ~1,000 free searches a month) or SerpApi
+                           # (SERPAPI_KEY, shared with Google Jobs). Skipped without either key
+    enabled: true
+    brave_per_run: 15      # 15 x 2 runs a day x 30 days = 900 of Brave's ~1,000 free a month
+    serpapi_per_run: 2     # only when there is no Brave key
+    hosts: [jobs.ashbyhq.com, jobs.lever.co, job-boards.greenhouse.io, boards.greenhouse.io, apply.workable.com,
+            myworkdayjobs.com, bamboohr.com, jobs.smartrecruiters.com, icims.com]
+    titles:
+      - '("software engineer" OR "software developer" OR "full stack" OR "backend" OR "frontend")'
+      - '("junior" OR "new grad" OR "entry level" OR "graduate" OR "associate") (developer OR engineer OR analyst)'
+      - '("data analyst" OR "data engineer" OR "data scientist" OR "machine learning" OR "AI engineer")'
+      - '("IT support" OR "IT analyst" OR "systems administrator" OR "help desk" OR "technical support")'
+      - '("security analyst" OR "cybersecurity" OR "devops" OR "cloud engineer" OR "QA" OR "automation")'
+    where: '(Vancouver OR "British Columbia" OR Burnaby OR Victoria OR "Remote Canada" OR Canada)'
   googlealerts:            # Google Alerts on the ATS sites (site:jobs.lever.co Vancouver ...), delivered as RSS. Free; the feed
                            # addresses go in the secret GOOGLE_ALERTS_FEEDS (README: "Google Alerts"); skipped without it
     enabled: true
@@ -479,6 +495,8 @@ notion:
     fit: "Fit %"
     signals: Signals
     location: Location        # optional: filled when the Feed has the column, ignored when it does not
+    recruiter: Recruiter      # optional (URL column): LinkedIn people search for the company's recruiters
+    manager: Hiring Manager   # optional (URL column): LinkedIn people search for the team's managers and leads
     jd: JD
     interested: Interested
     apply: Apply

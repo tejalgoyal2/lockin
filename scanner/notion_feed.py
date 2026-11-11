@@ -14,7 +14,8 @@ from datetime import datetime
 
 import requests
 
-from scanner.company_names import company_cell
+from scanner import people
+from scanner.company_names import company_cell, display_company
 from scanner.dedupe import canonical_url
 from scanner.models import Job
 from scanner.sources.listing import SITE_SOURCES
@@ -38,7 +39,7 @@ EXPECTED_TYPES = {
 }
 # Properties the scanner fills when the Feed has them and leaves alone when it does not, so a new column can be
 # added in Notion before or after the code that writes it ships.
-OPTIONAL_TYPES = {"location": "rich_text"}
+OPTIONAL_TYPES = {"location": "rich_text", "recruiter": "url", "manager": "url"}
 SOURCE_OPTIONS = ("Workday", "Greenhouse", "Lever", "Ashby", "BambooHR", "Paylocity", "Simplify", "Watchlist")
 # Labels of the job sites. Used when the Feed's Source column has the option; a Feed without it leaves Source empty
 # for those rows (they are not required, so the sites can ship before the options exist).
@@ -267,8 +268,19 @@ def build_properties(job: Job, feed: Feed, overrides: dict[str, str]) -> tuple[d
         props[n["source"]] = {"select": {"name": job.source}}
     if feed.has("location") and job.location:
         props[n["location"]] = {"rich_text": _rich(job.location[:200])}
+    props.update(people_properties(feed, display_company(job, overrides), job.title))
     props[n["fit"]] = {"number": None if job.fit_pct is None else round(job.fit_pct / 100, 4)}
     return props, jd_sent
+
+
+def people_properties(feed: Feed, company: str, title: str) -> dict:
+    """The two people-search links (scanner/people.py), for the columns the Feed has."""
+    out = {}
+    if feed.has("recruiter"):
+        out[feed.names["recruiter"]] = {"url": people.recruiter_link(company) or None}
+    if feed.has("manager"):
+        out[feed.names["manager"]] = {"url": people.manager_link(company, title) or None}
+    return out
 
 
 def build_page(job: Job, feed: Feed, overrides: dict[str, str]) -> tuple[dict, str]:
