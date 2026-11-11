@@ -2,11 +2,11 @@
 
 Read this when you suspect a good job is being lost: each reason names the rule, then lists the jobs it dropped (up to 40, newest first). A reason that drops a job you wanted is a rule to loosen in `config.yaml`.
 
-## location_not_canada: 864
+## location_not_canada: 865
 
 Not a Canadian posting; not listed.
 
-## experience_3plus: 224
+## experience_3plus: 222
 
 _the JD asks 3+ years of experience_
 
@@ -172,10 +172,6 @@ _an intern / co-op title whose JD does not welcome recent graduates_
 - [Co-op/Intern, Software Development - Winter 2027](https://job-boards.greenhouse.io/hootsuite/jobs/8360176) | Hootsuite | Vancouver, BC, Toronto, ON | 2026-11-06
 - [Co-op/Intern, DevOps - Winter 2027](https://job-boards.greenhouse.io/hootsuite/jobs/8359242) | Hootsuite | Alberta, British Columbia | 2026-11-06
 - [Compliance/DSD Conversion Analyst - Co-op Student](https://myview.wd3.myworkdayjobs.com/paradox_careers/job/1-Presidents-Choice-Circle-Brampton-ON/Compliance-DSD-Conversion-Analyst---Co-op-Student_R2000729357) | myview | 1 Presidents Choice Circle, Brampton, ON | 2026-11-06
-- [Quality Assurance Specialist Intern - Android (May 2027 - 12 Months)](https://soti.wd3.myworkdayjobs.com/soti-next-gen/job/Mississauga-Canada--Meadowvale-Office-HQ/Quality-Assurance-Specialist-Intern---Android--May-2027---12-Months-_R10651) | soti | Mississauga, Canada – Meadowvale Office (HQ) | 2026-11-06
-- [Performance Test Engineer Intern (May 2027 12 Months)](https://soti.wd3.myworkdayjobs.com/soti-next-gen/job/Mississauga-Canada--Meadowvale-Office-HQ/Performance-Test-Engineer-Intern--May-2027-12-Months-_R10626) | soti | Mississauga, Canada – Meadowvale Office (HQ) | 2026-11-06
-- [Performance Test Engineer Intern (January 2027 - 12 months)](https://soti.wd3.myworkdayjobs.com/soti-next-gen/job/Mississauga-Canada--Meadowvale-Office-HQ/Performance-Test-Engineer-Intern--January-2027---12-months-_R10639) | soti | Mississauga, Canada – Meadowvale Office (HQ) | 2026-11-06
-- [Software Developer Intern (May 2027 - 12 months)](https://soti.wd3.myworkdayjobs.com/soti-next-gen/job/Mississauga-Canada--Meadowvale-Office-HQ/Software-Developer-Intern--May-2027---12-months-_R10677) | soti | Mississauga, Canada – Meadowvale Office (HQ) | 2026-11-06
 - [Engineering CoOp/Intern](https://flowserve.wd1.myworkdayjobs.com/applied/job/Leduc-Canada/CoOp-Intern_R-21051) | flowserve | Leduc, Canada | 2026-11-06
 - [Machine Learning Developer, Winter 2027 ( Co-op/Internship) - 4 months](https://bmo.wd3.myworkdayjobs.com/privileged/job/Toronto-ON-CAN/Machine-Learning-Developer--Winter-2027---Co-op-Internship----4-months_R260029620) | bmo | Toronto, ON, CAN | 2026-11-06
 - [2027 Gas Project Engineering Co-op](https://eversource.wd1.myworkdayjobs.com/externalsite/job/MA-Westborough-Technology-Dr/XMLNAME-2027-Gas-Project-Engineering-Co-op_R-032515) | eversource | 2 Locations | 2026-11-06
@@ -185,6 +181,10 @@ _an intern / co-op title whose JD does not welcome recent graduates_
 - [Student Financial Management Analyst](https://ubc.wd10.myworkdayjobs.com/ubcstaffjobs/job/UBC-Vancouver-Campus---Vancouver-BC-Canada/Student-Financial-Management-Analyst_JR26582) | UBC | UBC Vancouver Campus - Vancouver, BC, Canada | 2026-11-06
 - [AI Developer Technology Engineering Intern - 2027](https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite/job/China-Shenzhen/AI-Developer-Technology-Engineering-Intern---2027_JR2024818) | NVIDIA | 3 Locations | 2026-11-06
 - [2027 Capital Markets, Global Equities, AI Engineer (16 Months, Co-op)](https://rbc.wd3.myworkdayjobs.com/rbcglobal1/job/TORONTO-Ontario-Canada/XMLNAME-2027-Capital-Markets--Global-Equities--AI-Engineer--16-Months--Co-op-_R-0000187401-2) | rbc | TORONTO, Ontario, Canada | 2026-11-05
+- [Test Engineering Intern](https://semtech.wd1.myworkdayjobs.com/semtechcareers/job/CAN---Burlington-ON/Test-Engineering-Intern_REQ3667) | semtech | CAN - Burlington, ON | 2026-11-05
+- [Quality Engineering Intern](https://semtech.wd1.myworkdayjobs.com/semtechcareers/job/CAN---Burlington-ON/Quality-Engineering-Intern_REQ3692) | semtech | CAN - Burlington, ON | 2026-11-05
+- [PEY - Junior Fullstack Engineer](https://volarisgroup.wd3.myworkdayjobs.com/bibliocommons/job/Canada---Ontario/PEY---Junior-Fullstack-Engineer_R72454) | volarisgroup | Canada - Ontario | 2026-11-05
+- [Engineering Intern](https://cerved.wd3.myworkdayjobs.com/cerved/job/Torino-Italy/Engineering-Intern_R-0000003634) | cerved | 2 Locations | 2026-11-05
 
 ## requires_french: 28
 

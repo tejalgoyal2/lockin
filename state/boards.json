@@ -1,5 +1,14 @@
 {
  "found": {
+  "greenhouse/capco": {
+   "canadian": 31,
+   "first": "2026-11-11",
+   "last": "2026-11-11",
+   "name": "capco",
+   "probes": 0,
+   "seen": 5,
+   "status": "added"
+  },
   "workday/abb.wd3/external_career_page": {
    "canadian": 14,
    "first": "2026-11-10",
@@ -32,7 +41,7 @@
    "first": "2026-11-11",
    "last": "2026-11-11",
    "name": "alfalaval",
-   "probes": 1,
+   "probes": 2,
    "seen": 5,
    "status": "empty"
   },
@@ -63,6 +72,15 @@
    "seen": 25,
    "status": "dead"
   },
+  "workday/bdo.wd3/bdo": {
+   "canadian": 98,
+   "first": "2026-11-11",
+   "last": "2026-11-11",
+   "name": "bdo",
+   "probes": 0,
+   "seen": 5,
+   "status": "added"
+  },
   "workday/bmo.wd3/privileged": {
    "canadian": 27,
    "first": "2026-11-09",
@@ -91,6 +109,15 @@
    "seen": 14,
    "status": "dead"
   },
+  "workday/canadiantirecorporation.wd3/enterprise_external_careers_site": {
+   "canadian": 98,
+   "first": "2026-11-11",
+   "last": "2026-11-11",
+   "name": "canadiantirecorporation",
+   "probes": 0,
+   "seen": 5,
+   "status": "added"
+  },
   "workday/capitalone.wd12/capital_one": {
    "canadian": 21,
    "first": "2026-11-09",
@@ -99,6 +126,24 @@
    "probes": 0,
    "seen": 46,
    "status": "added"
+  },
+  "workday/centene.wd5/centene_external": {
+   "canadian": 0,
+   "first": "2026-11-11",
+   "last": "2026-11-11",
+   "name": "centene",
+   "probes": 1,
+   "seen": 5,
+   "status": "empty"
+  },
+  "workday/cna.wd1/cna_careers": {
+   "canadian": 0,
+   "first": "2026-11-11",
+   "last": "2026-11-11",
+   "name": "cna",
+   "probes": 1,
+   "seen": 4,
+   "status": "empty"
   },
   "workday/corpay.wd103/ext_001": {
    "canadian": 11,
@@ -150,8 +195,17 @@
    "first": "2026-11-11",
    "last": "2026-11-11",
    "name": "eversource",
-   "probes": 1,
+   "probes": 2,
    "seen": 5,
+   "status": "empty"
+  },
+  "workday/fca.wd3/fca_careers": {
+   "canadian": 0,
+   "first": "2026-11-11",
+   "last": "2026-11-11",
+   "name": "fca",
+   "probes": 1,
+   "seen": 4,
    "status": "empty"
   },
   "workday/fil.wd3/fidelitycanada": {
@@ -171,6 +225,15 @@
    "probes": 0,
    "seen": 5,
    "status": "added"
+  },
+  "workday/flywheel.wd5/job_duck_careers": {
+   "canadian": 0,
+   "first": "2026-11-11",
+   "last": "2026-11-11",
+   "name": "flywheel",
+   "probes": 1,
+   "seen": 4,
+   "status": "empty"
   },
   "workday/geaerospace.wd5/ge_externalsite": {
    "canadian": 0,
@@ -361,6 +424,15 @@
    "seen": 7,
    "status": "empty"
   },
+  "workday/pae.wd1/amentum_careers": {
+   "canadian": 0,
+   "first": "2026-11-11",
+   "last": "2026-11-11",
+   "name": "pae",
+   "probes": 1,
+   "seen": 5,
+   "status": "empty"
+  },
   "workday/petronascanada.wd3/petronascanada": {
    "canadian": 28,
    "first": "2026-11-10",
@@ -438,7 +510,7 @@
    "first": "2026-11-11",
    "last": "2026-11-11",
    "name": "terminix",
-   "probes": 1,
+   "probes": 2,
    "seen": 7,
    "status": "empty"
   },
@@ -450,6 +522,15 @@
    "probes": 0,
    "seen": 6,
    "status": "added"
+  },
+  "workday/uline.wd1/uline_careers": {
+   "canadian": 0,
+   "first": "2026-11-11",
+   "last": "2026-11-11",
+   "name": "uline",
+   "probes": 1,
+   "seen": 5,
+   "status": "empty"
   }
  },
  "health": {},

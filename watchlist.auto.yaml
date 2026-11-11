@@ -27,3 +27,6 @@ boards:
   - {ats: workday, slug: spgi.wd5/spgi_careers, name: "spgi"}        # 6 Canadian postings when found, 2026-11-11
   - {ats: workday, slug: thermofisher.wd5/thermofishercareers, name: "thermofisher"}        # 11 Canadian postings when found, 2026-11-11
   - {ats: workday, slug: flir.wd1/flircareers, name: "flir"}        # 47 Canadian postings when found, 2026-11-11
+  - {ats: workday, slug: bdo.wd3/bdo, name: "bdo"}        # 98 Canadian postings when found, 2026-11-11
+  - {ats: workday, slug: canadiantirecorporation.wd3/enterprise_external_careers_site, name: "canadiantirecorporation"}        # 98 Canadian postings when found, 2026-11-11
+  - {ats: greenhouse, slug: capco, name: "capco"}        # 31 Canadian postings when found, 2026-11-11
