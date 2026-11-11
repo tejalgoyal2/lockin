@@ -3,10 +3,10 @@
 # all others are case-insensitive.
 
 freshness:
-  default_days: 10       # normal run: only jobs first seen in the last N days (seen.json keeps a job from coming twice, so a wide
-                         # window costs JD fetches, not duplicates; ten days also covers a skipped or failed run: GitHub drops
-                         # scheduled runs now and then)
-  first_run_days: 14     # used instead when state/seen.json does not exist yet (the first run)
+  default_days: 7        # normal run: only jobs first seen in the last N days. A week: a posting older than that has most of its
+                         # applicants already, and a week still covers several skipped or failed runs (GitHub drops scheduled
+                         # runs now and then). seen.json keeps a job from coming twice. since_days 14 / 30 widens it for one run.
+  first_run_days: 7      # used instead when state/seen.json does not exist yet (the first run)
 
 sources:
   feashliaa:
@@ -96,6 +96,20 @@ sources:
     terms: [software developer, software engineer, data analyst, data scientist, devops, cloud engineer, machine learning,
             qa analyst, it support, systems administrator, network administrator, cybersecurity, web developer, business intelligence,
             junior developer, new grad software, full stack developer, backend developer, frontend developer, python developer]
+  googlejobs:              # Google for Jobs through SerpApi: LinkedIn, Indeed, Glassdoor and company-site postings, each with its full
+                           # description. Free key (serpapi.com, 250 searches a month) -> secret SERPAPI_KEY; skipped without it
+    enabled: true
+    location: British Columbia, Canada     # Google's place for the search (remote jobs open to it come too)
+    queries_per_run: 4     # 4 x 2 runs a day x 30 days = 240 of the free plan's 250; terms are taken in turn, all of them every 3 days
+    terms: [junior software developer, software engineer new grad, entry level software engineer, junior data analyst,
+            data engineer, junior python developer, full stack developer, cybersecurity analyst, IT support analyst,
+            machine learning engineer, devops engineer, QA automation engineer, business intelligence analyst,
+            junior web developer, cloud engineer, software developer co-op new graduate, systems analyst, AI engineer,
+            technical support engineer, application support analyst, data scientist, junior backend developer,
+            database administrator, network engineer]
+  googlealerts:            # Google Alerts on the ATS sites (site:jobs.lever.co Vancouver ...), delivered as RSS. Free; the feed
+                           # addresses go in the secret GOOGLE_ALERTS_FEEDS (README: "Google Alerts"); skipped without it
+    enabled: true
   bcgov:                   # BC Public Service: the provincial government's own job board (one table, about 80 postings)
     enabled: true
   watchlist:               # employers read directly on every run (watchlist.yaml); see scanner/sources/watchlist.py
@@ -432,7 +446,7 @@ scoring:
     new_grad: 15             # JD/title has "new grad" or "recent graduate"
     simplify: 10             # listed by the Simplify new-grad feed or the curated Canada list
     bc_or_remote: 5
-    fresh:                   # a ten-day window lets an old posting outrank today's on Fit alone: favour the new ones.
+    fresh:                   # a week-long window lets an old posting outrank today's on Fit alone: favour the new ones.
       days: 4                # +bonus when posted just now, fading to 0 at this age
       bonus: 6
   penalty:
@@ -451,7 +465,7 @@ cluster:
 
 notion:
   api_version: "2026-03-11"   # Notion-Version header; 2026-03-11 renamed `archived` to `in_trash`
-  daily_cap: 500              # at most this many rows written per run, highest Score first (a ten-day window and ~150 boards
+  daily_cap: 500              # at most this many rows written per run, highest Score first (a week-long window and ~180 boards
                               # find several hundred jobs; the owner wants them all, so the cap is a safety valve, not a filter)
   verify_readback_min_chars: 4000   # after writing, read back a JD at least this long and compare lengths
   # Property names exactly as they appear in the Feed. The scanner never writes `interested` / `apply` /
