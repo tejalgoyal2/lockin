@@ -20,7 +20,7 @@ from scanner.filters import Filters
 from scanner.models import Job
 from scanner.normalize import job_key
 from scanner.score import Scorer
-from scanner.sources import ats
+from scanner.sources import ats, supplied
 
 log = logging.getLogger(__name__)
 _warned: set[str] = set()   # one warning per ATS; per-job failures go to debug
@@ -125,6 +125,16 @@ def _may_be_canadian(job: Job, filters: Filters) -> bool:
 
 
 def fetch_job(job: Job, client, cache: JDCache, filters: Filters | None = None) -> FetchResult:
+    """The job's own page first; when that cannot be read, the description its source handed over (Google for Jobs)."""
+    r = _fetch_job(job, client, cache, filters)
+    if r.status != "ok":
+        text = supplied.get(job.url)
+        if text:
+            return FetchResult("ok", text, relocation=r.relocation)
+    return r
+
+
+def _fetch_job(job: Job, client, cache: JDCache, filters: Filters | None = None) -> FetchResult:
     """Fetch one job's JD. Never raises: failures become a status plus detail like 'http 403'.
 
     With `filters`, a Workday id that answers 403 / 404 gets one search of the tenant for the same title: an

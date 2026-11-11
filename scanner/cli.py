@@ -23,7 +23,8 @@ from scanner.models import Job
 from scanner.net import client_from_config
 from scanner.pipeline import run_stream
 from scanner.score import Scorer
-from scanner.sources import ats, baystreet, bcgov, builtin, canadalist, feashliaa, hn, jobbank, jobicy, adzuna, listing, simplify, watchlist, yc
+from scanner.sources import (ats, baystreet, bcgov, builtin, canadalist, feashliaa, googlealerts, googlejobs, hn, jobbank,
+                             jobicy, adzuna, listing, simplify, supplied, watchlist, yc)
 from scanner.state import GapsStore, SeenStore
 
 log = logging.getLogger("scanner")
@@ -101,6 +102,11 @@ def collect(cfg, args, filters, now, since, store=None):
         ("BC Gov", "bcgov", lambda c: bcgov.fetch(http), ()),
         ("Jobicy", "jobicy", lambda c: jobicy.fetch(http, now), ()),
         ("Adzuna", "adzuna", lambda c: adzuna.fetch(http, c.get("terms", []), since, now, max_pages=c.get("max_pages", adzuna.MAX_PAGES)), ()),
+        ("Google Jobs", "googlejobs",
+         lambda c: googlejobs.fetch(http, c.get("terms", []), c.get("location", "Canada"), now,
+                                    per_run=c.get("queries_per_run", googlejobs.QUERIES_PER_RUN),
+                                    prefer=lambda url: ats.detect_ats(url) in ats.SUPPORTED and ats.detect_ats(url) not in ats.SITES), ()),
+        ("Google Alerts", "googlealerts", lambda c: googlealerts.fetch(http, now), ()),
         ("Canada List", "canadalist", lambda c: canadalist.fetch(c["urls"], http, now), ()),
     ]
     for label, key, read, pre_stages in sites:
@@ -113,6 +119,8 @@ def collect(cfg, args, filters, now, since, store=None):
             print(f"WARNING {label}: not read ({type(exc).__name__}: {str(exc)[:120]})")
             continue
         print(f"{label}: {len(records):,} postings")
+        for rec in records:
+            supplied.put(rec["url"], rec.get("jd", ""))       # a description the source handed over (Google for Jobs)
         found, stages, hold = run_stream(iter(records), listing.raw_fields, filters, now, since, pre_stages=pre_stages)
         jobs += found
         held += hold

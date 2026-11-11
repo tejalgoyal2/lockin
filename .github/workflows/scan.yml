@@ -7,7 +7,7 @@ on:
     # GitHub starts a scheduled run a few minutes to an hour after its slot (more on the hour: hence the odd minutes),
     # which lands the morning run in 8-9 am and the afternoon one in 4-5 pm.
     # The dataset (Feashliaa) always finishes by 18:15 UTC, so the afternoon run sees the day's data.
-    # GitHub also drops a scheduled run now and then; the 10-day window (config.yaml) picks the jobs up on the next one,
+    # GitHub also drops a scheduled run now and then; the 7-day window (config.yaml) picks the jobs up on the next one,
     # and a run only writes jobs not already seen, so nothing comes twice.
     - cron: "57 15 * * *"       # ~08:00 Pacific
     - cron: "57 23 * * *"       # ~16:00 Pacific
@@ -22,7 +22,7 @@ on:
         type: string
         required: false
       since_days:
-        description: "Only jobs first seen in the last N days (blank = 10, from config.yaml; 14 or 30 to catch up after a break)"
+        description: "Only jobs first seen in the last N days (blank = 7, from config.yaml; 14 or 30 to catch up after a break)"
         type: string
         required: false
 
@@ -63,6 +63,8 @@ jobs:
           NOTION_FEED_DATA_SOURCE_ID: ${{ secrets.NOTION_FEED_DATA_SOURCE_ID }}
           ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}        # optional: without them the Adzuna source is skipped
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}            # optional: Google for Jobs (skipped without it)
+          GOOGLE_ALERTS_FEEDS: ${{ secrets.GOOGLE_ALERTS_FEEDS }}   # optional: your Google Alerts RSS feeds, one per line
           APPLIED_KEY: ${{ secrets.APPLIED_KEY }}     # decrypts state/applied.json.enc in memory; optional
           # Inputs go through env vars, never straight into the script.
           DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}

@@ -36,7 +36,7 @@ It is scheduled twice a day, at 15:57 and 23:57 UTC. GitHub's cron has no time z
 two Pacific offsets (07:57 / 15:57 in winter, 08:57 / 16:57 in summer) and GitHub's usual delay of a few minutes to an
 hour lands the runs around 8-9 am and 4-5 pm Pacific. The odd minutes are on purpose: jobs scheduled on the hour are
 the ones GitHub delays most, which is also how it feels waiting for a recruiter. GitHub also forgets a scheduled run
-now and then; the 10-day window (`freshness.default_days`) makes the next run pick up what the lost one would have
+now and then; the 7-day window (`freshness.default_days`) makes the next run pick up what the lost one would have
 found, and a run only writes jobs not already seen, so nothing comes twice.
 
 ## Running it from GitHub (Actions tab)
@@ -48,7 +48,7 @@ Nothing needs installing: open the repo on GitHub, **Actions**, pick a workflow,
 | Input | Leave blank / default | Use it to |
 |---|---|---|
 | `dry_run` | ticked | scan and report without touching Notion or `state/seen.json`. **Untick it for a real run**; keep it ticked to look first. |
-| `since_days` | `10` (`freshness.default_days`) | widen the net: `14` or `30` after a break, a new source or a fix. Safe any time: `state/seen.json` keeps a job from being written twice, so a wide window only costs a longer run. |
+| `since_days` | `7` (`freshness.default_days`) | widen the net: `14` or `30` after a break, a new source or a fix. Safe any time: `state/seen.json` keeps a job from being written twice, so a wide window only costs a longer run. |
 | `max_rows` | `500` (`notion.daily_cap`) | how many new rows this run may write (the best-scoring ones go first; the rest wait for the next run while they are inside the window). `5` to try it, `100` to empty a backlog. |
 
 Typical recipes: *"did the last fix work?"* is `dry_run` ticked, `since_days` 14, then read the log and
@@ -188,6 +188,8 @@ changing a filter, or when a job you wanted never showed up.
 | `HN` | the monthly "Ask HN: Who is hiring?" thread; top-level comments whose header line (`Company \| Role \| Location`) names a Canadian place and a role (or whose first lines do) | Algolia HN API; a comment counts as new when first read, not when written |
 | `Jobicy` | remote jobs open to Canada | Jobicy's public JSON API (no key); the JD comes from the posting page |
 | `Adzuna` | Canadian search results for 20 tech keywords | Adzuna's API. Needs a free key (developer.adzuna.com) saved as the secrets `ADZUNA_APP_ID` and `ADZUNA_APP_KEY`; skipped without them |
+| `Google Jobs` | Google for Jobs: the job panel Google shows for a search, which gathers LinkedIn, Indeed, Glassdoor, Talent.com and employers' own sites. 4 of 24 tech searches a run, in turn, for British Columbia | SerpApi's Google Jobs API, each posting with its full description. Needs a free key (serpapi.com, 250 searches a month) saved as the secret `SERPAPI_KEY`; skipped without it. The link is the employer's ATS page when Google lists one, so the JD and location come from the employer |
+| `Google Alerts` | new pages Google indexes on the ATS sites (`site:jobs.lever.co Vancouver` ...): postings often show up here before LinkedIn | your own Google Alerts, delivered as RSS (see "Google Alerts" below). Free; the feed addresses go in the secret `GOOGLE_ALERTS_FEEDS`; skipped without it |
 | `Job Bank` | the federal Job Bank (jobbank.gc.ca): each tech occupation (NOC code) and a few keywords, paged 25 at a time, newest first | Job Bank's public results pages. They carry the employers' postings **and the partner sites' ones: CivicJobs.ca (the municipal board: city halls, regional districts), Talent.com, Indeed ...** The Atom feed was dropped: it holds only the employer-posted jobs and 10 per keyword. 5 seconds between requests, as its robots.txt asks |
 | `BC Gov` | the BC Public Service (bcpublicservice.hua.hrsmart.com): every external posting, about 80 | one HTML table; the page shows the date opened, so the freshness window works |
 
@@ -195,7 +197,7 @@ All of them read only what the sites publish to any visitor, at the same polite 
 scanner's own name. A site that is down or has changed prints `WARNING <site>: not read (...)` and the run goes on.
 A job a site shares with an ATS board is kept once, with the ATS link. To turn one off set `enabled: false` under
 `sources.<name>` in `config.yaml`. The Feed's Source column needs the options `YC`, `Built In`, `Bay Street Oracle`,
-`HN`, `Job Bank` and `BC Gov` (and `SmartRecruiters` / `Phenom` / `SuccessFactors` / `iCIMS` for those watchlist boards) to show them (without the option the Source cell stays empty; nothing else changes).
+`HN`, `Job Bank`, `BC Gov`, `Jobicy`, `Adzuna`, `Google Jobs` and `Google Alerts` (and `SmartRecruiters` / `Phenom` / `SuccessFactors` / `iCIMS` for those watchlist boards) to show them (without the option the Source cell stays empty; nothing else changes).
 
 **Municipal jobs.** CivicJobs and CivicInfo BC answer an automated client with a Cloudflare bot challenge (HTTP 403, including
 on the RSS feed CivicInfo advertises). That is the sites saying no, so lockin does not go there: no fake browsers, no challenge
@@ -203,6 +205,30 @@ solvers. Two honest routes instead: Job Bank republishes CivicJobs.ca postings (
 regional districts, health authorities and Crown corporations are read from their **own** job sites when those are iCIMS or
 SuccessFactors (City of Victoria, City of Vancouver, City of Toronto, ICBC ...: see `watchlist.yaml`). Work at a Startup lists the
 same postings as the YC pages.
+
+### Google Alerts: Google watching the ATS sites for you
+
+1. Open https://www.google.com/alerts (signed in to your Google account).
+2. Type a search, for example `site:jobs.lever.co Vancouver`. Click **Show options**: *How often* **As-it-happens**,
+   *Sources* **Automatic**, *Region* **Any**, *How many* **All results**, *Deliver to* **RSS feed**. Click **Create Alert**.
+   (No RSS choice? In the alerts page's settings cog, turn off the delivery time and digest, then try again.)
+3. Make one alert per line below (each takes a minute):
+   ```
+   site:jobs.lever.co (Vancouver OR "British Columbia" OR Canada)
+   site:job-boards.greenhouse.io (Vancouver OR "British Columbia" OR Canada)
+   site:boards.greenhouse.io (Vancouver OR "British Columbia" OR Canada)
+   site:jobs.ashbyhq.com (Vancouver OR "British Columbia" OR Canada)
+   site:apply.workable.com (Vancouver OR "British Columbia" OR Canada)
+   site:myworkdayjobs.com (Vancouver OR "British Columbia") (developer OR engineer OR analyst)
+   site:bamboohr.com/careers (Vancouver OR "British Columbia")
+   site:jobs.smartrecruiters.com (Vancouver OR "British Columbia")
+   ```
+4. On the alerts page each alert now has an RSS icon. Right-click it, copy the link.
+5. GitHub repo, then Settings, Secrets and variables, Actions, **New repository secret**: name `GOOGLE_ALERTS_FEEDS`, value
+   one feed link per line. A line may start with the place the alert is about, `Vancouver, BC | https://www.google.com/alerts/feeds/...`;
+   without it the place is "Canada". The employer's own page has the last word on where the job is.
+
+The scanner reads the feeds at each run and opens every posting on the employer's ATS like any other job.
 
 ## Feedback: teaching the robot your taste
 
