@@ -190,8 +190,9 @@ changing a filter, or when a job you wanted never showed up.
 | `HN` | the monthly "Ask HN: Who is hiring?" thread; top-level comments whose header line (`Company \| Role \| Location`) names a Canadian place and a role (or whose first lines do) | Algolia HN API; a comment counts as new when first read, not when written |
 | `Jobicy` | remote jobs open to Canada | Jobicy's public JSON API (no key); the JD comes from the posting page |
 | `Adzuna` | Canadian search results for 20 tech keywords | Adzuna's API. Needs a free key (developer.adzuna.com) saved as the secrets `ADZUNA_APP_ID` and `ADZUNA_APP_KEY`; skipped without them |
-| `Google Jobs` | Google for Jobs: the job panel Google shows for a search, which gathers LinkedIn, Indeed, Glassdoor, Talent.com and employers' own sites. 4 of 24 tech searches a run, in turn, for British Columbia | SerpApi's Google Jobs API, each posting with its full description. Needs a free key (serpapi.com, 250 searches a month) saved as the secret `SERPAPI_KEY`; skipped without it. The link is the employer's ATS page when Google lists one, so the JD and location come from the employer |
+| `Google Jobs` | Google for Jobs: the job panel Google shows for a search, which gathers LinkedIn, Indeed, Glassdoor, Talent.com and employers' own sites. 2 of 24 tech searches a run, in turn, for British Columbia | SerpApi's Google Jobs API, each posting with its full description. Needs a free key (serpapi.com, 250 searches a month) saved as the secret `SERPAPI_KEY`; skipped without it. The link is the employer's ATS page when Google lists one, so the JD and location come from the employer |
 | `Google Alerts` | new pages Google indexes on the ATS sites (`site:jobs.lever.co Vancouver` ...): postings often show up here before LinkedIn | your own Google Alerts, delivered as RSS (see "Google Alerts" below). Free; the feed addresses go in the secret `GOOGLE_ALERTS_FEEDS`; skipped without it |
+| `Site Search` | the recruiter's Boolean trick on 9 ATS sites at once: `site:jobs.ashbyhq.com ("software engineer" OR "software developer" ...) (Vancouver OR "British Columbia" OR Canada)`, past week only; every host x title group, taken in turn | Brave Search API (`BRAVE_SEARCH_API_KEY`, 15 searches a run) or, without it, SerpApi's Google results (`SERPAPI_KEY`, 2 a run). Each result that is a posting is read on the employer's ATS like any other job |
 | `Job Bank` | the federal Job Bank (jobbank.gc.ca): each tech occupation (NOC code) and a few keywords, paged 25 at a time, newest first | Job Bank's public results pages. They carry the employers' postings **and the partner sites' ones: CivicJobs.ca (the municipal board: city halls, regional districts), Talent.com, Indeed ...** The Atom feed was dropped: it holds only the employer-posted jobs and 10 per keyword. 5 seconds between requests, as its robots.txt asks |
 | `BC Gov` | the BC Public Service (bcpublicservice.hua.hrsmart.com): every external posting, about 80 | one HTML table; the page shows the date opened, so the freshness window works |
 
@@ -199,7 +200,7 @@ All of them read only what the sites publish to any visitor, at the same polite 
 scanner's own name. A site that is down or has changed prints `WARNING <site>: not read (...)` and the run goes on.
 A job a site shares with an ATS board is kept once, with the ATS link. To turn one off set `enabled: false` under
 `sources.<name>` in `config.yaml`. The Feed's Source column needs the options `YC`, `Built In`, `Bay Street Oracle`,
-`HN`, `Job Bank`, `BC Gov`, `Jobicy`, `Adzuna`, `Google Jobs` and `Google Alerts` (and `SmartRecruiters` / `Phenom` / `SuccessFactors` / `iCIMS` for those watchlist boards) to show them (without the option the Source cell stays empty; nothing else changes).
+`HN`, `Job Bank`, `BC Gov`, `Jobicy`, `Adzuna`, `Google Jobs`, `Google Alerts` and `Site Search` (and `SmartRecruiters` / `Phenom` / `SuccessFactors` / `iCIMS` for those watchlist boards) to show them (without the option the Source cell stays empty; nothing else changes).
 
 **Municipal jobs.** CivicJobs and CivicInfo BC answer an automated client with a Cloudflare bot challenge (HTTP 403, including
 on the RSS feed CivicInfo advertises). That is the sites saying no, so lockin does not go there: no fake browsers, no challenge
@@ -207,6 +208,25 @@ solvers. Two honest routes instead: Job Bank republishes CivicJobs.ca postings (
 regional districts, health authorities and Crown corporations are read from their **own** job sites when those are iCIMS or
 SuccessFactors (City of Victoria, City of Vancouver, City of Toronto, ICBC ...: see `watchlist.yaml`). Work at a Startup lists the
 same postings as the YC pages.
+
+## Keys and secrets (all optional, all free)
+
+Every source below is skipped, with a note in the log, until its secret exists. A secret is added the same way each time:
+GitHub, the `lockin` repo, **Settings**, **Secrets and variables**, **Actions**, **New repository secret**, then the name
+exactly as written and the value. Never paste a key into a file, an issue or a chat: only into that box.
+
+| Secret | Turns on | Where to get it |
+|---|---|---|
+| `BRAVE_SEARCH_API_KEY` | Site Search, 15 searches a run | api-dashboard.search.brave.com: sign up, confirm the email, subscribe to the **Search** plan (free monthly credit, about 1,000 searches; a card is asked for), **API Keys**, **Add API key**, copy it |
+| `SERPAPI_KEY` | Google Jobs (2 searches a run), and Site Search when there is no Brave key | serpapi.com: **Register** (free plan, 250 searches a month), confirm the email, **Api Key** in the dashboard, copy it |
+| `GOOGLE_ALERTS_FEEDS` | Google Alerts | the "Google Alerts" steps below |
+| `ADZUNA_APP_ID` and `ADZUNA_APP_KEY` | Adzuna, 20 searches a run | developer.adzuna.com: **Register**, confirm the email, the dashboard shows an Application ID and an Application Key: one secret each |
+
+To check: Actions, **scan**, **Run workflow** with *Dry run* ticked. The log shows `Site Search: 15 of 45 searches this run,
+through Brave`, `Google Jobs: N postings`, `Adzuna: N postings` instead of "skipped".
+
+**The Recruiter and Hiring Manager links** need nothing: they are LinkedIn people searches you open yourself, signed in.
+Rows written before the columns existed get them with Actions, **tools**, command `clean-feed`, args `--people-links`.
 
 ### Google Alerts: Google watching the ATS sites for you
 

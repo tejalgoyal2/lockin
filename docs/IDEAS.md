@@ -3,74 +3,68 @@
 The goal is interviews, not a big Feed. Every idea here is judged by one question: does it put a good application in
 front of a person sooner?
 
-## 1. Switch these on (10 minutes, all free)
+## 1. Switch these on (README, "Keys and secrets", has the click-by-click steps)
 
-| What | Why it matters | How |
+| Secret | What it turns on | Cost |
 |---|---|---|
-| **Google for Jobs** (`SERPAPI_KEY`) | Google's job panel gathers LinkedIn, Indeed, Glassdoor, Talent.com and employers' own sites: the jobs lockin cannot read itself. Each comes with its full description | serpapi.com, sign up (free plan, 250 searches a month), copy the API key, add the repo secret `SERPAPI_KEY` |
-| **Google Alerts on the ATS sites** (`GOOGLE_ALERTS_FEEDS`) | The "Google dork" trick from the videos (`site:jobs.lever.co Vancouver`), run by Google for you as soon as a page is indexed. Lever is the one big ATS the open datasets miss | README, section "Google Alerts": 8 alerts, RSS delivery, paste the feed links into one secret |
-| **Adzuna** (`ADZUNA_APP_ID`, `ADZUNA_APP_KEY`) | A Canadian job search engine: thousands of employers' postings, 20 tech searches a run | developer.adzuna.com, register an app, add the two secrets |
+| `BRAVE_SEARCH_API_KEY` | **Site Search**: the recruiter's Boolean trick (`site:jobs.ashbyhq.com ("software engineer" OR ...) (Vancouver OR Canada)`) on 9 ATS sites, 15 searches a run, past week only | free monthly credit (~1,000 searches); a card is needed to sign up |
+| `SERPAPI_KEY` | **Google Jobs** (Google's job panel: LinkedIn, Indeed, Glassdoor, company sites, each with its full description) and Site Search through Google's own results when there is no Brave key | free plan, 250 searches a month |
+| `GOOGLE_ALERTS_FEEDS` | **Google Alerts**: Google runs the same `site:` searches for you and lists new pages as they are indexed | free |
+| `ADZUNA_APP_ID`, `ADZUNA_APP_KEY` | **Adzuna**: a Canadian job search engine, 20 tech searches a run | free |
 
-Nothing else changes: the next scan picks them up. Without them the scan still runs; each prints "skipped".
+Each one is optional: without it the scan still runs and prints "skipped" for that source.
 
 ## 2. Already in place
 
 - 7-day window, two runs a day (8 am and 4 pm Pacific), up to 500 new rows a run, best Score first.
-- Sources: a dataset of ~1.4 M ATS postings refreshed daily (Feashliaa: Workday, iCIMS, Greenhouse, Lever, Ashby, BambooHR, Paylocity), 180+
-  employer boards on the watchlist (banks, telcos, BC Crown corporations, cities), Job Bank (with CivicJobs.ca municipal
-  postings), BC Public Service, YC, Built In Vancouver, HN "Who is hiring", Jobicy, Simplify new-grad, Bay Street Oracle.
+- Sources: a dataset of ~1.4 M ATS postings refreshed daily (Feashliaa: Workday, iCIMS, Greenhouse, Lever, Ashby,
+  BambooHR, Paylocity), 200+ employer boards on the watchlist (banks, telcos, BC Crown corporations, cities, Vancouver
+  tech), Job Bank (with CivicJobs.ca municipal postings), BC Public Service, YC, Built In Vancouver, HN "Who is hiring",
+  Jobicy, Simplify new-grad, Bay Street Oracle.
 - The scanner finds new employer boards by itself (`watchlist.auto.yaml`), drops nothing for a missing description, and
   flags rather than drops the "2+ years" postings.
+- **Two people per job.** Every Feed row has a `Recruiter` and a `Hiring Manager` link: LinkedIn's people search,
+  narrowed to the company and the team, closest connections first.
 
 ## 3. How to use the Feed to get interviews
 
 1. **Apply the same day.** Recruiters read applicant lists newest first and stop when they have enough to interview. A
    University of Chicago study of job-board data found about 39% of all applications go to postings less than 48 hours
-   old. Two runs a day exist so you can be in that first batch: check the Feed at 9 am and 5 pm.
-2. **Sort by Score, apply to the top 10 every day** before reading anything else. Ten tailored applications a day beat 50
-   blind ones.
-3. **Every application gets a person.** After applying, find the hiring manager or a team member on LinkedIn (company +
-   team name + "manager") and send a 3-line note: the role, one concrete thing you built that matches the JD, a link.
-   Direct notes and referrals get answered far more often than cold applications.
-4. **Ask for referrals at companies with several Feed rows.** If a company shows up 3+ times, someone you know (alumni,
-   classmates, bootcamp, meetup contacts) probably works there or knows someone who does. A referral moves you to the top
-   of the pile.
+   old. Two runs a day exist so you can be in that first batch.
+2. **Sort by Score and work down.** Ten careful applications a day beat 50 blind ones.
+3. **Write to the two people.** After applying, open the row's `Hiring Manager` link, pick the person who leads that team
+   (a 2nd-degree connection is best: ask the mutual contact for an intro), and send a 3-line note: the role, one thing you
+   built that matches the JD, a link. Then the `Recruiter` link: a one-line note that you applied, with the job title.
+4. **Ask for referrals at companies with several Feed rows.** If a company shows up 3+ times, the people links will show
+   who you know there.
 5. **Use the gap report.** `reports/gaps.md` lists the skills the week's job descriptions ask for that your skills list
-   does not have (this week: Java, SAP, Salesforce, microservices). One small weekend project with the top gap
-   unlocks dozens of postings.
-6. **Follow up after 7 days** on applications with no answer: a short note to the recruiter or hiring manager.
+   does not have (this week: Java, SAP, Salesforce, microservices). One small project with the top gap unlocks dozens of
+   postings.
 
-## 4. Next things to build (ranked by how much they help)
+## 4. Next things to build
 
-1. **Daily shortlist.** After each run, a "Top 10 today" view or digest: highest Score, posted < 48 h, BC or remote first.
-2. **One-click tailored resume and cover letter.** For a row you tick Interested on, draft the tailored resume and cover
-   letter from the JD (the resume-tailor and cover-letter skills already exist; this connects them to the Feed).
-3. **Hiring-manager finder.** For each top row, the team name from the JD and a ready search link for LinkedIn people at
-   that company and team, so the note in 3.3 takes one minute.
-4. **Follow-up reminders.** In the Job Applications database: a date column filled 7 days after Apply, and a view of
-   what is due.
-5. **"Posted < 24 h" signal** in the Feed so the freshest jobs stand out at a glance.
-6. **Response tracking.** Which sources, titles and companies answer you: after a month the scanner can rank sources by
-   interviews, not just postings.
-7. **More employer boards.** Give a list of 20 to 30 companies you would love to work for (Vancouver startups, BC tech,
-   public sector); each goes on the watchlist so their new postings arrive within hours.
+1. **More employer boards.** Name companies you would love to work for and they go on the watchlist; the scanner also
+   keeps adding the busiest boards it meets by itself.
+2. **"Posted < 24 h" signal** in the Feed so the freshest jobs stand out at a glance.
 
 ## 5. Beyond job boards
 
 - **Vancouver tech meetups and events** (VanJS, Vancouver Python, Women Who Code, BC Tech events, hackathons): most
   first jobs come through a person met there.
-- **Programs that pay employers to hire graduates**: TECHNATION Career Ready (wage subsidy for placements), and Canada
-  Summer Jobs / Youth Employment and Skills Strategy employers. Mention eligibility in cover letters when it applies; a
-  subsidy makes a junior hire cheaper.
-- **Staffing and contract agencies** that place juniors (they show up in the Feed as "Upstaff", "Apex Systems" ...): a
-  contract role is a paid first line on the resume.
-- **Public sector**: BC Public Service, cities, health authorities and Crown corporations hire juniors steadily and post
-  on their own sites (already on the watchlist).
+- **Programs that pay employers to hire graduates**: TECHNATION Career Ready (wage subsidy for placements). Mention
+  eligibility in cover letters when it applies; a subsidy makes a junior hire cheaper.
+- **Staffing and contract agencies** that place juniors: a contract role is a paid first line on the resume.
+- **Public sector**: BC Public Service, cities, health authorities and Crown corporations hire juniors steadily (already
+  on the watchlist).
 
 ## Not done, and why
 
-- **Scraping Google, LinkedIn or Indeed directly**: they block automated readers. lockin reads them through Google for Jobs
-  (SerpApi) instead, which is permitted and pays for the searches.
-- **Paid aggregators** (beyond the free tiers above): not needed yet. Add them only if the Feed runs short of good jobs.
-- **The hanzili Canada new-grad list**: it is currently empty upstream ("No roles currently"). The scanner keeps reading
-  it and picks it up again if it returns.
+- **Running Google's search page from a script.** Searching by hand is fine. A program is different: google.com/robots.txt
+  says `Disallow: /search` to every automated client, Google's terms forbid automated access against those instructions,
+  and Google typically answers a script from a cloud server with a CAPTCHA. lockin will not dodge
+  that. Brave's and SerpApi's APIs are built to be called by programs, so the same searches go
+  through them.
+- **Reading LinkedIn or Indeed directly**: they refuse automated readers. Their jobs arrive through Google Jobs, and their
+  people through the two links you click yourself.
+- **The hanzili Canada new-grad list**: empty upstream ("No roles currently"). The scanner keeps reading it in case it
+  returns.
