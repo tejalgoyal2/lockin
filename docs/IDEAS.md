@@ -22,6 +22,10 @@ Each one is optional: without it the scan still runs and prints "skipped" for th
 - **Jobhive**: ats-scrapers' open dataset (5 M postings, 64 hiring systems, refreshed daily) for the systems lockin cannot
   read itself: Oracle, Eightfold (Microsoft), Dayforce, UKG, Rippling, JazzHR, Breezy, Cornerstone; and every
   Greenhouse, Lever, Ashby, BambooHR and iCIMS board, not only the ones on the watchlist.
+- **Fewer silent misses.** A posting whose location is only a Canadian city name ("Guelph", "Kelowna", "Halifax",
+  "St. John's") used to be dropped as not Canadian; those cities now count. A Jobhive row in Canada that says only
+  "Remote" reads "Remote, Canada".
+- **talent pool** flag: a posting that says it is evergreen or not for a current opening is tagged, not dropped.
 - **Pay and Posted columns.** `Pay` shows the range the posting states ("$70,000–$85,000 a year"; Ontario and BC require
   one), the Canadian range when a posting gives a US one too. `Posted` is a real date, so the Feed sorts newest first.
 - The scanner finds new employer boards by itself (`watchlist.auto.yaml`), drops nothing for a missing description, and
@@ -76,6 +80,10 @@ Each one is optional: without it the scan still runs and prints "skipped" for th
   its Workday rows come from employers the watchlist and the Feashliaa dataset already read.
 - **Jobhive's Workday, Google, TikTok, Avature and Pinpoint snapshots**: their Canadian rows carry no posting date, so
   there is no telling a new job from a year-old one.
+- **GC Jobs** (the federal public service board): its search runs on server sessions and forms, with no list or feed
+  a program can read; federal postings that also go to Job Bank arrive through Job Bank.
+- **Ghost-job and scam scores** (several GitHub projects): they score company trust with paid data or an AI call per
+  job. lockin keeps to what the posting itself says (the talent pool flag) and to employers' own boards.
 - **openroles.today**: a good open dataset, but its robots.txt disallows `/data/` for programs, so it is not read.
 - **Reading LinkedIn or Indeed directly**: they refuse automated readers. Their jobs arrive through Google Jobs, and their
   people through the two links you click yourself.

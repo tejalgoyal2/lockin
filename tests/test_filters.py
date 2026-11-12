@@ -6,6 +6,8 @@ import pytest
     "CAN - Alberta - Calgary", "Montréal, Quebec", "Victoria, BC", "London, ON",
     "Seattle, WA; Toronto, ON", "San Francisco, Palo Alto, Los Angeles, Toronto",
     "Richmond Hill, ON", "Home-Canada",
+    "Halifax", "Victoria", "Guelph", "Kelowna", "Brampton", "St. John's", "North York", "Thunder Bay", "Moncton",
+    "St. John's, NL, ca", "Charlottetown, PE", "Iqaluit, NU", "Yellowknife, NT", "Dawson City, Yukon", "Labrador City, NL",
 ])
 def test_canadian_locations_kept(filters, loc):
     assert filters.canadian_location(loc) is not None
@@ -15,6 +17,8 @@ def test_canadian_locations_kept(filters, loc):
     "Vancouver, Washington", "Vancouver, WA", "Ottawa, Illinois", "Waterloo, Wisconsin",
     "United States", "USA", "Remote - US", "Victoria, Australia", "London, UK",
     "Halifax, UK", "Seattle, WA", "Not specified", "",
+    "Halifax, England", "Melbourne, Victoria, Australia", "Victoria Street, London, UK", "North Yorkshire",
+    "London", "Richmond", "Surrey",
 ])
 def test_non_canadian_locations_dropped(filters, loc):
     assert filters.canadian_location(loc) is None
@@ -124,3 +128,8 @@ def test_french_only_titles_dropped_but_bilingual_kept(filters):
     assert not filters.language_ok("Analyste de données")
     assert filters.language_ok("Data Analyst / Analyste de données")      # English first: kept
     assert filters.language_ok("Software Engineer")
+
+
+def test_bi_means_business_intelligence_only_in_capitals(filters):
+    assert filters.title_tier("BI Developer") == "strong"
+    assert filters.title_tier("Server- 38 Hours Bi Weekly; 7am-3pm Shifts") is None

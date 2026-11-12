@@ -102,3 +102,21 @@ def test_older_rows_get_their_date_once_from_the_company_tag():
     assert nf.date_rows(client, FEED, rows, date(2026, 11, 12), dry_run=False) == 1
     assert client.calls == [("PATCH", "/v1/pages/p1", {"properties": {"Posted": {"date": {"start": "2026-11-06"}}}})]
     assert nf.date_rows(client, nf.Feed("ds", FEED.names), rows, date(2026, 11, 12), dry_run=False) == 0
+
+
+def test_a_bare_remote_row_in_canada_reads_remote_canada():
+    assert jobhive._where("Remote") == "Remote, Canada" and jobhive._where("") == "Canada"
+    assert jobhive._where("Remote - US") == "Remote - US" and jobhive._where("Toronto, ON") == "Toronto, ON"
+
+
+@pytest.mark.parametrize("text, want", [
+    ("This is an evergreen requisition and does not represent a current vacancy.", True),
+    ("This posting is for building a talent pool for upcoming roles.", True),
+    ("This job posting is not for a current vacancy.", True),
+    ("Not the right fit? Join our talent community!", False),                 # the usual footer
+    ("This competition may be used to fill future vacancies.", False),        # a real job that also fills others
+    ("We are hiring for an immediate opening.", False),
+])
+def test_talent_pool_postings_are_flagged(text, want):
+    from scanner import jd_rules
+    assert jd_rules.talent_pool(text) is want

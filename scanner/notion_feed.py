@@ -237,7 +237,7 @@ def _rich(text: str) -> list[dict]:
 
 
 LEVEL_SIGNALS = ("new grad", "recent graduate", "0-2 years", "entry level", "junior")       # strongest first
-CAUTION_SIGNALS = ("2+ yrs", "P.Eng req", "jd unavailable", "low signal")                    # most important first
+CAUTION_SIGNALS = ("2+ yrs", "P.Eng req", "talent pool", "jd unavailable", "low signal")                    # most important first
 
 
 def display_signals(signals: list[str]) -> list[str]:

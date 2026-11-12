@@ -154,15 +154,17 @@ location:
   # Names that are unambiguous on their own.
   include:
     - '\bCanada\b'
-    - '\b(Ontario|British Columbia|Alberta|Quebec|Québec|Manitoba|Saskatchewan|Nova Scotia|New Brunswick|Newfoundland|Prince Edward Island)\b'
+    - '\b(Ontario|British Columbia|Alberta|Quebec|Québec|Manitoba|Saskatchewan|Nova Scotia|New Brunswick|Newfoundland|Labrador|Prince Edward Island|Yukon|Northwest Territories|Nunavut)\b'
     - '\b(Toronto|Vancouver|Montr[ée]al|Ottawa|Waterloo|Kitchener|Calgary|Edmonton|Burnaby|Mississauga|Markham|Kanata|Gatineau|Winnipeg|Regina|Saskatoon|Oakville)\b'
+    # More cities that can only be Canadian, so a posting that names just the city ("Guelph", "Kelowna") is not lost
+    - '\b(Guelph|Kelowna|Kamloops|Nanaimo|Abbotsford|Coquitlam|Chilliwack|Langford|Squamish|Penticton|New Westminster|Prince George|Brampton|Vaughan|Etobicoke|North York|Barrie|Oshawa|Pickering|Thunder Bay|Sault Ste\.? Marie|St\.? Catharines|Brantford|Sarnia|Timmins|Moncton|Fredericton|Charlottetown|St\.? John[’\x27]s|Lethbridge|Red Deer|Medicine Hat|Fort McMurray|Grande Prairie|Whitehorse|Yellowknife|Iqaluit|Halifax|Victoria)\b'
     # Names shared with places outside Canada: require a province qualifier.
     - '\b(Victoria|Richmond|Surrey|Hamilton|London|Halifax),?\s+(BC|ON|NS|British Columbia|Ontario|Nova Scotia)\b'
     - 'Remote\s*\(?\s*Canada'
     - 'Canada\s*[-–]\s*Remote'
   # Province suffixes, case-sensitive so ", on" in prose does not match.
   include_cs:
-    - ',\s*(ON|BC|AB|QC|MB|SK|NS|NB)\b'
+    - ',\s*(ON|BC|AB|QC|MB|SK|NS|NB|NL|PE|PEI|YT|NT|NU)\b'
   # Known false positives. Matching spans are removed from the string BEFORE the
   # include test, so "Seattle, WA; Toronto, ON" still passes but "Vancouver, WA" does not.
   # "United States"/"USA" need no entry: a string with no Canadian location left is dropped.
@@ -173,6 +175,11 @@ location:
     # "Ontario, CA" and nothing else is Ontario, California (an Owens & Minor warehouse job reached the Feed); "Toronto, Ontario,
     # CA" keeps its city and passes. The whole-string anchors keep "Remote, Ontario, CA" (Canada) alone.
     - '^\s*Ontario,\s*(?:CA|California)\s*$'
+    # Halifax and Victoria alone are taken as Canadian (Halifax, Nova Scotia; Victoria, BC), except these
+    - '\bHalifax,?\s+(?:UK|United Kingdom|England|West Yorkshire|Yorkshire|VA|Virginia|MA|Massachusetts)\b'
+    - '\bVictoria,?\s+(?:Australia|AU|AUS|VIC|TX|Texas|Seychelles|Mah[ée]|Hong Kong|Malta|Gozo|London|UK)\b'
+    - '\b(?:Melbourne|Geelong|Ballarat|Bendigo)\b[^;|]*'
+    - '\bVictoria\s+(?:Street|St\.?|Road|Rd\.?|Avenue|Ave\.?|Station|Square|Embankment|Park|Island|Falls|Harbour)\b'
   exclude_cs:
     - ',\s*WA\b'
   split_on: '[;|]'   # multi-location strings are split on this; first Canadian part is used
@@ -229,6 +236,7 @@ title:
     - ML
     - AI
     - SRE
+  strong_words_cs:       # upper case only: "BI Developer", never "Bi Weekly" (a restaurant Server shift reached the Feed)
     - BI
   weak:
     - engineer

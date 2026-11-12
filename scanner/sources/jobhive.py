@@ -99,6 +99,18 @@ def _text(desc: str) -> str:
     return html_to_text(desc) if _TAG.search(desc) else desc
 
 
+_VAGUE = re.compile(r"^\W*(?:remote|hybrid|anywhere|flexible|work from home|wfh|home[- ]based)?\W*$", re.I)
+
+
+def _where(location) -> str:
+    """The row's location; a bare "Remote" (or none) on a row the dataset places in Canada reads "Remote, Canada", so
+    the location stage does not drop a Canadian remote job for naming no country."""
+    location = (location or "").strip()
+    if _VAGUE.match(location):
+        return f"{location}, Canada" if location else "Canada"
+    return location
+
+
 def records(rows: list[dict], cutoff: datetime, names: dict[str, str] | None = None) -> list[dict]:
     """Dataset rows (already Canadian) -> lockin records, newest first; rows older than `cutoff` or undated are left out."""
     out = []
@@ -113,7 +125,7 @@ def records(rows: list[dict], cutoff: datetime, names: dict[str, str] | None = N
         company = company_for(r.get("company") or "", url, names or {})
         slug = company.lower() == (urlsplit(url).hostname or "").split(".")[0]      # "lenddirect-attainfinance"
         out.append({"company": company or "Jobhive employer", "company_name": "" if slug else company, "title": title,
-                    "location": (r.get("location") or "").strip() or "Canada", "url": url, "source": SOURCE, "first_seen": when,
+                    "location": _where(r.get("location")), "url": url, "source": SOURCE, "first_seen": when,
                     "jd": _text(r.get("description") or ""), "pay": pay_line(r)})
     out.sort(key=lambda rec: rec["first_seen"], reverse=True)
     return out

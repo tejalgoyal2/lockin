@@ -254,6 +254,26 @@ def requires_peng(jd: str) -> bool:
     return False
 
 
+# --- talent pool / evergreen postings ------------------------------------------
+# A posting that says it is not for a current opening ("evergreen requisition", "this posting is to build a talent
+# pool") rarely leads to an interview soon. Flagged, never dropped. The "join our talent community" footer many
+# employers add to every posting does not count, nor does "also used to fill future vacancies".
+_POOL = re.compile(
+    r"\bevergreen\s+(?:requisition|posting|req|role|position|opening|job)s?\b"
+    r"|\b(?:this|the)\s+(?:job\s+)?(?:posting|requisition|position|role|opportunity|advertisement)\s+is\s+(?:an?\s+)?"
+    r"(?:evergreen|pipeline|pooling|talent[\s-]pool|(?:for|intended\s+(?:for|to))\s+(?:build(?:ing)?|creat\w+)\s+(?:a|our)\s+"
+    r"(?:talent\s+pool|pool|pipeline|candidate\s+pool))"
+    r"|\b(?:this|the)\s+(?:job\s+)?(?:posting|requisition|advertisement)\s+(?:is|does)\s+not\s+(?:for\s+|represent\s+)?"
+    r"(?:an?\s+)?(?:current|immediate|specific|existing|active)\s+(?:vacanc|opening|position|role)"
+    r"|\bthere\s+(?:is|are)\s+(?:currently\s+)?no\s+(?:current\s+|immediate\s+)?(?:vacanc|opening|position)",
+    re.IGNORECASE)
+
+
+def talent_pool(jd: str) -> bool:
+    """The posting says it is evergreen or for a talent pool, not for a current opening."""
+    return bool(_POOL.search(jd or ""))
+
+
 # --- Notion "Signals" multi-select ------------------------------------------
 _SIGNAL_NEW_GRAD = re.compile(r"new[\s-]?grad(?:uate)?s?\b", re.IGNORECASE)
 _SIGNAL_RECENT = re.compile(r"recent(?:ly)?\s+graduat\w*|graduated\s+within|university\s+grad|college\s+grad", re.IGNORECASE)
@@ -266,6 +286,7 @@ TWO_YEARS = "2+ yrs"                 # requirement is exactly 2 years (kept only
 LOW_SIGNAL = "low signal"            # JD found, but too few tech terms to trust Fit %
 JD_UNAVAILABLE = "jd unavailable"    # no JD text could be fetched
 PENG = "P.Eng req"                   # the JD requires a P.Eng licence (kept, never dropped)
+POOL = "talent pool"                 # evergreen / talent-pool posting, not a current opening (kept, never dropped)
 
 
 def detect_signals(title: str, jd: str, exp: Experience) -> list[str]:
