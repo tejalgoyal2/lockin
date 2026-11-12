@@ -1,10 +1,10 @@
 # Canadian entry-level tech jobs: candidates
 
-- Generated: 2026-11-12 20:15 UTC
+- Generated: 2026-11-12 22:03 UTC
 - Window: first seen in the last 7 day(s)
 - Feashliaa dataset last updated: 2026-11-10T16:37:41.293421Z
-- Candidates after dedupe: **1297**
-- Remaining after JD rules: **136** (ranked by Score)
+- Candidates after dedupe: **1293**
+- Remaining after JD rules: **138** (ranked by Score)
 - Skipped as already applied to: 2 (by link 0, by company + title 2)
 
 | First Seen | Company | Role | Location | Source | Tier | Fit % | Cluster | Signals | Gaps | URL |
@@ -29,6 +29,7 @@
 | 2026-11-10 | Mamoru | Blockchain Wallet Engineer (Rust) | Toronto, ON, Canada | Jobhive | weak | 80 | software |  |  | https://mamoru.applytojob.com/apply/jobs/details/n69XOezU7t |
 | 2026-11-07 | genesys | Associate Software Developer | Toronto (Flexible) | Workday | strong | 68.4 | software | 0-2 years | Java, Kotlin, Spring, Vue | https://genesys.wd1.myworkdayjobs.com/genesys/job/Toronto-Flexible/Associate-Software-Developer_JR112811 |
 | 2026-11-09 | Company3 | Systems Administrator | Toronto, ON, Canada | Jobhive | weak | 70 | software |  | Ansible, SAS | https://company3.applytojob.com/apply/jobs/details/PQP1VnwfIK |
+| 2026-11-12 | C&B TECHNOLOGIES INC. | Web Developer | Georgetown, ON | Job Bank | strong | 71.4 | software |  | Java | https://www.jobbank.gc.ca/jobsearch/jobposting/50716383 |
 | 2026-11-12 | Kablamo Pty Ltd | Devops Engineer | Toronto, ON | Job Bank | strong | 61.1 | software |  | Datadog, GCP, GitLab, Redshift, Ansible, Grafana | https://www.jobbank.gc.ca/jobsearch/jobposting/50710875 |
 | 2026-11-12 | Edge Factor Inc. | Web Developer | Beamsville, ON | Job Bank | strong | 58.5 | software | 2+ yrs | Angular, Ansible, Java, Jenkins, MySQL, PHP | https://www.jobbank.gc.ca/jobsearch/jobposting/50711372 |
 | 2026-11-06 | University of Saskatchewan | Application Support Specialist, Information and Communications Technology | Saskatoon, SK, CA | Jobhive | weak | 75 | data | 2+ yrs |  | https://usask.csod.com/ux/ats/careersite/14/job/15783?c=usask |
@@ -56,7 +57,6 @@
 | 2026-11-11 | Miratech | Operation Model and Service Transition Analyst, Contact Centre | Kitchener, ON, ca | Jobhive | weak | n/a | software | low signal, 2+ yrs |  | https://jobs.smartrecruiters.com/miratech1/744000161012808 |
 | 2026-11-09 | DP World | Maximo Functional Analyst | Burnaby, BC, Canada | Jobhive | weak | n/a | software | low signal |  | https://ehpv.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/27652 |
 | 2026-11-12 | spgi | OTC Derivatives Analyst | Toronto, CAN | Workday | weak | n/a | software | low signal |  | https://spgi.wd5.myworkdayjobs.com/spgi_careers/job/Toronto-CAN/OTC-Derivatives-Analyst_331925-1 |
-| 2026-11-12 | canadiantirecorporation | Treasury Analyst (6 Month Contract) - Myworkdayjobs.com | Canada | Site Search | weak | n/a | data | low signal |  | https://canadiantirecorporation.wd3.myworkdayjobs.com/fr-CA/Enterprise_External_Careers_Site/job/Toronto-Ontario/Treasury-Analyst--6-Month-Contract-_JR167450-1 |
 | 2026-11-10 | AccorHotel | Shift Engineer, Full-Time (Parental Leave Contract \| November 2026 - February 2027) | Vancouver, BC, ca | Jobhive | weak | n/a | software | low signal |  | https://jobs.smartrecruiters.com/AccorHotel/744000160920610 |
 | 2026-11-11 | Samuel, Son & Co. 1855 | Specialist, Intelligent Automation | Oakville, ON, Canada | Jobhive | strong | n/a | software | low signal |  | https://ebct.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_3002/job/225968 |
 | 2026-11-06 | Packetlabs | Penetration Tester - Hardware (Canada) | Remote (Canada) | Jobhive | weak | n/a | software | low signal |  | https://ats.rippling.com/packetlabs/jobs/f01d9da6-b18e-4c6d-9a2c-c851f323e265 |
@@ -66,22 +66,24 @@
 | 2026-11-10 | Kuehne+Nagel | KC Finance Accounts Receivable Specialist | Vancouver, Canada | Jobhive | weak | n/a | software | low signal |  | https://jobs.kuehne-nagel.com/job/20153 |
 | 2026-11-10 | Cencora | Learning Specialist | Remote, Ontario, Canada | Jobhive | weak | n/a | software | low signal |  | https://careers.cencora.com/job/R2619656 |
 | 2026-11-11 | Klick | Paid Social Specialist | Toronto, Ontario, ca | Jobhive | weak | n/a | data | low signal |  | https://jobs.smartrecruiters.com/klick1/744000161149159 |
-| 2026-11-11 | University Health Network | Clinical Nurse Specialist, Psychosocial Oncology | Toronto, ON, ca | Jobhive | weak | n/a | ml | low signal |  | https://jobs.smartrecruiters.com/universityhealthnetwork/744000161104130 |
 | 2026-11-09 | clio | Application Security Developer | Toronto | Workday | strong | n/a | security | low signal |  | https://clio.wd3.myworkdayjobs.com/ClioCareerSite/job/Toronto/Application-Security-Developer_REQ-5443 |
+| 2026-11-11 | University Health Network | Clinical Nurse Specialist, Psychosocial Oncology | Toronto, ON, ca | Jobhive | weak | n/a | ml | low signal |  | https://jobs.smartrecruiters.com/universityhealthnetwork/744000161104130 |
 | 2026-11-06 | manulife | Pricing Specialist | Toronto, Ontario | Workday | weak | n/a | data | low signal |  | https://manulife.wd3.myworkdayjobs.com/mfcjh_jobs/job/Boston-Massachusetts/Pricing-Specialist-Senior-Pricing-Specialist_JR26071489 |
 | 2026-11-06 | Myant Shared Service Corp. | Clinical Scientist (On Site) | Mississauga, ON, Canada | Jobhive | weak | n/a | ml | low signal, 2+ yrs |  | https://myant.applytojob.com/apply/jobs/details/OipZrjeuia |
 | 2026-11-11 | Danaher | ITSM Reporting Specialist | London, Ontario, Canada | Jobhive | weak | n/a | software | low signal |  | https://jobs.danaher.com/job/R1320568 |
 | 2026-11-11 | sunlife | Business Systems Consultant, Technical Change, Release Governance & Operations | Waterloo, Ontario | Workday | weak | n/a | data | low signal |  | https://sunlife.wd3.myworkdayjobs.com/Experienced-Jobs/job/Waterloo-Ontario/Business-Systems-Consultant--Technical-Change--Release-Governance---Operations_JR00128569 |
 | 2026-11-11 | Fa Evlf Saasfaprod1 | Bilingual Tolls and Violations Specialist | Etobicoke, ON, Canada | Jobhive | weak | n/a | data | entry level, low signal |  | https://fa-evlf-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/41750 |
 | 2026-11-09 | Cencora | Personal Care Specialist | Remote, Ontario, Canada | Jobhive | weak | n/a | software | low signal |  | https://careers.cencora.com/job/R2618307 |
-| 2026-11-10 | Indigo Books & Music | Analyst, Supply Chain (12-month contract) | Brampton, ON, ca | Jobhive | weak | n/a | data | low signal | SAP | https://jobs.smartrecruiters.com/indigobooksmusic/744000160960239 |
 | 2026-11-06 | A49 | Systems Integrator – Industrial Automation & SCADA | Vancouver, BC, Canada | Jobhive | strong | n/a | software | low signal |  | https://emit.fa.ca3.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_2001/job/98928 |
 | 2026-11-06 | GE HealthCare | Clinical Applications Specialist - Monitoring Systems | Remote, Alberta, Canada | Jobhive | weak | n/a | software | low signal |  | https://careers.gehealthcare.com/job/R4042352 |
 | 2026-11-06 | Cencora | Personal Care Specialist (12-month contract) | Remote, British Columbia, Canada | Jobhive | weak | n/a | software | low signal |  | https://careers.cencora.com/job/R2618768 |
 | 2026-11-06 | Thales Group | Technical Specialist - Hull (West) | Victoria, British Columbia, Canada | Jobhive | weak | n/a | software | low signal |  | https://careers.thalesgroup.com/job/R0347289 |
+| 2026-11-10 | Indigo Books & Music | Analyst, Supply Chain (12-month contract) | Brampton, ON, ca | Jobhive | weak | n/a | data | low signal | SAP | https://jobs.smartrecruiters.com/indigobooksmusic/744000160960239 |
 | 2026-11-10 | Microsoft | Customer Experience Engineer / M365 | Toronto, ON, CA | Jobhive | weak | n/a | software | low signal, 2+ yrs |  | https://microsoft.eightfold.ai/careers/job/1970393557044065 |
 | 2026-11-12 | Molson Coors | Environmental & Sustainability Engineer | Toronto, CA-ON, Canada | Jobhive | weak | n/a | software | low signal |  | https://careers.molsoncoors.com/job/40435 |
 | 2026-11-10 | Avery Dennison | Workforce Support (HR) Specialist (12 month contract) | Toronto, ON, ca | Jobhive | weak | n/a | software | low signal, 2+ yrs |  | https://jobs.smartrecruiters.com/averydennison/744000160937681 |
+| 2026-11-12 | ProServeIT Corporation | Cybersecurity Analyst | Mississauga, ON | Job Bank | strong | n/a | security | low signal, 2+ yrs |  | https://www.jobbank.gc.ca/jobsearch/jobposting/50716335 |
+| 2026-11-12 | RE/MAX Realtron Realty Inc., Brokerage | Cloud Administrator | Markham, ON | Job Bank | strong | n/a | software | 0-2 years, low signal |  | https://www.jobbank.gc.ca/jobsearch/jobposting/50715635 |
 | 2026-11-12 | Atlas-Apex Roofing Inc. | Desktop Support Analyst | Etobicoke, ON | Job Bank | weak | n/a | software | low signal, 2+ yrs | Cisco | https://www.jobbank.gc.ca/jobsearch/jobposting/50713934 |
 | 2026-11-10 | medaviehs | Actuarial Analyst- Pricing | New Brunswick | Workday | weak | n/a | data | low signal, 2+ yrs | VBA | https://medaviehs.wd10.myworkdayjobs.com/blue_cross_life_external/job/New-Brunswick/Actuarial-Analyst--Pricing_R-268975-1 |
 | 2026-11-10 | UAP Inc. | Warehouse Process and Systems Specialist | Edmonton, AB, ca | Jobhive | weak | n/a | data | low signal, 2+ yrs |  | https://jobs.smartrecruiters.com/UAPInc/744000160904562 |
@@ -168,8 +170,8 @@
 | Stage | Remaining |
 |---|---:|
 | raw records | 18,852 |
-| active, visible, tech category | 2,185 |
-| first seen within window | 193 |
+| active, visible, tech category | 2,173 |
+| first seen within window | 191 |
 | Canadian location | 12 |
 | not Quebec-only | 10 |
 | not on blocklist | 10 |
@@ -183,16 +185,16 @@
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 39,989 |
-| first seen within window | 10,556 |
-| Canadian location | 4,727 |
-| not Quebec-only | 4,255 |
-| not on blocklist | 4,211 |
-| not French-only | 4,199 |
-| title matches tech roles | 1,452 |
-| not senior / non-software | 518 |
-| not student-only | 468 |
-|   of which weak_title | 305 |
+| raw records | 39,650 |
+| first seen within window | 10,649 |
+| Canadian location | 4,803 |
+| not Quebec-only | 4,316 |
+| not on blocklist | 4,270 |
+| not French-only | 4,258 |
+| title matches tech roles | 1,464 |
+| not senior / non-software | 520 |
+| not student-only | 467 |
+|   of which weak_title | 304 |
 
 **YC**
 
@@ -259,16 +261,16 @@
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 248 |
-| first seen within window | 248 |
-| Canadian location | 243 |
-| not Quebec-only | 189 |
-| not on blocklist | 189 |
-| not French-only | 189 |
-| title matches tech roles | 181 |
-| not senior / non-software | 165 |
-| not student-only | 165 |
-|   of which weak_title | 105 |
+| raw records | 246 |
+| first seen within window | 246 |
+| Canadian location | 241 |
+| not Quebec-only | 192 |
+| not on blocklist | 192 |
+| not French-only | 192 |
+| title matches tech roles | 184 |
+| not senior / non-software | 167 |
+| not student-only | 167 |
+|   of which weak_title | 103 |
 
 **BC Gov**
 
@@ -304,7 +306,7 @@
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 11 |
+| raw records | 10 |
 | first seen within window | 5 |
 | Canadian location | 5 |
 | not Quebec-only | 5 |
@@ -319,16 +321,16 @@
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 6 |
-| first seen within window | 6 |
-| Canadian location | 6 |
-| not Quebec-only | 6 |
-| not on blocklist | 6 |
-| not French-only | 6 |
-| title matches tech roles | 4 |
-| not senior / non-software | 2 |
-| not student-only | 2 |
-|   of which weak_title | 2 |
+| raw records | 4 |
+| first seen within window | 4 |
+| Canadian location | 4 |
+| not Quebec-only | 4 |
+| not on blocklist | 4 |
+| not French-only | 4 |
+| title matches tech roles | 3 |
+| not senior / non-software | 1 |
+| not student-only | 1 |
+|   of which weak_title | 1 |
 
 **Canada List**
 
@@ -349,25 +351,25 @@
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 4,215 |
-| first seen within window | 4,215 |
-| Canadian location | 3,642 |
-| not Quebec-only | 2,979 |
-| not on blocklist | 2,977 |
-| not French-only | 2,974 |
-| title matches tech roles | 526 |
-| not senior / non-software | 244 |
-| not student-only | 233 |
-|   of which weak_title | 199 |
+| raw records | 4,165 |
+| first seen within window | 4,165 |
+| Canadian location | 3,599 |
+| not Quebec-only | 2,952 |
+| not on blocklist | 2,950 |
+| not French-only | 2,947 |
+| title matches tech roles | 519 |
+| not senior / non-software | 240 |
+| not student-only | 229 |
+|   of which weak_title | 197 |
 
 **Combined**
 
 | Stage | Remaining |
 |---|---:|
-| before dedupe | 1,790 |
-|   merged by canonical URL | 83 |
-|   merged by fuzzy company+title | 220 |
-| after dedupe | 1,487 |
+| before dedupe | 1,786 |
+|   merged by canonical URL | 86 |
+|   merged by fuzzy company+title | 217 |
+| after dedupe | 1,483 |
 
 ## JD rules
 
@@ -375,41 +377,41 @@
 
 | Reason | Jobs |
 |---|---:|
-| location_not_canada | 718 |
-| experience_3plus | 287 |
+| location_not_canada | 711 |
+| experience_3plus | 290 |
 | weak_title_few_terms | 84 |
-| requires_enrollment | 66 |
-| student_title_not_rescued | 47 |
+| requires_enrollment | 68 |
+| student_title_not_rescued | 48 |
+| requires_french | 21 |
 | location_quebec_only | 20 |
-| requires_french | 20 |
 | location_unresolved_url_not_canadian | 15 |
-| security_clearance | 13 |
+| security_clearance | 10 |
 | weak_title_no_jd | 1 |
 | student_title_no_jd | 1 |
 
-Student-titled jobs held for JD check: 113; rescued: 0.
+Student-titled jobs held for JD check: 116; rescued: 0.
 
 **JD fetch status** (source:status)
 
 | Source:status | Jobs |
 |---|---:|
-| Ashby:ok | 4 |
+| Ashby:ok | 5 |
 | BambooHR:ok | 21 |
 | Bay Street Oracle:ok | 1 |
 | Google Jobs:ok | 3 |
 | Greenhouse:ok | 16 |
-| Job Bank:ok | 30 |
-| Jobhive:ok | 225 |
+| Job Bank:ok | 34 |
+| Jobhive:ok | 221 |
 | Jobicy:ok | 14 |
 | Lever:ok | 6 |
 | Phenom:ok | 9 |
 | Simplify:ok | 1 |
-| Site Search:ok | 2 |
+| Site Search:ok | 1 |
 | SuccessFactors:ok | 40 |
 | Workday:error | 16 |
 | Workday:not_found | 1 |
 | Workday:ok | 1019 |
-| iCIMS:ok | 2 |
+| iCIMS:ok | 1 |
 
 **JD fetch HTTP 403 (permission denied) by host**
 
@@ -446,7 +448,7 @@ Student-titled jobs held for JD check: 113; rescued: 0.
 | 0-19 | 0 |
 | 20-39 | 0 |
 | 40-59 | 5 |
-| 60-79 | 17 |
+| 60-79 | 18 |
 | 80-100 | 12 |
-| n/a (no JD or no tech terms) | 102 |
+| n/a (no JD or no tech terms) | 103 |
 

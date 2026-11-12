@@ -30,3 +30,7 @@ boards:
   - {ats: workday, slug: bdo.wd3/bdo, name: "bdo"}        # 98 Canadian postings when found, 2026-11-11
   - {ats: workday, slug: canadiantirecorporation.wd3/enterprise_external_careers_site, name: "canadiantirecorporation"}        # 98 Canadian postings when found, 2026-11-11
   - {ats: greenhouse, slug: capco, name: "capco"}        # 31 Canadian postings when found, 2026-11-11
+  - {ats: workday, slug: kiongroup.wd3/kiongroup, name: "kiongroup"}        # 4 Canadian postings when found, 2026-11-12
+  - {ats: workday, slug: barclays.wd3/external_career_site_barclays, name: "barclays"}        # 2 Canadian postings when found, 2026-11-12
+  - {ats: workday, slug: abbott.wd5/abbottcareers, name: "abbott"}        # 17 Canadian postings when found, 2026-11-12
+  - {ats: workday, slug: agilent.wd5/agilent_careers, name: "agilent"}        # 19 Canadian postings when found, 2026-11-12

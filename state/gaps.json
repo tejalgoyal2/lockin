@@ -4173,6 +4173,12 @@
    "gaps": [],
    "title": "DO NOT APPLY - TEST REQ - CRG - Customer Service Representative I - Mississauga, ON Canada"
   },
+  "27a1c89601484e407b9c5b96d35cee8babecd123": {
+   "company": "abb",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "HSE Specialist"
+  },
   "27a72c39cbeea36a56d30f913a3211a1965c74c8": {
    "company": "Proofpoint",
    "date": "2026-11-03",
@@ -4204,6 +4210,14 @@
    "date": "2026-11-09",
    "gaps": [],
    "title": "Analyst, Database"
+  },
+  "27c4d5ef47b007ccde7da593556900022d87adf9": {
+   "company": "Manulife",
+   "date": "2026-11-12",
+   "gaps": [
+    "Salesforce"
+   ],
+   "title": "Distribution Project Specialist"
   },
   "27dfdb45c5bb3505ade4744e6a448108a4da7fc5": {
    "company": "TMX Group",
@@ -7141,6 +7155,12 @@
    "date": "2026-11-07",
    "gaps": [],
    "title": "Control Strategy Scientist"
+  },
+  "41706b4c414d24364abd91c35c8f9c2ae7e3fc75": {
+   "company": "slihrms",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Assembly & Test Co-op Student - Winter 2027"
   },
   "4194fd7d30d390985a058e94c86e48f283b77aef": {
    "company": "Cmhapeel",
@@ -10549,6 +10569,15 @@
    ],
    "title": "System Engineer Intern"
   },
+  "5e174c888b0efc212248a5eec7c091435f88f104": {
+   "company": "1Password",
+   "date": "2026-11-12",
+   "gaps": [
+    "Go",
+    "Oracle"
+   ],
+   "title": "Security Engineer, Corporate Security"
+  },
   "5e22e1e2c6c23ad14a85a6ef3219959276145a0e": {
    "company": "Alberta Motor Association",
    "date": "2026-10-23",
@@ -11256,6 +11285,14 @@
    "date": "2026-10-16",
    "gaps": [],
    "title": "Wavelogic Embedded Software Developer Intern (Winter 2027)"
+  },
+  "65156c998d5bd0fb66a826a61ca3d58719ec6ae1": {
+   "company": "C&B TECHNOLOGIES INC.",
+   "date": "2026-11-12",
+   "gaps": [
+    "Java"
+   ],
+   "title": "Web Developer"
   },
   "6530bcd01ae7b755dac965c654d0bee4754d9864": {
    "company": "Scotiabank",
@@ -15648,6 +15685,12 @@
    "gaps": [],
    "title": "Developer, AI & Automation - IAF"
   },
+  "8b4b35aa77a74c6cd712964275e0c32628fef8e8": {
+   "company": "ProServeIT Corporation",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Cybersecurity Analyst"
+  },
   "8b6461ad59662de4b057bea7e8faf92a94ee3b8a": {
    "company": "Securitas Canada",
    "date": "2026-11-12",
@@ -19352,6 +19395,12 @@
    "gaps": [],
    "title": "Automation Controls Engineer"
   },
+  "ac6d7db4942398f6c71a7ef5d119d05345008a17": {
+   "company": "RE/MAX Realtron Realty Inc., Brokerage",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Cloud Administrator"
+  },
   "ac94aa31641910492af6d9330d05deb30faf3264": {
    "company": "Nuclear Promise X",
    "date": "2026-10-28",
@@ -19582,6 +19631,12 @@
    "date": "2026-11-03",
    "gaps": [],
    "title": "Intern Safety Specialist (Fall 2027, 8-12 months)"
+  },
+  "aeeeb9b5c8731ec1992fac29a0d41cc793f56ecd": {
+   "company": "Manulife",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Group Underwriting Analyst"
   },
   "aefde6d412ffe4de84559c1c532deab83a0e9865": {
    "company": "RBC",
@@ -20330,6 +20385,12 @@
    "date": "2026-10-28",
    "gaps": [],
    "title": "Associate Controls Specialist"
+  },
+  "b5bc1a658e9c84b61f916a9a602d4cd04061cabe": {
+   "company": "Thales",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Firmware Technical Leader"
   },
   "b5c8e0067d773a58f5a8505071b379fbc0a1a68d": {
    "company": "Fidelity Canada",
@@ -24629,6 +24690,12 @@
    "gaps": [],
    "title": "Small Business Markets Recruitment & Networking Session- November 2026"
   },
+  "dd9e90a7a71943241f2626e18621dd85b0c87e35": {
+   "company": "BMO",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Investment Specialist - BMO Investorline - Bilingual in English and Mandarin and/or Cantonese"
+  },
   "dda2031f23919803f7984a87a02745153c32c583": {
    "company": "Flowserve",
    "date": "2026-11-06",
@@ -27917,6 +27984,12 @@
    "date": "2026-11-06",
    "gaps": [],
    "title": "Co-op Student Mining Engineer"
+  },
+  "fc1ffb40c7a7c5d2b52641e0bd01e78d1d3bff21": {
+   "company": "Samee Metal Trading",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Big Data Analyst"
   },
   "fc28767d3597bb9f5d119937dd187370a3baa182": {
    "company": "Nvidia",

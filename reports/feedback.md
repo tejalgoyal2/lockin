@@ -1,32 +1,32 @@
 # What gets picked
 
-Reviewed rows (ticked `done-del`) since 2026-10-06: **275**, picked (`Interested` or `Apply`): **80** (29%). Counts only; a rate needs 10+ rows. If Fit % predicts your picks, the rate rises down the Fit table.
+Reviewed rows (ticked `done-del`) since 2026-10-06: **330**, picked (`Interested` or `Apply`): **86** (26%). Counts only; a rate needs 10+ rows. If Fit % predicts your picks, the rate rises down the Fit table.
 
 ## Fit %
 
 | Fit % | Reviewed | Picked | Pick rate |
 |---|---:|---:|---:|
-| <60 | 16 | 1 | 6% |
-| 60-69 | 35 | 6 | 17% |
-| 70-79 | 46 | 14 | 30% |
-| 80-89 | 118 | 41 | 35% |
-| 90+ | 29 | 8 | 28% |
-| n/a | 31 | 10 | 32% |
+| <60 | 20 | 2 | 10% |
+| 60-69 | 41 | 7 | 17% |
+| 70-79 | 50 | 14 | 28% |
+| 80-89 | 124 | 42 | 34% |
+| 90+ | 32 | 8 | 25% |
+| n/a | 63 | 13 | 21% |
 
 ## Source
 
 | Source | Reviewed | Picked | Pick rate |
 |---|---:|---:|---:|
-| Workday | 106 | 31 | 29% |
-| Greenhouse | 43 | 9 | 21% |
-| Ashby | 26 | 4 | 15% |
-| BambooHR | 21 | 6 | 29% |
-| Simplify | 20 | 12 | 60% |
-| Job Bank | 19 | 6 | 32% |
-| Lever | 17 | 4 | 24% |
+| Workday | 137 | 36 | 26% |
+| Greenhouse | 46 | 9 | 20% |
+| Job Bank | 32 | 7 | 22% |
+| Ashby | 27 | 4 | 15% |
+| BambooHR | 23 | 6 | 26% |
+| Simplify | 21 | 12 | 57% |
+| Lever | 18 | 4 | 22% |
+| Jobicy | 9 | 4 | - |
 | none | 8 | 0 | - |
 | Built In | 6 | 2 | - |
-| Jobicy | 6 | 4 | - |
 | SuccessFactors | 2 | 1 | - |
 | Paylocity | 1 | 1 | - |
 
@@ -34,19 +34,19 @@ Reviewed rows (ticked `done-del`) since 2026-10-06: **275**, picked (`Interested
 
 | Level tag | Reviewed | Picked | Pick rate |
 |---|---:|---:|---:|
-| none | 232 | 61 | 26% |
+| none | 285 | 66 | 23% |
 | 0-2 years | 17 | 5 | 29% |
-| recent graduate | 10 | 6 | 60% |
+| recent graduate | 11 | 7 | 64% |
+| new grad | 8 | 3 | - |
 | junior | 7 | 4 | - |
-| new grad | 7 | 3 | - |
 | entry level | 2 | 1 | - |
 
 ## Warning tag
 
 | Warning tag | Reviewed | Picked | Pick rate |
 |---|---:|---:|---:|
-| none | 176 | 51 | 29% |
-| 2+ yrs | 67 | 19 | 28% |
-| jd unavailable | 23 | 8 | 35% |
-| low signal | 8 | 2 | - |
+| none | 191 | 53 | 28% |
+| 2+ yrs | 81 | 20 | 25% |
+| low signal | 33 | 5 | 15% |
+| jd unavailable | 24 | 8 | 33% |
 | P.Eng req | 1 | 0 | - |

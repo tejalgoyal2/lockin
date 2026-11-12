@@ -18,6 +18,15 @@
    "seen": 10,
    "status": "added"
   },
+  "workday/abbott.wd5/abbottcareers": {
+   "canadian": 17,
+   "first": "2026-11-12",
+   "last": "2026-11-12",
+   "name": "abbott",
+   "probes": 0,
+   "seen": 3,
+   "status": "added"
+  },
   "workday/aero.wd5/external": {
    "canadian": 0,
    "first": "2026-11-09",
@@ -34,6 +43,15 @@
    "name": "ag",
    "probes": 0,
    "seen": 11,
+   "status": "added"
+  },
+  "workday/agilent.wd5/agilent_careers": {
+   "canadian": 19,
+   "first": "2026-11-12",
+   "last": "2026-11-12",
+   "name": "agilent",
+   "probes": 0,
+   "seen": 3,
    "status": "added"
   },
   "workday/alfalaval.wd3/alfa_laval_jobs": {
@@ -71,6 +89,15 @@
    "probes": 3,
    "seen": 25,
    "status": "dead"
+  },
+  "workday/barclays.wd3/external_career_site_barclays": {
+   "canadian": 2,
+   "first": "2026-11-12",
+   "last": "2026-11-12",
+   "name": "barclays",
+   "probes": 0,
+   "seen": 4,
+   "status": "added"
   },
   "workday/bdo.wd3/bdo": {
    "canadian": 98,
@@ -136,14 +163,23 @@
    "seen": 5,
    "status": "empty"
   },
+  "workday/cgm.wd3/cgm": {
+   "canadian": 0,
+   "first": "2026-11-12",
+   "last": "2026-11-12",
+   "name": "cgm",
+   "probes": 1,
+   "seen": 3,
+   "status": "empty"
+  },
   "workday/cna.wd1/cna_careers": {
    "canadian": 0,
    "first": "2026-11-11",
    "last": "2026-11-12",
    "name": "cna",
-   "probes": 2,
-   "seen": 4,
-   "status": "empty"
+   "probes": 3,
+   "seen": 3,
+   "status": "dead"
   },
   "workday/corpay.wd103/ext_001": {
    "canadian": 11,
@@ -204,9 +240,9 @@
    "first": "2026-11-11",
    "last": "2026-11-12",
    "name": "fca",
-   "probes": 2,
+   "probes": 3,
    "seen": 4,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/fil.wd3/fidelitycanada": {
    "canadian": 116,
@@ -231,9 +267,9 @@
    "first": "2026-11-11",
    "last": "2026-11-12",
    "name": "flywheel",
-   "probes": 2,
-   "seen": 4,
-   "status": "empty"
+   "probes": 3,
+   "seen": 3,
+   "status": "dead"
   },
   "workday/geaerospace.wd5/ge_externalsite": {
    "canadian": 0,
@@ -285,7 +321,7 @@
    "first": "2026-11-12",
    "last": "2026-11-12",
    "name": "godirect",
-   "probes": 1,
+   "probes": 2,
    "seen": 4,
    "status": "empty"
   },
@@ -370,6 +406,24 @@
    "seen": 8,
    "status": "added"
   },
+  "workday/kiongroup.wd3/kiongroup": {
+   "canadian": 4,
+   "first": "2026-11-12",
+   "last": "2026-11-12",
+   "name": "kiongroup",
+   "probes": 0,
+   "seen": 4,
+   "status": "added"
+  },
+  "workday/lbg.wd3/lbg_careers": {
+   "canadian": 0,
+   "first": "2026-11-12",
+   "last": "2026-11-12",
+   "name": "lbg",
+   "probes": 1,
+   "seen": 4,
+   "status": "empty"
+  },
   "workday/ledcor.wd3/ledcor_external": {
    "canadian": 161,
    "first": "2026-11-10",
@@ -447,9 +501,9 @@
    "first": "2026-11-11",
    "last": "2026-11-12",
    "name": "pae",
-   "probes": 2,
-   "seen": 5,
-   "status": "empty"
+   "probes": 3,
+   "seen": 4,
+   "status": "dead"
   },
   "workday/petronascanada.wd3/petronascanada": {
    "canadian": 28,
@@ -546,11 +600,17 @@
    "first": "2026-11-11",
    "last": "2026-11-12",
    "name": "uline",
-   "probes": 2,
+   "probes": 3,
    "seen": 5,
-   "status": "empty"
+   "status": "dead"
   }
  },
- "health": {},
+ "health": {
+  "workday/broadcom.wd1/external_career": {
+   "error": "HTTPError: 502 Server Error: Bad Gateway for url: https://broadcom.wd1.myworkdayjobs.com/wday/cxs/broadcom/External_Care",
+   "fails": 1,
+   "last_fail": "2026-11-12"
+  }
+ },
  "version": 1
 }
