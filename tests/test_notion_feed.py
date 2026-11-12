@@ -254,7 +254,7 @@ def test_list_rows_asks_only_for_the_needed_properties(notion, client, feed):
     rows_fixture(notion, client, feed)
     q = [r for r in notion.requests if r["path"].endswith("/query")][-1]
     assert q["params"] == {"filter_properties[]": ["p_link", "p_int", "p_apply", "p_done", "p_fit", "p_source",
-                                                                "p_signals"]}
+                                                                "p_signals", "p_company"]}
 
 
 # --- writing + read-back --------------------------------------------------------------

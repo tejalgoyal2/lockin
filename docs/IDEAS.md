@@ -20,7 +20,10 @@ Each one is optional: without it the scan still runs and prints "skipped" for th
   tech), Job Bank (with CivicJobs.ca municipal postings), BC Public Service, YC, Built In Vancouver, HN "Who is hiring",
   Jobicy, Simplify new-grad, Bay Street Oracle.
 - **Jobhive**: ats-scrapers' open dataset (5 M postings, 64 hiring systems, refreshed daily) for the systems lockin cannot
-  read itself: Oracle, Eightfold (Microsoft), Dayforce, UKG, Rippling, JazzHR, Breezy, Cornerstone.
+  read itself: Oracle, Eightfold (Microsoft), Dayforce, UKG, Rippling, JazzHR, Breezy, Cornerstone; and every
+  Greenhouse, Lever, Ashby, BambooHR and iCIMS board, not only the ones on the watchlist.
+- **Pay and Posted columns.** `Pay` shows the range the posting states ("$70,000–$85,000 a year"; Ontario and BC require
+  one), the Canadian range when a posting gives a US one too. `Posted` is a real date, so the Feed sorts newest first.
 - The scanner finds new employer boards by itself (`watchlist.auto.yaml`), drops nothing for a missing description, and
   flags rather than drops the "2+ years" postings.
 - **Two people per job.** Every Feed row has a `Recruiter` and a `Hiring Manager` link: LinkedIn's people search,
@@ -68,6 +71,11 @@ Each one is optional: without it the scan still runs and prints "skipped" for th
   be a person's browser so a site's bot check lets them through. When a site says no to programs, lockin takes the answer
   and gets the same jobs another way (APIs, open datasets, the employer's own board).
 - **Google Alerts and Adzuna**: switched off by choice (`enabled: false`); the code stays in case they are wanted again.
+- **zapplyjobs/Canada-Jobs-2027** (Canadian entry-level list, updated every 10 minutes): its links go through Zapply's
+  own site and land on its sign-up page, not the posting. Its Greenhouse, Lever and Ashby rows are in Jobhive anyway;
+  its Workday rows come from employers the watchlist and the Feashliaa dataset already read.
+- **Jobhive's Workday, Google, TikTok, Avature and Pinpoint snapshots**: their Canadian rows carry no posting date, so
+  there is no telling a new job from a year-old one.
 - **openroles.today**: a good open dataset, but its robots.txt disallows `/data/` for programs, so it is not read.
 - **Reading LinkedIn or Indeed directly**: they refuse automated readers. Their jobs arrive through Google Jobs, and their
   people through the two links you click yourself.

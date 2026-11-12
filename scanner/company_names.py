@@ -37,6 +37,22 @@ def date_tag(first_seen) -> str:
     return f"{_MONTHS[first_seen.month - 1]}{first_seen.day}"
 
 
+def tag_date(cell: str, today):
+    """The date in a Company cell ('RBC · oct6' -> the most recent Oct 6 not after `today`); None without a tag."""
+    m = re.search(r"·\s*([a-z]+)(\d{1,2})\s*$", cell or "")
+    if not m or m.group(1) not in _MONTHS:
+        return None
+    month, day = _MONTHS.index(m.group(1)) + 1, int(m.group(2))
+    for year in (today.year, today.year - 1):
+        try:
+            when = today.replace(year=year, month=month, day=day)
+        except ValueError:
+            continue
+        if when <= today:
+            return when
+    return None
+
+
 def company_cell(job: Job, overrides: dict[str, str]) -> str:
     """'<Company> · <date>', e.g. 'RBC · oct6'."""
     return f"{display_company(job, overrides)} · {date_tag(job.first_seen)}"

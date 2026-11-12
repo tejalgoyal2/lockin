@@ -20,15 +20,18 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
+from scanner import pay
 from scanner.net import http_get
 from scanner.normalize import parse_iso
 from scanner.text import html_to_text
 
 SOURCE = "Jobhive"
 BASE = "https://storage.stapply.ai/jobhive/v1"
-COLUMNS = ["url", "apply_url", "title", "company", "location", "country_iso", "posted_at", "description", "raw"]
+COLUMNS = ["url", "apply_url", "title", "company", "location", "country_iso", "posted_at", "description", "raw",
+           "salary_min", "salary_max", "salary_currency", "salary_period", "salary_summary"]
 SYSTEMS = ("oracle", "smartrecruiters", "eightfold", "dayforce", "ukg", "rippling", "jazzhr", "breezy", "cornerstone",
-           "phenom", "jobvite", "recruitee", "teamtailor", "taleo", "adp", "workable", "gem")
+           "phenom", "jobvite", "recruitee", "teamtailor", "taleo", "adp", "workable", "gem",
+           "greenhouse", "lever", "ashby", "bamboohr", "icims", "uber", "apple")
 _TAG = re.compile(r"<[a-z/][^>]*>", re.I)
 _SITE_WORDS = re.compile(r"^(?:careers|jobs) at\s+|\s*\(CX_\w+\)$|\s+(?:external\s+)?(?:career|careers)(?:\s+site)?$|\s+job opportunities$"
                          r"|\s+career opportunities$", re.I)
@@ -81,6 +84,16 @@ def _when(value) -> datetime | None:
     return when if when.tzinfo else when.replace(tzinfo=timezone.utc)
 
 
+def pay_line(r: dict) -> str:
+    """The pay the dataset gives as data (min / max / period / currency, or the employer's own pay sentence)."""
+    currency = (r.get("salary_currency") or "").upper()
+    if (r.get("salary_min") or r.get("salary_max")) and currency in ("", "CAD", "USD"):
+        line = pay.fmt(r.get("salary_min"), r.get("salary_max"), r.get("salary_period"), currency)
+        if line:
+            return line
+    return pay.from_text(_text(r.get("salary_summary") or ""))
+
+
 def _text(desc: str) -> str:
     desc = (desc or "").strip()
     return html_to_text(desc) if _TAG.search(desc) else desc
@@ -95,10 +108,13 @@ def records(rows: list[dict], cutoff: datetime, names: dict[str, str] | None = N
         if when is None or when < cutoff or not (title and url):
             continue
         url = oracle_url(url, r.get("raw") or "") if ".oraclecloud.com" in url else url.split("#")[0]
+        if ".icims.com" in url:
+            url = url.split("?")[0]                 # "?in_iframe=1" opens the bare frame
         company = company_for(r.get("company") or "", url, names or {})
-        out.append({"company": company or "Jobhive employer", "company_name": company, "title": title,
+        slug = company.lower() == (urlsplit(url).hostname or "").split(".")[0]      # "lenddirect-attainfinance"
+        out.append({"company": company or "Jobhive employer", "company_name": "" if slug else company, "title": title,
                     "location": (r.get("location") or "").strip() or "Canada", "url": url, "source": SOURCE, "first_seen": when,
-                    "jd": _text(r.get("description") or "")})
+                    "jd": _text(r.get("description") or ""), "pay": pay_line(r)})
     out.sort(key=lambda rec: rec["first_seen"], reverse=True)
     return out
 

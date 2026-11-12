@@ -14,8 +14,9 @@ from datetime import datetime
 
 import requests
 
+from scanner import pay as pay_text
 from scanner import people
-from scanner.company_names import company_cell, display_company
+from scanner.company_names import company_cell, display_company, tag_date
 from scanner.dedupe import canonical_url
 from scanner.models import Job
 from scanner.sources.listing import SITE_SOURCES
@@ -39,7 +40,7 @@ EXPECTED_TYPES = {
 }
 # Properties the scanner fills when the Feed has them and leaves alone when it does not, so a new column can be
 # added in Notion before or after the code that writes it ships.
-OPTIONAL_TYPES = {"location": "rich_text", "recruiter": "url", "manager": "url"}
+OPTIONAL_TYPES = {"location": "rich_text", "recruiter": "url", "manager": "url", "posted": "date", "pay": "rich_text"}
 SOURCE_OPTIONS = ("Workday", "Greenhouse", "Lever", "Ashby", "BambooHR", "Paylocity", "Simplify", "Watchlist")
 # Labels of the job sites. Used when the Feed's Source column has the option; a Feed without it leaves Source empty
 # for those rows (they are not required, so the sites can ship before the options exist).
@@ -268,6 +269,12 @@ def build_properties(job: Job, feed: Feed, overrides: dict[str, str]) -> tuple[d
         props[n["source"]] = {"select": {"name": job.source}}
     if feed.has("location") and job.location:
         props[n["location"]] = {"rich_text": _rich(job.location[:200])}
+    if feed.has("posted"):          # a real date, so the Feed sorts newest first (the tag in Company is text)
+        props[n["posted"]] = {"date": {"start": job.first_seen.date().isoformat()}}
+    if feed.has("pay"):
+        pay = job.pay or pay_text.from_text(job.jd)
+        if pay:
+            props[n["pay"]] = {"rich_text": _rich(pay[:200])}
     props.update(people_properties(feed, display_company(job, overrides), job.title))
     props[n["fit"]] = {"number": None if job.fit_pct is None else round(job.fit_pct / 100, 4)}
     return props, jd_sent
@@ -310,6 +317,8 @@ class FeedRow:
     fit: float | None = None       # the Feed's Fit % cell (a fraction); the next three feed reports/feedback.md
     source: str = ""
     signals: tuple[str, ...] = ()
+    company: str = ""
+    posted: str | None = None      # the Posted date (ISO); None when the cell is empty or the Feed has no such column
 
     @property
     def picked(self) -> bool:
@@ -323,7 +332,7 @@ def _parse_ts(ts: str) -> datetime:
 def list_rows(client: NotionClient, feed: Feed) -> list[FeedRow]:
     """Every row in the Feed (paginated), fetching only Link / Interested / Apply / done-del."""
     n, ids = feed.names, feed.ids
-    wanted = ["link", "interested", "apply", "done_del", "fit", "source", "signals"]
+    wanted = ["link", "interested", "apply", "done_del", "fit", "source", "signals", "company", "posted"]
     params = {"filter_properties[]": [ids[k] for k in wanted if k in ids]}
     rows, cursor = [], None
     while True:
@@ -344,6 +353,8 @@ def list_rows(client: NotionClient, feed: Feed) -> list[FeedRow]:
                 fit=(props.get(n["fit"]) or {}).get("number"),
                 source=((props.get(n["source"]) or {}).get("select") or {}).get("name") or "",
                 signals=tuple(o["name"] for o in (props.get(n["signals"]) or {}).get("multi_select") or []),
+                company="".join(t.get("plain_text", "") for t in (props.get(n["company"]) or {}).get("rich_text") or []),
+                posted=((props.get(n.get("posted", "")) or {}).get("date") or {}).get("start"),
             ))
         if not data.get("has_more"):
             return rows
@@ -392,6 +403,27 @@ def moved_rows(rows: list[FeedRow]) -> list[FeedRow]:
     deletes unwanted rows by hand.
     """
     return [r for r in rows if r.done_del is True]
+
+
+def date_rows(client: NotionClient, feed: Feed, rows: list[FeedRow], today, *, dry_run: bool) -> int:
+    """Fill the Posted date of rows written before the column existed, from the date tag in their Company cell
+    ('RBC · oct6'). Runs once per row: a dated row is never touched again."""
+    if not feed.has("posted"):
+        return 0
+    done = 0
+    for row in rows:
+        when = None if row.posted or row.done_del else tag_date(row.company, today)
+        if when is None:
+            continue
+        if not dry_run:
+            try:
+                client.request("PATCH", f"/v1/pages/{row.page_id}", idempotent=True,
+                               json={"properties": {feed.names["posted"]: {"date": {"start": when.isoformat()}}}})
+            except NotionError as exc:        # a date is a convenience: never stop the run for it
+                log.warning("could not fill a Posted date: %s", exc)
+                continue
+        done += 1
+    return done
 
 
 def trash_rows(client: NotionClient, rows: list[FeedRow], *, dry_run: bool, on_trashed=None) -> int:

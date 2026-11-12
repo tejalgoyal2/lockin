@@ -215,6 +215,9 @@ def trash_moved_rows(client, feed, *, dry_run: bool, feedback=None, feedback_rep
         if feedback_report:
             report.write(feedback_report, feedback.render())
     print(f"Notion: Feed has {len(rows)} rows; {'would trash' if dry_run else 'trashed'} {done} with done-del ticked")
+    dated = notion_feed.date_rows(client, feed, rows, datetime.now(timezone.utc).date(), dry_run=dry_run)
+    if dated:
+        print(f"Notion: {'would fill' if dry_run else 'filled'} the Posted date of {dated} older rows")
     return done
 
 
