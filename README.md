@@ -85,7 +85,7 @@ log). Pick `command` and write `args` the way you would in a terminal:
    | Link | URL |
    | Source | Select: Workday, Greenhouse, Lever, Ashby, BambooHR, Paylocity, Simplify, Watchlist. Optional extras: YC, Built In, Bay Street Oracle, HN, SmartRecruiters |
    | Fit % | Number, format **Percent** |
-   | Signals | Multi-select, options: new grad, recent graduate, 0-2 years, entry level, junior, low signal, jd unavailable (`2+ yrs` and `P.Eng req` are created on first use) |
+   | Signals | Multi-select, options: new grad, recent graduate, 0-2 years, entry level, junior, low signal, jd unavailable (`2+ yrs`, `P.Eng req` and `talent pool` are created on first use) |
    | Location | Text (optional: filled when the column exists) |
    | Posted | Date (optional): the posting date, so the Feed sorts newest first. Rows written before the column existed get it from the date in Company on the next run |
    | Pay | Text (optional): the pay the posting states, e.g. "$70,000–$85,000 a year" (empty when it states none) |
@@ -109,8 +109,10 @@ log). Pick `command` and write `args` the way you would in a terminal:
    let GitHub Actions push to it.
 
 **Reading the Feed.** A row carries at most two Signals: the strongest level tag (new grad, recent graduate, 0-2 years, entry level,
-junior) and the most important warning (2+ yrs, P.Eng req, jd unavailable, low signal). The full set is in
-`reports/latest.md`. **Fit %** is a keyword match between the posting and your skills, not a prophecy: open the job
+junior) and the most important warning (2+ yrs, P.Eng req, talent pool, jd unavailable, low signal). `talent pool`
+means the posting says it is evergreen or not for a current opening: apply if you like it, but expect to wait. The
+full set is in `reports/latest.md`. **Posted** is the date the employer published the job; for the few sources that
+give none (the Canada List) it is the day lockin first saw it. **Fit %** is a keyword match between the posting and your skills, not a prophecy: open the job
 before you fall in love.
 
 Your Notion automation copies a ticked row to your main database and ticks `done-del`; the next run trashes the row,

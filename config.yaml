@@ -156,6 +156,8 @@ location:
     - '\bCanada\b'
     - '\b(Ontario|British Columbia|Alberta|Quebec|Québec|Manitoba|Saskatchewan|Nova Scotia|New Brunswick|Newfoundland|Prince Edward Island)\b'
     - '\b(Toronto|Vancouver|Montr[ée]al|Ottawa|Waterloo|Kitchener|Calgary|Edmonton|Burnaby|Mississauga|Markham|Kanata|Gatineau|Winnipeg|Regina|Saskatoon|Oakville)\b'
+    # More cities that can only be Canadian, so a posting that names just the city ("Guelph", "Kelowna") is not lost
+    - '\b(Guelph|Kelowna|Kamloops|Nanaimo|Abbotsford|Coquitlam|Chilliwack|Langford|Squamish|Penticton|New Westminster|Prince George|Brampton|Vaughan|Etobicoke|North York|Barrie|Oshawa|Pickering|Thunder Bay|Sault Ste\.? Marie|St\.? Catharines|Brantford|Sarnia|Timmins|Moncton|Fredericton|Charlottetown|St\.? John[’\x27]s|Lethbridge|Red Deer|Medicine Hat|Fort McMurray|Grande Prairie|Whitehorse|Yellowknife|Iqaluit|Halifax|Victoria)\b'
     # Names shared with places outside Canada: require a province qualifier.
     - '\b(Victoria|Richmond|Surrey|Hamilton|London|Halifax),?\s+(BC|ON|NS|British Columbia|Ontario|Nova Scotia)\b'
     - 'Remote\s*\(?\s*Canada'
@@ -173,6 +175,11 @@ location:
     # "Ontario, CA" and nothing else is Ontario, California (an Owens & Minor warehouse job reached the Feed); "Toronto, Ontario,
     # CA" keeps its city and passes. The whole-string anchors keep "Remote, Ontario, CA" (Canada) alone.
     - '^\s*Ontario,\s*(?:CA|California)\s*$'
+    # Halifax and Victoria alone are taken as Canadian (Halifax, Nova Scotia; Victoria, BC), except these
+    - '\bHalifax,?\s+(?:UK|United Kingdom|England|West Yorkshire|Yorkshire|VA|Virginia|MA|Massachusetts)\b'
+    - '\bVictoria,?\s+(?:Australia|AU|AUS|VIC|TX|Texas|Seychelles|Mah[ée]|Hong Kong|Malta|Gozo|London|UK)\b'
+    - '\b(?:Melbourne|Geelong|Ballarat|Bendigo)\b[^;|]*'
+    - '\bVictoria\s+(?:Street|St\.?|Road|Rd\.?|Avenue|Ave\.?|Station|Square|Embankment|Park|Island|Falls|Harbour)\b'
   exclude_cs:
     - ',\s*WA\b'
   split_on: '[;|]'   # multi-location strings are split on this; first Canadian part is used

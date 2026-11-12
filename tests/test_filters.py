@@ -6,6 +6,7 @@ import pytest
     "CAN - Alberta - Calgary", "Montréal, Quebec", "Victoria, BC", "London, ON",
     "Seattle, WA; Toronto, ON", "San Francisco, Palo Alto, Los Angeles, Toronto",
     "Richmond Hill, ON", "Home-Canada",
+    "Halifax", "Victoria", "Guelph", "Kelowna", "Brampton", "St. John's", "North York", "Thunder Bay", "Moncton",
 ])
 def test_canadian_locations_kept(filters, loc):
     assert filters.canadian_location(loc) is not None
@@ -15,6 +16,8 @@ def test_canadian_locations_kept(filters, loc):
     "Vancouver, Washington", "Vancouver, WA", "Ottawa, Illinois", "Waterloo, Wisconsin",
     "United States", "USA", "Remote - US", "Victoria, Australia", "London, UK",
     "Halifax, UK", "Seattle, WA", "Not specified", "",
+    "Halifax, England", "Melbourne, Victoria, Australia", "Victoria Street, London, UK", "North Yorkshire",
+    "London", "Richmond", "Surrey",
 ])
 def test_non_canadian_locations_dropped(filters, loc):
     assert filters.canadian_location(loc) is None
