@@ -89,9 +89,9 @@ sources:
       - https://raw.githubusercontent.com/hanzili/canada_sde_junior_new_grad_position/main/FINANCE.md
   jobicy:                  # Jobicy: remote jobs open to Canada (public JSON API, no key; one request an hour per query is its limit)
     enabled: true
-  adzuna:                  # Adzuna Canada search engine (free API key: developer.adzuna.com -> secrets ADZUNA_APP_ID / ADZUNA_APP_KEY;
-                           # skipped with a note when the keys are not set)
-    enabled: true
+  adzuna:                  # Adzuna Canada search engine (free API key: developer.adzuna.com -> secrets ADZUNA_APP_ID / ADZUNA_APP_KEY).
+                           # Off: the owner chose not to use it
+    enabled: false
     max_pages: 2           # 50 results a page per term: at most 20 x 2 = 40 calls a run, 80 a day, ~2,400 a month (Adzuna's
                            # default limits: 250 a day, 1,000 a week, 2,500 a month)
     terms: [software developer, software engineer, data analyst, data scientist, devops, cloud engineer, machine learning,
@@ -123,9 +123,14 @@ sources:
       - '("IT support" OR "IT analyst" OR "systems administrator" OR "help desk" OR "technical support")'
       - '("security analyst" OR "cybersecurity" OR "devops" OR "cloud engineer" OR "QA" OR "automation")'
     where: '(Vancouver OR "British Columbia" OR Burnaby OR Victoria OR "Remote Canada" OR Canada)'
-  googlealerts:            # Google Alerts on the ATS sites (site:jobs.lever.co Vancouver ...), delivered as RSS. Free; the feed
-                           # addresses go in the secret GOOGLE_ALERTS_FEEDS (README: "Google Alerts"); skipped without it
+  jobhive:                 # ats-scrapers' open dataset (MIT, free, no key): daily snapshots of the hiring systems lockin has no reader
+                           # for. Each snapshot is downloaded, its Canadian rows inside the window kept, the description used as the JD
     enabled: true
+    systems: [oracle, smartrecruiters, eightfold, dayforce, ukg, rippling, jazzhr, breezy, cornerstone, phenom, jobvite,
+              recruitee, teamtailor, taleo, adp, workable, gem]
+  googlealerts:            # Google Alerts on the ATS sites (site:jobs.lever.co Vancouver ...), delivered as RSS. Free; the feed
+                           # addresses would go in the secret GOOGLE_ALERTS_FEEDS. Off: the owner chose not to use it
+    enabled: false
   bcgov:                   # BC Public Service: the provincial government's own job board (one table, about 80 postings)
     enabled: true
   watchlist:               # employers read directly on every run (watchlist.yaml); see scanner/sources/watchlist.py

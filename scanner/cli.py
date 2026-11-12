@@ -23,7 +23,7 @@ from scanner.models import Job
 from scanner.net import client_from_config
 from scanner.pipeline import run_stream
 from scanner.score import Scorer
-from scanner.sources import (ats, baystreet, bcgov, builtin, canadalist, feashliaa, googlealerts, googlejobs, hn, jobbank, sitesearch,
+from scanner.sources import (ats, baystreet, bcgov, builtin, canadalist, feashliaa, googlealerts, googlejobs, hn, jobbank, jobhive, sitesearch,
                              jobicy, adzuna, listing, simplify, supplied, watchlist, yc)
 from scanner.state import GapsStore, SeenStore
 
@@ -111,6 +111,7 @@ def collect(cfg, args, filters, now, since, store=None):
          lambda c: sitesearch.fetch(http, c.get("hosts", []), c.get("titles", []), c.get("where", ""), now,
                                     brave_per_run=c.get("brave_per_run", 15), serpapi_per_run=c.get("serpapi_per_run", 2)), ()),
         ("Canada List", "canadalist", lambda c: canadalist.fetch(c["urls"], http, now), ()),
+        ("Jobhive", "jobhive", lambda c: jobhive.fetch(c.get("systems") or jobhive.SYSTEMS, since, now), ()),
     ]
     for label, key, read, pre_stages in sites:
         conf = src.get(key) or {}
@@ -123,7 +124,7 @@ def collect(cfg, args, filters, now, since, store=None):
             continue
         print(f"{label}: {len(records):,} postings")
         for rec in records:
-            supplied.put(rec["url"], rec.get("jd", ""))       # a description the source handed over (Google for Jobs)
+            supplied.put(rec["url"], rec.get("jd", ""))       # a description the source handed over (Google for Jobs, Jobhive)
         found, stages, hold = run_stream(iter(records), listing.raw_fields, filters, now, since, pre_stages=pre_stages)
         jobs += found
         held += hold

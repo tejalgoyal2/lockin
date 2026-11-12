@@ -61,11 +61,8 @@ jobs:
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_FEED_DATA_SOURCE_ID: ${{ secrets.NOTION_FEED_DATA_SOURCE_ID }}
-          ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}        # optional: without them the Adzuna source is skipped
-          ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
           SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}            # optional: Google for Jobs and Site Search (skipped without it)
           BRAVE_SEARCH_API_KEY: ${{ secrets.BRAVE_SEARCH_API_KEY }}   # optional: Site Search, more searches a run
-          GOOGLE_ALERTS_FEEDS: ${{ secrets.GOOGLE_ALERTS_FEEDS }}   # optional: your Google Alerts RSS feeds, one per line
           APPLIED_KEY: ${{ secrets.APPLIED_KEY }}     # decrypts state/applied.json.enc in memory; optional
           # Inputs go through env vars, never straight into the script.
           DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
