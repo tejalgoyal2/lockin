@@ -235,7 +235,7 @@ def url_location(url: str) -> str:
     primary location, the only one visible when the detail cannot be read."""
     m = re.search(r"/job/([^/]+)/", url or "")
     text = re.sub(r"[-_]+", " ", m.group(1)).strip() if m else ""
-    return re.sub(r"(?<=\w) (ON|BC|AB|QC|MB|SK|NS|NB)\b", r", \1", text)      # "Guelph ON" -> "Guelph, ON"
+    return re.sub(r"(?<=\w) (ON|BC|AB|QC|MB|SK|NS|NB|NL|PE|YT|NT|NU)\b", r", \1", text)      # "Guelph ON" -> "Guelph, ON"
 
 
 def resolve_location(job: Job, filters: Filters, cfg: dict | None = None) -> str | None:

@@ -7,6 +7,7 @@ import pytest
     "Seattle, WA; Toronto, ON", "San Francisco, Palo Alto, Los Angeles, Toronto",
     "Richmond Hill, ON", "Home-Canada",
     "Halifax", "Victoria", "Guelph", "Kelowna", "Brampton", "St. John's", "North York", "Thunder Bay", "Moncton",
+    "St. John's, NL, ca", "Charlottetown, PE", "Iqaluit, NU", "Yellowknife, NT", "Dawson City, Yukon", "Labrador City, NL",
 ])
 def test_canadian_locations_kept(filters, loc):
     assert filters.canadian_location(loc) is not None

@@ -154,7 +154,7 @@ location:
   # Names that are unambiguous on their own.
   include:
     - '\bCanada\b'
-    - '\b(Ontario|British Columbia|Alberta|Quebec|Québec|Manitoba|Saskatchewan|Nova Scotia|New Brunswick|Newfoundland|Prince Edward Island)\b'
+    - '\b(Ontario|British Columbia|Alberta|Quebec|Québec|Manitoba|Saskatchewan|Nova Scotia|New Brunswick|Newfoundland|Labrador|Prince Edward Island|Yukon|Northwest Territories|Nunavut)\b'
     - '\b(Toronto|Vancouver|Montr[ée]al|Ottawa|Waterloo|Kitchener|Calgary|Edmonton|Burnaby|Mississauga|Markham|Kanata|Gatineau|Winnipeg|Regina|Saskatoon|Oakville)\b'
     # More cities that can only be Canadian, so a posting that names just the city ("Guelph", "Kelowna") is not lost
     - '\b(Guelph|Kelowna|Kamloops|Nanaimo|Abbotsford|Coquitlam|Chilliwack|Langford|Squamish|Penticton|New Westminster|Prince George|Brampton|Vaughan|Etobicoke|North York|Barrie|Oshawa|Pickering|Thunder Bay|Sault Ste\.? Marie|St\.? Catharines|Brantford|Sarnia|Timmins|Moncton|Fredericton|Charlottetown|St\.? John[’\x27]s|Lethbridge|Red Deer|Medicine Hat|Fort McMurray|Grande Prairie|Whitehorse|Yellowknife|Iqaluit|Halifax|Victoria)\b'
@@ -164,7 +164,7 @@ location:
     - 'Canada\s*[-–]\s*Remote'
   # Province suffixes, case-sensitive so ", on" in prose does not match.
   include_cs:
-    - ',\s*(ON|BC|AB|QC|MB|SK|NS|NB)\b'
+    - ',\s*(ON|BC|AB|QC|MB|SK|NS|NB|NL|PE|PEI|YT|NT|NU)\b'
   # Known false positives. Matching spans are removed from the string BEFORE the
   # include test, so "Seattle, WA; Toronto, ON" still passes but "Vancouver, WA" does not.
   # "United States"/"USA" need no entry: a string with no Canadian location left is dropped.
