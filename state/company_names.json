@@ -91,6 +91,14 @@
   "name": "Corinex Technologies",
   "checked": "2026-11-06"
  },
+ "BambooHR:enwave": {
+  "name": "Enwave",
+  "checked": "2026-11-12"
+ },
+ "BambooHR:euna": {
+  "name": "Euna Solutions",
+  "checked": "2026-11-12"
+ },
  "BambooHR:geospectrum": {
   "name": "GeoSpectrum Technologies",
   "checked": "2026-11-09"
@@ -142,6 +150,10 @@
  "BambooHR:samsters": {
   "name": "samdesk Canada",
   "checked": "2026-10-28"
+ },
+ "BambooHR:solace": {
+  "name": "Solace",
+  "checked": "2026-11-12"
  },
  "BambooHR:tantalussystems": {
   "name": "Tantalus",
