@@ -127,3 +127,8 @@ def test_french_only_titles_dropped_but_bilingual_kept(filters):
     assert not filters.language_ok("Analyste de données")
     assert filters.language_ok("Data Analyst / Analyste de données")      # English first: kept
     assert filters.language_ok("Software Engineer")
+
+
+def test_bi_means_business_intelligence_only_in_capitals(filters):
+    assert filters.title_tier("BI Developer") == "strong"
+    assert filters.title_tier("Server- 38 Hours Bi Weekly; 7am-3pm Shifts") is None

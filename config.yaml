@@ -236,6 +236,7 @@ title:
     - ML
     - AI
     - SRE
+  strong_words_cs:       # upper case only: "BI Developer", never "Bi Weekly" (a restaurant Server shift reached the Feed)
     - BI
   weak:
     - engineer
