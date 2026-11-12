@@ -2,4 +2,4 @@
 #   pip-compile --generate-hashes --allow-unsafe --strip-extras requirements-dev.in
 -c requirements.txt
 -r requirements.in
-pytest>=8.0
+pytest>=9.2.0
