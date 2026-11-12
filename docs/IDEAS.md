@@ -7,10 +7,8 @@ front of a person sooner?
 
 | Secret | What it turns on | Cost |
 |---|---|---|
-| `BRAVE_SEARCH_API_KEY` | **Site Search**: the recruiter's Boolean trick (`site:jobs.ashbyhq.com ("software engineer" OR ...) (Vancouver OR Canada)`) on 9 ATS sites, 15 searches a run, past week only | free monthly credit (~1,000 searches); a card is needed to sign up |
+| `BRAVE_SEARCH_API_KEY` | **Site Search**: the recruiter's Boolean trick (`site:jobs.ashbyhq.com ("software engineer" OR ...) (Vancouver OR Canada)`) on 9 ATS sites, 15 searches a run, past week only | Free plan: $5 credit a month (~1,000 searches) |
 | `SERPAPI_KEY` | **Google Jobs** (Google's job panel: LinkedIn, Indeed, Glassdoor, company sites, each with its full description) and Site Search through Google's own results when there is no Brave key | free plan, 250 searches a month |
-| `GOOGLE_ALERTS_FEEDS` | **Google Alerts**: Google runs the same `site:` searches for you and lists new pages as they are indexed | free |
-| `ADZUNA_APP_ID`, `ADZUNA_APP_KEY` | **Adzuna**: a Canadian job search engine, 20 tech searches a run | free |
 
 Each one is optional: without it the scan still runs and prints "skipped" for that source.
 
@@ -21,6 +19,8 @@ Each one is optional: without it the scan still runs and prints "skipped" for th
   BambooHR, Paylocity), 200+ employer boards on the watchlist (banks, telcos, BC Crown corporations, cities, Vancouver
   tech), Job Bank (with CivicJobs.ca municipal postings), BC Public Service, YC, Built In Vancouver, HN "Who is hiring",
   Jobicy, Simplify new-grad, Bay Street Oracle.
+- **Jobhive**: ats-scrapers' open dataset (5 M postings, 64 hiring systems, refreshed daily) for the systems lockin cannot
+  read itself: Oracle, Eightfold (Microsoft), Dayforce, UKG, Rippling, JazzHR, Breezy, Cornerstone.
 - The scanner finds new employer boards by itself (`watchlist.auto.yaml`), drops nothing for a missing description, and
   flags rather than drops the "2+ years" postings.
 - **Two people per job.** Every Feed row has a `Recruiter` and a `Hiring Manager` link: LinkedIn's people search,
@@ -64,6 +64,11 @@ Each one is optional: without it the scan still runs and prints "skipped" for th
   and Google typically answers a script from a cloud server with a CAPTCHA. lockin will not dodge
   that. Brave's and SerpApi's APIs are built to be called by programs, so the same searches go
   through them.
+- **Anti-detect browsers** (github.com/topics/antidetect-browser) **and JobSpy-style scrapers**: they work by pretending to
+  be a person's browser so a site's bot check lets them through. When a site says no to programs, lockin takes the answer
+  and gets the same jobs another way (APIs, open datasets, the employer's own board).
+- **Google Alerts and Adzuna**: switched off by choice (`enabled: false`); the code stays in case they are wanted again.
+- **openroles.today**: a good open dataset, but its robots.txt disallows `/data/` for programs, so it is not read.
 - **Reading LinkedIn or Indeed directly**: they refuse automated readers. Their jobs arrive through Google Jobs, and their
   people through the two links you click yourself.
 - **The hanzili Canada new-grad list**: empty upstream ("No roles currently"). The scanner keeps reading it in case it

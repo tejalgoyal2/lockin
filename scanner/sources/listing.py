@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 # Job sites that list postings of employers whose own ATS the scanner usually reads too. The one list: `ats` finds
 # their pages by it, the Feed's Source column offers them, and `dedupe` lets an ATS posting win over them.
-SITE_SOURCES = ("YC", "Built In", "Bay Street Oracle", "HN", "Job Bank", "BC Gov", "Canada List", "Jobicy", "Adzuna", "Google Jobs", "Google Alerts", "Site Search")
+SITE_SOURCES = ("YC", "Built In", "Bay Street Oracle", "HN", "Job Bank", "BC Gov", "Canada List", "Jobicy", "Adzuna", "Google Jobs", "Google Alerts", "Site Search", "Jobhive")
 
 _NUMBER_WORDS = {"a": 1, "an": 1, "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7,
                  "eight": 8, "nine": 9, "ten": 10, "eleven": 11, "twelve": 12}
