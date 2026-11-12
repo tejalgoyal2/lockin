@@ -50,4 +50,5 @@ def raw_fields(rec: dict) -> dict:
         "url": rec["url"],
         "source": rec["source"],
         "first_seen": rec["first_seen"],
+        "pay": rec.get("pay", ""),
     }

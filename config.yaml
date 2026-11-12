@@ -124,10 +124,13 @@ sources:
       - '("security analyst" OR "cybersecurity" OR "devops" OR "cloud engineer" OR "QA" OR "automation")'
     where: '(Vancouver OR "British Columbia" OR Burnaby OR Victoria OR "Remote Canada" OR Canada)'
   jobhive:                 # ats-scrapers' open dataset (MIT, free, no key): daily snapshots of the hiring systems lockin has no reader
-                           # for. Each snapshot is downloaded, its Canadian rows inside the window kept, the description used as the JD
+                           # for. Each snapshot is downloaded, its Canadian rows inside the window kept, the description used as the JD.
+                           # Greenhouse, Lever, Ashby, BambooHR and iCIMS are read too: the dataset covers every board on them, not
+                           # just the watchlist's (a job found both ways is one row). Its Workday, Google and TikTok rows carry no
+                           # date, so they are not read.
     enabled: true
     systems: [oracle, smartrecruiters, eightfold, dayforce, ukg, rippling, jazzhr, breezy, cornerstone, phenom, jobvite,
-              recruitee, teamtailor, taleo, adp, workable, gem]
+              recruitee, teamtailor, taleo, adp, workable, gem, greenhouse, lever, ashby, bamboohr, icims, uber, apple]
   googlealerts:            # Google Alerts on the ATS sites (site:jobs.lever.co Vancouver ...), delivered as RSS. Free; the feed
                            # addresses would go in the secret GOOGLE_ALERTS_FEEDS. Off: the owner chose not to use it
     enabled: false
@@ -502,6 +505,9 @@ notion:
     location: Location        # optional: filled when the Feed has the column, ignored when it does not
     recruiter: Recruiter      # optional (URL column): LinkedIn people search for the company's recruiters
     manager: Hiring Manager   # optional (URL column): LinkedIn people search for the team's managers and leads
+    posted: Posted            # optional (Date column): the posting date, so the Feed sorts newest first; older rows get
+                              # it from the date tag in Company on the next run
+    pay: Pay                  # optional (Text column): the pay range the posting states ("$70,000–$85,000 a year")
     jd: JD
     interested: Interested
     apply: Apply

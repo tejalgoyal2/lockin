@@ -67,7 +67,7 @@ def run_stream(
             company=f["company"], company_name=f.get("company_name", ""), title=f["title"], location=loc, url=f["url"],
             source=f["source"], first_seen=f["first_seen"], sources={f["source"]},
             new_grad=f["source"] == "Simplify", weak_title=tier == "weak",
-            location_pending=status == "unresolved",
+            location_pending=status == "unresolved", pay=f.get("pay", ""),
         )
         if not filters.not_student_only(f["title"]):
             held.append(job)
