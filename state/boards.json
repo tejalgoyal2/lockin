@@ -39,11 +39,11 @@
   "workday/alfalaval.wd3/alfa_laval_jobs": {
    "canadian": 0,
    "first": "2026-11-11",
-   "last": "2026-11-11",
+   "last": "2026-11-12",
    "name": "alfalaval",
-   "probes": 2,
+   "probes": 3,
    "seen": 5,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/astrazeneca.wd3/broadbean_external": {
    "canadian": 0,
@@ -130,18 +130,18 @@
   "workday/centene.wd5/centene_external": {
    "canadian": 0,
    "first": "2026-11-11",
-   "last": "2026-11-11",
+   "last": "2026-11-12",
    "name": "centene",
-   "probes": 1,
+   "probes": 2,
    "seen": 5,
    "status": "empty"
   },
   "workday/cna.wd1/cna_careers": {
    "canadian": 0,
    "first": "2026-11-11",
-   "last": "2026-11-11",
+   "last": "2026-11-12",
    "name": "cna",
-   "probes": 1,
+   "probes": 2,
    "seen": 4,
    "status": "empty"
   },
@@ -193,18 +193,18 @@
   "workday/eversource.wd1/externalsite": {
    "canadian": 0,
    "first": "2026-11-11",
-   "last": "2026-11-11",
+   "last": "2026-11-12",
    "name": "eversource",
-   "probes": 2,
+   "probes": 3,
    "seen": 5,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/fca.wd3/fca_careers": {
    "canadian": 0,
    "first": "2026-11-11",
-   "last": "2026-11-11",
+   "last": "2026-11-12",
    "name": "fca",
-   "probes": 1,
+   "probes": 2,
    "seen": 4,
    "status": "empty"
   },
@@ -229,9 +229,9 @@
   "workday/flywheel.wd5/job_duck_careers": {
    "canadian": 0,
    "first": "2026-11-11",
-   "last": "2026-11-11",
+   "last": "2026-11-12",
    "name": "flywheel",
-   "probes": 1,
+   "probes": 2,
    "seen": 4,
    "status": "empty"
   },
@@ -247,11 +247,11 @@
   "workday/gehc.wd5/gehc_externalsite": {
    "canadian": 0,
    "first": "2026-11-10",
-   "last": "2026-11-11",
+   "last": "2026-11-12",
    "name": "gehc",
-   "probes": 2,
-   "seen": 7,
-   "status": "empty"
+   "probes": 3,
+   "seen": 4,
+   "status": "dead"
   },
   "workday/gevernova.wd5/vernova_externalsite": {
    "canadian": 14,
@@ -279,6 +279,24 @@
    "probes": 0,
    "seen": 23,
    "status": "added"
+  },
+  "workday/godirect.wd5/voya_jobs": {
+   "canadian": 0,
+   "first": "2026-11-12",
+   "last": "2026-11-12",
+   "name": "godirect",
+   "probes": 1,
+   "seen": 4,
+   "status": "empty"
+  },
+  "workday/gsk.wd5/gskcareers": {
+   "canadian": 0,
+   "first": "2026-11-12",
+   "last": "2026-11-12",
+   "name": "gsk",
+   "probes": 1,
+   "seen": 4,
+   "status": "empty"
   },
   "workday/guidehouse.wd1/external": {
    "canadian": 0,
@@ -427,9 +445,9 @@
   "workday/pae.wd1/amentum_careers": {
    "canadian": 0,
    "first": "2026-11-11",
-   "last": "2026-11-11",
+   "last": "2026-11-12",
    "name": "pae",
-   "probes": 1,
+   "probes": 2,
    "seen": 5,
    "status": "empty"
   },
@@ -508,11 +526,11 @@
   "workday/terminix.wd1/steritech": {
    "canadian": 0,
    "first": "2026-11-11",
-   "last": "2026-11-11",
+   "last": "2026-11-12",
    "name": "terminix",
-   "probes": 2,
+   "probes": 3,
    "seen": 7,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/thermofisher.wd5/thermofishercareers": {
    "canadian": 11,
@@ -526,9 +544,9 @@
   "workday/uline.wd1/uline_careers": {
    "canadian": 0,
    "first": "2026-11-11",
-   "last": "2026-11-11",
+   "last": "2026-11-12",
    "name": "uline",
-   "probes": 1,
+   "probes": 2,
    "seen": 5,
    "status": "empty"
   }
