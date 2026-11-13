@@ -41,3 +41,8 @@ boards:
   - {ats: workday, slug: sanofi.wd3/sanoficareers, name: "sanofi"}        # 24 Canadian postings when found, 2026-11-13
   - {ats: workday, slug: bakerhughes.wd5/bakerhughes, name: "bakerhughes"}        # 9 Canadian postings when found, 2026-11-13
   - {ats: workday, slug: vaderstad.wd3/external_careers, name: "vaderstad"}        # 14 Canadian postings when found, 2026-11-13
+  - {ats: workday, slug: capitalpower.wd10/External, name: "Capital Power"}        # 22 Canadian postings when found, 2026-11-13
+  - {ats: workday, slug: boeing.wd1/external_careers, name: "boeing"}        # 2 Canadian postings when found, 2026-11-13
+  - {ats: workday, slug: equinix.wd1/external, name: "equinix"}        # 10 Canadian postings when found, 2026-11-13
+  - {ats: workday, slug: altera.wd1/altera, name: "Altera"}        # 12 Canadian postings when found, 2026-11-13
+  - {ats: workday, slug: hitachi.wd1/hitachi, name: "hitachi"}        # 66 Canadian postings when found, 2026-11-13

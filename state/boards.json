@@ -63,6 +63,15 @@
    "seen": 5,
    "status": "dead"
   },
+  "workday/altera.wd1/altera": {
+   "canadian": 12,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "Altera",
+   "probes": 0,
+   "seen": 4,
+   "status": "added"
+  },
   "workday/astrazeneca.wd3/broadbean_external": {
    "canadian": 0,
    "first": "2026-11-10",
@@ -126,6 +135,15 @@
    "seen": 10,
    "status": "added"
   },
+  "workday/boeing.wd1/external_careers": {
+   "canadian": 2,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "boeing",
+   "probes": 0,
+   "seen": 6,
+   "status": "added"
+  },
   "workday/boeing.wd1/external_subsidiary": {
    "canadian": 2,
    "first": "2026-11-09",
@@ -145,6 +163,15 @@
    "seen": 14,
    "status": "dead"
   },
+  "workday/cambiahealth.wd504/external": {
+   "canadian": 0,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "cambiahealth",
+   "probes": 1,
+   "seen": 5,
+   "status": "empty"
+  },
   "workday/canadiantirecorporation.wd3/enterprise_external_careers_site": {
    "canadian": 98,
    "first": "2026-11-11",
@@ -161,6 +188,15 @@
    "name": "capitalone",
    "probes": 0,
    "seen": 46,
+   "status": "added"
+  },
+  "workday/capitalpower.wd10/external": {
+   "canadian": 22,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "Capital Power",
+   "probes": 0,
+   "seen": 8,
    "status": "added"
   },
   "workday/centene.wd5/centene_external": {
@@ -199,6 +235,15 @@
    "seen": 6,
    "status": "added"
   },
+  "workday/dedalus.wd3/external": {
+   "canadian": 0,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "dedalus",
+   "probes": 1,
+   "seen": 5,
+   "status": "empty"
+  },
   "workday/desjardins.wd10/desjardins": {
    "canadian": 0,
    "first": "2026-11-10",
@@ -235,6 +280,15 @@
    "seen": 28,
    "status": "dead"
   },
+  "workday/equinix.wd1/external": {
+   "canadian": 10,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "equinix",
+   "probes": 0,
+   "seen": 5,
+   "status": "added"
+  },
   "workday/eversource.wd1/externalsite": {
    "canadian": 0,
    "first": "2026-11-11",
@@ -261,6 +315,15 @@
    "probes": 0,
    "seen": 9,
    "status": "added"
+  },
+  "workday/flcancer.wd1/flcancer_careers": {
+   "canadian": 0,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "flcancer",
+   "probes": 1,
+   "seen": 4,
+   "status": "empty"
   },
   "workday/flir.wd1/flircareers": {
    "canadian": 47,
@@ -388,6 +451,15 @@
    "seen": 5,
    "status": "dead"
   },
+  "workday/hitachi.wd1/hitachi": {
+   "canadian": 66,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "hitachi",
+   "probes": 0,
+   "seen": 4,
+   "status": "added"
+  },
   "workday/hntb.wd5/hntb_careers": {
    "canadian": 0,
    "first": "2026-11-12",
@@ -496,6 +568,15 @@
    "seen": 8,
    "status": "added"
   },
+  "workday/massmutual.wd1/mmcareers": {
+   "canadian": 0,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "massmutual",
+   "probes": 1,
+   "seen": 4,
+   "status": "empty"
+  },
   "workday/maxar.wd1/vantor": {
    "canadian": 0,
    "first": "2026-11-10",
@@ -562,11 +643,11 @@
   "workday/nttlimited.wd3/ntt_careers": {
    "canadian": 0,
    "first": "2026-11-10",
-   "last": "2026-11-11",
+   "last": "2026-11-13",
    "name": "nttlimited",
-   "probes": 2,
-   "seen": 7,
-   "status": "empty"
+   "probes": 3,
+   "seen": 4,
+   "status": "dead"
   },
   "workday/optioncare.wd1/optioncare": {
    "canadian": 0,
@@ -690,8 +771,8 @@
    "first": "2026-11-13",
    "last": "2026-11-13",
    "name": "stvinc",
-   "probes": 1,
-   "seen": 3,
+   "probes": 2,
+   "seen": 6,
    "status": "empty"
   },
   "workday/synechron.wd1/synechroncareers": {
@@ -748,6 +829,15 @@
    "seen": 3,
    "status": "added"
   },
+  "workday/verizon.wd12/verizon-careers": {
+   "canadian": 0,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "verizon",
+   "probes": 1,
+   "seen": 6,
+   "status": "empty"
+  },
   "workday/zeissgroup.wd3/external": {
    "canadian": 8,
    "first": "2026-11-12",
@@ -762,6 +852,16 @@
   "workday/broadcom.wd1/external_career": {
    "fails": 0,
    "last_ok": "2026-11-13"
+  },
+  "workday/generalmotors.wd5/careers_gm": {
+   "error": "HTTPError: 502 Server Error: Bad Gateway for url: https://generalmotors.wd5.myworkdayjobs.com/wday/cxs/generalmotors/Car",
+   "fails": 1,
+   "last_fail": "2026-11-13"
+  },
+  "workday/nvidia.wd5/nvidiaexternalcareersite": {
+   "error": "HTTPError: 502 Server Error: Bad Gateway for url: https://nvidia.wd5.myworkdayjobs.com/wday/cxs/nvidia/NVIDIAExternalCar",
+   "fails": 1,
+   "last_fail": "2026-11-13"
   }
  },
  "version": 1
