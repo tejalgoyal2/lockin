@@ -41,7 +41,8 @@ EXPECTED_TYPES = {
 # Properties the scanner fills when the Feed has them and leaves alone when it does not, so a new column can be
 # added in Notion before or after the code that writes it ships.
 OPTIONAL_TYPES = {"location": "rich_text", "recruiter": "url", "manager": "url", "posted": "date", "pay": "rich_text",
-                  "area": "select"}
+                  "area": "select", "verdict": "select", "why": "rich_text"}
+VERDICTS = ("Apply first", "Worth a look", "Long shot")     # the owner's order; Notion sorts a select this way
 AREA_OPTIONS = ("BC", "Remote", "Alberta", "Ontario", "Canada")     # the owner's order; Notion sorts a select this way
 SOURCE_OPTIONS = ("Workday", "Greenhouse", "Lever", "Ashby", "BambooHR", "Paylocity", "Simplify", "Watchlist")
 # Labels of the job sites. Used when the Feed's Source column has the option; a Feed without it leaves Source empty
@@ -250,12 +251,47 @@ LEVEL_SIGNALS = ("internship", "new grad", "recent graduate", "0-2 years", "entr
 CAUTION_SIGNALS = ("students only", "2+ yrs", "P.Eng req", "talent pool", "jd unavailable", "low signal")                    # most important first
 
 
+HIDDEN_TAGS = ("students only",)     # the owner applies anyway: many such postings also welcome recent grads
+
+
+def verdict(job: Job) -> str:
+    """One word on whether to spend time on the job, from what lockin knows (Fit, the level the posting asks for,
+    its warnings). The Why column shows the evidence."""
+    s, fit = set(job.signals), job.fit_pct
+    junior = bool(s & set(LEVEL_SIGNALS))
+    if s & {"P.Eng req", "talent pool"}:
+        return "Long shot"
+    if fit is None:                                  # no description, or one naming few of the owner's skills
+        return "Worth a look" if junior else "Long shot"
+    if fit >= 60 and "2+ yrs" not in s:
+        return "Apply first"
+    if junior and fit >= 40:
+        return "Apply first"
+    return "Worth a look" if fit >= 40 else "Long shot"
+
+
+def why(job: Job) -> str:
+    """The evidence behind the verdict in one line: the owner's skills the posting names, and the ones it asks for that
+    the owner does not list."""
+    if "jd unavailable" in job.signals:
+        return "Could not read the posting: open the link"
+    have = ", ".join(job.matched[:5])
+    if job.fit_pct is None:
+        return "Names few of your skills: probably not a tech job" + (f" (mentions {have})" if have else "")
+    line = f"You have: {have}" if have else "Names none of your skills"
+    if job.gaps:
+        line += f" · Missing: {', '.join(job.gaps[:3])}"
+    if "2+ yrs" in job.signals:
+        line += " · asks 2 years"
+    return line[:300]
+
+
 def display_signals(signals: list[str]) -> list[str]:
     """The tags shown in the Feed: the strongest level tag, then the most important warning. A row used to carry
     up to five tags ("recent graduate, 0-2 years, junior, 2+ yrs"), more than the column shows; the rest say
     nothing the first two do not, and the full set stays in reports/latest.md."""
     level = next((s for s in LEVEL_SIGNALS if s in signals), None)
-    rest = [s for s in signals if s not in LEVEL_SIGNALS]
+    rest = [s for s in signals if s not in LEVEL_SIGNALS and s not in HIDDEN_TAGS]
     rank = lambda s: CAUTION_SIGNALS.index(s) if s in CAUTION_SIGNALS else len(CAUTION_SIGNALS)
     caution = min(rest, key=rank) if rest else None
     return [TAG_LABELS.get(s, s) for s in (level, caution) if s]
@@ -281,6 +317,10 @@ def build_properties(job: Job, feed: Feed, overrides: dict[str, str]) -> tuple[d
         props[n["location"]] = {"rich_text": _rich(job.location[:200])}
     if feed.has("posted"):          # a real date, so the Feed sorts newest first (the tag in Company is text)
         props[n["posted"]] = {"date": {"start": job.first_seen.date().isoformat()}}
+    if feed.has("verdict"):
+        props[n["verdict"]] = {"select": {"name": verdict(job)}}
+    if feed.has("why"):
+        props[n["why"]] = {"rich_text": _rich(why(job))}
     if feed.has("area") and job.area in AREA_OPTIONS:
         props[n["area"]] = {"select": {"name": job.area}}
     if feed.has("pay"):

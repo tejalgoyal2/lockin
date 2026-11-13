@@ -171,3 +171,25 @@ def test_workday_rows_without_location_text_use_their_bullets_or_the_canada_filt
         == "Ann Arbor; Toronto ; Michigan; Ontario"
     assert wl._workday_where({}, True) == "Canada" and wl._workday_where({}, False) == ""
     assert wl._workday_where({"locationsText": "2 Locations"}, True) == "2 Locations"
+
+
+@pytest.mark.parametrize("fit, signals, want", [
+    (75.0, [], "Apply first"),
+    (75.0, ["2+ yrs"], "Worth a look"),
+    (45.0, ["new grad"], "Apply first"),
+    (45.0, [], "Worth a look"),
+    (20.0, [], "Long shot"),
+    (None, ["low signal"], "Long shot"),
+    (None, ["internship", "jd unavailable"], "Worth a look"),
+    (90.0, ["P.Eng req"], "Long shot"),
+])
+def test_every_row_gets_a_verdict(fit, signals, want):
+    assert nf.verdict(job(fit_pct=fit, signals=signals)) == want
+
+
+def test_the_why_line_shows_the_evidence():
+    assert nf.why(job(fit_pct=80.0, matched=["Python", "SQL"], gaps=["Tableau"], signals=["2+ yrs"])) == \
+        "You have: Python, SQL · Missing: Tableau · asks 2 years"
+    assert nf.why(job(fit_pct=None, signals=["low signal"], matched=["Excel"])).startswith("Names few of your skills")
+    assert nf.why(job(signals=["jd unavailable"])) == "Could not read the posting: open the link"
+    assert nf.display_signals(["internship", "students only"]) == ["Internship"]

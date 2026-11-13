@@ -545,6 +545,8 @@ notion:
     source: Source
     fit: "Fit %"
     signals: Tags             # New grad / Entry level, and at most one warning (Asks 2 yrs, Needs P.Eng, Talent pool, ...)
+    verdict: Verdict          # optional (Select: Apply first, Worth a look, Long shot, in that order)
+    why: Why                  # optional (Text): your skills the posting names, the ones it asks that you lack
     area: Area                # optional (Select column, options BC, Remote, Alberta, Ontario, Canada in that order)
     location: Location        # optional: filled when the Feed has the column, ignored when it does not
     recruiter: Recruiter      # optional (URL column): LinkedIn people search for the company's recruiters
