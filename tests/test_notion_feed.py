@@ -62,7 +62,7 @@ def test_wrong_type_and_wrong_number_format_and_missing_options_all_listed(clien
     msg = str(e.value)
     assert "'Link' has type 'rich_text', expected 'url'" in msg
     assert "'Fit %' has number format 'number', expected 'percent'" in msg
-    assert "'Signals' is missing options: New grad" in msg and "No description" in msg
+    assert "'Signals' is missing options: Internship" in msg and "New grad" in msg and "No description" in msg
 
 
 def test_unreadable_data_source_gives_a_sharing_hint(client, notion):

@@ -1,4 +1,4 @@
-"""SimplifyJobs/New-Grad-Positions listings.json (SPEC §3b)."""
+"""SimplifyJobs/New-Grad-Positions listings.json (SPEC §3b), and the same project's internship list."""
 import json
 from collections.abc import Iterator
 from pathlib import Path
@@ -8,7 +8,13 @@ from scanner.normalize import clean_title, from_unix
 
 
 def fetch(cfg: dict) -> list[dict]:
-    return http_get(cfg["listings_url"]).json()
+    rows = http_get(cfg["listings_url"]).json()
+    if cfg.get("internships_url"):
+        try:
+            rows += [{**r, "_intern": True} for r in http_get(cfg["internships_url"]).json()]
+        except Exception as exc:                 # the internship list failing must not cost the new-grad one
+            print(f"  Simplify internships: not read ({type(exc).__name__})")
+    return rows
 
 
 def load_file(path: Path) -> list[dict]:
@@ -33,5 +39,6 @@ def raw_fields(rec: dict) -> dict:
         "location": " ; ".join(rec.get("locations") or []),
         "url": rec.get("url") or "",
         "source": "Simplify",
+        "intern": bool(rec.get("_intern")),
         "first_seen": from_unix(rec["date_posted"]) if rec.get("date_posted") else None,
     }

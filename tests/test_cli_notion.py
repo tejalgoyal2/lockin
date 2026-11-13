@@ -162,7 +162,7 @@ def test_schema_problem_exits_2_with_the_list_and_writes_nothing(monkeypatch, ca
         token, version, session=notion, sleep=lambda s: None, min_interval=0))
     assert cli.main(["run"]) == 2
     err = capsys.readouterr().err
-    assert "missing property 'Apply'" in err and "'Link' has type 'title'" in err
+    assert "missing property 'A'" in err and "'Link' has type 'title'" in err
     assert not [r for r in notion.requests if r["method"] in ("POST", "PATCH")]
 
 

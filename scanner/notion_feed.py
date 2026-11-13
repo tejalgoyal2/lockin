@@ -50,7 +50,7 @@ SITE_SOURCE_OPTIONS = SITE_SOURCES
 # Optional too: a watchlist ATS added after the Feed was built. Without the option in Notion, Source stays empty.
 EXTRA_SOURCE_OPTIONS = ("SmartRecruiters", "Phenom", "SuccessFactors", "iCIMS")
 # What each tag says in the Feed. The scanner's own names ("low signal", "jd unavailable") meant nothing to the owner.
-TAG_LABELS = {"new grad": "New grad", "recent graduate": "New grad", "0-2 years": "Entry level",
+TAG_LABELS = {"internship": "Internship", "students only": "Students only", "new grad": "New grad", "recent graduate": "New grad", "0-2 years": "Entry level",
               "entry level": "Entry level", "junior": "Entry level", "2+ yrs": "Asks 2 yrs", "P.Eng req": "Needs P.Eng",
               "talent pool": "Talent pool", "jd unavailable": "No description", "low signal": "Unclear fit"}
 SIGNAL_OPTIONS = tuple(dict.fromkeys(TAG_LABELS.values()))
@@ -246,8 +246,8 @@ def _rich(text: str) -> list[dict]:
     return [{"type": "text", "text": {"content": c}} for c in chunk_text(text)][:ARRAY_MAX]
 
 
-LEVEL_SIGNALS = ("new grad", "recent graduate", "0-2 years", "entry level", "junior")       # strongest first
-CAUTION_SIGNALS = ("2+ yrs", "P.Eng req", "talent pool", "jd unavailable", "low signal")                    # most important first
+LEVEL_SIGNALS = ("internship", "new grad", "recent graduate", "0-2 years", "entry level", "junior")       # strongest first
+CAUTION_SIGNALS = ("students only", "2+ yrs", "P.Eng req", "talent pool", "jd unavailable", "low signal")                    # most important first
 
 
 def display_signals(signals: list[str]) -> list[str]:

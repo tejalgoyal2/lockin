@@ -103,12 +103,15 @@ class Notion:
         return resp
 
 
+N = CFG["notion"]["properties"]
+
+
 def page(pid, title, company, link, jd, interested=False, apply=False, signals=(), done_del=False):
     rt = lambda s: [{"type": "text", "plain_text": s, "text": {"content": s}}]
     return {"id": pid, "properties": {
         "Name": {"title": rt(title)}, "Company": {"rich_text": rt(company)}, "Link": {"url": link},
-        "Source": {"select": {"name": "Greenhouse"}}, "Signals": {"multi_select": [{"name": s} for s in signals]},
-        "JD": {"rich_text": rt(jd)}, "Interested": {"checkbox": interested}, "Apply": {"checkbox": apply},
+        "Source": {"select": {"name": "Greenhouse"}}, N["signals"]: {"multi_select": [{"name": s} for s in signals]},
+        "JD": {"rich_text": rt(jd)}, N["interested"]: {"checkbox": interested}, N["apply"]: {"checkbox": apply},
         **({} if done_del is None else {"done-del": {"checkbox": done_del}})}}
 
 

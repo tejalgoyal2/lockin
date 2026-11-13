@@ -180,7 +180,8 @@ def test_student_titled_jobs_rescued_only_when_jd_welcomes_recent_grads():
            "2": "Python. Must be enrolled in a co-op program.",
            "3": "Python. Summer role for students. Best Employers for Recent Graduates 2025.",
            "4": http_error(500)}
-    res = run([], held, jds)
+    old = {**CFG, "jd": {**CFG["jd"], "keep_student_roles": False}}       # the rule before the owner asked for internships
+    res = E.enrich([], list(held), old, FILTERS, SCORER, FakeClient(jds), cache=NOCACHE)
     assert [j.title for j in res.kept] == ["Software Engineer Intern"]
     assert res.rescued == 1 and res.held_total == 4
     assert res.drops == {E.R_ENROLLMENT: 1, E.R_STUDENT: 1, E.R_STUDENT_NO_JD: 1}
@@ -364,3 +365,14 @@ def test_tech_flavoured_generic_title_is_not_dropped_for_few_terms():
     assert _tech_flavoured("Information Technology (IT) Analyst", sc)
     assert not _tech_flavoured("Mobile Mortgage Specialist", sc)
     assert not _tech_flavoured("Fraud Analyst", sc)
+
+
+def test_internships_and_co_ops_are_kept_with_their_tags_when_the_owner_wants_them():
+    held = [gh(1, title="Software Engineer Intern", student=True), gh(2, title="Developer Co-op", student=True)]
+    jds = {"1": "Python, SQL, Docker. Recent graduates are welcome to apply.",
+           "2": "Python, SQL, Docker. Must be enrolled in a co-op program."}
+    res = run([], held, jds)
+    tags = {j.title: j.signals for j in res.kept}
+    assert set(tags) == {"Software Engineer Intern", "Developer Co-op"}
+    assert tags["Software Engineer Intern"][0] == "internship" and "students only" not in tags["Software Engineer Intern"]
+    assert "students only" in tags["Developer Co-op"]

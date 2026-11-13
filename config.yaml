@@ -17,6 +17,9 @@ sources:
   simplify:
     enabled: true
     listings_url: https://raw.githubusercontent.com/SimplifyJobs/New-Grad-Positions/dev/.github/scripts/listings.json
+    # Simplify's internship list (same format; about 450 open Canadian internships and co-ops). Its rows are tagged
+    # Internship, never "new grad". Remove the line to read the new-grad list only.
+    internships_url: https://raw.githubusercontent.com/SimplifyJobs/Summer2027-Internships/dev/.github/scripts/listings.json
     categories:             # Simplify has used a few spellings for the same buckets
       - Software
       - Software Engineering
@@ -484,6 +487,8 @@ jd:
     - pharmac
     - nurs
     - dental hygien
+  keep_student_roles: true    # internships and co-ops reach the Feed tagged Internship (and Students only when the posting
+                              # requires current enrollment); false: only those whose JD welcomes recent grads (below)
   rescue_student_titles: true  # fetch JDs of student-titled jobs; keep those that welcome recent grads
 
 scoring:
@@ -547,8 +552,8 @@ notion:
                               # it from the date tag in Company on the next run
     pay: Pay                  # optional (Text column): the pay range the posting states ("$70,000–$85,000 a year")
     jd: JD
-    interested: Interested
-    apply: Apply
+    interested: I             # Interested (shortened to save space)
+    apply: A                  # Apply
     done_del: done-del
 
 state:
