@@ -151,3 +151,8 @@ def test_area_follows_the_owners_order(filters, loc, area):
 def test_the_area_names_the_place_it_came_from(filters):
     assert filters.area("Regina, SK; Vancouver, BC") == ("BC", "Vancouver, BC")
     assert filters.area("Seattle, WA") == ("", None)
+
+
+def test_a_german_posting_relabelled_as_canadian_is_not_kept(filters):
+    assert not filters.title_location_ok("9499 | Full Stack Developer (m/w/d)")
+    assert filters.title_location_ok("Full Stack Developer")
