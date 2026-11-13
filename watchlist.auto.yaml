@@ -38,3 +38,4 @@ boards:
   - {ats: workday, slug: generac.wd5/external, name: "generac"}        # 13 Canadian postings when found, 2026-11-12
   - {ats: workday, slug: ghr.wd1/lateral-canada, name: "ghr"}        # 3 Canadian postings when found, 2026-11-12
   - {ats: workday, slug: keyera.wd10/keyera_careers, name: "keyera"}        # 13 Canadian postings when found, 2026-11-12
+  - {ats: workday, slug: sanofi.wd3/sanoficareers, name: "sanofi"}        # 24 Canadian postings when found, 2026-11-13

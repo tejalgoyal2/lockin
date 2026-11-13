@@ -92,6 +92,15 @@
    "gaps": [],
    "title": "Financial Analyst - Financial Reporting Systems"
   },
+  "00f1e90b2345b9c83c3e7a2d8a1160809dece665": {
+   "company": "Celestica",
+   "date": "2026-11-13",
+   "gaps": [
+    "GCP",
+    "Java"
+   ],
+   "title": "AI Security Engineer"
+  },
   "01017388013f382374a690ce15b160d3f00d3553": {
    "company": "Alimentiv 2",
    "date": "2026-10-27",
@@ -543,6 +552,14 @@
     "Splunk"
    ],
    "title": "Platform Engineer RPA and Agentic Automation"
+  },
+  "05020f4f5c0df430d4561f4f192c7931d84603de": {
+   "company": "Kinaxis",
+   "date": "2026-11-13",
+   "gaps": [
+    "Cisco"
+   ],
+   "title": "Cloud Engineer 1, Site Reliability Engineering (Early Career, Junior level)"
   },
   "051880170ff89b293440cfe67d272541b0f5dfcd": {
    "company": "SOTI",
@@ -4125,6 +4142,15 @@
    "gaps": [],
    "title": "ATM Technical Instructor"
   },
+  "25f6392ed8c3b379f80e5a5618e4aa3f4184032e": {
+   "company": "Scotiabank",
+   "date": "2026-11-13",
+   "gaps": [
+    "SAS",
+    "unit testing"
+   ],
+   "title": "Developer"
+  },
   "261fab53627df121f72fa413bf2135aa8d9900e5": {
    "company": "Regional Municipality of Peel",
    "date": "2026-11-12",
@@ -4502,6 +4528,12 @@
    "date": "2026-10-10",
    "gaps": [],
    "title": "Stagiaire en IA et robotique / AI/ML/Robotics Developer Intern"
+  },
+  "293b221c0ffae50c61a5a8cca87f7f718781fe54": {
+   "company": "Celestica",
+   "date": "2026-11-13",
+   "gaps": [],
+   "title": "08 - Specialist, Material Costing and Awards"
   },
   "293df569645f17356e5c1ef9172d9f2247072d36": {
    "company": "Accesscu",
@@ -6412,6 +6444,14 @@
    ],
    "title": "Jr. AI Native Engineer"
   },
+  "3ac66209187958f601d934373b882f27dcd3bea8": {
+   "company": "High Performance Technologies, Inc. (HPTech)",
+   "date": "2026-11-13",
+   "gaps": [
+    "Oracle"
+   ],
+   "title": "Database Engineer"
+  },
   "3ac8a0e2056979166bd17bf56d8a2a75275f1d5f": {
    "company": "Altera",
    "date": "2026-10-07",
@@ -8302,6 +8342,12 @@
    "date": "2026-11-11",
    "gaps": [],
    "title": "Information Technology (IT) Analyst"
+  },
+  "49d2550f63dc86d8f60b6b52800be2f182720609": {
+   "company": "SaskPower",
+   "date": "2026-11-13",
+   "gaps": [],
+   "title": "Summer Student - Engineering"
   },
   "49e13403cdf767d231a7f22baf6c4d570f126b89": {
    "company": "CIBC",
@@ -11430,6 +11476,12 @@
     "microservices"
    ],
    "title": "Information Technology Security Analyst"
+  },
+  "64f6546b91e3fda41549948379c7a80b3eb573ed": {
+   "company": "Scotiabank",
+   "date": "2026-11-13",
+   "gaps": [],
+   "title": "ScotiaHelps Advisor, Front End (Bilingual)"
   },
   "64f7c16f10d8b6a7a9a22c0330562fc2f2a3b3ba": {
    "company": "Uline",
@@ -17290,6 +17342,14 @@
    ],
    "title": "Software Engineer, Android, Level 4"
   },
+  "96888b08a959d0022269ffc48f121060cb14c60d": {
+   "company": "generac",
+   "date": "2026-11-13",
+   "gaps": [
+    "Oracle"
+   ],
+   "title": "Financial Planning Analyst"
+  },
   "969253b3edc8a629c79b575def191f86490852ba": {
    "company": "Tucows Inc.",
    "date": "2026-10-29",
@@ -17924,6 +17984,12 @@
    "date": "2026-11-12",
    "gaps": [],
    "title": "Preventative Maintenance Junior Analyst"
+  },
+  "9bf0f223ce24668dfff0ecf909b050d66e66190c": {
+   "company": "Thales",
+   "date": "2026-11-13",
+   "gaps": [],
+   "title": "ILS Analyst/ Maintenance Supportability Analyst"
   },
   "9bfff49cf9b21371821f016eb4d64abf99fdb3f9": {
    "company": "Trimble",
@@ -25378,6 +25444,12 @@
    "date": "2026-11-12",
    "gaps": [],
    "title": "Junior Energy Analyst"
+  },
+  "e0399b47cd47dd8f5fb2cf9c817f1ef7c138ee99": {
+   "company": "Scotiabank",
+   "date": "2026-11-13",
+   "gaps": [],
+   "title": "Agriculture Specialist, Commercial Banking - New Liskeard, Peterborough, Kingston, Brockville area"
   },
   "e044f0e6b68da52a13512cf0c5d9bfc17a9c9a13": {
    "company": "Agoda",

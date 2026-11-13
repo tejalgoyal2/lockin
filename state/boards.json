@@ -166,11 +166,11 @@
   "workday/cgm.wd3/cgm": {
    "canadian": 0,
    "first": "2026-11-12",
-   "last": "2026-11-12",
+   "last": "2026-11-13",
    "name": "cgm",
-   "probes": 2,
+   "probes": 3,
    "seen": 3,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/cna.wd1/cna_careers": {
    "canadian": 0,
@@ -346,11 +346,11 @@
   "workday/gsk.wd5/gskcareers": {
    "canadian": 0,
    "first": "2026-11-12",
-   "last": "2026-11-12",
+   "last": "2026-11-13",
    "name": "gsk",
-   "probes": 2,
+   "probes": 3,
    "seen": 3,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/guidehouse.wd1/external": {
    "canadian": 0,
@@ -364,9 +364,9 @@
   "workday/hcsc.wd1/hcsc_external": {
    "canadian": 0,
    "first": "2026-11-12",
-   "last": "2026-11-12",
+   "last": "2026-11-13",
    "name": "hcsc",
-   "probes": 1,
+   "probes": 2,
    "seen": 3,
    "status": "empty"
   },
@@ -382,9 +382,9 @@
   "workday/hntb.wd5/hntb_careers": {
    "canadian": 0,
    "first": "2026-11-12",
-   "last": "2026-11-12",
+   "last": "2026-11-13",
    "name": "hntb",
-   "probes": 1,
+   "probes": 2,
    "seen": 3,
    "status": "empty"
   },
@@ -463,11 +463,11 @@
   "workday/lbg.wd3/lbg_careers": {
    "canadian": 0,
    "first": "2026-11-12",
-   "last": "2026-11-12",
+   "last": "2026-11-13",
    "name": "lbg",
-   "probes": 2,
+   "probes": 3,
    "seen": 4,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/ledcor.wd3/ledcor_external": {
    "canadian": 161,
@@ -499,9 +499,9 @@
   "workday/mbda.wd3/mbda-uk": {
    "canadian": 0,
    "first": "2026-11-12",
-   "last": "2026-11-12",
+   "last": "2026-11-13",
    "name": "mbda",
-   "probes": 1,
+   "probes": 2,
    "seen": 3,
    "status": "empty"
   },
@@ -517,9 +517,9 @@
   "workday/morganlewis.wd5/morganlewis": {
    "canadian": 0,
    "first": "2026-11-12",
-   "last": "2026-11-12",
+   "last": "2026-11-13",
    "name": "morganlewis",
-   "probes": 1,
+   "probes": 2,
    "seen": 3,
    "status": "empty"
   },
@@ -559,6 +559,15 @@
    "seen": 7,
    "status": "empty"
   },
+  "workday/optioncare.wd1/optioncare": {
+   "canadian": 0,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "optioncare",
+   "probes": 1,
+   "seen": 3,
+   "status": "empty"
+  },
   "workday/pae.wd1/amentum_careers": {
    "canadian": 0,
    "first": "2026-11-11",
@@ -586,6 +595,24 @@
    "seen": 6,
    "status": "dead"
   },
+  "workday/pwc.wd3/global_experienced_careers": {
+   "canadian": 0,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "pwc",
+   "probes": 1,
+   "seen": 3,
+   "status": "empty"
+  },
+  "workday/rb.wd5/frs": {
+   "canadian": 0,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "rb",
+   "probes": 1,
+   "seen": 3,
+   "status": "empty"
+  },
   "workday/regions.wd5/regions_careers": {
    "canadian": 0,
    "first": "2026-11-10",
@@ -602,6 +629,15 @@
    "name": "roche",
    "probes": 0,
    "seen": 11,
+   "status": "added"
+  },
+  "workday/sanofi.wd3/sanoficareers": {
+   "canadian": 24,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "sanofi",
+   "probes": 0,
+   "seen": 3,
    "status": "added"
   },
   "workday/slihrms.wd3/careers": {
@@ -630,6 +666,15 @@
    "probes": 0,
    "seen": 6,
    "status": "added"
+  },
+  "workday/strayer.wd1/sei": {
+   "canadian": 0,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "strayer",
+   "probes": 1,
+   "seen": 3,
+   "status": "empty"
   },
   "workday/synechron.wd1/synechroncareers": {
    "canadian": 8,
@@ -680,7 +725,7 @@
  "health": {
   "workday/broadcom.wd1/external_career": {
    "fails": 0,
-   "last_ok": "2026-11-12"
+   "last_ok": "2026-11-13"
   }
  },
  "version": 1
