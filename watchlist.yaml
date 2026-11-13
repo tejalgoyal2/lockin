@@ -53,7 +53,6 @@ boards:
   - {ats: ashby,      slug: xenon,          name: Xenon}              # not in the dataset
   - {ats: lever,      slug: magnetforensics, name: Magnet Forensics}  # Waterloo
   - {ats: lever,      slug: waabi,          name: Waabi}              # Toronto
-  - {ats: lever,      slug: sophos,         name: Sophos}
   - {ats: greenhouse, slug: d2l,            name: D2L}                # Kitchener
   - {ats: greenhouse, slug: geotab,         name: Geotab}             # Oakville
   - {ats: greenhouse, slug: carta,          name: Carta}

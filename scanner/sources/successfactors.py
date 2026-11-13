@@ -144,7 +144,40 @@ def fetch_board(slug: str, name: str, client, now: datetime) -> list[dict]:
         dated = [r["first_seen"] for r in new if r["first_seen"]]
         if dated and max(dated) < cutoff:
             break
+    if out and not any(r["first_seen"] for r in out):
+        _date_from_pages(out, client, started)
     return out
+
+
+_DATE_POSTED = re.compile(r'itemprop="datePosted"\s+content="([^"]+)"')
+PAGE_DATES_MAX = 150          # postings whose own page is read for its date, on a site whose list shows none
+
+
+def posted_on_page(page_html: str) -> datetime | None:
+    """The schema.org datePosted a posting page carries: "Tue Oct 20 00:00:00 UTC 2026" or an ISO date."""
+    m = _DATE_POSTED.search(page_html or "")
+    if not m:
+        return None
+    text = m.group(1).strip()
+    for fmt in ("%a %b %d %H:%M:%S UTC %Y", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(text[:10] if fmt == "%Y-%m-%d" else text, fmt).replace(tzinfo=timezone.utc)
+        except ValueError:
+            continue
+    return None
+
+
+def _date_from_pages(records: list[dict], client, started: float) -> None:
+    """Some sites (FortisBC) show no date column, so every posting would count as undated and be skipped. Each posting's
+    own page states its date (schema.org datePosted): read it, within the board's time budget. (The site's sitemap is no
+    help: it gives every page the day the sitemap was rebuilt.)"""
+    for rec in records[:PAGE_DATES_MAX]:
+        if time.monotonic() - started > BOARD_SECONDS:
+            break
+        try:
+            rec["first_seen"] = posted_on_page(client.get(rec["url"], SOURCE).text)
+        except Exception:
+            continue
 
 
 # --- a posting's page --------------------------------------------------------------------------
