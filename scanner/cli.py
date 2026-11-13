@@ -73,7 +73,8 @@ def collect(cfg, args, filters, now, since, store=None):
         records, failed = watchlist.fetch_all(
             boards, client_from_config(cfg["jd"]),
             workers=wl.get("workers", 6), now=now, seed_ashby=ats.seed_ashby_board,
-            want=lambda t: bool(filters.title_tier(t)) and filters.title_not_excluded(t))
+            want=lambda t, where: (bool(filters.title_tier(t)) and filters.title_not_excluded(t)
+                                   and (not where or filters.location_status(where)[0] != "not_canada")))
         if store:
             failed_by = {boards_mod.key(b): err for b, err in failed}
             for b in boards:
