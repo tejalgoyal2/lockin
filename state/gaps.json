@@ -4582,6 +4582,12 @@
    ],
    "title": "AI Engineer"
   },
+  "27f075e14800debb524d062c8f647c56ee833114": {
+   "company": "TD Bank",
+   "date": "2026-11-13",
+   "gaps": [],
+   "title": "Bus Sys Analysis Specialist"
+  },
   "27fbf1e07386b7c2023c2585c469a72f2135f7a6": {
    "company": "Awc",
    "date": "2026-10-17",
@@ -22946,6 +22952,15 @@
    "gaps": [],
    "title": "Customer Onboarding Specialist - Ontario"
   },
+  "bf820c3ddf9c9219012c1161fd0d647940833d4c": {
+   "company": "TD Bank",
+   "date": "2026-11-13",
+   "gaps": [
+    "GCP",
+    "Splunk"
+   ],
+   "title": "Information Security Specialist - Attack Surface Reduction (Cyber Threat Hunting)"
+  },
   "bf87109ddbb47ed6f7791ae270c0f14c01ad0add": {
    "company": "AutoFi",
    "date": "2026-11-13",
@@ -28487,6 +28502,14 @@
    "date": "2026-10-10",
    "gaps": [],
    "title": "Vote Audit Analyst ( Contract) (Hybrid)"
+  },
+  "f0005da1eea24ab6280de17ea49933d9357147c3": {
+   "company": "Company 3",
+   "date": "2026-11-13",
+   "gaps": [
+    "VLANs"
+   ],
+   "title": "Systems Engineer"
   },
   "f0038abd7ea49e411bb4f6e23ad685443367cdaa": {
    "company": "Health Employers Association of BC",

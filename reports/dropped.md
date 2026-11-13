@@ -6,7 +6,7 @@ Read this when you suspect a good job is being lost: each reason names the rule,
 
 Not a Canadian posting; not listed.
 
-## experience_3plus: 261
+## experience_3plus: 262
 
 _the JD asks 3+ years of experience_
 
@@ -42,6 +42,7 @@ _the JD asks 3+ years of experience_
 - [AI Agent Evaluation Engineer](https://job-boards.greenhouse.io/cresta/jobs/5480801008) | Cresta | Canada - BC (Remote) | 2026-11-13 (asks 3+ years)
 - [Engineer In Training, Processing](https://jobs.lever.co/evr/7bb1c9bb-7def-4c60-ba58-3f49d846bc70) | evr | Sparwood, BC | 2026-11-13 (asks 3+ years)
 - [SAP Functional Analyst](https://lcbo.wd3.myworkdayjobs.com/lcbocareersite/job/Toronto-Ontario/SAP-Functional-Analyst_JR26-30000) | lcbo | Toronto, Ontario | 2026-11-13 (asks 3+ years)
+- [Information Security Specialist - Attack Surface Reduction (Cyber Threat Hunting)](https://td.wd3.myworkdayjobs.com/TD_Bank_Careers/job/Toronto-Ontario/Information-Security-Specialist---Attack-Surface-Reduction--Cyber-Threat-Hunting-_R_1521793) | TD | Toronto, Ontario | 2026-11-13 (asks 3+ years)
 - [Data Governance Specialist (Data Analytics) - BMO Insurance](https://bmo.wd3.myworkdayjobs.com/External/job/Toronto-ON-CAN/Data-Governance-Specialist--Data-Analytics----BMO-Insurance_R260030956-1) | BMO | Toronto, ON, CAN | 2026-11-13 (asks 4+ years)
 - [Full Stack Software Engineer](https://manulife.wd3.myworkdayjobs.com/MFCJH_Jobs/job/Toronto-Ontario/Full-Stack-Software-Engineer_JR26101403-1) | Manulife | Toronto, Ontario | 2026-11-13 (asks 5+ years)
 - [Workday Platform Engineer](https://manulife.wd3.myworkdayjobs.com/MFCJH_Jobs/job/Toronto-Ontario/Workday-Platform-Engineer_JR26100211-1) | Manulife | Toronto, Ontario | 2026-11-13 (asks 5+ years)
@@ -49,7 +50,6 @@ _the JD asks 3+ years of experience_
 - [Associate Network Engineer](https://jobs.scotiabank.com/Tangerine/job/Toronto-Associate-Network-Engineer-ON-M5H-4A9/608027417/) | Scotiabank | Toronto, ON, CA, M5H 4A9 | 2026-11-13 (asks 3+ years)
 - [Front-end Developer](https://www.jobbank.gc.ca/jobsearch/jobposting/50720756) | Kablamo Pty Ltd | Toronto, ON | 2026-11-13 (asks 3+ years)
 - [Communications Specialist](https://navcanada.wd10.myworkdayjobs.com/nav_careers/job/Ottawa/Communications-Specialist_JR-8606) | navcanada | Ottawa | 2026-11-13 (asks 3+ years)
-- [Data Engineer](https://www.jobbank.gc.ca/jobsearch/jobposting/50724006) | CATSA | Ottawa, ON | 2026-11-13 (asks 3+ years)
 
 ## weak_title_few_terms: 96
 
@@ -130,7 +130,7 @@ _every location it lists is in Quebec_
 - [Cyber Security Specialist](https://slihrms.wd3.myworkdayjobs.com/careers/job/CAQCQubec5500-boul-des-Galeries/Cyber-Security-Specialist_R-170597-1) | slihrms | 2 Locations | 2026-11-07
 - [Software Solution Architecture Advisor](https://ia.wd3.myworkdayjobs.com/professional/job/Quebec-Quebec/Conseiller-re--en-architecture-de-solutions-logicielles_JR10028199) | ia | 2 Locations | 2026-11-07
 
-## requires_french: 28
+## requires_french: 27
 
 _the JD requires French_
 
@@ -152,7 +152,6 @@ _the JD requires French_
 - [Support Desk Analyst](https://job-boards.greenhouse.io/ooma/jobs/5289661007) | Ooma | Vancouver, BC | 2026-11-10
 - [Customer Onboarding Specialist - Ontario](https://jobs.smartrecruiters.com/Medfar/744000160890459) | Medfar | Ottawa, Ontario, ca | 2026-11-10
 - [Technical Support Specialist - Bilingual](https://cibc.wd3.myworkdayjobs.com/search/job/Toronto-ON/Technical-Support-Specialist---Bilingual_2623200) | CIBC | Toronto, ON | 2026-11-10
-- [Renewal Specialist, Small Law](https://thomsonreuters.wd5.myworkdayjobs.com/External_Career_Site/job/Canada-Toronto-Ontario/Renewal-Specialist--Small-Law_JREQ204808) | Thomson Reuters | Toronto | 2026-11-10
 - [Specialist, Technical Network](https://jobs.bell.ca/ca/en/job/433574) | Bell | Toronto, Ontario | 2026-11-10
 - [Data and Analytics Specialist](https://careers.bankofcanada.ca/job/Ottawa-%28Downtown%29-Data-and-Analytics-Specialist-ON/607894417/) | Bank of Canada | Ottawa (Downtown), ON, CA | 2026-11-10
 - [Data Scientist, Economics & AI](https://careers.bankofcanada.ca/job/Ottawa-%28Downtown%29-Data-Scientist%2C-Economics-&amp;-AI-ON/607896217/) | Bank of Canada | Ottawa (Downtown), ON, CA | 2026-11-10
@@ -213,10 +212,11 @@ _the JD requires a security clearance_
 - [Financial Specialist, Private Investments](https://intactfc.wd3.myworkdayjobs.com/intactfc/job/Montral-Quebec-CAN/Spcialiste-Financier--Placements-Privs_R153743) | Intact | Montréal, Quebec, CAN | 2026-11-09
 - [Mine Engineer](https://ledcor.wd3.myworkdayjobs.com/ledcor_external/job/St-Lawrence-NL/Mine-Engineer_R31649) | ledcor | St. Lawrence, NL | 2026-11-07
 
-## location_ats_not_canada: 2
+## location_ats_not_canada: 3
 
 _the employer's own location list has no Canadian place_
 
+- [Forward Deployed Engineer - Entry Level](https://job-boards.greenhouse.io/sharkninjaoperatingllc/jobs/4728305006) | SharkNinja | Canada | 2026-11-13
 - [Technical Consultant, Strategic](https://jobs.ashbyhq.com/ramp/e45a8b6a-5029-4ca5-ac6f-5af940843c72) | Ramp | Remote (Canada) | 2026-11-13
 - [Analyste de l’Offre Produit, Systèmes cabine - Product offer analyst, Cabin systems](https://ag.wd3.myworkdayjobs.com/airbus/job/Mirabel/Analyste-de-l-Offre-Produit--Systmes-cabine---Product-offer-analyst--Cabin-systems_JR10457497) | ag | Canada | 2026-11-12
 

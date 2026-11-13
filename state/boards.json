@@ -27,6 +27,15 @@
    "seen": 3,
    "status": "added"
   },
+  "workday/aep.wd1/aepcareersite": {
+   "canadian": 0,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "aep",
+   "probes": 1,
+   "seen": 3,
+   "status": "empty"
+  },
   "workday/aero.wd5/external": {
    "canadian": 0,
    "first": "2026-11-09",
@@ -126,6 +135,15 @@
    "seen": 5,
    "status": "added"
   },
+  "workday/bestbuycanada.wd3/bestbuyca_career": {
+   "canadian": 22,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "bestbuycanada",
+   "probes": 0,
+   "seen": 4,
+   "status": "added"
+  },
   "workday/bmo.wd3/privileged": {
    "canadian": 27,
    "first": "2026-11-09",
@@ -168,9 +186,9 @@
    "first": "2026-11-13",
    "last": "2026-11-13",
    "name": "cambiahealth",
-   "probes": 2,
+   "probes": 3,
    "seen": 5,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/canadiantirecorporation.wd3/enterprise_external_careers_site": {
    "canadian": 98,
@@ -240,9 +258,9 @@
    "first": "2026-11-13",
    "last": "2026-11-13",
    "name": "dedalus",
-   "probes": 2,
+   "probes": 3,
    "seen": 5,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/desjardins.wd10/desjardins": {
    "canadian": 0,
@@ -321,9 +339,9 @@
    "first": "2026-11-13",
    "last": "2026-11-13",
    "name": "flcancer",
-   "probes": 2,
+   "probes": 3,
    "seen": 4,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/flir.wd1/flircareers": {
    "canadian": 47,
@@ -573,9 +591,9 @@
    "first": "2026-11-13",
    "last": "2026-11-13",
    "name": "massmutual",
-   "probes": 2,
+   "probes": 3,
    "seen": 4,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/maxar.wd1/vantor": {
    "canadian": 0,
@@ -654,7 +672,7 @@
    "first": "2026-11-13",
    "last": "2026-11-13",
    "name": "nztagovtnz",
-   "probes": 1,
+   "probes": 2,
    "seen": 4,
    "status": "empty"
   },
@@ -690,7 +708,7 @@
    "first": "2026-11-13",
    "last": "2026-11-13",
    "name": "premierresearch",
-   "probes": 1,
+   "probes": 2,
    "seen": 4,
    "status": "empty"
   },
@@ -699,7 +717,7 @@
    "first": "2026-11-13",
    "last": "2026-11-13",
    "name": "pretiumenterpriseservices",
-   "probes": 1,
+   "probes": 2,
    "seen": 4,
    "status": "empty"
   },
@@ -753,7 +771,7 @@
    "first": "2026-11-13",
    "last": "2026-11-13",
    "name": "salesforce",
-   "probes": 1,
+   "probes": 2,
    "seen": 4,
    "status": "empty"
   },
@@ -881,7 +899,7 @@
    "first": "2026-11-13",
    "last": "2026-11-13",
    "name": "vanguard",
-   "probes": 1,
+   "probes": 2,
    "seen": 4,
    "status": "error"
   },
@@ -890,9 +908,9 @@
    "first": "2026-11-13",
    "last": "2026-11-13",
    "name": "verizon",
-   "probes": 2,
+   "probes": 3,
    "seen": 6,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/zeissgroup.wd3/external": {
    "canadian": 8,
@@ -907,22 +925,22 @@
  "health": {
   "successfactors/careers.celestica.com": {
    "error": "HTTPError: 404 Client Error: Not Found for url: https://careers.celestica.com/search/?q=&locationsearch=Canada&sortColum",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/abbott.wd5/abbottcareers": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://abbott.wd5.myworkdayjobs.com/wday/cxs/abbott/abbottcareers/jobs",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/agilent.wd5/agilent_careers": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://agilent.wd5.myworkdayjobs.com/wday/cxs/agilent/agilent_careers/jobs",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/bakerhughes.wd5/bakerhughes": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://bakerhughes.wd5.myworkdayjobs.com/wday/cxs/bakerhughes/bakerhughes/",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/broadcom.wd1/external_career": {
@@ -931,132 +949,138 @@
   },
   "workday/brookfield.wd5/brookfield": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://brookfield.wd5.myworkdayjobs.com/wday/cxs/brookfield/brookfield/job",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/ciena.wd5/careers": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://ciena.wd5.myworkdayjobs.com/wday/cxs/ciena/Careers/jobs",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/cisco.wd5/cisco_careers": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://cisco.wd5.myworkdayjobs.com/wday/cxs/cisco/cisco_careers/jobs",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/citi.wd5/2": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://citi.wd5.myworkdayjobs.com/wday/cxs/citi/2/jobs",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/crowdstrike.wd5/crowdstrikecareers": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://crowdstrike.wd5.myworkdayjobs.com/wday/cxs/crowdstrike/crowdstrikec",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/equifax.wd5/external": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://equifax.wd5.myworkdayjobs.com/wday/cxs/equifax/External/jobs",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/fis.wd5/searchjobs": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://fis.wd5.myworkdayjobs.com/wday/cxs/fis/SearchJobs/jobs",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/fiserv.wd5/ext": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://fiserv.wd5.myworkdayjobs.com/wday/cxs/fiserv/EXT/jobs",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/generac.wd5/external": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://generac.wd5.myworkdayjobs.com/wday/cxs/generac/external/jobs",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/generalmotors.wd5/careers_gm": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://generalmotors.wd5.myworkdayjobs.com/wday/cxs/generalmotors/Careers_",
-   "fails": 2,
-   "last_fail": "2026-11-13"
+   "fails": 3,
+   "last_fail": "2026-11-13",
+   "next_try": "2026-11-20"
   },
   "workday/gevernova.wd5/vernova_externalsite": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://gevernova.wd5.myworkdayjobs.com/wday/cxs/gevernova/vernova_external",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/globalhr.wd5/rec_rtx_ext_gateway": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://globalhr.wd5.myworkdayjobs.com/wday/cxs/globalhr/rec_rtx_ext_gatewa",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/homedepot.wd5/careerdepotcanada": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://homedepot.wd5.myworkdayjobs.com/wday/cxs/homedepot/CareerDepotCanad",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/hp.wd5/externalcareersite": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://hp.wd5.myworkdayjobs.com/wday/cxs/hp/ExternalCareerSite/jobs",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/hp.wd5/exteu-ac-careersite": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://hp.wd5.myworkdayjobs.com/wday/cxs/hp/exteu-ac-careersite/jobs",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/kyndryl.wd5/kyndrylearlycareers": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://kyndryl.wd5.myworkdayjobs.com/wday/cxs/kyndryl/KyndrylEarlyCareers/",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/kyndryl.wd5/kyndrylprofessionalcareers": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://kyndryl.wd5.myworkdayjobs.com/wday/cxs/kyndryl/KyndrylProfessionalC",
-   "fails": 1,
-   "last_fail": "2026-11-13"
-  },
-  "workday/mastercard.wd1/corporatecareers": {
-   "error": "HTTPError: 502 Server Error: Bad Gateway for url: https://mastercard.wd1.myworkdayjobs.com/wday/cxs/mastercard/Corporate",
-   "fails": 1,
-   "last_fail": "2026-11-13"
-  },
-  "workday/nvidia.wd5/nvidiaexternalcareersite": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://nvidia.wd5.myworkdayjobs.com/wday/cxs/nvidia/NVIDIAExternalCareerSi",
    "fails": 2,
    "last_fail": "2026-11-13"
   },
+  "workday/mastercard.wd1/corporatecareers": {
+   "fails": 0,
+   "last_ok": "2026-11-13"
+  },
+  "workday/nvidia.wd5/nvidiaexternalcareersite": {
+   "error": "HTTPError: 521 Server Error: <none> for url: https://nvidia.wd5.myworkdayjobs.com/wday/cxs/nvidia/NVIDIAExternalCareerSi",
+   "fails": 3,
+   "last_fail": "2026-11-13",
+   "next_try": "2026-11-20"
+  },
   "workday/paloaltonetworks.wd5/panwexternalcareers": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://paloaltonetworks.wd5.myworkdayjobs.com/wday/cxs/paloaltonetworks/pa",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/redhat.wd5/jobs": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://redhat.wd5.myworkdayjobs.com/wday/cxs/redhat/Jobs/jobs",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/spgi.wd5/spgi_careers": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://spgi.wd5.myworkdayjobs.com/wday/cxs/spgi/spgi_careers/jobs",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/thermofisher.wd5/thermofishercareers": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://thermofisher.wd5.myworkdayjobs.com/wday/cxs/thermofisher/thermofish",
+   "fails": 2,
+   "last_fail": "2026-11-13"
+  },
+  "workday/thomsonreuters.wd5/external_career_site": {
+   "error": "HTTPError: 521 Server Error: <none> for url: https://thomsonreuters.wd5.myworkdayjobs.com/wday/cxs/thomsonreuters/Extern",
    "fails": 1,
    "last_fail": "2026-11-13"
   },
   "workday/transunion.wd5/transunion": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://transunion.wd5.myworkdayjobs.com/wday/cxs/transunion/TransUnion/job",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/workday.wd5/workday": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://workday.wd5.myworkdayjobs.com/wday/cxs/workday/Workday/jobs",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   },
   "workday/zoom.wd5/zoom": {
    "error": "HTTPError: 521 Server Error: <none> for url: https://zoom.wd5.myworkdayjobs.com/wday/cxs/zoom/Zoom/jobs",
-   "fails": 1,
+   "fails": 2,
    "last_fail": "2026-11-13"
   }
  },

@@ -47,3 +47,4 @@ boards:
   - {ats: workday, slug: altera.wd1/altera, name: "Altera"}        # 12 Canadian postings when found, 2026-11-13
   - {ats: workday, slug: hitachi.wd1/hitachi, name: "hitachi"}        # 66 Canadian postings when found, 2026-11-13
   - {ats: workday, slug: sunlife.wd3/campus, name: "sunlife"}        # 2 Canadian postings when found, 2026-11-13
+  - {ats: workday, slug: bestbuycanada.wd3/bestbuyca_career, name: "bestbuycanada"}        # 22 Canadian postings when found, 2026-11-13

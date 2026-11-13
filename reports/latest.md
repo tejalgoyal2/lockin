@@ -1,10 +1,10 @@
 # Canadian entry-level tech jobs: candidates
 
-- Generated: 2026-11-13 22:16 UTC
+- Generated: 2026-11-13 22:46 UTC
 - Window: first seen in the last 7 day(s)
 - Feashliaa dataset last updated: 2026-11-13T16:13:05.402843Z
-- Candidates after dedupe: **1557**
-- Remaining after JD rules: **388** (ranked by Score)
+- Candidates after dedupe: **1560**
+- Remaining after JD rules: **390** (ranked by Score)
 - Skipped as already applied to: 2 (by link 0, by company + title 2)
 
 | First Seen | Company | Role | Location | Source | Tier | Fit % | Cluster | Signals | Gaps | URL |
@@ -23,8 +23,8 @@
 | 2026-11-09 | kensingtontours | BI/Data Analyst Intern | Toronto, ON, Canada | Greenhouse+Jobhive+Simplify | strong | 87.5 | data | internship |  | https://job-boards.greenhouse.io/kensingtontours/jobs/5289223007 |
 | 2026-11-13 | Atlassian | Software Engineer - Full Stack (Loom Billing & Integrations) | British Columbia | Google Jobs | strong | 81.8 | software | 2+ yrs | Cypress, microservices | https://bebee.com/ca/jobs/software-engineer-full-stack-loom-billing-integrations-atlassian-british-columbia--jooble-911225793242980916?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic |
 | 2026-11-13 | ciena | AI/ML Layout Engineering Intern (Winter 2027) | Ottawa | Workday | strong | 87.5 | ml | internship, students only |  | https://ciena.wd5.myworkdayjobs.com/careers/job/Ottawa/AI-ML-Layout-Engineering-Intern--Winter-2027-_R032102 |
-| 2026-11-13 | bb | QNX DevOps Developer | Ottawa, Ontario | Workday | strong | 84.6 | software |  | GitLab, Jenkins | https://bb.wd3.myworkdayjobs.com/qnx/job/Ottawa-Ontario/QNX-DevOps-Developer_20260332-1 |
 | 2026-11-12 | tmx | AI Engineering Intern | Toronto - 100 Adelaide St W | Workday+Simplify | strong | 77.1 | ml | internship, students only | Java | https://tmx.wd3.myworkdayjobs.com/tmx_careers/job/Toronto---100-Adelaide-St-W/AI-Engineering-Intern_R-6680 |
+| 2026-11-13 | bb | QNX DevOps Developer | Ottawa, Ontario | Workday | strong | 84.6 | software |  | GitLab, Jenkins | https://bb.wd3.myworkdayjobs.com/qnx/job/Ottawa-Ontario/QNX-DevOps-Developer_20260332-1 |
 | 2026-11-13 | cityofhamilton | Job ID #32329: Data Scientist - PH | Hamilton, Ontario | BambooHR | strong | 88.2 | ml |  |  | https://cityofhamilton.bamboohr.com/careers/2457 |
 | 2026-11-12 | Canonical | Software Engineer - Python - Container Images | Remote, Canada | Jobicy | strong | 86.7 | software |  |  | https://jobicy.com/jobs/150364-software-engineer-python-container-images |
 | 2026-11-12 | Canonical | Open Source Networking Software Engineer - ToR Switch / SmartNIC / DPU | Remote, Canada | Jobicy | strong | 85.7 | software |  |  | https://jobicy.com/jobs/150360-open-source-networking-software-engineer-tor-switch-smartnic-dpu |
@@ -40,8 +40,8 @@
 | 2026-11-13 | Traction Rec | Front End Developer (Hybrid or Remote) | British Columbia | Google Jobs | strong | 78.4 | software | 2+ yrs | Salesforce | https://ca.trabajo.org/job-5267-6eb6566f54c66b1349a7e843d9bd6677?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic |
 | 2026-11-10 | PCL Construction | Data Scientist | Edmonton, AB | Job Bank | strong | 88.9 | ml |  |  | https://www.jobbank.gc.ca/jobsearch/jobposting/50704460 |
 | 2026-11-10 | Canonical | Software Developer (Backend SaaS) | Remote, Canada | Jobicy | strong | 84.6 | software |  |  | https://jobicy.com/jobs/161191-software-developer-backend-saas |
-| 2026-11-10 | cardata | Jr. Data Analyst | Canada - Remote | Greenhouse+Jobhive | strong | 80 | data | 0-2 years, junior | dbt | https://job-boards.greenhouse.io/cardata/jobs/4486297009 |
 | 2026-11-11 | Sienna Senior Living | Cloud Administrator | Markham, ON | Job Bank | strong | 86.7 | software |  |  | https://www.jobbank.gc.ca/jobsearch/jobposting/50710163 |
+| 2026-11-10 | cardata | Jr. Data Analyst | Canada - Remote | Greenhouse+Jobhive | strong | 80 | data | 0-2 years, junior | dbt | https://job-boards.greenhouse.io/cardata/jobs/4486297009 |
 | 2026-11-13 | workday | AI Engineer - Evisort Agentic Dev | Canada, BC, Vancouver | Workday | strong | 71.4 | ml |  | Kafka, distributed systems, integration testing, Django, FastAPI, Datadog | https://workday.wd5.myworkdayjobs.com/workday/job/Canada-BC-Vancouver/Senior-AI-Engineer---Evisort-AI_JR-0108859 |
 | 2026-11-07 | lumentum | Process Automation Software Engineer - MEMS | Canada - Ottawa (Bill Leathem) | Workday | strong | 72.7 | software | recent graduate | unit testing | https://lumentum.wd5.myworkdayjobs.com/lite/job/Canada---Ottawa-Bill-Leathem/Process-Automation-Software-Engineer---MEMS_20261527 |
 | 2026-11-13 | ellisdon | Data Architecture & Governance Advisor | Mississauga, ON | Workday | strong | 80 | data | 2+ yrs | Snowflake | https://ellisdon.wd3.myworkdayjobs.com/ellis-don/job/Mississauga-ON/Data-Architecture---Governance-Advisor_R2026-01893 |
@@ -110,8 +110,8 @@
 | 2026-11-10 | soti | Software Developer Intern (May 2027 - 12 months) | Mississauga, Canada – Meadowvale Office (HQ) | Workday | strong | 60 | software | internship | Elixir, Java, Ruby | https://soti.wd3.myworkdayjobs.com/soti-next-gen/job/Mississauga-Canada--Meadowvale-Office-HQ/Software-Developer-Intern--May-2027---12-months-_R10677 |
 | 2026-11-07 | lkqcorp | Workday Operations Analyst | HMON Home Ontario, Canada | Workday | weak | 71.4 | software |  |  | https://lkqcorp.wd5.myworkdayjobs.com/externalcareersite-lkq/job/HMON-Home-Ontario-Canada/Workday-Operations-Analyst_R73920 |
 | 2026-11-07 | sanofi | Patient Support Specialist - 1-year Contract | Toronto, ON | Workday | weak | 71.4 | software |  |  | https://sanofi.wd3.myworkdayjobs.com/sanoficareers/job/Toronto-ON/Patient-Support-Specialist---1-year-Contract_R2876001 |
-| 2026-11-12 | SOCi | Revenue Operations Analyst | Remote, Canada | Jobicy | weak | 60 | data | 2+ yrs | Salesforce | https://jobicy.com/jobs/161558-revenue-operations-analyst-2 |
 | 2026-11-07 | hootsuite | Junior Software Developer | Toronto, Ontario, Canada, Vancouver, British Columbia, Canada | Greenhouse | strong | 61.9 | software | 0-2 years, junior | Java | https://job-boards.greenhouse.io/hootsuite/jobs/8359647 |
+| 2026-11-12 | SOCi | Revenue Operations Analyst | Remote, Canada | Jobicy | weak | 60 | data | 2+ yrs | Salesforce | https://jobicy.com/jobs/161558-revenue-operations-analyst-2 |
 | 2026-11-07 | Canonical | Software Engineer - Python/Golang - Kubernetes | Remote, Canada | Jobicy | strong | 63.6 | software |  | Go | https://jobicy.com/jobs/159591-software-engineer-python-golang-kubernetes |
 | 2026-11-07 | Canonical | Software Developer in Observability | Remote, Canada | Jobicy | strong | 63.6 | software |  | distributed systems | https://jobicy.com/jobs/159583-software-developer-in-observability |
 | 2026-11-13 | tenstorrent | Lab Technician, AI Systems | Toronto, Ontario, Canada | Greenhouse | strong | 66.7 | ml |  |  | https://job-boards.greenhouse.io/tenstorrent/jobs/5293977007 |
@@ -123,8 +123,8 @@
 | 2026-11-13 | thales | Cloud Security Specialist | Ottawa 20 Colonnade | Workday | strong | 60 | security | 2+ yrs | Splunk, Tableau | https://thales.wd3.myworkdayjobs.com/Careers/job/Ottawa-20-Colonnade/Cloud-Security-Specialist_R0348177-2 |
 | 2026-11-13 | acceldata | Product Specialist (Cloud Support SME) | Kitchener | Lever | strong | 46.9 | software | 2+ yrs | GCP, Hadoop, Helm, Hive, Java, New Relic | https://jobs.lever.co/acceldata/7a30be80-bb12-47b5-af62-e9cac23b1907 |
 | 2026-11-07 | Canonical | Software Engineer, Ceph & Distributed Storage | Remote, Canada | Jobicy | strong | 57.1 | software |  | Go, distributed systems | https://jobicy.com/jobs/159587-software-engineer-ceph-distributed-storage-2 |
-| 2026-11-13 | pointclickcare | Software Engineer | Mississauga, Ontario | Lever | strong | 60 | software |  | unit testing | https://jobs.lever.co/pointclickcare/4df74b15-3479-4a75-a4c4-5640ccde7346 |
 | 2026-11-07 | petronascanada | Summer Student, Information Systems - Systems Developer | Calgary | Workday | strong | 63.6 | software | internship, students only | SAP | https://petronascanada.wd3.myworkdayjobs.com/petronascanada/job/Calgary/Summer-Student--Information-Systems---Systems-Developer_R0001856 |
+| 2026-11-13 | pointclickcare | Software Engineer | Mississauga, Ontario | Lever | strong | 60 | software |  | unit testing | https://jobs.lever.co/pointclickcare/4df74b15-3479-4a75-a4c4-5640ccde7346 |
 | 2026-11-09 | versapay | Technical Support Specialist | Canada (Remote) | Lever+Jobhive | weak | 56.5 | data |  | Oracle, SAP, Salesforce | https://jobs.lever.co/versapay/236973df-3f2f-4ea0-b36e-2954ff83f2c2 |
 | 2026-11-10 | lyft | Data Engineer | Toronto, Canada | Greenhouse+Jobhive | strong | 53.5 | data | 2+ yrs | Airflow, Kafka, distributed systems, microservices | https://app.careerpuck.com/job-board/lyft/job/8931413002?gh_jid=8931413002 |
 | 2026-11-13 | canadiantirecorporation | Programmer Analyst Intern (12 months) - Winter 2027 | Mississauga, ON | Workday | strong | 51.2 | software | internship, students only | Angular, SSIS, VBA, jQuery | https://canadiantirecorporation.wd3.myworkdayjobs.com/enterprise_external_careers_site/job/Mississauga-ON/Programmer-Analyst-Intern--12-months----Winter-2027_JR167748 |
@@ -134,13 +134,14 @@
 | 2026-11-13 | cibc | Consultant, Business Systems Analysis and Solution Design | Toronto, ON | Workday | weak | 60 | software |  |  | https://cibc.wd3.myworkdayjobs.com/search/job/Toronto-ON/Consultant--Business-Systems-Analysis-and-Solution-Design_2623048 |
 | 2026-11-10 | euna | Go to Market Intelligence Analyst | Oakville, Ontario | BambooHR+Jobhive | weak | 60 | data |  | Salesforce | https://euna.bamboohr.com/careers/813 |
 | 2026-11-10 | DCS Technologies Inc. | Front-end Web Developer | Surrey, BC | Job Bank | strong | 53.8 | software |  | MySQL, PHP | https://www.jobbank.gc.ca/jobsearch/jobposting/50705743 |
-| 2026-11-13 | mecca | Technology Product Owner - Supply Chain | Victoria | Workday | weak | 50 | software |  |  | https://mecca.wd3.myworkdayjobs.com/careers/job/Richmond/Technology-Product-Owner---Supply-Chain_R016102 |
 | 2026-11-07 | tmx | QA Automation Specialist | Toronto - 100 Adelaide St W | Workday | strong | 52.6 | software | 2+ yrs | Java, Postman, Selenium, microservices | https://tmx.wd3.myworkdayjobs.com/tmx_careers/job/Toronto---100-Adelaide-St-W/QA-Automation-Specialist_R-6598 |
 | 2026-11-07 | hootsuite | Co-op/Intern, DevOps - Winter 2027 | Alberta, British Columbia | Greenhouse | strong | 55.6 | software | internship |  | https://job-boards.greenhouse.io/hootsuite/jobs/8359242 |
+| 2026-11-13 | mecca | Technology Product Owner - Supply Chain | Victoria | Workday | weak | 50 | software |  |  | https://mecca.wd3.myworkdayjobs.com/careers/job/Richmond/Technology-Product-Owner---Supply-Chain_R016102 |
 | 2026-11-13 | jobs.scotiabank.com | Business Systems Analyst | Toronto, ON, CA, M1K 5L1 | SuccessFactors | weak | 55.6 | software |  |  | https://jobs.scotiabank.com/job/Toronto-Business-Systems-Analyst-ON-M1K-5L1/608033717/ |
 | 2026-11-09 | Clientserver Tech Systems | Software Developer | Mississauga, ON | Job Bank | strong | 60 | software |  | Java | https://www.jobbank.gc.ca/jobsearch/jobposting/50694109 |
 | 2026-11-13 | ubc | Research Analyst | UBC Vancouver Campus - Vancouver, BC, Canada | Workday | weak | 50 | data |  | SAS | https://ubc.wd10.myworkdayjobs.com/ubcstaffjobs/job/UBC-Vancouver-Campus---Vancouver-BC-Canada/Research-Analyst_JR26603 |
 | 2026-11-10 | Snappay Inc. | Data Analyst - Informatics And Systems | Mississauga, ON | Job Bank | strong | 60 | data |  |  | https://www.jobbank.gc.ca/jobsearch/jobposting/50704327 |
+| 2026-11-13 | company-3 | Systems Engineer | Vancouver, BC, CAN | Built In | weak | 46.7 | software |  | VLANs | https://builtinvancouver.org/job/systems-engineer/12250375 |
 | 2026-11-07 | spgi | Cashflow Modeling Analyst – ABS, Toronto, CA or Denver, CO | Toronto, CAN | Workday | weak | 55.6 | software | 2+ yrs | VBA | https://spgi.wd5.myworkdayjobs.com/spgi_careers/job/Toronto-CAN/Cashflow-Modeling-Analyst---ABS--Toronto--Canada_332537-1 |
 | 2026-11-09 | Wingmate Inc. | Software Engineer | Toronto, ON | Job Bank | strong | 53.8 | software | 2+ yrs | integration testing, microservices | https://www.jobbank.gc.ca/jobsearch/jobposting/50720915 |
 | 2026-11-09 | td | Market Risk Analyst (5382) | Toronto, Ontario | Workday | weak | 55.6 | data |  | Tableau | https://td.wd3.myworkdayjobs.com/TD_Bank_Careers/job/Toronto-Ontario/Market-Risk-Analyst--5382-_R_1519342 |
@@ -162,13 +163,13 @@
 | 2026-11-07 | docebo | Technical Support Analyst, Tier 1 | Toronto, Ontario | Ashby | weak | 33.3 | software |  | Swift, Salesforce | https://jobs.ashbyhq.com/docebo/40f550eb-08ad-4d0c-94ce-da5378afe9e0 |
 | 2026-11-07 | algonquincollege | Full-time Enterprise CRM Integration Specialist | Ottawa Campus | Workday | weak | 30.4 | data |  | Java, Salesforce, integration testing | https://algonquincollege.wd3.myworkdayjobs.com/careeropportunities/job/Ottawa-Campus/Full-time-Enterprise-CRM-Integration-Specialist_R177315 |
 | 2026-11-13 | bluecatnetworks | Financial Analyst, FP&A | Toronto Office | Lever | weak | 25 | data | 2+ yrs | Oracle, SAP | https://jobs.lever.co/bluecatnetworks/9c550d43-c99f-4fb7-8846-1cbb7b054640 |
-| 2026-11-13 | sunlife | Student, Junior Financial Analyst (Winter 2027) | Toronto, Ontario | Workday | weak | n/a | data | internship, new grad, junior, low signal, students only |  | https://sunlife.wd3.myworkdayjobs.com/campus/job/Toronto-Ontario/Student--Junior-Financial-Analyst--Winter-2027-_JR00129543 |
-| 2026-11-13 | sunlife | Student, Private Fixed Income Operations Specialist, SLC Management (Winter 2027) | Waterloo, Ontario | Workday | weak | n/a | data | internship, new grad, low signal, students only |  | https://sunlife.wd3.myworkdayjobs.com/campus/job/Waterloo-Ontario/Student--Private-Fixed-Income-Operations-Specialist--SLC-Management--Winter-2027-_JR00129539 |
 | 2026-11-12 | J.D. Power | Automotive Data Analyst | Remote in Canada | Simplify | strong | n/a | data | low signal |  | https://jdpa.wd501.myworkdayjobs.com/JDPower/job/Remote-Canada/Automotive-Data-Analyst_R-100570 |
 | 2026-11-12 | capitalpower | Asset Engineering Coop Student | Edmonton, AB | Workday | weak | n/a | data | internship, recent graduate, low signal, students only |  | https://capitalpower.wd10.myworkdayjobs.com/external/job/Edmonton-AB/Asset-Engineering-Coop-Student_JR807233 |
 | 2026-11-13 | bdo | Business Analyst - BizApps - New Grad (January 2027) | Toronto - Bay St | Workday | weak | n/a | software | new grad, low signal | Oracle, Salesforce | https://bdo.wd3.myworkdayjobs.com/bdo/job/Toronto---Bay-St/Business-Analyst---BizApps_JR7066 |
+| 2026-11-10 | sunlife | Student, Junior Financial Analyst (Winter 2027) | Toronto, Ontario | Workday | weak | n/a | data | internship, new grad, junior, low signal, students only |  | https://sunlife.wd3.myworkdayjobs.com/campus/job/Toronto-Ontario/Student--Junior-Financial-Analyst--Winter-2027-_JR00129543 |
 | 2026-11-09 | keyera | Engineer-in-Training (EIT) | Sarnia | Workday | weak | n/a | software | recent graduate, low signal, 2+ yrs |  | https://keyera.wd10.myworkdayjobs.com/keyera_careers/job/Sarnia/Engineer-in-Training--EIT-_JR2875 |
 | 2026-11-09 | thales | Junior Supply Chain Engineering Analyst (New Grad) | Ottawa | Workday+Jobhive | weak | n/a | data | new grad, 0-2 years, junior, low signal | SAP | https://thales.wd3.myworkdayjobs.com/careers/job/Ottawa/Junior-Supply-Chain-Engineering-Analyst--New-Grad-_R0346713-1 |
+| 2026-11-10 | sunlife | Student, Private Fixed Income Operations Specialist, SLC Management (Winter 2027) | Waterloo, Ontario | Workday | weak | n/a | data | internship, new grad, low signal, students only |  | https://sunlife.wd3.myworkdayjobs.com/campus/job/Waterloo-Ontario/Student--Private-Fixed-Income-Operations-Specialist--SLC-Management--Winter-2027-_JR00129539 |
 | 2026-11-09 | keyera | Engineer-in-Training (EIT) | Edmonton, Alberta | Workday | weak | n/a | software | recent graduate, low signal, 2+ yrs |  | https://keyera.wd10.myworkdayjobs.com/keyera_careers/job/Edmonton-Alberta/Engineer-in-Training--EIT-_JR2862 |
 | 2026-11-09 | keyera | Engineer-in-Training (EIT) | Medicine Hat | Workday | weak | n/a | software | recent graduate, low signal, 2+ yrs |  | https://keyera.wd10.myworkdayjobs.com/keyera_careers/job/Medicine-Hat/Engineer-in-Training--EIT-_JR2887 |
 | 2026-11-07 | clvgroup | Junior Financial Analyst | Ottawa, Ontario | BambooHR | weak | n/a | data | recent graduate, entry level, junior, low signal |  | https://clvgroup.bamboohr.com/careers/235 |
@@ -184,16 +185,16 @@
 | 2026-11-13 | wealthsimple | Specialist, People Operations (12 month contract) | Remote (Canada) | Ashby | weak | n/a | software | low signal, 2+ yrs |  | https://jobs.ashbyhq.com/wealthsimple/3de8c796-7525-4f4e-992b-b1b703b71c1a |
 | 2026-11-13 | sailorhealth | Patient Intake Specialist, Mental Health (Remote) | Canada | Ashby | weak | n/a | software | low signal |  | https://jobs.ashbyhq.com/sailorhealth/63ffb237-934d-423c-8767-7aea4de71150 |
 | 2026-11-10 | Bank of Montreal | Data Analyst Co-op Intern | Toronto, ON, Canada | Simplify | strong | n/a | data | internship, 0-2 years, low signal |  | https://bmo.wd3.myworkdayjobs.com/Privileged/job/Toronto-ON-CAN/Data-Analyst--Winter-2027--Co-o-Internship----8-months_R260026973 |
-| 2026-11-13 | saputo | Intern, CRM Implementation Analyst | Georgetown, ON | Workday | weak | n/a | data | internship, low signal, students only |  | https://saputo.wd5.myworkdayjobs.com/saputo_external_careers/job/Georgetown-ON/Intern--CRM-Implementation-Analyst_JR68378 |
 | 2026-11-13 | BC Transit | Analyst, Information Technology (IT) | Victoria, BC | Job Bank | weak | n/a | software | low signal |  | https://www.jobbank.gc.ca/jobsearch/jobposting/50721743 |
 | 2026-11-13 | jll | Mech and Robotics Tech | Burnaby, BC | Workday | weak | n/a | software | low signal |  | https://jll.wd1.myworkdayjobs.com/jllcareers/job/Burnaby-BC/Mech-and-Robotics-Tech_REQ544802-1 |
 | 2026-11-13 | jll | Mech and Robotics Tech | Pitt Meadows, BC | Workday | weak | n/a | software | low signal |  | https://jll.wd1.myworkdayjobs.com/jllcareers/job/Pitt-Meadows-BC/Mech-and-Robotics-Tech_REQ548629 |
+| 2026-11-13 | saputo | Intern, CRM Implementation Analyst | Georgetown, ON | Workday | weak | n/a | data | internship, low signal, students only |  | https://saputo.wd5.myworkdayjobs.com/saputo_external_careers/job/Georgetown-ON/Intern--CRM-Implementation-Analyst_JR68378 |
 | 2026-11-13 | Matcha.fm | Engineer | REMOTE (Worldwide: US / Canada / Europe / UK / LATAM) | HN | strong | n/a | software | low signal |  | https://news.ycombinator.com/item?id=50369728 |
 | 2026-11-09 | clio | Application Security Developer | Remote - Canada | Workday | strong | n/a | security | low signal |  | https://clio.wd3.myworkdayjobs.com/ClioCareerSite/job/Toronto/Application-Security-Developer_REQ-5443 |
+| 2026-11-13 | rbc | Trade Support Reconciliation Analyst (12-Month Contract) | TORONTO, Ontario, Canada | Workday | weak | n/a | data | low signal, 2+ yrs |  | https://rbc.wd3.myworkdayjobs.com/RBCGLOBAL1/job/TORONTO-Ontario-Canada/Trade-Support-Reconciliation-Analyst--12-Month-Contract-_R-0000192715-1 |
 | 2026-11-13 | ciena | Embedded Software Engineer - New Grad | Ottawa | Workday | strong | n/a | software | new grad, jd unavailable |  | https://ciena.wd5.myworkdayjobs.com/careers/job/Ottawa/Embedded-Software-Engineer---New-Grad_R032090-1 |
 | 2026-11-13 | frpd | Third Engineer - Duty Engineer | New Westminster, British Columbia | BambooHR | weak | n/a | software | low signal |  | https://frpd.bamboohr.com/careers/195 |
 | 2026-11-13 | ralmax | Quality Control Technologist - industrial engineering | Point Hope Maritime, Victoria, British Columbia | BambooHR | weak | n/a | software | low signal, 2+ yrs |  | https://ralmax.bamboohr.com/careers/228 |
-| 2026-11-13 | rbc | Trade Support Reconciliation Analyst (12-Month Contract) | TORONTO, Ontario, Canada | Workday | weak | n/a | data | low signal, 2+ yrs |  | https://rbc.wd3.myworkdayjobs.com/RBCGLOBAL1/job/TORONTO-Ontario-Canada/Trade-Support-Reconciliation-Analyst--12-Month-Contract-_R-0000192715-1 |
 | 2026-11-12 | Ashby | Mid-Market Implementation Specialist - Americas | Remote, Canada | Jobicy | weak | n/a | data | low signal |  | https://jobicy.com/jobs/155120-mid-market-implementation-specialist-americas |
 | 2026-11-11 | Jobs for Humanity | IT Support | Vancouver, BC, ca | Jobhive | weak | n/a | software | low signal |  | https://jobs.smartrecruiters.com/jobsforhumanity/744000161177384 |
 | 2026-11-13 | sandvik | Aerospace Projects Engineer | Canada, ON, Mississauga | Workday | weak | n/a | software | low signal |  | https://sandvik.wd3.myworkdayjobs.com/sandvik-jobs/job/USA-NC-Mebane/Aerospace-Projects-Engineer_R0098804-2 |
@@ -211,6 +212,7 @@
 | 2026-11-10 | medaviehs | Actuarial Analyst- Pricing | British Columbia | Workday | weak | n/a | data | low signal, 2+ yrs | VBA | https://medaviehs.wd10.myworkdayjobs.com/blue_cross_life_external/job/New-Brunswick/Actuarial-Analyst--Pricing_R-268975-1 |
 | 2026-11-13 | toast | Solutions Engineer | Toronto, Ontario, Canada | Greenhouse | weak | n/a | software | low signal, 2+ yrs |  | https://careers.toasttab.com/jobs?gh_jid=8385632 |
 | 2026-11-11 | Miratech | Operation Model and Service Transition Analyst, Contact Centre | Kitchener, ON, ca | Jobhive | weak | n/a | software | low signal, 2+ yrs |  | https://jobs.smartrecruiters.com/miratech1/744000161012808 |
+| 2026-11-11 | cibc | Analyst, Client Experience | Toronto, ON | Workday | weak | n/a | data | low signal, 2+ yrs |  | https://cibc.wd3.myworkdayjobs.com/search/job/Toronto-ON/Analyst--Client-Experience_2623229 |
 | 2026-11-13 | alliance | Treasury Analyst 1 | Mississauga, Ontario - Canada | Workday | weak | n/a | data | low signal, 2+ yrs |  | https://alliance.wd3.myworkdayjobs.com/nissanjobs/job/Mississauga-Ontario---Canada/Treasury-Analyst-1_R00216285-1 |
 | 2026-11-13 | extendicare | Labour Relations Analyst | 3000 Steeles Avenue East, Suite 400, Markham, Onta | Workday | weak | n/a | data | low signal |  | https://extendicare.wd10.myworkdayjobs.com/extendicare2023/job/3000-Steeles-Avenue-East-Suite-400-Markham-Ontario/Labour-Relations-Analyst_R36984-1 |
 | 2026-11-13 | resilience | Analyst, QC Microbiology (12:00 PM - 9:00 PM) | CAN - ON - Mississauga - Meadowpine Blvd | Workday | weak | n/a | data | low signal, 2+ yrs | SAP | https://resilience.wd1.myworkdayjobs.com/resilience_careers/job/CAN---ON---Mississauga---Meadowpine-Blvd/Analyst--QC-Microbiology--12-00-PM---9-00-PM-_R-107340 |
@@ -224,7 +226,6 @@
 | 2026-11-13 | gianttiger | Automation Maintenance Technician | Johnstown, Ontario, Canada | Workday | strong | n/a | software | low signal |  | https://gianttiger.wd3.myworkdayjobs.com/gianttiger/job/Johnstown-Ontario-Canada/Automation-Maintenance-Technician_JR134332 |
 | 2026-11-13 | cityofhamilton | Job ID #32343: Organizational Development and Learning Specialist | Hamilton, Ontario | BambooHR | weak | n/a | data | low signal |  | https://cityofhamilton.bamboohr.com/careers/2463 |
 | 2026-11-13 | sait | Cyber Range Operations and Engagement Coordinator | Calgary, AB | Lever | strong | n/a | security | 0-2 years, low signal |  | https://jobs.lever.co/sait/d26a69c5-8221-4932-8283-e8672d8cb626 |
-| 2026-11-11 | cibc | Analyst, Client Experience | Toronto, ON | Workday | weak | n/a | data | low signal, 2+ yrs |  | https://cibc.wd3.myworkdayjobs.com/search/job/Toronto-ON/Analyst--Client-Experience_2623229 |
 | 2026-11-12 | capitalone | Intern, Strategy Analyst - Summer 2027 | Toronto, ON | Workday | weak | n/a | software | internship, low signal, students only |  | https://capitalone.wd12.myworkdayjobs.com/capital_one/job/Toronto-ON/Intern--Strategy-Analyst---Summer-2027_R243855-1 |
 | 2026-11-12 | tmx | IT Support Intern | Toronto - 100 Adelaide St W | Workday | weak | n/a | software | internship, low signal |  | https://tmx.wd3.myworkdayjobs.com/tmx_careers/job/Toronto---100-Adelaide-St-W/IT-Support-Intern_R-6686 |
 | 2026-11-12 | slihrms | Assembly & Test Co-op Student - Winter 2027 | CA.ON.Mississauga.2251 Speakman Drive | Workday | weak | n/a | software | internship, low signal, students only |  | https://slihrms.wd3.myworkdayjobs.com/careers/job/CAONMississauga2251-Speakman-Drive/Assembly---Test-Co-op-Student---Winter-2027_R-167215 |
@@ -233,6 +234,7 @@
 | 2026-11-07 | motorolasolutions | Back Office Support Specialist | Vancouver, Canada | Workday | weak | n/a | software | low signal |  | https://motorolasolutions.wd5.myworkdayjobs.com/careers/job/Vancouver-Canada/Back-Office-Support-Specialist_R70574 |
 | 2026-11-07 | hubinternational | Client Service Specialist, Employee Benefits | Vancouver, BC | Workday | weak | n/a | data | low signal, 2+ yrs |  | https://hubinternational.wd1.myworkdayjobs.com/hubinternational/job/Vancouver-BC/Client-Service-Representative--Employee-Benefits_R0039440 |
 | 2026-11-07 | Ashby | Demo Engineer | Remote, Canada | Jobicy | weak | n/a | software | low signal | Snowflake | https://jobicy.com/jobs/159568-demo-engineer-3 |
+| 2026-11-13 | td | Bus Sys Analysis Specialist | Toronto, Ontario | Workday | weak | n/a | software | low signal |  | https://td.wd3.myworkdayjobs.com/TD_Bank_Careers/job/Toronto-Ontario/Bus-Sys-Analysis-Specialist_R_1521655 |
 | 2026-11-13 | Recrute Action | Information Technology (IT) Analyst | Toronto, ON | Job Bank | weak | n/a | software | 0-2 years, low signal |  | https://www.jobbank.gc.ca/jobsearch/jobposting/50720627 |
 | 2026-11-13 | corpay | Onboarding Specialist, Global Integrated Payments | Toronto - Cross Border | Workday | weak | n/a | data | low signal | Salesforce | https://corpay.wd103.myworkdayjobs.com/ext_001/job/Toronto---Cross-Border/Onboarding-Specialist--Global-Integrated-Payments_R10206 |
 | 2026-11-13 | navcanada | Regional Learning Quality Specialist | Edmonton | Workday | weak | n/a | data | low signal |  | https://navcanada.wd10.myworkdayjobs.com/nav_careers/job/Edmonton/Regional-Learning-Quality-Specialist_JR-8448 |
@@ -246,14 +248,14 @@
 | 2026-11-10 | rockwellautomation | Co-op, User Experience - Robotics (Jan - Apr 2027) | Waterloo, Ontario, Canada | Workday | weak | n/a | software | internship, low signal, students only |  | https://rockwellautomation.wd1.myworkdayjobs.com/external_rockwell_automation/job/Waterloo-Ontario-Canada/Co-op--User-Experience---Robotics_R26-8569 |
 | 2026-11-08 | ttmtech | Quality Engineering Intern | Toronto, Canada | Workday | weak | n/a | data | internship, low signal, students only |  | https://ttmtech.wd5.myworkdayjobs.com/jobs/job/Toronto-Canada/Quality-Engineering-Intern_R18900 |
 | 2026-11-07 | spgi | Summer intern, Financial Risk Analytics Product | Toronto, CAN | Workday | strong | n/a | data | internship, low signal, students only |  | https://spgi.wd5.myworkdayjobs.com/spgi_careers/job/Toronto-CAN/Summer-intern--Financial-Risk-Analytics-Product_332618-2 |
+| 2026-11-11 | Samuel, Son & Co. 1855 | Specialist, Intelligent Automation | Oakville, ON, Canada | Jobhive | strong | n/a | software | low signal |  | https://ebct.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_3002/job/225968 |
+| 2026-11-11 | canadiantirecorporation | Business Analyst, Supply Chain Automation & Asset Mgmt | Brampton, ON | Workday | strong | n/a | data | low signal |  | https://canadiantirecorporation.wd3.myworkdayjobs.com/enterprise_external_careers_site/job/Brampton-ON/Business-Analyst--Supply-Chain-Automation---Asset-Mgmt_JR166600 |
+| 2026-11-11 | Definity | Financial Analyst - Winter 2027 Co-op/Intern | Toronto, ONT, Canada | Jobhive | weak | n/a | data | internship, low signal | Oracle | https://hdks.fa.ca2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/9498 |
 | 2026-11-13 | pacificlife | Analyst, Finance Transformation (12 month contract) | Toronto-40 CA | Workday | weak | n/a | software | low signal, 2+ yrs | Oracle, SAP | https://pacificlife.wd1.myworkdayjobs.com/pacificliferecareers/job/Toronto-40-CA/Analyst--Finance-Transformation_R18160 |
 | 2026-11-13 | medcan | Bilingual Client Experience Specialist (Inbound & Outbound) | Toronto | Workday | weak | n/a | software | 0-2 years, low signal | Salesforce | https://medcan.wd10.myworkdayjobs.com/medcan/job/Toronto/Bilingual-Client-Experience-Specialist--Inbound---Outbound-_MED02601 |
 | 2026-11-13 | terac | Economists: Economic Analysis for AI Training | Canada | Ashby | strong | n/a | ml | low signal |  | https://jobs.ashbyhq.com/terac/4d65412b-b414-4522-b684-892c39e449dd |
 | 2026-11-13 | thermofisher | Logistic Specialist I | Milton, Canada | Workday | weak | n/a | software | low signal | SAP | https://thermofisher.wd5.myworkdayjobs.com/thermofishercareers/job/Milton-Canada/Logistic-Specialist-I_R-01374265 |
 | 2026-11-13 | jensenhughes | Fire Protection Engineer | Mississauga, Ontario, Canada | Greenhouse | weak | n/a | software | low signal, P.Eng req, 2+ yrs |  | https://job-boards.greenhouse.io/jensenhughes/jobs/5477513008 |
-| 2026-11-11 | Samuel, Son & Co. 1855 | Specialist, Intelligent Automation | Oakville, ON, Canada | Jobhive | strong | n/a | software | low signal |  | https://ebct.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_3002/job/225968 |
-| 2026-11-11 | canadiantirecorporation | Business Analyst, Supply Chain Automation & Asset Mgmt | Brampton, ON | Workday | strong | n/a | data | low signal |  | https://canadiantirecorporation.wd3.myworkdayjobs.com/enterprise_external_careers_site/job/Brampton-ON/Business-Analyst--Supply-Chain-Automation---Asset-Mgmt_JR166600 |
-| 2026-11-11 | Definity | Financial Analyst - Winter 2027 Co-op/Intern | Toronto, ONT, Canada | Jobhive | weak | n/a | data | internship, low signal | Oracle | https://hdks.fa.ca2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/9498 |
 | 2026-11-10 | Synopsys | R&D Engineering - Engineer | Remote in Canada | Simplify | weak | n/a | software | jd unavailable |  | https://synopsys.avature.net/careers/JobDetail/19637 |
 | 2026-11-10 | waveapps | Compliance Analyst | Canada | Lever+Jobhive | weak | n/a | software | low signal |  | https://jobs.lever.co/waveapps/aa2f8920-263a-4f11-842e-732c0b7bb5fb |
 | 2026-11-12 | slihrms | Electrical/I&C Engineering Student - Winter 2027 | CA.ON.Mississauga.2251 Speakman Drive | Workday | weak | n/a | data | internship, low signal, students only | MATLAB | https://slihrms.wd3.myworkdayjobs.com/careers/job/CAONMississauga2251-Speakman-Drive/Electrical-I-C-Engineering-Student---Winter-2027_R-166896 |
@@ -301,8 +303,8 @@
 | 2026-11-12 | Atlas-Apex Roofing Inc. | Desktop Support Analyst | Etobicoke, ON | Job Bank | weak | n/a | software | low signal, 2+ yrs | Cisco | https://www.jobbank.gc.ca/jobsearch/jobposting/50713934 |
 | 2026-11-12 | Spirit Omega Inc. | Information Technology (IT) Analyst | Clarington, ON | Job Bank | weak | n/a | software | low signal |  | https://www.jobbank.gc.ca/jobsearch/jobposting/50720828 |
 | 2026-11-12 | analogdevices | Analog Design Engineering Intern | Canada, Ottawa | Workday | weak | n/a | software | internship, low signal |  | https://analogdevices.wd1.myworkdayjobs.com/External/job/Canada-Ottawa/Analog-Design-Engineering-Intern_R267446 |
-| 2026-11-10 | UAP Inc. | Warehouse Process and Systems Specialist | Edmonton, AB, ca | Jobhive | weak | n/a | data | low signal, 2+ yrs |  | https://jobs.smartrecruiters.com/UAPInc/744000160904562 |
 | 2026-11-11 | Amazon | Software Developer Engineer | Toronto, ON, Canada | Simplify | strong | n/a | software | jd unavailable |  | https://amazon.jobs/en/jobs/10589122/software-dev-engineer |
+| 2026-11-10 | UAP Inc. | Warehouse Process and Systems Specialist | Edmonton, AB, ca | Jobhive | weak | n/a | data | low signal, 2+ yrs |  | https://jobs.smartrecruiters.com/UAPInc/744000160904562 |
 | 2026-11-10 | Sureway Construction Group Ltd | Industrial PLC Programmer (Bruderheim) | Bruderheim, AB, CA | Jobhive | strong | n/a | software | low signal |  | https://careers-sil.icims.com/jobs/8317/industrial-plc-programmer-%28bruderheim%29/job |
 | 2026-11-11 | exacare ai | Data and Analytics Intern | Toronto, ON, Canada | Simplify | strong | n/a | data | internship, jd unavailable |  | https://ats.rippling.com/exacare-inc/jobs/e42f12bc-041a-4ef2-90d8-a77cd7f1f166 |
 | 2026-11-10 | CDW | Information Technology (IT) Analyst | Toronto, ON | Job Bank | weak | n/a | software | low signal | Salesforce | https://www.jobbank.gc.ca/jobsearch/jobposting/50704547 |
@@ -420,9 +422,9 @@
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 36,519 |
-| active, visible, tech category | 5,890 |
-| first seen within window | 498 |
+| raw records | 36,456 |
+| active, visible, tech category | 5,882 |
+| first seen within window | 497 |
 | Canadian location | 28 |
 | not Quebec-only | 24 |
 | BC, Alberta, Ontario or remote | 24 |
@@ -437,17 +439,17 @@
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 32,304 |
-| first seen within window | 6,961 |
-| Canadian location | 4,690 |
-| not Quebec-only | 4,312 |
-| BC, Alberta, Ontario or remote | 4,059 |
-| not on blocklist | 4,059 |
-| not French-only | 4,035 |
-| title matches tech roles | 1,278 |
-| not senior / non-software | 419 |
-| not student-only | 382 |
-|   of which weak_title | 262 |
+| raw records | 31,995 |
+| first seen within window | 6,525 |
+| Canadian location | 4,171 |
+| not Quebec-only | 3,795 |
+| BC, Alberta, Ontario or remote | 3,541 |
+| not on blocklist | 3,541 |
+| not French-only | 3,517 |
+| title matches tech roles | 1,026 |
+| not senior / non-software | 422 |
+| not student-only | 383 |
+|   of which weak_title | 263 |
 
 **YC**
 
@@ -477,10 +479,10 @@
 | BC, Alberta, Ontario or remote | 20 |
 | not on blocklist | 20 |
 | not French-only | 20 |
-| title matches tech roles | 10 |
-| not senior / non-software | 5 |
-| not student-only | 5 |
-|   of which weak_title | 3 |
+| title matches tech roles | 11 |
+| not senior / non-software | 6 |
+| not student-only | 6 |
+|   of which weak_title | 4 |
 
 **Bay Street Oracle**
 
@@ -582,17 +584,17 @@
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 2 |
-| first seen within window | 2 |
-| Canadian location | 2 |
-| not Quebec-only | 2 |
-| BC, Alberta, Ontario or remote | 2 |
-| not on blocklist | 2 |
-| not French-only | 2 |
-| title matches tech roles | 1 |
-| not senior / non-software | 0 |
-| not student-only | 0 |
-|   of which weak_title | 0 |
+| raw records | 3 |
+| first seen within window | 3 |
+| Canadian location | 3 |
+| not Quebec-only | 3 |
+| BC, Alberta, Ontario or remote | 3 |
+| not on blocklist | 3 |
+| not French-only | 3 |
+| title matches tech roles | 2 |
+| not senior / non-software | 1 |
+| not student-only | 1 |
+|   of which weak_title | 1 |
 
 **Canada List**
 
@@ -614,13 +616,13 @@
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 4,610 |
-| first seen within window | 4,610 |
-| Canadian location | 3,405 |
-| not Quebec-only | 2,886 |
-| BC, Alberta, Ontario or remote | 2,229 |
-| not on blocklist | 2,060 |
-| not French-only | 2,058 |
+| raw records | 4,592 |
+| first seen within window | 4,592 |
+| Canadian location | 3,393 |
+| not Quebec-only | 2,877 |
+| BC, Alberta, Ontario or remote | 2,220 |
+| not on blocklist | 2,051 |
+| not French-only | 2,049 |
 | title matches tech roles | 451 |
 | not senior / non-software | 172 |
 | not student-only | 169 |
@@ -630,10 +632,10 @@
 
 | Stage | Remaining |
 |---|---:|
-| before dedupe | 1,855 |
+| before dedupe | 1,858 |
 |   merged by canonical URL | 129 |
 |   merged by fuzzy company+title | 169 |
-| after dedupe | 1,557 |
+| after dedupe | 1,560 |
 
 ## JD rules
 
@@ -642,14 +644,14 @@
 | Reason | Jobs |
 |---|---:|
 | location_not_canada | 825 |
-| experience_3plus | 261 |
+| experience_3plus | 262 |
 | weak_title_few_terms | 96 |
 | location_quebec_only | 29 |
-| requires_french | 28 |
+| requires_french | 27 |
 | location_unresolved_url_not_canadian | 15 |
 | security_clearance | 12 |
 | location_other_province | 10 |
-| location_ats_not_canada | 2 |
+| location_ats_not_canada | 3 |
 | requires_enrollment | 1 |
 
 Student-titled jobs held for JD check: 112; rescued: 66.
@@ -661,7 +663,7 @@ Student-titled jobs held for JD check: 112; rescued: 66.
 | Ashby:ok | 19 |
 | BC Gov:ok | 1 |
 | BambooHR:ok | 42 |
-| Built In:ok | 4 |
+| Built In:ok | 5 |
 | Google Jobs:ok | 6 |
 | Greenhouse:ok | 31 |
 | HN:ok | 1 |
@@ -675,11 +677,12 @@ Student-titled jobs held for JD check: 112; rescued: 66.
 | Simplify:error | 1 |
 | Simplify:ok | 6 |
 | Simplify:unsupported | 5 |
+| Site Search:ok | 1 |
 | SmartRecruiters:ok | 1 |
 | SuccessFactors:ok | 47 |
 | Workday:error | 18 |
 | Workday:not_found | 2 |
-| Workday:ok | 1217 |
+| Workday:ok | 1218 |
 | iCIMS:ok | 3 |
 
 **JD fetch HTTP 403 (permission denied) by host**
@@ -761,8 +764,8 @@ The plain request and a second try with browser headers plus career-site cookies
 |---|---:|
 | 0-19 | 1 |
 | 20-39 | 6 |
-| 40-59 | 29 |
+| 40-59 | 30 |
 | 60-79 | 74 |
 | 80-100 | 44 |
-| n/a (no JD or no tech terms) | 234 |
+| n/a (no JD or no tech terms) | 235 |
 
