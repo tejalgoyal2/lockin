@@ -34,3 +34,7 @@ boards:
   - {ats: workday, slug: barclays.wd3/external_career_site_barclays, name: "barclays"}        # 2 Canadian postings when found, 2026-11-12
   - {ats: workday, slug: abbott.wd5/abbottcareers, name: "abbott"}        # 17 Canadian postings when found, 2026-11-12
   - {ats: workday, slug: agilent.wd5/agilent_careers, name: "agilent"}        # 19 Canadian postings when found, 2026-11-12
+  - {ats: workday, slug: zeissgroup.wd3/external, name: "zeissgroup"}        # 8 Canadian postings when found, 2026-11-12
+  - {ats: workday, slug: generac.wd5/external, name: "generac"}        # 13 Canadian postings when found, 2026-11-12
+  - {ats: workday, slug: ghr.wd1/lateral-canada, name: "ghr"}        # 3 Canadian postings when found, 2026-11-12
+  - {ats: workday, slug: keyera.wd10/keyera_careers, name: "keyera"}        # 13 Canadian postings when found, 2026-11-12

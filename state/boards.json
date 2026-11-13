@@ -168,7 +168,7 @@
    "first": "2026-11-12",
    "last": "2026-11-12",
    "name": "cgm",
-   "probes": 1,
+   "probes": 2,
    "seen": 3,
    "status": "empty"
   },
@@ -289,6 +289,15 @@
    "seen": 4,
    "status": "dead"
   },
+  "workday/generac.wd5/external": {
+   "canadian": 13,
+   "first": "2026-11-12",
+   "last": "2026-11-12",
+   "name": "generac",
+   "probes": 0,
+   "seen": 3,
+   "status": "added"
+  },
   "workday/gevernova.wd5/vernova_externalsite": {
    "canadian": 14,
    "first": "2026-11-09",
@@ -296,6 +305,15 @@
    "name": "gevernova",
    "probes": 0,
    "seen": 12,
+   "status": "added"
+  },
+  "workday/ghr.wd1/lateral-canada": {
+   "canadian": 3,
+   "first": "2026-11-12",
+   "last": "2026-11-12",
+   "name": "ghr",
+   "probes": 0,
+   "seen": 3,
    "status": "added"
   },
   "workday/ghr.wd1/us-emplsv": {
@@ -321,17 +339,17 @@
    "first": "2026-11-12",
    "last": "2026-11-12",
    "name": "godirect",
-   "probes": 2,
+   "probes": 3,
    "seen": 4,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/gsk.wd5/gskcareers": {
    "canadian": 0,
    "first": "2026-11-12",
    "last": "2026-11-12",
    "name": "gsk",
-   "probes": 1,
-   "seen": 4,
+   "probes": 2,
+   "seen": 3,
    "status": "empty"
   },
   "workday/guidehouse.wd1/external": {
@@ -343,6 +361,15 @@
    "seen": 8,
    "status": "dead"
   },
+  "workday/hcsc.wd1/hcsc_external": {
+   "canadian": 0,
+   "first": "2026-11-12",
+   "last": "2026-11-12",
+   "name": "hcsc",
+   "probes": 1,
+   "seen": 3,
+   "status": "empty"
+  },
   "workday/highmarkhealth.wd1/highmark": {
    "canadian": 0,
    "first": "2026-11-10",
@@ -351,6 +378,15 @@
    "probes": 3,
    "seen": 5,
    "status": "dead"
+  },
+  "workday/hntb.wd5/hntb_careers": {
+   "canadian": 0,
+   "first": "2026-11-12",
+   "last": "2026-11-12",
+   "name": "hntb",
+   "probes": 1,
+   "seen": 3,
+   "status": "empty"
   },
   "workday/hp.wd5/exteu-ac-careersite": {
    "canadian": 17,
@@ -406,6 +442,15 @@
    "seen": 8,
    "status": "added"
   },
+  "workday/keyera.wd10/keyera_careers": {
+   "canadian": 13,
+   "first": "2026-11-12",
+   "last": "2026-11-12",
+   "name": "keyera",
+   "probes": 0,
+   "seen": 3,
+   "status": "added"
+  },
   "workday/kiongroup.wd3/kiongroup": {
    "canadian": 4,
    "first": "2026-11-12",
@@ -420,7 +465,7 @@
    "first": "2026-11-12",
    "last": "2026-11-12",
    "name": "lbg",
-   "probes": 1,
+   "probes": 2,
    "seen": 4,
    "status": "empty"
   },
@@ -451,6 +496,15 @@
    "seen": 7,
    "status": "dead"
   },
+  "workday/mbda.wd3/mbda-uk": {
+   "canadian": 0,
+   "first": "2026-11-12",
+   "last": "2026-11-12",
+   "name": "mbda",
+   "probes": 1,
+   "seen": 3,
+   "status": "empty"
+  },
   "workday/micron.wd1/external": {
    "canadian": 0,
    "first": "2026-11-10",
@@ -459,6 +513,15 @@
    "probes": 3,
    "seen": 8,
    "status": "dead"
+  },
+  "workday/morganlewis.wd5/morganlewis": {
+   "canadian": 0,
+   "first": "2026-11-12",
+   "last": "2026-11-12",
+   "name": "morganlewis",
+   "probes": 1,
+   "seen": 3,
+   "status": "empty"
   },
   "workday/msd.wd5/searchjobs": {
    "canadian": 0,
@@ -603,13 +666,21 @@
    "probes": 3,
    "seen": 5,
    "status": "dead"
+  },
+  "workday/zeissgroup.wd3/external": {
+   "canadian": 8,
+   "first": "2026-11-12",
+   "last": "2026-11-12",
+   "name": "zeissgroup",
+   "probes": 0,
+   "seen": 4,
+   "status": "added"
   }
  },
  "health": {
   "workday/broadcom.wd1/external_career": {
-   "error": "HTTPError: 502 Server Error: Bad Gateway for url: https://broadcom.wd1.myworkdayjobs.com/wday/cxs/broadcom/External_Care",
-   "fails": 1,
-   "last_fail": "2026-11-12"
+   "fails": 0,
+   "last_ok": "2026-11-12"
   }
  },
  "version": 1

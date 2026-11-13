@@ -1732,6 +1732,12 @@
    "gaps": [],
    "title": "Partner Support Specialist, BMO Investorline (Bilingual in French and English) WFH"
   },
+  "102f2806203b19084d49a58299eb89d443e1feab": {
+   "company": "Keyera",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Engineer-in-Training (EIT)"
+  },
   "10430f1e193897bb47ede4115bd103a3f4e17f10": {
    "company": "1Password",
    "date": "2026-11-10",
@@ -2092,6 +2098,12 @@
    "date": "2026-10-15",
    "gaps": [],
    "title": "Undergrad Intern Technical"
+  },
+  "1310d4648b5da1cb926607d57a945f7587e56d1f": {
+   "company": "Home Depot Canada",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Service Desk Associate: Full Time - PRINCE GEORGE"
   },
   "135fcafea1dae2136aa93fa005436b01a83ee6b5": {
    "company": "Aptech Precision Machining Inc",
@@ -3493,6 +3505,14 @@
    ],
    "title": "Microsoft Dynamics 365 Technical Consultant / Developer"
   },
+  "1fadea1b4fd94e07766c16dfe75d43bb6fbc2782": {
+   "company": "Pvh",
+   "date": "2026-11-12",
+   "gaps": [
+    "Salesforce"
+   ],
+   "title": "Specialist CRM Campaign Personalisation (7-Month FTC)"
+  },
   "203db9098ae76d9cdb8e739072dbece927a473c9": {
    "company": "Clarity",
    "date": "2026-11-06",
@@ -3514,6 +3534,12 @@
    ],
    "title": "Supply Chain & Fulfillment Analyst"
   },
+  "2057138fa41dc3d58842f1dcf24a0573a1b4ff8e": {
+   "company": "Home Depot Canada",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Service Desk Associate Part-Time - 7236 Timmins"
+  },
   "2065a98a39935e9793093fc52e428b0c9aa7b02a": {
    "company": "Hitachi",
    "date": "2026-11-03",
@@ -3521,6 +3547,14 @@
     "SAP"
    ],
    "title": "Functional Specialist , SAP - MM & SCS"
+  },
+  "2068089dd060627b71296a462bee6174bc96933c": {
+   "company": "Affirm",
+   "date": "2026-11-12",
+   "gaps": [
+    "distributed systems"
+   ],
+   "title": "Software Engineer I, Backend (Continuous Delivery)"
   },
   "206cfd8107030e3b4c6b46cbfa2e0dc2de752277": {
    "company": "Canonical",
@@ -4126,6 +4160,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Audit and Exam Support Analyst, Winter 2027 (Co-op/Internship) - 4 months"
+  },
+  "265c0c5fd5cee3fc83ef2126ae195f8531c60234": {
+   "company": "SWBC",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Junior Systems Reliability Engineer"
   },
   "2660df031f9caa05831698ebdb893f6f169dc332": {
    "company": "BMO",
@@ -5258,6 +5298,12 @@
    "date": "2026-11-09",
    "gaps": [],
    "title": "Software Developer"
+  },
+  "3034807067b35218306c27894b4ea0ec4b5032bd": {
+   "company": "Keyera",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Engineer-in-Training (EIT)"
   },
   "303e6938c19ad2f88797d0d5f58232940ea623ad": {
    "company": "City of Vernon",
@@ -6778,6 +6824,12 @@
     "Java"
    ],
    "title": "Software Developer I (Full Time) - Canada"
+  },
+  "3e0b6ca68e4b021bc49c728ef993979c681dc781": {
+   "company": "Air North",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Payroll & Compliance Specialist"
   },
   "3e1d5a38c8545cd085fc0ae25ead44dcbea6ab58": {
    "company": "Fidelity Canada",
@@ -10266,6 +10318,12 @@
    "gaps": [],
    "title": "Equity Market Analyst & Portfolio Associate"
   },
+  "5b56073032a34b90ddd5dac2a9a07fbdffbb88af": {
+   "company": "Zeissgroup",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Software Development Engineer in Test"
+  },
   "5b6d759886a973684a5031cabe73d0bdcd952658": {
    "company": "Cheo",
    "date": "2026-11-02",
@@ -10865,6 +10923,12 @@
    "gaps": [],
    "title": "Engineering Enablement Specialist"
   },
+  "5fcc58ac1135d0945a561b243d8ba3fce1b38084": {
+   "company": "Thales",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Technical Specialist - Hull (West)"
+  },
   "5fcd7ce7d2878589bb83832b5be902abbece6812": {
    "company": "BMO",
    "date": "2026-11-09",
@@ -11056,6 +11120,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Engineer, Energy Services"
+  },
+  "614cd4259106d281bb864f46e2154d66d74ad578": {
+   "company": "Ledcor",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Mine Engineer"
   },
   "61538c1a115257fb71cde54731dee236017aa72d": {
    "company": "TD Bank",
@@ -11515,6 +11585,12 @@
    ],
    "title": "Analyst, Data Governance"
   },
+  "6634fde05137c9f289dafbf511d66754ee8f710d": {
+   "company": "J.D. Power",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Automotive Data Analyst"
+  },
   "665bec2812ca11bd0b78efe84335c2f5dc543d1e": {
    "company": "Volarisgroup",
    "date": "2026-10-10",
@@ -11769,6 +11845,12 @@
    "date": "2026-10-30",
    "gaps": [],
    "title": "Accounts Receivable Specialist"
+  },
+  "68b2ebd0272947deee38c11863017d429157d2d4": {
+   "company": "Ccf",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Imaging Systems Administrator"
   },
   "68bb21d4f71c9ffaf0a0bf1bfb6af11f85976714": {
    "company": "Uwaterloo",
@@ -14922,6 +15004,12 @@
    ],
    "title": "Stagiaire en automatisation de l’assurance qualité (AQ) / QA Automation Engineer Intern - Hiver /Winter 2027"
   },
+  "829f5d6f4fc2b2e36c93334e6f1f357e6f028c8c": {
+   "company": "We An-Ser",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Information Technology (IT) Analyst"
+  },
   "82a8001117fa198ed7f348e09ab9bd375c5a756f": {
    "company": "Marsh McLennan",
    "date": "2026-10-31",
@@ -15693,6 +15781,12 @@
    "gaps": [],
    "title": "Cyber Security Advisor"
   },
+  "8a50b3b8303f7792a4b760273d94958ede250a95": {
+   "company": "Thales",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "AJISS - Junior Systems Engineer"
+  },
   "8a54a6a36122a174dc128980cd836bd1e88d6e50": {
    "company": "Sophos",
    "date": "2026-11-09",
@@ -15876,6 +15970,12 @@
    "date": "2026-10-23",
    "gaps": [],
    "title": "Electronics Engineer"
+  },
+  "8bd97ffbde99ddd1292f9b2866fa91ff9da56aa2": {
+   "company": "ledcor",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Mining Engineer"
   },
   "8be0b55761f98f862d61d2749c3870f0404536dc": {
    "company": "Sysgen",
@@ -17001,6 +17101,12 @@
    "gaps": [],
    "title": "Specialist, Northern Engagement and Community Outreach"
   },
+  "94f8e9a3bcf19a811590c93b3f938373592c13a0": {
+   "company": "Unimelb",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Laser Ablation, Automation and Digitisation Research Scientist"
+  },
   "951347cd0fd7869d83db6972efdb5299e35d5345": {
    "company": "TMX Group",
    "date": "2026-11-05",
@@ -18022,6 +18128,12 @@
    "date": "2026-10-22",
    "gaps": [],
    "title": "Engineering Co-Op"
+  },
+  "9dab89e68a267ff6a54b56b96a27e6564e469ba5": {
+   "company": "Mecca",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "MECCA Brighton - Operations Specialist"
   },
   "9dbc22b209eb9952473bbef5c3cf52013c34f21a": {
    "company": "Arraymarketing",
@@ -21755,6 +21867,12 @@
    "gaps": [],
    "title": "Treasury Analyst (6 Month Contract) - Myworkdayjobs.com"
   },
+  "bf9e5aae0c47009d5fb3b746be15debe922fcc88": {
+   "company": "Home Depot Canada",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Front End Associate: Part Time - SQUAMISH"
+  },
   "bfd904909dbee168593adb039b0bbe18a5efed4b": {
    "company": "Cfindustries",
    "date": "2026-11-03",
@@ -21784,6 +21902,12 @@
    "date": "2026-11-05",
    "gaps": [],
    "title": "QA Analyst"
+  },
+  "c036725cafa162dac7cb25c0aa486b8df74947d2": {
+   "company": "Bestbuycanada",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Technical Service Representative (Part Time)"
   },
   "c05b342aa538c0568735158d034a6a4d5c0b4b27": {
    "company": "Lyft",
@@ -23949,6 +24073,14 @@
    "gaps": [],
    "title": "GIS Analyst"
   },
+  "d3f9feb631cba53cef00dd2533667965002c6e35": {
+   "company": "Pvh",
+   "date": "2026-11-12",
+   "gaps": [
+    "Salesforce"
+   ],
+   "title": "Specialist CRM Campaigns Sale & Promotions - Maternity Cover"
+  },
   "d4011a5cab0bab95acbd7e6ac0dffa4dafc551b5": {
    "company": "Sodalessolutions",
    "date": "2026-11-07",
@@ -25089,6 +25221,12 @@
    ],
    "title": "Business Systems Analyst FCC"
   },
+  "de28970ecfa146e5429214f3e92a221314d916b3": {
+   "company": "Home Depot Canada",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "TRANSPORTATION ANALYST"
+  },
   "de4526f4974d7dc53d1c4021c6d2b2eafe9b2491": {
    "company": "Talentmanagementsolution",
    "date": "2026-10-31",
@@ -25134,6 +25272,12 @@
    "date": "2026-11-09",
    "gaps": [],
    "title": "Security Engineer - Android & Linux"
+  },
+  "deb022dbe7a239cb94be564ba423ce350a61f640": {
+   "company": "Cscgeneration 2",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Junior Software Engineer"
   },
   "decec7d0e4b165e2e9a23a40a13bfcd227de1af5": {
    "company": "Motorola Solutions",
@@ -26549,6 +26693,12 @@
    ],
    "title": "Analyst, Supply Chain Replenishment, Logistics"
   },
+  "eb0e33cda9b8511be998f361969bbd9d021be533": {
+   "company": "Home Depot Canada",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Service Desk Associate - Part Time (St. John's)"
+  },
   "eb1e084cfd14fbcfd33e568b294c43c4d3594094": {
    "company": "CIBC",
    "date": "2026-11-09",
@@ -26774,6 +26924,12 @@
    "gaps": [],
    "title": "Portfolio Analyst"
   },
+  "ed8f0efba96e42a21355eab9d941d07a023ada32": {
+   "company": "Thales",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Technical Specialist - Hull (East)"
+  },
   "ed8faadbb438c751e3ada6a2c7852557c373ebea": {
    "company": "Moneris",
    "date": "2026-10-07",
@@ -26969,6 +27125,12 @@
    "date": "2026-11-09",
    "gaps": [],
    "title": "Technology Partner, LCA (Legal & Corporate Affairs)"
+  },
+  "ef99947d53c6c46261d6ebe85d59129e1f13f959": {
+   "company": "Cba",
+   "date": "2026-11-12",
+   "gaps": [],
+   "title": "Customer Banking Specialist"
   },
   "efc9c01a2ae7862c97fd83d2c38016225a7901a5": {
    "company": "Sun Life",

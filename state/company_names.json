@@ -39,6 +39,10 @@
   "name": "Plasma",
   "checked": "2026-11-09"
  },
+ "Ashby:procurify": {
+  "name": "Procurify",
+  "checked": "2026-11-12"
+ },
  "Ashby:relayfi": {
   "name": "Relay",
   "checked": "2026-11-09"
@@ -515,6 +519,10 @@
   "name": "",
   "checked": "2026-11-09"
  },
+ "Workday:swbc.wd1.myworkdayjobs.com/swbcmexico": {
+  "name": "SWBC",
+  "checked": "2026-11-12"
+ },
  "Workday:synechron.wd1.myworkdayjobs.com/synechroncareers": {
   "name": "",
   "checked": "2026-10-31"
@@ -542,6 +550,10 @@
  "Workday:trinityhealth.wd1.myworkdayjobs.com/jobs": {
   "name": "",
   "checked": "2026-11-09"
+ },
+ "Workday:unimelb.wd105.myworkdayjobs.com/broadbean_external": {
+  "name": "",
+  "checked": "2026-11-12"
  },
  "Workday:ur.wd1.myworkdayjobs.com/urcareers": {
   "name": "UR",

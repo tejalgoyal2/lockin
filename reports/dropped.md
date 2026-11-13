@@ -2,15 +2,14 @@
 
 Read this when you suspect a good job is being lost: each reason names the rule, then lists the jobs it dropped (up to 40, newest first). A reason that drops a job you wanted is a rule to loosen in `config.yaml`.
 
-## location_not_canada: 711
+## location_not_canada: 726
 
 Not a Canadian posting; not listed.
 
-## experience_3plus: 290
+## experience_3plus: 316
 
 _the JD asks 3+ years of experience_
 
-- [Application Engineer- Mars Veterinary Health](https://mvh.wd115.myworkdayjobs.com/BFCareers/job/Support-Office---Vancouver/Application-Engineer--Mars-Veterinary-Health_R-259562-1) | mvh | Canada | 2026-11-12 (asks 3+ years)
 - [Security Engineer, Corporate Security](https://jobs.ashbyhq.com/1password/13200311-77c5-49ed-a3ce-8460d5c72d91) | 1Password | Canada) | 2026-11-12 (asks 3+ years)
 - [Data Scientist, Enterprise Analytics](https://jobicy.com/jobs/161680-data-scientist-enterprise-analytics) | GitLab | Remote, Canada | 2026-11-12 (asks 3+ years)
 - [Engineer - Tooling](https://careers.aircanada.com/ca/en/job/40506) | Air Canada | TORONTO, ONTARIO, CANADA | 2026-11-12 (asks 3+ years)
@@ -32,6 +31,7 @@ _the JD asks 3+ years of experience_
 - [Claims Specialist, Property](https://intactfc.wd3.myworkdayjobs.com/intactfc/job/Calgary-Alberta-CAN/Claims-Specialist--Property_R155776) | Intact | Calgary, Alberta, CAN | 2026-11-12 (asks 10+ years)
 - [Advanced App Engineering Specialist/Business Architecture](https://accenture.wd103.myworkdayjobs.com/AvanadeCareers/job/Calgary-Brookfield-Place-Corp/Advanced-App-Engineering-Specialist-Business-Architecture_R00370258) | Avanade | Calgary, Brookfield Place, Corp | 2026-11-12 (asks 4+ years)
 - [Advanced App Engineering Specialist/Business Architecture](https://accenture.wd103.myworkdayjobs.com/AvanadeCareers/job/Calgary-Brookfield-Place-Corp/Advanced-App-Engineering-Specialist-Business-Architecture_R00370285) | Avanade | Calgary, Brookfield Place, Corp | 2026-11-12 (asks 4+ years)
+- [Yard Controller Help Desk](https://slihrms.wd3.myworkdayjobs.com/careers/job/CAONOttawa3110-Albion-Road-North/Yard-Controller-Help-Desk_R-167371) | slihrms | CA.ON.Ottawa.3110 Albion Road North | 2026-11-12 (asks 6+ years)
 - [Hardware Design Engineer (Sustaining Engineering )](https://flir.wd1.myworkdayjobs.com/flircareers/job/Canada---Waterloo-ON/Hardware-Design-Engineer--Sustaining-Engineering--_REQ36877) | flir | Canada - Waterloo, ON | 2026-11-12 (asks 5+ years)
 - [Big Data Analyst](https://www.jobbank.gc.ca/jobsearch/jobposting/50715675) | Samee Metal Trading | Hamilton, ON | 2026-11-12 (asks 3+ years)
 - [Statistical Analyst](https://www.jobbank.gc.ca/jobsearch/jobposting/50714553) | University of New Brunswick | Fredericton, NB | 2026-11-12 (asks 5+ years)
@@ -40,6 +40,7 @@ _the JD asks 3+ years of experience_
 - [Technical Specialist](https://jobs.smartrecruiters.com/universityhealthnetwork/744000161164129) | University Health Network | Toronto, ON, ca | 2026-11-11 (asks 5+ years)
 - [Credit Operations Analyst](https://stripe.com/jobs/search?gh_jid=8354560) | Stripe | Toronto, Canada | 2026-11-11 (asks 3+ years)
 - [Specialist Data and AI - Tooling Administrator](https://careers.aircanada.com/ca/en/job/40523) | Air Canada | TORONTO, ONTARIO, CANADA | 2026-11-11 (asks 5+ years)
+- [Integration Specialist Developer](https://careersen-hrrh.icims.com/jobs/26559/integration-specialist-developer/job) | Humber River Health | Greater Toronto, ON, CA | 2026-11-11 (asks 3+ years)
 - [Power System Engineer (SME)](https://fa-emqh-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/7648) | Fa Emqh Saasfaprod1 | Canada | 2026-11-11 (asks 15+ years)
 - [Energy & GHG Management Specialist](https://ehtc.fa.ca2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/117773) | MX | Canada | 2026-11-11 (asks 6+ years)
 - [Systems Support Representative](https://jobs.utoronto.ca/job/Toronto-Systems-Support-Representative-ON/607945717/) | University of Toronto | Toronto, ON | 2026-11-11 (asks 4+ years)
@@ -47,14 +48,14 @@ _the JD asks 3+ years of experience_
 - [Software Developer](https://www.jobbank.gc.ca/jobsearch/jobposting/50710897) | Turing | Toronto, ON | 2026-11-11 (asks 3+ years)
 - [Systems Engineer-GCGCON](https://elvk.fa.ca3.oraclecloud.com/hcmUI/CandidateExperience/en/sites/cx_1001/job/9549) | Great Canadian Entertainment | Toronto, ON, Canada | 2026-11-11 (asks 7+ years)
 - [Network Engineer-GCGCON](https://elvk.fa.ca3.oraclecloud.com/hcmUI/CandidateExperience/en/sites/cx_1001/job/9553) | Great Canadian Entertainment | Toronto, ON, Canada | 2026-11-11 (asks 8+ years)
+- [Bilingual BI Developer](https://icebergfinance.bamboohr.com/careers/310) | icebergfinance | Toronto, Ontario, Canada | 2026-11-11 (asks 3+ years)
 - [R3, Systems Training Specialist - Initiative & Opportunity](https://algonquincollege.wd3.myworkdayjobs.com/CareerOpportunities/job/Ottawa-Campus/R3--Systems-Training-Specialist---Initiative---Opportunity_R177359) | Algonquin College | Ottawa Campus | 2026-11-11 (asks 3+ years)
-- [Technical Fellow, Advanced Packaging Integration](https://techinsights.applytojob.com/apply/jobs/details/Ih57gFw5s7) | techinsights | Ottawa, ON, Canada | 2026-11-11 (asks 10+ years)
-- [Software Developer](https://www.jobbank.gc.ca/jobsearch/jobposting/50710895) | Turing | Vancouver, BC | 2026-11-11 (asks 3+ years)
 
-## weak_title_few_terms: 84
+## weak_title_few_terms: 95
 
 _a generic title (Analyst, Specialist, Engineer ...) whose JD names too few tech skills_
 
+- [CA - Specialist: Seasonal, Part-time](https://jobs.apple.com/en-us/details/114438004/ca-specialist-seasonal-part-time) | Apple | Canada | 2026-11-12 (0 skill terms in a 2,651-character JD)
 - [Mortgage Specialist - Downtown Toronto](https://jobs.scotiabank.com/job/Toronto-Mortgage-Specialist-Downtown-Toronto-ON/601831917/) | Scotiabank | Toronto, ON, CA | 2026-11-12 (0 skill terms in a 4,832-character JD)
 - [Mobile Mortgage Specialist](https://td.wd3.myworkdayjobs.com/TD_Bank_Careers/job/Ottawa-Ontario/Mobile-Mortgage-Specialist_R_1521969) | TD | Ottawa, Ontario | 2026-11-12 (0 skill terms in a 6,887-character JD)
 - [Investment Specialist - BMO Investorline - Bilingual in English and Mandarin and/or Cantonese](https://bmo.wd3.myworkdayjobs.com/External/job/REMOTETELETRAVAIL-ON-CAN/Investment-Specialist---BMO-Investorline---Bilingual-in-English-and-Mandarin-or-Cantonese_R260024198) | BMO | REMOTE/TELETRAVAIL, ON, CAN | 2026-11-12 (0 skill terms in a 6,225-character JD)
@@ -64,6 +65,7 @@ _a generic title (Analyst, Specialist, Engineer ...) whose JD names too few tech
 - [Mortgage Specialist - Durham](https://jobs.scotiabank.com/job/Ajax-Mortgage-Specialist-Durham-ON/601823617/) | Scotiabank | Ajax, ON, CA | 2026-11-12 (0 skill terms in a 4,861-character JD)
 - [HSE Specialist](https://abb.wd3.myworkdayjobs.com/external_career_page/job/Saint-Laurent-Quebec-Canada/HSE-Specialist_JR00051504) | abb | Oakville, Ontario, Canada | 2026-11-12 (0 skill terms in a 5,336-character JD)
 - [Elder Life Specialist - Acute Care For Elderly ACE](https://jobs.smartrecruiters.com/williamoslerhealthsystem1/744000161133219) | William Osler Health System | Brampton, ON, ca | 2026-11-11 (0 skill terms in a 5,172-character JD)
+- [Client Experience & Enablement Specialist](https://job-boards.greenhouse.io/flipp/jobs/8279336) | Flipp | Canada | 2026-11-11 (0 skill terms in a 8,648-character JD)
 - [Circuit Delayering Specialist](https://techinsights.applytojob.com/apply/jobs/details/2v249EquDW) | techinsights | Ottawa, ON, Canada | 2026-11-11 (0 skill terms in a 6,035-character JD)
 - [Agriculture Specialist, Commercial Banking, Central Alberta](https://jobs.scotiabank.com/job/Calgary-Agriculture-Specialist%2C-Commercial-Banking%2C-Central-Alberta-AB-T4S2J3/606073517/) | Scotiabank | Calgary, AB, CA, T4S2J3 | 2026-11-11 (0 skill terms in a 7,069-character JD)
 - [Global Banking & Markets Operations-Calgary-Associate/Analyst-Natural Gas Scheduling](https://hdpc.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CampusHiring/job/188823) | Goldman Sachs | Calgary, AB, Canada | 2026-11-11 (0 skill terms in a 641-character JD)
@@ -73,15 +75,19 @@ _a generic title (Analyst, Specialist, Engineer ...) whose JD names too few tech
 - [Systems Operations Specialist](https://uwaterloo.wd3.myworkdayjobs.com/uw_careers_tis/job/Waterloo-Ontario-Canada/Systems-Operations-Specialist_2026-03893) | University of Waterloo | Waterloo, Ontario, Canada | 2026-11-11 (0 skill terms in a 8,366-character JD)
 - [Mortgage Specialist - Prince George Region](https://jobs.scotiabank.com/job/Prince-George-Mortgage-Specialist-Prince-George-Region-BC/601795417/) | Scotiabank | Prince George, BC, CA | 2026-11-11 (0 skill terms in a 4,847-character JD)
 - [Analyst Part Time Day](https://myview.wd3.myworkdayjobs.com/paradox_careers/job/4771-Yonge-St-Toronto-ON/Analyst-Part-Time-Day_R2000732552) | myview | 4771 Yonge St, Toronto, ON | 2026-11-11 (0 skill terms in a 4,386-character JD)
+- [Customer Experience Specialist](https://job-boards.greenhouse.io/quince/jobs/5478345008) | Quince | Toronto, Ontario, Canada | 2026-11-10 (0 skill terms in a 9,261-character JD)
 - [Abilities Management Specialist](https://careersen-victoria.icims.com/jobs/4878/abilities-management-specialist/job) | City of Victoria | Victoria, BC | 2026-11-10 (0 skill terms in a 6,132-character JD)
 - [Automotive Parts Specialist](https://jobs.smartrecruiters.com/UAPInc/744000160918069) | UAP Inc. | Duncan, BC, ca | 2026-11-10 (0 skill terms in a 2,214-character JD)
 - [Analyst, Contract and Systems Support](https://saskenergy.wd10.myworkdayjobs.com/saskenergy/job/Regina-SK/Analyst--Contract-and-Systems-Support_R00004508) | saskenergy | Regina, SK | 2026-11-10 (0 skill terms in a 3,004-character JD)
-- [Fleet Delivery Specialist](https://job-boards.greenhouse.io/clutch/jobs/6254121004) | Clutch Technologies Inc. | Halifax, Nova Scotia, Canada | 2026-11-10 (0 skill terms in a 4,590-character JD)
+- [Customer Banking Specialist](https://cba.wd3.myworkdayjobs.com/commbank_careers/job/VIC-Central-Victoria-Area/Customer-Banking-Specialist_REQ268464) | cba | VIC Central Victoria Area | 2026-11-10 (0 skill terms in a 3,039-character JD)
 - [Field Technical Service Representative (Full Time)](https://bestbuycanada.wd3.myworkdayjobs.com/bestbuyca_career/job/11940-Ottawa-East/Field-Technical-Service-Representative--Full-Time-_R-54692) | bestbuycanada | 11940 Ottawa East | 2026-11-10 (0 skill terms in a 2,190-character JD)
 - [Equipment Rental Specialist](https://sunbeltrentals.wd1.myworkdayjobs.com/sbcareers/job/Halifax-NS-B3K-4X6/Equipment-Rental-Specialist_2026-18261) | sunbeltrentals | Halifax NS B3K 4X6 | 2026-11-10 (0 skill terms in a 4,286-character JD)
+- [Fleet Delivery Specialist](https://job-boards.greenhouse.io/clutch/jobs/6254121004) | Clutch Technologies Inc. | Halifax, Nova Scotia, Canada | 2026-11-10 (0 skill terms in a 4,590-character JD)
 - [Quotation Specialist](https://jobs.smartrecruiters.com/rexel1/744000160897638) | REXEL | Calgary/Edmonton, AB, ca | 2026-11-10 (0 skill terms in a 3,548-character JD)
+- [Proposal Specialist](https://external-dillon.icims.com/jobs/4656/proposal-specialist/job) | external-dillon | Toronto | 2026-11-10 (0 skill terms in a 5,801-character JD)
 - [Mobile Mortgage Specialist](https://td.wd3.myworkdayjobs.com/TD_Bank_Careers/job/Toronto-Ontario/Mobile-Mortgage-Specialist_R_1507599-1) | TD | Toronto, Ontario | 2026-11-10 (0 skill terms in a 6,960-character JD)
 - [Analyst, Large Cash Transaction Reporting (LCTR)](https://cibc.wd3.myworkdayjobs.com/search/job/Toronto-ON/Analyst--Large-Cash-Transaction-Reporting--LCTR-_2622883) | CIBC | Toronto, ON | 2026-11-10 (0 skill terms in a 5,290-character JD)
+- [Product Specialist - JAK's Kitsilano](https://jaks.bamboohr.com/careers/338) | jaks | Vancouver, British Columbia, Canada | 2026-11-10 (0 skill terms in a 2,529-character JD)
 - [Mobile Mortgage Specialist](https://td.wd3.myworkdayjobs.com/TD_Bank_Careers/job/North-York-Ontario/Mobile-Mortgage-Specialist_R_1520748) | TD | North York, Ontario | 2026-11-10 (0 skill terms in a 6,934-character JD)
 - [Specialist Asset Performance](https://enbridge.wd3.myworkdayjobs.com/enbridge_careers/job/North-York-ON-CAN/Specialist-Asset-Performance_73587-2) | Enbridge | North York, ON, CAN | 2026-11-10 (0 skill terms in a 5,899-character JD)
 - [Residential Claims Subrogation Analyst](https://td.wd3.myworkdayjobs.com/TD_Bank_Careers/job/Markham-Ontario/Residential-Claims-Subrogation-Analyst_R_1521574) | TD | Markham, Ontario | 2026-11-10 (0 skill terms in a 7,012-character JD)
@@ -89,12 +95,6 @@ _a generic title (Analyst, Specialist, Engineer ...) whose JD names too few tech
 - [Mortgage Specialist - Kitchener, Cambridge, Waterloo](https://jobs.scotiabank.com/job/Waterloo-Mortgage-Specialist-Kitchener%2C-Cambridge%2C-Waterloo-ON/596957817/) | Scotiabank | Waterloo, ON, CA | 2026-11-10 (0 skill terms in a 4,575-character JD)
 - [Mortgage Specialist - Port Elgin/Hanover](https://jobs.scotiabank.com/job/Elgin-Mortgage-Specialist-Port-ElginHanover-ON/596011317/) | Scotiabank | Elgin, ON, CA | 2026-11-10 (0 skill terms in a 4,852-character JD)
 - [Technical Analyst, Disability Claims](https://ia.wd3.myworkdayjobs.com/Professional/job/Quebec-Quebec/Analyste-technique--rclamations-d-invalidit_JR10027538) | iA Financial | Toronto, Ontario | 2026-11-10 (0 skill terms in a 6,038-character JD)
-- [Functions - Internal Audit, Summer Analyst - Mississauga, ON 2027](https://citi.wd5.myworkdayjobs.com/2/job/Mississauga-Ontario-Canada/Functions---Internal-Audit--Summer-Analyst---Mississauga--ON-2027_26951380) | Citi | Mississauga Ontario Canada | 2026-11-10 (0 skill terms in a 5,905-character JD)
-- [Project Specialist, Assurance](https://bdo.wd3.myworkdayjobs.com/bdo/job/Calgary---8th-Ave-SW/Project-Specialist--Assurance_JR7351) | bdo | Calgary - 8th Ave SW | 2026-11-10 (0 skill terms in a 6,805-character JD)
-- [Hearing Aid Specialist or Audiologist](https://efuf.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/21834) | Efuf | PORT PERRY, ON, Canada | 2026-11-10 (0 skill terms in a 3,983-character JD)
-- [AP Analyst](https://jobs.smartrecruiters.com/signode/3743990016741176) | Signode | Halton Hills, ON, ca | 2026-11-09 (0 skill terms in a 4,961-character JD)
-- [Payroll Operations Specialist](https://job-boards.greenhouse.io/mercury/jobs/6240021004) | Mercury | San Francisco, CA, New York, NY, Portland, OR, or Remote within Canada or United States | 2026-11-09 (0 skill terms in a 4,476-character JD)
-- [Maintenance Specialist](https://salvationarmyca.wd3.myworkdayjobs.com/tsacb/job/NEWMARKET-ON/Maintenance-Specialist_JR115662) | salvationarmyca | NEWMARKET, ON | 2026-11-09 (0 skill terms in a 11,746-character JD)
 
 ## requires_enrollment: 68
 
@@ -103,8 +103,8 @@ _the JD asks for a currently enrolled student_
 - [Product Engineering (Prod Dev) Intern](https://analogdevices.wd1.myworkdayjobs.com/External/job/Canada-Ottawa/Product-Engineering--Prod-Dev--Intern_R267447) | Analog Devices | Canada, Ottawa | 2026-11-12
 - [AI Engineering Intern](https://tmx.wd3.myworkdayjobs.com/TMX_Careers/job/Toronto---100-Adelaide-St-W/AI-Engineering-Intern_R-6680) | TMX Group | Toronto - 100 Adelaide St W | 2026-11-12
 - [Full-time Student Success Specialist, School of Wellness, Public Safety, and Community Studies](https://algonquincollege.wd3.myworkdayjobs.com/CareerOpportunities/job/Ottawa-Campus/Full-time-Student-Success-Specialist_R177301) | Algonquin College | Ottawa Campus | 2026-11-12
-- [Electrical/I&C Engineering Student - Winter 2027](https://slihrms.wd3.myworkdayjobs.com/careers/job/CAONMississauga2251-Speakman-Drive/Electrical-I-C-Engineering-Student---Winter-2027_R-166896) | slihrms | CA.ON.Mississauga.2251 Speakman Drive | 2026-11-12
 - [Assembly & Test Co-op Student - Winter 2027](https://slihrms.wd3.myworkdayjobs.com/careers/job/CAONMississauga2251-Speakman-Drive/Assembly---Test-Co-op-Student---Winter-2027_R-167215) | slihrms | CA.ON.Mississauga.2251 Speakman Drive | 2026-11-12
+- [Electrical/I&C Engineering Student - Winter 2027](https://slihrms.wd3.myworkdayjobs.com/careers/job/CAONMississauga2251-Speakman-Drive/Electrical-I-C-Engineering-Student---Winter-2027_R-166896) | slihrms | CA.ON.Mississauga.2251 Speakman Drive | 2026-11-12
 - [Student Intern, Processes and Applications, Programmer](https://careers.celestica.com/job/Toronto-Student-Intern%2C-Processes-and-Applications%2C-Programmer-ON/1446546133/) | Celestica | Toronto, ON, CA | 2026-11-11
 - [Student Intern, Analytics Centre of Excellence](https://careers.celestica.com/job/Toronto-Student-Intern%2C-Analytics-Centre-of-Excellence-ON/1456506333/) | Celestica | Toronto, ON, CA | 2026-11-11
 - [AI/ML Layout Engineering Intern (Winter 2027)](https://ciena.wd5.myworkdayjobs.com/Careers/job/Ottawa/AI-ML-Layout-Engineering-Intern--Winter-2027-_R032102) | Ciena | Ottawa | 2026-11-11
@@ -127,6 +127,7 @@ _the JD asks for a currently enrolled student_
 - [IT Intern (8-month fixed term)](https://tricon.wd3.myworkdayjobs.com/tricon/job/Toronto-ON/IT-Intern--8-month-fixed-term-_JR104005) | tricon | Toronto, ON | 2026-11-09
 - [2027 Technology Assurance Summer Intern](https://eisneramper.wd1.myworkdayjobs.com/eisneramperearlycareers/job/Philadelphia/XMLNAME-2027-Tech-Assurance-Summer-Intern_Req-8555) | eisneramper | 2 Locations | 2026-11-09
 - [Geomatics Engineering Co-Op Student](https://careers.urbansystems.ca/application-form/?gh_jid=8199170003) | Urban Systems | Calgary, AB | 2026-11-09
+- [HRIS Analyst](https://careers-mpi.icims.com/jobs/7407/hris-analyst/job) | The Manitoba Public Insurance Corporation | Winnipeg, MB, CA | 2026-11-09
 - [Associate Technology Leadership Advancement Program - Summer 2027](https://cibc.wd3.myworkdayjobs.com/campus/job/Toronto-ON/Associate-Technology-Leadership-Advancement-Program---Summer-2027_2623078) | CIBC | Toronto, ON | 2026-11-09
 - [Student Intern, IT Business Application Development](https://careers.celestica.com/job/Toronto-Student-Intern%2C-IT-Business-Application-Development-ON/1455777233/) | Celestica | Toronto, ON, CA | 2026-11-09
 - [Commercial Banking Credit Analyst Internship, Summer 2027 (Co-op/Internship) - 4 months](https://bmo.wd3.myworkdayjobs.com/privileged/job/Toronto-ON-CAN/Commercial-Banking-Credit-Analyst-Internship--Summer-2027--Co-op-Internship----4-months_R260026697-3) | bmo | Toronto, ON, CAN | 2026-11-09
@@ -139,9 +140,8 @@ _the JD asks for a currently enrolled student_
 - [Student, Telephony Analyst, Co-op (Winter and Summer 2027)](https://sunlife.wd3.myworkdayjobs.com/campus/job/Toronto-Ontario/Student--Telephony-Analyst--Co-op--Winter-and-Summer-2027-_JR00129532) | sunlife | Toronto, Ontario | 2026-11-07
 - [Student, Associate DevOps Engineer (Winter 2027)](https://sunlife.wd3.myworkdayjobs.com/campus/job/Waterloo-Ontario/Student--Associate-DevOps-Engineer--Winter-2027-_JR00127798) | sunlife | Waterloo, Ontario | 2026-11-07
 - [Intern - Health Automation & Analytics, Provider Advisory - Campus 2027](https://guidehouse.wd1.myworkdayjobs.com/external/job/US---VA-Arlington/Intern---Health-Automation---Analytics--Provider-Advisory---Campus-2027_46421) | guidehouse | 4 Locations | 2026-11-07
-- [Electronics Engineering Technologist](https://avnan.bamboohr.com/careers/125) | avnan | Mississauga, Ontario | 2026-11-07
 
-## student_title_not_rescued: 48
+## student_title_not_rescued: 49
 
 _an intern / co-op title whose JD does not welcome recent graduates_
 
@@ -174,9 +174,9 @@ _an intern / co-op title whose JD does not welcome recent graduates_
 - [Software Design Engineer Intern](https://datarobot.wd1.myworkdayjobs.com/datarobot_external_careers/job/Boston-Massachusetts-US/Software-Design-Engineer-Intern_R-102764) | datarobot | 4 Locations | 2026-11-07
 - [Analytics Engineering & Measurement Student](https://olg.wd3.myworkdayjobs.com/careers-students/job/Toronto-Ontario-Canada/Analytics-Engineering---Measurement-Student_R26_00700) | olg | 2 Locations | 2026-11-07
 - [Logistics Analyst Internship - Summer 2027](https://uline.wd1.myworkdayjobs.com/uline_careers/job/Pleasant-Prairie-WI/Logistics-Operations-Internship---Summer-2027_R268539) | uline | 5 Locations | 2026-11-07
-- [Software Engineering Intern - Waterloo University - Winter Session](https://job-boards.greenhouse.io/brave/jobs/8360001) | Brave | Canada | 2026-11-07
 - [System Software Engineer Intern, Autonomous Vehicles - 2027](https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite/job/China-Shenzhen/System-Software-Engineer-Intern--Autonomous-Vehicles---2027_JR2028172) | NVIDIA | 2 Locations | 2026-11-07
 - [Co-op/Intern, Software Development - Winter 2027](https://job-boards.greenhouse.io/hootsuite/jobs/8360176) | Hootsuite | Vancouver, BC, Toronto, ON | 2026-11-06
+- [Software Engineering Intern - Waterloo University - Winter Session](https://job-boards.greenhouse.io/brave/jobs/8360001) | Brave | Canada | 2026-11-06
 - [Co-op/Intern, DevOps - Winter 2027](https://job-boards.greenhouse.io/hootsuite/jobs/8359242) | Hootsuite | Alberta, British Columbia | 2026-11-06
 - [Compliance/DSD Conversion Analyst - Co-op Student](https://myview.wd3.myworkdayjobs.com/paradox_careers/job/1-Presidents-Choice-Circle-Brampton-ON/Compliance-DSD-Conversion-Analyst---Co-op-Student_R2000729357) | myview | 1 Presidents Choice Circle, Brampton, ON | 2026-11-06
 - [Quality Assurance Specialist Intern - Android (May 2027 - 12 Months)](https://soti.wd3.myworkdayjobs.com/soti-next-gen/job/Mississauga-Canada--Meadowvale-Office-HQ/Quality-Assurance-Specialist-Intern---Android--May-2027---12-Months-_R10651) | soti | Mississauga, Canada – Meadowvale Office (HQ) | 2026-11-06
@@ -186,15 +186,17 @@ _an intern / co-op title whose JD does not welcome recent graduates_
 - [Engineering CoOp/Intern](https://flowserve.wd1.myworkdayjobs.com/applied/job/Leduc-Canada/CoOp-Intern_R-21051) | flowserve | Leduc, Canada | 2026-11-06
 - [Machine Learning Developer, Winter 2027 ( Co-op/Internship) - 4 months](https://bmo.wd3.myworkdayjobs.com/privileged/job/Toronto-ON-CAN/Machine-Learning-Developer--Winter-2027---Co-op-Internship----4-months_R260029620) | bmo | Toronto, ON, CAN | 2026-11-06
 
-## requires_french: 21
+## requires_french: 24
 
 _the JD requires French_
 
 - [Group Underwriting Analyst](https://manulife.wd3.myworkdayjobs.com/MFCJH_Jobs/job/Montreal-Quebec/Group-Underwriting-Analyst_JR26101555-1) | Manulife | CAN, Ontario, Waterloo, 500 King Street North | 2026-11-12
+- [Bilingual Credit Analyst](https://icebergfinance.bamboohr.com/careers/304) | icebergfinance | Toronto, Ontario, Canada | 2026-11-11
 - [Cost Estimator, Data center construction](https://jobs.bell.ca/ca/en/job/433117) | Bell | Regina, Saskatchewan | 2026-11-11
 - [Specialist - Agentic AI & Automation in Risk Management](https://intactfc.wd3.myworkdayjobs.com/intactfc/job/Montral-Quebec-CAN/Spcialiste---IA-Agentique---Automatisation-en-gestion-des-risques_R156069) | Intact | Toronto, Ontario, CAN | 2026-11-11
 - [Customer Technology Advisor – Zero Trust, Network & Edge](https://kyndryl.wd5.myworkdayjobs.com/KyndrylProfessionalCareers/job/Toronto-KCA51701-HQ/Customer-Technology-Advisor---Zero-Trust--Network---Edge_R-67461) | Kyndryl | Toronto (KCA51701) HQ | 2026-11-11
 - [Bilingual IT Support Analyst](https://jobs.smartrecruiters.com/emcocorporation/744000160951959) | EMCO Corporation | London, ON, ca | 2026-11-10
+- [Customer Experience Specialist - French Bilingual](https://job-boards.greenhouse.io/quince/jobs/5478361008) | Quince | Canada, Remote | 2026-11-10
 - [Bilingual Disability Claims Specialist](https://medaviehs.wd10.myworkdayjobs.com/medavie_external/job/Montreal-Qubec/Bilingual-Disability-Claims-Specialist_R-269783-1) | medaviehs | Newfoundland and Labrador | 2026-11-10
 - [Specialist, Designated Beauty Advisor (DBA) - Chantecaille](https://myview.wd3.myworkdayjobs.com/holt_renfrew_external_career_site/job/50-Bloor-Street-W-Toronto-ON/Specialist--Designated-Beauty-Advisor--DBA----Chantecaille_R2000731470-1) | myview | 50 Bloor Street W, Toronto, ON | 2026-11-10
 - [Specialist, Designated Beauty Advisor (DBA) - Clinique](https://myview.wd3.myworkdayjobs.com/holt_renfrew_external_career_site/job/50-Bloor-Street-W-Toronto-ON/Specialist--Designated-Beauty-Advisor--DBA----Clinique_R2000731476-1) | myview | 50 Bloor Street W, Toronto, ON | 2026-11-10
@@ -204,13 +206,14 @@ _the JD requires French_
 - [Specialist, Technical Network](https://jobs.bell.ca/ca/en/job/433574) | Bell | Toronto, Ontario | 2026-11-10
 - [Consultant, ICT Systems Engineering, Level 3, Epic](https://jobs.bell.ca/ca/en/job/433534) | Bell | Winnipeg, Manitoba | 2026-11-10
 - [IT Specialist](https://odellhvac.bamboohr.com/careers/331) | odellhvac | Ottawa, Ontario | 2026-11-09
-- [Bilingual Customer Experience Specialist - Canada 🇨🇦](https://jobs.ashbyhq.com/alan/5c71238c-2b3c-41c6-8ffc-bab9fe4944b3) | alan | Toronto, ON, Canada | 2026-11-09
 - [Business Systems Analyst (initial assignment Grand Central) – Full Time (1.0)](https://cheo.wd10.myworkdayjobs.com/external_site/job/Ottawa-ON/Business-Systems-Analyst--initial-assignment-Grand-Central----Full-Time--10-_JR8423) | cheo | Ottawa, ON | 2026-11-09
+- [Bilingual Customer Experience Specialist - Canada 🇨🇦](https://jobs.ashbyhq.com/alan/5c71238c-2b3c-41c6-8ffc-bab9fe4944b3) | Alan | Toronto, ON, Canada | 2026-11-09
 - [Distribution Support Specialist](https://ia.wd3.myworkdayjobs.com/professional/job/Calgary-Alberta/Distribution-Support-Specialist_JR10028276-2) | iA Financial | Calgary, Alberta | 2026-11-07
 - [Compliance Specialist - Calgary, AB or Langley, BC](https://optiom.bamboohr.com/careers/174) | optiom | Calgary, Alberta | 2026-11-07
 - [Industry Development Specialist - Canada](https://nvidia.wd5.myworkdayjobs.com/nvidiaexternalcareersite/job/Canada-Remote/Industry-Development-Specialist---Canada_JR2023420) | NVIDIA | Canada, Remote | 2026-11-07
 - [QA Analyst, Mortgages- Analyste AQ, Hypothèques](https://ats.rippling.com/nestogroup/jobs/1069e664-495c-4f5d-81a1-150d7fb41fcf) | Nesto Group(e) | Canada (Remote) | 2026-11-06
 - [Mortgage Specialist Associate](https://bmo.wd3.myworkdayjobs.com/external/job/Ottawa-ON-CAN/Mortgage-Specialist-Associate_R260030927) | BMO | Ottawa, ON, CAN | 2026-11-06
+- [Bilingual Client Care Specialist](https://nomoredebts.bamboohr.com/careers/159) | nomoredebts | Ottawa, Ontario, Canada | 2026-11-06
 
 ## location_quebec_only: 20
 
@@ -257,11 +260,12 @@ _"N Locations", the description could not be read and the place in the link is n
 - [Versa Network Engineer](https://bah.wd1.myworkdayjobs.com/bah_jobs/job/Fort-Meade-MD/Versa-Network-Engineer_R0252120) | bah | 9 Locations | 2026-11-06
 - [Software Engineer - Java, Paze](https://earlywarning.wd5.myworkdayjobs.com/earlywarningcareers/job/Scottsdale/Software-Engineer---Java--Paze_REQ2026933) | earlywarning | 3 Locations | 2026-11-06
 
-## security_clearance: 10
+## security_clearance: 11
 
 _the JD requires a security clearance_
 
 - [Human Factors Engineering Analyst](https://jobs.smartrecruiters.com/gdmsi/744000161082575) | General Dynamics Missions System International | Ottawa, ON, ca | 2026-11-11
+- [AJISS - Junior Systems Engineer](https://thales.wd3.myworkdayjobs.com/Careers/job/Victoria---905-Ellery/AJISS---Junior-Systems-Engineer_R0345638-1) | Thales | Victoria - 905 Ellery | 2026-11-11
 - [Platform Developer](https://jobs.smartrecruiters.com/CanadianBankNoteCompany/744000160956665) | Canadian Bank Note Company | Ottawa, ON, ca | 2026-11-10
 - [System Engineer, Air & Naval](https://jobs.smartrecruiters.com/gdmsi/744000160954879) | General Dynamics Missions System International | Cole Harbour, NS, ca | 2026-11-10
 - [Management Information Systems (MIS) Analyst](https://www.jobbank.gc.ca/jobsearch/jobposting/50704581) | City of Calgary | Calgary, AB | 2026-11-10
@@ -270,7 +274,13 @@ _the JD requires a security clearance_
 - [Technical Service Analyst](https://boeing.wd1.myworkdayjobs.com/external_subsidiary/job/CAN---Ottawa-Canada/Technical-Service-Analyst_JR2026527564) | boeing | CAN - Ottawa, Canada | 2026-11-09
 - [Graphic Designer, Web](https://www.jobbank.gc.ca/jobsearch/jobposting/50697757) | Schneider's Computing Ltd. | Mitchell, ON | 2026-11-09
 - [Power Engineer - 4th Class](https://fa-evcg-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/234205) | Fa Evcg Saasfaprod1 | Brooks, AB, Canada | 2026-11-09
-- [IT Systems Administrator](https://geospectrum.bamboohr.com/careers/316) | geospectrum | Port Coquitlam, British Columbia | 2026-11-07
+- [IT Systems Administrator](https://geospectrum.bamboohr.com/careers/316) | geospectrum | Port Coquitlam, British Columbia | 2026-11-06
+
+## location_ats_not_canada: 1
+
+_the employer's own location list has no Canadian place_
+
+- [AI Labs Rotational Fellowship, Emerging Talent](https://salesforce.wd12.myworkdayjobs.com/en-US/Futureforce_NewGradRoles/job/AI-Labs-Rotational-Fellowship--Emerging-Talent_JR367643) | salesforce | Canada | 2026-11-12
 
 ## weak_title_no_jd: 1
 
