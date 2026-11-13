@@ -20,6 +20,7 @@ from urllib.parse import quote
 
 import yaml
 
+from scanner.net import http_get
 from scanner.normalize import clean_title, from_unix, parse_iso
 from scanner.sources import icims, phenom, successfactors
 
@@ -255,6 +256,7 @@ def _canada_facet(facets) -> tuple[str, list[str]] | None:
 
 
 WORKDAY_DETAIL_DATES_MAX = 150     # job details read for their date on a tenant whose list shows none
+DETAIL_PAUSE = 0.3
 
 
 def _date_undated_workday(board: Board, postings: list[dict], client, want, started: float, budget: float) -> None:
@@ -266,12 +268,14 @@ def _date_undated_workday(board: Board, postings: list[dict], client, want, star
     for j in postings:
         if read >= WORKDAY_DETAIL_DATES_MAX or time.monotonic() - started > budget:
             break
-        if j.get("postedOn") or not j.get("externalPath") or (want and not want(j.get("title") or "")):
+        if j.get("postedOn") or not j.get("externalPath") or (
+                want and not want(j.get("title") or "", _workday_where(j, False))):
             continue
         read += 1
-        try:
-            info = (client.get_json(f"https://{host}/wday/cxs/{tenant}/{site}{j['externalPath']}", board.label)
-                    .get("jobPostingInfo") or {})
+        time.sleep(DETAIL_PAUSE)
+        try:                                  # one quick try: a slow detail must not hold the whole run up
+            info = (http_get(f"https://{host}/wday/cxs/{tenant}/{site}{j['externalPath']}", retries=0, timeout=15)
+                    .json().get("jobPostingInfo") or {})
         except Exception:
             continue
         if info.get("startDate"):
