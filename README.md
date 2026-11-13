@@ -85,14 +85,14 @@ log). Pick `command` and write `args` the way you would in a terminal:
    | Link | URL |
    | Source | Select: Workday, Greenhouse, Lever, Ashby, BambooHR, Paylocity, Simplify, Watchlist. Optional extras: YC, Built In, Bay Street Oracle, HN, SmartRecruiters |
    | Fit % | Number, format **Percent** |
-   | Tags | Multi-select, options: New grad, Entry level, Asks 2 yrs, Needs P.Eng, Talent pool, No description, Unclear fit |
+   | Tags | Multi-select, options: Internship, Students only, New grad, Entry level, Asks 2 yrs, Needs P.Eng, Talent pool, No description, Unclear fit |
    | Area | Select (optional), options in this order: BC, Remote, Alberta, Ontario, Canada. Sorting by Area puts BC first |
    | Location | Text (optional: filled when the column exists) |
    | Posted | Date (optional): the posting date, so the Feed sorts newest first. Rows written before the column existed get it from the date in Company on the next run |
    | Pay | Text (optional): the pay the posting states, e.g. "$70,000–$85,000 a year" (empty when it states none) |
    | JD | Text |
-   | Interested | Checkbox |
-   | Apply | Checkbox |
+   | I | Checkbox (Interested) |
+   | A | Checkbox (Apply) |
    | done-del | Checkbox |
 
 2. **Create a Notion integration** (an internal connection) at <https://www.notion.so/profile/integrations>
@@ -109,11 +109,13 @@ log). Pick `command` and write `args` the way you would in a terminal:
    After that the schedule takes over. The workflow commits to the branch it runs on; if that branch is protected,
    let GitHub Actions push to it.
 
-**Reading the Feed.** Sort by **Area** (BC, then remote jobs open to all of Canada, then Alberta and Ontario), then
-**Fit %**. Jobs only in other provinces are not written at all. **Tags**, at most two:
+**Reading the Feed.** The Feed's **Info** tab repeats this key in one line. Sort by **Area** (BC, then remote jobs open
+to all of Canada, then Alberta and Ontario), then **Fit %**. Jobs only in other provinces are not written at all. **Tags**, at most two:
 
 | Tag | Means |
 |---|---|
+| Internship | an intern or co-op role |
+| Students only | the posting requires current enrollment |
 | New grad | the posting asks for new or recent graduates |
 | Entry level | it says junior, entry level or 0-2 years |
 | Asks 2 yrs | it asks for 2 years of experience: apply if the rest fits |

@@ -364,7 +364,9 @@ def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer,
         if cfg.get("language", {}).get("drop_french_required_jd", True) and jd_rules.requires_french(jd):
             return R_FRENCH
         if jd_rules.requires_enrollment(jd):
-            return R_ENROLLMENT
+            if not (job.student and jdcfg.get("keep_student_roles")):
+                return R_ENROLLMENT
+            job.signals.append(jd_rules.STUDENTS_ONLY)
         if jd_rules.requires_clearance(jd):
             return R_CLEARANCE
         if jd_rules.requires_us_authorization(jd) and filters.canadian_location(job.location) is None:
@@ -435,7 +437,18 @@ def enrich(candidates: list[Job], held: list[Job], cfg: dict, filters: Filters, 
         job.score = _score(job, cfg, boost_re)
         res.kept.append(job)
 
+    keep_students = jdcfg.get("keep_student_roles", False)
     for job in held:
+        if keep_students:                       # the owner wants internships and co-ops too, tagged as such
+            reason = apply_rules(job, cfg, filters, scorer, clusters)
+            if reason:
+                res.drop(reason, job)
+                continue
+            job.signals.insert(0, jd_rules.INTERN)
+            res.rescued += 1
+            job.score = _score(job, cfg, boost_re)
+            res.kept.append(job)
+            continue
         if job.jd_status != "ok":
             res.drop(R_STUDENT_NO_JD, job)
             continue

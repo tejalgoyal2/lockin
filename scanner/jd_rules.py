@@ -286,6 +286,8 @@ TWO_YEARS = "2+ yrs"                 # requirement is exactly 2 years (kept only
 LOW_SIGNAL = "low signal"            # JD found, but too few tech terms to trust Fit %
 JD_UNAVAILABLE = "jd unavailable"    # no JD text could be fetched
 PENG = "P.Eng req"                   # the JD requires a P.Eng licence (kept, never dropped)
+INTERN = "internship"                # an intern / co-op / student role (kept when jd.keep_student_roles)
+STUDENTS_ONLY = "students only"      # ... whose posting requires current enrollment
 POOL = "talent pool"                 # evergreen / talent-pool posting, not a current opening (kept, never dropped)
 
 

@@ -200,7 +200,7 @@ boards:
   - {ats: icims,          slug: careersen-mackenzieinvestments.icims.com,  name: Mackenzie Investments, location: "Toronto, ON"}
   - {ats: successfactors, slug: jobs.descartes.com,                        name: Descartes}
   - {ats: successfactors, slug: jobs.wawanesa.com,                         name: Wawanesa}
-  - {ats: successfactors, slug: careers.sap.com,                           name: SAP}
+  - {ats: smartrecruiters, slug: SAPITBusinessSysteme,                     name: SAP}   # moved from careers.sap.com (4 Canadian jobs there) in 2026
   - {ats: workday,        slug: foresters.wd3/ForestersFinancialCareers,   name: Foresters}
   - {ats: workday,        slug: agf.wd3/AGF_Careers,                       name: AGF}
   - {ats: workday,        slug: aig.wd1/aig,                               name: AIG}

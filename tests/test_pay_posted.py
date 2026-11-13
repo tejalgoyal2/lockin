@@ -140,3 +140,17 @@ def test_the_area_is_written_and_tags_read_back_under_either_name():
     assert "Area" not in nf.build_properties(job(area=""), feed, {})[0]
     assert nf.has_tag(["No description"], "jd unavailable") and nf.has_tag(["jd unavailable"], "jd unavailable")
     assert not nf.has_tag(["Entry level"], "jd unavailable")
+
+
+def test_simplify_internship_rows_are_not_new_grad(filters, monkeypatch):
+    from scanner.pipeline import run_stream
+    from scanner.sources import simplify
+    now = datetime(2026, 11, 12, tzinfo=timezone.utc)
+    row = {"company_name": "Acme", "title": "Software Developer", "locations": ["Vancouver, BC, Canada"],
+           "url": "https://x/1", "date_posted": int(now.timestamp()), "active": True, "is_visible": True, "category": "Software"}
+    lists = {"new": [row], "intern": [{**row, "url": "https://x/2", "title": "Software Developer Intern"}]}
+    monkeypatch.setattr(simplify, "http_get", lambda url, **kw: type("R", (), {"json": lambda self: list(lists[url])})())
+    rows = simplify.fetch({"listings_url": "new", "internships_url": "intern"})
+    jobs, _, held = run_stream(rows, simplify.raw_fields, filters, now, since_days=7)
+    assert [j.new_grad for j in jobs] == [True] and [(j.title, j.new_grad, j.student) for j in held] == [
+        ("Software Developer Intern", False, True)]
