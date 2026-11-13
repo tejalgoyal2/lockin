@@ -2502,6 +2502,14 @@
    "gaps": [],
    "title": "Front End Crew (Cattle Processor)"
   },
+  "1587c964d7dcdefb00876ca3d5048bb97395f73a": {
+   "company": "Altera",
+   "date": "2026-11-13",
+   "gaps": [
+    "unit testing"
+   ],
+   "title": "Quartus Compiler Software - Intern"
+  },
   "158975c3108ebb582256e71d057d281ff2cf78a5": {
    "company": "Canadian Tire",
    "date": "2026-11-13",
@@ -10639,6 +10647,12 @@
    ],
    "title": "Analytical Data Science Programmer"
   },
+  "59bb54f94e4cbbd18826fd90326eea13264c5cef": {
+   "company": "UBC",
+   "date": "2026-11-13",
+   "gaps": [],
+   "title": "Systems Support/Data Analyst"
+  },
   "59d2b377aee218ead9530cbbd1883d745d0838a1": {
    "company": "Brave",
    "date": "2026-11-07",
@@ -18187,6 +18201,12 @@
    ],
    "title": "Professional Solution Development Engineer"
   },
+  "96a0b9df91d79b75aee702fd9ddeb20b690bd4be": {
+   "company": "iA Financial Group",
+   "date": "2026-11-13",
+   "gaps": [],
+   "title": "Claims Analyst"
+  },
   "96b5a08eaa0309fb3c08b431b4fd60e259670c09": {
    "company": "Thomson Reuters",
    "date": "2026-11-13",
@@ -25042,6 +25062,12 @@
    ],
    "title": "Developer Intern, Vault Team - Winter 2027"
   },
+  "d291acaa6a0e8659265f6f63598655cd18734c79": {
+   "company": "Wealthsimple",
+   "date": "2026-11-13",
+   "gaps": [],
+   "title": "Specialist, People Operations (12 month contract)"
+  },
   "d29cf0a8a2fbd30ec93c6f8a52c25193db5ad02f": {
    "company": "Salesforce",
    "date": "2026-10-20",
@@ -26295,6 +26321,12 @@
     "GCP"
    ],
    "title": "Junior NLP Data Scientist"
+  },
+  "dd699c3d8048bfc722ec55731977883b3304fc20": {
+   "company": "Euro Tile & Stone",
+   "date": "2026-11-13",
+   "gaps": [],
+   "title": "Cybersecurity Consultant"
   },
   "dd6f3f59c763f1c3e725c1ea6f85c688ad7a329a": {
    "company": "Wealthsimple",
