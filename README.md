@@ -109,7 +109,9 @@ log). Pick `command` and write `args` the way you would in a terminal:
    After that the schedule takes over. The workflow commits to the branch it runs on; if that branch is protected,
    let GitHub Actions push to it.
 
-**Reading the Feed.** The Feed's **Info** tab repeats this key in one line. Sort by **Area** (BC, then remote jobs open
+**Reading the Feed.** Every row has a **Verdict** (Apply first: your skills and level fit; Worth a look: a partial
+match or 2 years asked; Long shot: few of your skills, a P.Eng, or no current opening) and a **Why** line (your skills
+the posting names, and what it asks that you lack). The Feed's **Info** tab repeats this key in one line. Sort by **Area** (BC, then remote jobs open
 to all of Canada, then Alberta and Ontario), then **Fit %**. Jobs only in other provinces are not written at all. **Tags**, at most two:
 
 | Tag | Means |

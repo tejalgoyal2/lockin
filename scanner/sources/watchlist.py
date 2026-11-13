@@ -257,6 +257,7 @@ def _canada_facet(facets) -> tuple[str, list[str]] | None:
 
 WORKDAY_DETAIL_DATES_MAX = 150     # job details read for their date on a tenant whose list shows none
 DETAIL_PAUSE = 0.3
+RETRY_PAUSE = 30                   # seconds before the boards that failed are tried once more
 
 
 def _date_undated_workday(board: Board, postings: list[dict], client, want, started: float, budget: float) -> None:
@@ -370,8 +371,16 @@ def fetch_all(boards: Iterable[Board], client, *, workers: int = 6, now: datetim
         for board, recs, err in pool.map(one, boards):
             if err:
                 failed.append((board, err))
-                log.warning("watchlist: %s/%s not read (%s)", board.ats, board.slug, err)
             records += recs
+    if failed:                                # Workday's servers come and go (5xx): one more try at the end of the read
+        time.sleep(RETRY_PAUSE)
+        retried, failed = [b for b, _ in failed], []
+        with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
+            for board, recs, err in pool.map(one, retried):
+                if err:
+                    failed.append((board, err))
+                    log.warning("watchlist: %s/%s not read (%s)", board.ats, board.slug, err)
+                records += recs
     return records, failed
 
 
