@@ -154,3 +154,20 @@ def test_simplify_internship_rows_are_not_new_grad(filters, monkeypatch):
     jobs, _, held = run_stream(rows, simplify.raw_fields, filters, now, since_days=7)
     assert [j.new_grad for j in jobs] == [True] and [(j.title, j.new_grad, j.student) for j in held] == [
         ("Software Developer Intern", False, True)]
+
+
+def test_a_successfactors_page_states_its_own_posting_date():
+    from scanner.sources import successfactors as sf
+    assert sf.posted_on_page('<meta itemprop="datePosted" content="Tue Oct 20 00:00:00 UTC 2026">') == \
+        datetime(2026, 10, 20, tzinfo=timezone.utc)
+    assert sf.posted_on_page('<span itemprop="datePosted" content="2026-11-09">') == datetime(2026, 11, 9, tzinfo=timezone.utc)
+    assert sf.posted_on_page("<html></html>") is None
+
+
+def test_workday_rows_without_location_text_use_their_bullets_or_the_canada_filter():
+    from scanner.sources import watchlist as wl
+    assert wl._workday_where({"bulletFields": ["Toronto", "Ontario", "JREQ204795"]}, True) == "Toronto ; Ontario ; Canada"
+    assert wl._workday_where({"bulletFields": ["Ann Arbor; Toronto", "Michigan; Ontario", "JREQ1"]}, False) \
+        == "Ann Arbor; Toronto ; Michigan; Ontario"
+    assert wl._workday_where({}, True) == "Canada" and wl._workday_where({}, False) == ""
+    assert wl._workday_where({"locationsText": "2 Locations"}, True) == "2 Locations"

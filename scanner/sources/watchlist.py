@@ -195,7 +195,20 @@ def workday_posted(text: str | None, now: datetime) -> datetime | None:
     return None
 
 
-def parse_workday(board: Board, postings: list[dict], now: datetime) -> list[dict]:
+def _workday_where(j: dict, canada: bool) -> str:
+    """locationsText; some tenants (Thomson Reuters) leave it out and list the places in bulletFields instead
+    (["Toronto", "Ontario", "JREQ204795"], ["Ann Arbor; Frisco; Toronto", "Michigan; Texas; Ontario", ...]). A board read
+    with its Canada country filter is Canadian whatever the row says."""
+    where = j.get("locationsText") or ""
+    if not where:
+        where = " ; ".join(b for b in (j.get("bulletFields") or [])
+                           if isinstance(b, str) and b.strip() and not re.search(r"\d", b))
+    if canada and where and "canada" not in where.lower():
+        where = f"{where} ; Canada" if not re.match(r"^\s*\d+\s+Locations?\s*$", where, re.I) else where
+    return _where(where or ("Canada" if canada else ""))
+
+
+def parse_workday(board: Board, postings: list[dict], now: datetime, canada: bool = False) -> list[dict]:
     host, _tenant, site = board.workday
     base = {"company": board.slug.split(".")[0], "company_name": board.name, "source": board.label}
     out = []
@@ -204,7 +217,8 @@ def parse_workday(board: Board, postings: list[dict], now: datetime) -> list[dic
         if not (j.get("title") and path):
             continue
         out.append({**base, "title": j["title"], "url": f"https://{host}/{site}{path}",
-                    "location": _where(j.get("locationsText")), "first_seen": workday_posted(j.get("postedOn"), now)})
+                    "location": _workday_where(j, canada),
+                    "first_seen": _ts(j["_start"]) if j.get("_start") else workday_posted(j.get("postedOn"), now)})
     return out
 
 
@@ -240,7 +254,33 @@ def _canada_facet(facets) -> tuple[str, list[str]] | None:
     return None
 
 
-def _fetch_workday(board: Board, client, now: datetime, budget: float = BOARD_SECONDS) -> list[dict]:
+WORKDAY_DETAIL_DATES_MAX = 150     # job details read for their date on a tenant whose list shows none
+
+
+def _date_undated_workday(board: Board, postings: list[dict], client, want, started: float, budget: float) -> None:
+    """Some tenants (Brookfield, Zoom) leave postedOn out of the list, so every posting would count as undated and be
+    skipped. The posting's own detail has its start date: read it, only for titles the owner could want (`want`), within
+    the board's time budget."""
+    host, tenant, site = board.workday
+    read = 0
+    for j in postings:
+        if read >= WORKDAY_DETAIL_DATES_MAX or time.monotonic() - started > budget:
+            break
+        if j.get("postedOn") or not j.get("externalPath") or (want and not want(j.get("title") or "")):
+            continue
+        read += 1
+        try:
+            info = (client.get_json(f"https://{host}/wday/cxs/{tenant}/{site}{j['externalPath']}", board.label)
+                    .get("jobPostingInfo") or {})
+        except Exception:
+            continue
+        if info.get("startDate"):
+            j["_start"] = info["startDate"]
+        elif info.get("postedOn"):
+            j["postedOn"] = info["postedOn"]
+
+
+def _fetch_workday(board: Board, client, now: datetime, budget: float = BOARD_SECONDS, want=None) -> list[dict]:
     """Canada only where the tenant has a country facet (a 5,000-posting employer costs a few requests); otherwise
     the whole board, capped. Facet ids differ per tenant: the first (unfiltered) answer lists them."""
     first = client.post_json(board.url, board.label, json={"appliedFacets": {}, "limit": 1, "offset": 0, "searchText": ""})
@@ -260,7 +300,9 @@ def _fetch_workday(board: Board, client, now: datetime, budget: float = BOARD_SE
         postings += got
         if len(got) < WORKDAY_PAGE:
             break
-    return parse_workday(board, postings, now)
+    if postings and not any(j.get("postedOn") for j in postings):
+        _date_undated_workday(board, postings, client, want, started, budget)
+    return parse_workday(board, postings, now, canada=found is not None)
 
 
 def _fetch_smartrecruiters(board: Board, client) -> list[dict]:
@@ -275,9 +317,9 @@ def _fetch_smartrecruiters(board: Board, client) -> list[dict]:
 
 
 def fetch_board(board: Board, client, *, now: datetime | None = None, seed_ashby: Callable[[str, dict], None] | None = None,
-                budget: float = BOARD_SECONDS) -> list[dict]:
+                budget: float = BOARD_SECONDS, want=None) -> list[dict]:
     """The board's postings; one with no location is given the entry's `location` (a city's own site lists none)."""
-    records = _fetch_board(board, client, now=now, seed_ashby=seed_ashby, budget=budget)
+    records = _fetch_board(board, client, now=now, seed_ashby=seed_ashby, budget=budget, want=want)
     if board.where:
         for rec in records:
             rec["location"] = rec.get("location") or board.where
@@ -285,10 +327,10 @@ def fetch_board(board: Board, client, *, now: datetime | None = None, seed_ashby
 
 
 def _fetch_board(board: Board, client, *, now: datetime | None = None, seed_ashby: Callable[[str, dict], None] | None = None,
-                 budget: float = BOARD_SECONDS) -> list[dict]:
+                 budget: float = BOARD_SECONDS, want=None) -> list[dict]:
     """`budget`: seconds a Workday board may take (it is read newest first); a probe asks for less than a full run."""
     if board.ats == "workday":
-        return _fetch_workday(board, client, now or datetime.now(timezone.utc), budget)
+        return _fetch_workday(board, client, now or datetime.now(timezone.utc), budget, want)
     if board.ats == "smartrecruiters":
         return _fetch_smartrecruiters(board, client)
     if board.ats == "phenom":
@@ -304,7 +346,7 @@ def _fetch_board(board: Board, client, *, now: datetime | None = None, seed_ashb
 
 
 def fetch_all(boards: Iterable[Board], client, *, workers: int = 6, now: datetime | None = None,
-              seed_ashby: Callable[[str, dict], None] | None = None) -> tuple[list[dict], list[tuple[Board, str]]]:
+              seed_ashby: Callable[[str, dict], None] | None = None, want=None) -> tuple[list[dict], list[tuple[Board, str]]]:
     """Every board's records, plus (board, reason) for each board that could not be read. One dead board (renamed,
     closed, a 5xx) never stops the others."""
     boards = list(boards)
@@ -312,7 +354,7 @@ def fetch_all(boards: Iterable[Board], client, *, workers: int = 6, now: datetim
     def one(board: Board):
         started = time.monotonic()
         try:
-            return board, fetch_board(board, client, now=now, seed_ashby=seed_ashby), ""
+            return board, fetch_board(board, client, now=now, seed_ashby=seed_ashby, want=want), ""
         except Exception as exc:                            # network, HTTP error, bad JSON: report and carry on
             return board, [], f"{type(exc).__name__}: {str(exc)[:120]}"
         finally:

@@ -168,6 +168,7 @@ location:
   # Province suffixes, case-sensitive so ", on" in prose does not match.
   include_cs:
     - ',\s*(ON|BC|AB|QC|MB|SK|NS|NB|NL|PE|PEI|YT|NT|NU)\b'
+    - '\(CAN\)|\bCAN\b(?!\s*-?\s*\d)'     # "KOHO (CAN)", "CAN - Remote"
   # Known false positives. Matching spans are removed from the string BEFORE the
   # include test, so "Seattle, WA; Toronto, ON" still passes but "Vancouver, WA" does not.
   # "United States"/"USA" need no entry: a string with no Canadian location left is dropped.
