@@ -10,6 +10,7 @@ STAGE_LABELS = {
     "fresh": "first seen within window",
     "location": "Canadian location",
     "not_quebec_only": "not Quebec-only",
+    "wanted_area": "BC, Alberta, Ontario or remote",
     "company": "not on blocklist",
     "language": "not French-only",
     "title_match": "title matches tech roles",

@@ -40,15 +40,25 @@ EXPECTED_TYPES = {
 }
 # Properties the scanner fills when the Feed has them and leaves alone when it does not, so a new column can be
 # added in Notion before or after the code that writes it ships.
-OPTIONAL_TYPES = {"location": "rich_text", "recruiter": "url", "manager": "url", "posted": "date", "pay": "rich_text"}
+OPTIONAL_TYPES = {"location": "rich_text", "recruiter": "url", "manager": "url", "posted": "date", "pay": "rich_text",
+                  "area": "select"}
+AREA_OPTIONS = ("BC", "Remote", "Alberta", "Ontario", "Canada")     # the owner's order; Notion sorts a select this way
 SOURCE_OPTIONS = ("Workday", "Greenhouse", "Lever", "Ashby", "BambooHR", "Paylocity", "Simplify", "Watchlist")
 # Labels of the job sites. Used when the Feed's Source column has the option; a Feed without it leaves Source empty
 # for those rows (they are not required, so the sites can ship before the options exist).
 SITE_SOURCE_OPTIONS = SITE_SOURCES
 # Optional too: a watchlist ATS added after the Feed was built. Without the option in Notion, Source stays empty.
 EXTRA_SOURCE_OPTIONS = ("SmartRecruiters", "Phenom", "SuccessFactors", "iCIMS")
-SIGNAL_OPTIONS = ("new grad", "recent graduate", "0-2 years", "entry level", "junior", "low signal",
-                  "jd unavailable")
+# What each tag says in the Feed. The scanner's own names ("low signal", "jd unavailable") meant nothing to the owner.
+TAG_LABELS = {"new grad": "New grad", "recent graduate": "New grad", "0-2 years": "Entry level",
+              "entry level": "Entry level", "junior": "Entry level", "2+ yrs": "Asks 2 yrs", "P.Eng req": "Needs P.Eng",
+              "talent pool": "Talent pool", "jd unavailable": "No description", "low signal": "Unclear fit"}
+SIGNAL_OPTIONS = tuple(dict.fromkeys(TAG_LABELS.values()))
+
+
+def has_tag(tags, signal: str) -> bool:
+    """A Feed row carries this signal, under its Feed label or (rows written before the labels) its own name."""
+    return signal in tags or TAG_LABELS.get(signal) in tags
 
 
 _UUID = re.compile(r"[0-9a-fA-F]{8}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{12}")
@@ -248,7 +258,7 @@ def display_signals(signals: list[str]) -> list[str]:
     rest = [s for s in signals if s not in LEVEL_SIGNALS]
     rank = lambda s: CAUTION_SIGNALS.index(s) if s in CAUTION_SIGNALS else len(CAUTION_SIGNALS)
     caution = min(rest, key=rank) if rest else None
-    return [s for s in (level, caution) if s]
+    return [TAG_LABELS.get(s, s) for s in (level, caution) if s]
 
 
 def build_properties(job: Job, feed: Feed, overrides: dict[str, str]) -> tuple[dict, str]:
@@ -271,6 +281,8 @@ def build_properties(job: Job, feed: Feed, overrides: dict[str, str]) -> tuple[d
         props[n["location"]] = {"rich_text": _rich(job.location[:200])}
     if feed.has("posted"):          # a real date, so the Feed sorts newest first (the tag in Company is text)
         props[n["posted"]] = {"date": {"start": job.first_seen.date().isoformat()}}
+    if feed.has("area") and job.area in AREA_OPTIONS:
+        props[n["area"]] = {"select": {"name": job.area}}
     if feed.has("pay"):
         pay = job.pay or pay_text.from_text(job.jd)
         if pay:

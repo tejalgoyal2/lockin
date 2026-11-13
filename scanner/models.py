@@ -20,6 +20,7 @@ class Job:
     relocation: str = ""             # Workday id that stopped resolving: "matched" (url replaced) or "no_match"
     drop_note: str = ""              # why a JD rule dropped it, in a few words (reports/dropped.md)
     location_dropped: bool = False   # dropped in phase 2 for its resolved locations (not a Canadian job)
+    area: str = ""                   # BC / Remote / Alberta / Ontario / Canada (filters.area): the Feed's Area column
     pay: str = ""                    # pay as the source gives it as data ("$70,000–$85,000 a year"); else read from the JD
     # phase 2 (filled by scanner.enrich)
     jd: str = ""

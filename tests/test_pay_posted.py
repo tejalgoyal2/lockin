@@ -120,3 +120,23 @@ def test_a_bare_remote_row_in_canada_reads_remote_canada():
 def test_talent_pool_postings_are_flagged(text, want):
     from scanner import jd_rules
     assert jd_rules.talent_pool(text) is want
+
+
+def test_only_wanted_provinces_reach_the_feed(filters):
+    from scanner.pipeline import run_stream
+    from scanner.sources import listing
+    now = datetime(2026, 11, 12, tzinfo=timezone.utc)
+    recs = [{"company": "acme", "title": "Software Developer", "location": where, "url": f"https://x/{i}",
+             "source": "Job Bank", "first_seen": now} for i, where in
+            enumerate(["Regina, SK", "Regina, SK; Vancouver, BC", "Calgary, AB", "Winnipeg, MB"])]
+    jobs, stages, _ = run_stream(recs, listing.raw_fields, filters, now, since_days=7)
+    assert sorted((j.area, j.location) for j in jobs) == [("Alberta", "Calgary, AB"), ("BC", "Vancouver, BC")]
+    assert dict(stages)["wanted_area"] == 2
+
+
+def test_the_area_is_written_and_tags_read_back_under_either_name():
+    feed = nf.Feed("ds", {**FEED.names, "area": "Area"}, ids={"area": "p_area"})
+    assert nf.build_properties(job(area="BC"), feed, {})[0]["Area"] == {"select": {"name": "BC"}}
+    assert "Area" not in nf.build_properties(job(area=""), feed, {})[0]
+    assert nf.has_tag(["No description"], "jd unavailable") and nf.has_tag(["jd unavailable"], "jd unavailable")
+    assert not nf.has_tag(["Entry level"], "jd unavailable")

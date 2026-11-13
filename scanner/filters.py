@@ -58,6 +58,9 @@ class Filters:
     title_exclude_weak: list = field(default_factory=list)
     student_season: list = field(default_factory=list)
     grad_signal: list = field(default_factory=list)
+    areas: list = field(default_factory=list)      # [(area name, [patterns])] in the owner's order of preference
+    other_area: list = field(default_factory=list)  # patterns for a province the owner does not want
+    drop_other_areas: bool = False
 
     @classmethod
     def from_config(cls, cfg: dict) -> "Filters":
@@ -87,6 +90,11 @@ class Filters:
             title_exclude_phrases=[re.compile(r"\b" + re.escape(fold(p)) + r"\b") for p in title.get("exclude_phrases") or []],
             title_exclude_weak=_prefix(title.get("exclude_if_weak")),
             french_first=re.compile(lang.get("french_first_segment_pattern", "$^"), re.IGNORECASE),
+            areas=[(name, _compile(spec) + _compile((loc.get("areas") or {}).get(f"{name}_cs"), 0))
+                   for name, spec in (loc.get("areas") or {}).items()
+                   if not name.endswith("_cs") and name != "other" and isinstance(spec, list)],
+            other_area=_compile((loc.get("areas") or {}).get("other")) + _compile((loc.get("areas") or {}).get("other_cs"), 0),
+            drop_other_areas=bool(loc.get("drop_other_areas", False)),
             title_foreign=([re.compile(rf"(?<![\w.])(?:{p})(?![\w])", re.IGNORECASE) for p in loc.get("title_foreign") or []]
                            + [re.compile(rf"(?<![\w.])(?:{p})(?![\w])") for p in loc.get("title_foreign_cs") or []]),
         )
@@ -120,6 +128,29 @@ class Filters:
         for pat in self.country_only:                    # "Canada" alone does not leave Quebec
             rest = pat.sub(" ", rest)
         return not _any(self.loc_include, rest)
+
+    AREA_ORDER = ("BC", "Remote", "Alberta", "Ontario", "Canada", "Other")
+
+    def _part_area(self, part: str) -> str:
+        """One Canadian place -> its area. A named province wins over "Remote" ("Remote, Ontario" is Ontario)."""
+        for name, pats in self.areas:
+            if name != "Remote" and _any(pats, part):
+                return name
+        if _any(self.other_area, part):
+            return "Other"
+        remote = dict(self.areas).get("Remote") or []
+        return "Remote" if _any(remote, part) else "Canada"
+
+    def area(self, location: str) -> tuple[str, str | None]:
+        """(area, the place it comes from) for the Feed's Area column: the best of the job's Canadian places in the
+        owner's order (BC, Remote, Alberta, Ontario, Canada). ("Other", part) when every place is in a province the
+        owner does not want; ("", None) when nothing in it is Canadian."""
+        best, where = "", None
+        for part in self._canadian_parts(location):
+            name = self._part_area(part)
+            if not best or self.AREA_ORDER.index(name) < self.AREA_ORDER.index(best):
+                best, where = name, part
+        return best, where
 
     def location_status(self, location: str) -> tuple[str, str | None]:
         """('ok', part) | ('quebec_only', part) | ('unresolved', location) | ('not_canada', None).

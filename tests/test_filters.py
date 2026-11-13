@@ -133,3 +133,21 @@ def test_french_only_titles_dropped_but_bilingual_kept(filters):
 def test_bi_means_business_intelligence_only_in_capitals(filters):
     assert filters.title_tier("BI Developer") == "strong"
     assert filters.title_tier("Server- 38 Hours Bi Weekly; 7am-3pm Shifts") is None
+
+
+@pytest.mark.parametrize("loc, area", [
+    ("Vancouver, BC", "BC"), ("Burnaby", "BC"), ("Victoria, British Columbia, Canada", "BC"),
+    ("Remote, Canada", "Remote"), ("Canada - Remote", "Remote"), ("Remote (Canada)", "Remote"),
+    ("Calgary, AB", "Alberta"), ("Edmonton, Alberta, Canada", "Alberta"),
+    ("Toronto, ON", "Ontario"), ("Waterloo", "Ontario"), ("Remote, Ontario, Canada", "Ontario"),   # remote inside Ontario
+    ("Regina, SK", "Other"), ("Winnipeg, MB, Canada", "Other"), ("Halifax, NS", "Other"), ("St. John's, NL", "Other"),
+    ("Toronto, ON; Vancouver, BC", "BC"), ("Regina, SK; Calgary, AB", "Alberta"),    # the best place wins
+    ("Canada", "Canada"), ("Langbank, Canada", "Canada"),                             # no province named: kept
+])
+def test_area_follows_the_owners_order(filters, loc, area):
+    assert filters.area(loc)[0] == area
+
+
+def test_the_area_names_the_place_it_came_from(filters):
+    assert filters.area("Regina, SK; Vancouver, BC") == ("BC", "Vancouver, BC")
+    assert filters.area("Seattle, WA") == ("", None)

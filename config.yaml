@@ -175,6 +175,7 @@ location:
     # "Ontario, CA" and nothing else is Ontario, California (an Owens & Minor warehouse job reached the Feed); "Toronto, Ontario,
     # CA" keeps its city and passes. The whole-string anchors keep "Remote, Ontario, CA" (Canada) alone.
     - '^\s*Ontario,\s*(?:CA|California)\s*$'
+    - '\bNew Brunswick,?\s+(?:NJ|New Jersey)\b'     # New Brunswick, New Jersey
     # Halifax and Victoria alone are taken as Canadian (Halifax, Nova Scotia; Victoria, BC), except these
     - '\bHalifax,?\s+(?:UK|United Kingdom|England|West Yorkshire|Yorkshire|VA|Virginia|MA|Massachusetts)\b'
     - '\bVictoria,?\s+(?:Australia|AU|AUS|VIC|TX|Texas|Seychelles|Mah[ée]|Hong Kong|Malta|Gozo|London|UK)\b'
@@ -191,6 +192,34 @@ location:
     - ',\s*QC\b'
     - '\bQC\s*[,-]'
     - '^QC$'
+  # The Feed's Area column, in the owner's order: British Columbia first (and remote jobs open to all of Canada, which can
+  # be done from BC), then Alberta and Ontario (the same priority). A job listed in several places takes its best area.
+  # A job only in another province (Saskatchewan, Manitoba, the Atlantic provinces, the territories) is dropped
+  # (`drop_other_areas`); one whose place names no province ("Canada", "Smalltown, Canada") is kept as Canada.
+  areas:
+    BC:
+      - '\bBritish Columbia\b|\bB\.C\.'
+      - '\b(?:Vancouver|Burnaby|Victoria|Surrey|Richmond(?!\s+Hill)|Kelowna|Kamloops|Nanaimo|Abbotsford|Coquitlam|Langley|Squamish|New Westminster|Chilliwack|Penticton|Prince George|Langford|Whistler|Port Moody|Maple Ridge|Saanich|Vernon|Courtenay|Cranbrook|Fort St\.? John|Kitimat|North Vancouver|West Vancouver|Delta, BC)\b'
+    BC_cs:
+      - '\bBC\b'
+    Remote:
+      - '\bremote\b|work from home|\bWFH\b|anywhere in Canada|home[- ]based|Home-Canada|telecommut|telework'
+    Alberta:
+      - '\bAlberta\b'
+      - '\b(?:Calgary|Edmonton|Red Deer|Lethbridge|Medicine Hat|Fort McMurray|Grande Prairie|Airdrie|Banff|Canmore|Cochrane|Okotoks|Leduc|Sherwood Park|St\.? Albert|Spruce Grove)\b'
+    Alberta_cs:
+      - '\bAB\b'
+    Ontario:
+      - '\bOntario\b'
+      - '\b(?:Toronto|Ottawa|Mississauga|Waterloo|Kitchener|Markham|Kanata|Oakville|Brampton|Vaughan|Guelph|Hamilton|Barrie|Oshawa|Whitby|Pickering|Ajax|Burlington|Richmond Hill|North York|Etobicoke|Scarborough|Sarnia|Thunder Bay|Sudbury|Kingston|Cambridge|Milton|Newmarket|Aurora|Sault Ste\.? Marie|St\.? Catharines|Niagara|Brantford|Peterborough|Windsor|London|Belleville|Timmins|North Bay|Woodbridge|Concord|Bolton|Stoney Creek)\b'
+    Ontario_cs:
+      - '\bON\b(?![- ]?SITE)'
+    other:                     # another province or territory, or Quebec
+      - '\b(?:Saskatchewan|Manitoba|Nova Scotia|New Brunswick|Newfoundland|Labrador|Prince Edward Island|Yukon|Northwest Territories|Nunavut|Qu[ée]bec)\b'
+      - '\b(?:Regina|Saskatoon|Winnipeg|Halifax|Dartmouth|Bedford|Moncton|Fredericton|Saint John|St\.? John[’\x27]s|Charlottetown|Whitehorse|Yellowknife|Iqaluit|Montr[ée]al|Laval|Gatineau|Sherbrooke|Longueuil|Norquay|Brandon)\b'
+    other_cs:
+      - '\b(?:SK|MB|NS|NB|NL|PE|PEI|YT|NT|NU|QC)\b'
+  drop_other_areas: true
   # Workday lists "2 Locations" and keeps the real list in the job detail (additionalLocations).
   # These pass the location stage unresolved; phase 2 reads the list. Unresolvable ones are kept.
   unresolved: '^\s*\d+\s+Locations?\s*$'
@@ -509,7 +538,8 @@ notion:
     link: Link
     source: Source
     fit: "Fit %"
-    signals: Signals
+    signals: Tags             # New grad / Entry level, and at most one warning (Asks 2 yrs, Needs P.Eng, Talent pool, ...)
+    area: Area                # optional (Select column, options BC, Remote, Alberta, Ontario, Canada in that order)
     location: Location        # optional: filled when the Feed has the column, ignored when it does not
     recruiter: Recruiter      # optional (URL column): LinkedIn people search for the company's recruiters
     manager: Hiring Manager   # optional (URL column): LinkedIn people search for the team's managers and leads
