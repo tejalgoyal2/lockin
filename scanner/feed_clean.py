@@ -203,7 +203,7 @@ def evaluate(item: FeedItem, location: str, cfg: dict, filters: Filters, scorer:
     job.weak_title = filters.title_tier(item.title) == "weak"
     if unresolved:
         job.location_pending, job.jd_locations = True, jd_locations or []
-    job.jd_status = "ok" if item.jd.strip() else ("error" if "jd unavailable" in item.signals else "")
+    job.jd_status = "ok" if item.jd.strip() else ("error" if notion_feed.has_tag(item.signals, "jd unavailable") else "")
     reason = enrich_mod.apply_rules(job, cfg, filters, scorer, clusters)
     if reason:
         v.rule = reason
@@ -303,7 +303,7 @@ def rescore(verdicts: list[Verdict], records: dict[str, Found], cfg: dict, filte
         slug = rec.company or slug_from_url(it.link)
         job = to_job(it, v.location or "Canada")
         job.weak_title = filters.title_tier(it.title) == "weak"
-        job.jd_status = "ok" if it.jd.strip() else ("error" if "jd unavailable" in it.signals else "")
+        job.jd_status = "ok" if it.jd.strip() else ("error" if notion_feed.has_tag(it.signals, "jd unavailable") else "")
         job.company, job.company_name = slug or it.company, rec.company_name
         enrich_mod.apply_rules(job, cfg, filters, scorer, clusters)
         ch = Change(it)

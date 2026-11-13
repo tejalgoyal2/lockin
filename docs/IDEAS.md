@@ -22,6 +22,8 @@ Each one is optional: without it the scan still runs and prints "skipped" for th
 - **Jobhive**: ats-scrapers' open dataset (5 M postings, 64 hiring systems, refreshed daily) for the systems lockin cannot
   read itself: Oracle, Eightfold (Microsoft), Dayforce, UKG, Rippling, JazzHR, Breezy, Cornerstone; and every
   Greenhouse, Lever, Ashby, BambooHR and iCIMS board, not only the ones on the watchlist.
+- **BC first.** An Area column (BC, Remote, Alberta, Ontario, Canada) sorts the Feed in the owner's order; jobs only in
+  other provinces are left out. Tags are plain words (New grad, Entry level, Asks 2 yrs, Unclear fit ...).
 - **Fewer silent misses.** A posting whose location is only a Canadian city name ("Guelph", "Kelowna", "Halifax",
   "St. John's") used to be dropped as not Canadian; those cities now count. A Jobhive row in Canada that says only
   "Remote" reads "Remote, Canada".

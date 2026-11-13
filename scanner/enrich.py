@@ -37,6 +37,7 @@ R_LOW_SIGNAL_TITLE = "low_signal_not_dev_title"
 R_FRENCH = "requires_french"
 R_QUEBEC_ONLY = "location_quebec_only"
 R_NOT_CANADA = "location_not_canada"
+R_OTHER_AREA = "location_other_province"
 R_UNRESOLVED_FOREIGN = "location_unresolved_url_not_canadian"
 R_ATS_NOT_CANADA = "location_ats_not_canada"
 R_WEAK = "weak_title_low_fit"
@@ -336,6 +337,15 @@ def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer,
     reason = resolve_location(job, filters, cfg)
     if reason:
         return reason
+    if job.jd_locations:                     # the posting's own, current places decide the Area
+        area, part = filters.area(" ; ".join(job.jd_locations))
+        if area == "Other" and filters.drop_other_areas:
+            job.location_dropped = True
+            return R_OTHER_AREA
+        if area:
+            job.area = area
+            if part and filters.area(job.location)[0] != area:
+                job.location = part
     jdcfg = cfg["jd"]
     if job.jd_status == "ok":
         jd = job.jd

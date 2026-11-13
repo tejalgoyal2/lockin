@@ -35,7 +35,7 @@ def test_company_fit_and_signals_are_recomputed_with_the_current_rules():
     (c,) = rescore([it])
     assert c.company == ("Bdo · oct8", "BDO · oct8")                  # company_names.yaml
     assert c.fit == (1.0, 0.8)                                       # old formula said 100 %
-    assert c.signals == (["junior"], ["junior", "2+ yrs"])
+    assert c.signals == (["junior"], ["Entry level", "Asks 2 yrs"])
 
 
 def test_a_row_that_is_already_current_is_not_touched():
@@ -65,7 +65,7 @@ def test_ticked_unreadable_and_failing_rows_are_skipped():
 
 def test_a_row_that_lost_its_terms_goes_to_na_with_low_signal():
     (c,) = rescore([item(jd="Python, SQL and Docker.", fit=0.9, cell="BDO · oct8")])
-    assert c.fit == (0.9, None) and c.signals == ([], ["low signal"])
+    assert c.fit == (0.9, None) and c.signals == ([], ["Unclear fit"])
 
 
 def test_apply_changes_writes_only_what_changed_and_never_the_checkboxes():

@@ -27,7 +27,7 @@ def run_stream(
     filter; phase 2 may rescue them from their JD text.
     """
     cutoff = now - timedelta(days=since_days)
-    names = ["raw", *[n for n, _ in pre_stages], "fresh", "location", "not_quebec_only", "company",
+    names = ["raw", *[n for n, _ in pre_stages], "fresh", "location", "not_quebec_only", "wanted_area", "company",
              "language", "title_match", "title_not_senior", "not_student_only"]
     counts: Counter = Counter()
     kept: list[Job] = []
@@ -50,6 +50,13 @@ def run_stream(
         if status == "quebec_only":
             continue
         counts["not_quebec_only"] += 1
+        area = ""
+        if status == "ok":
+            area, part = filters.area(f["location"])
+            if area == "Other" and filters.drop_other_areas:
+                continue                # only in a province the owner does not want (config location.areas)
+            loc = part or loc
+        counts["wanted_area"] += 1
         if not filters.company_ok(f["company"]):
             continue
         counts["company"] += 1
@@ -67,7 +74,7 @@ def run_stream(
             company=f["company"], company_name=f.get("company_name", ""), title=f["title"], location=loc, url=f["url"],
             source=f["source"], first_seen=f["first_seen"], sources={f["source"]},
             new_grad=f["source"] == "Simplify", weak_title=tier == "weak",
-            location_pending=status == "unresolved", pay=f.get("pay", ""),
+            location_pending=status == "unresolved", pay=f.get("pay", ""), area=area,
         )
         if not filters.not_student_only(f["title"]):
             held.append(job)

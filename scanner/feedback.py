@@ -8,7 +8,7 @@ file says how well Fit % predicts a pick without recording what was picked. It i
 from datetime import date, datetime, timezone
 from pathlib import Path
 
-from scanner.notion_feed import CAUTION_SIGNALS, LEVEL_SIGNALS
+from scanner.notion_feed import CAUTION_SIGNALS, LEVEL_SIGNALS, has_tag
 from scanner.state import _load, _save
 
 FIT_BANDS = ("<60", "60-69", "70-79", "80-89", "90+", "n/a")
@@ -28,8 +28,8 @@ def fit_band(fit: float | None) -> str:
 
 
 def _tags(signals) -> tuple[str, str]:
-    level = next((s for s in LEVEL_SIGNALS if s in signals), "none")
-    caution = next((s for s in CAUTION_SIGNALS if s in signals), "none")
+    level = next((s for s in LEVEL_SIGNALS if has_tag(signals, s)), "none")
+    caution = next((s for s in CAUTION_SIGNALS if has_tag(signals, s)), "none")
     return level, caution
 
 

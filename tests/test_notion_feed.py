@@ -62,7 +62,7 @@ def test_wrong_type_and_wrong_number_format_and_missing_options_all_listed(clien
     msg = str(e.value)
     assert "'Link' has type 'rich_text', expected 'url'" in msg
     assert "'Fit %' has number format 'number', expected 'percent'" in msg
-    assert "'Signals' is missing options: new grad" in msg and "jd unavailable" in msg
+    assert "'Signals' is missing options: New grad" in msg and "No description" in msg
 
 
 def test_unreadable_data_source_gives_a_sharing_hint(client, notion):
@@ -85,7 +85,7 @@ def test_payload_shape(feed):
     assert p["Link"] == {"url": "https://jobs.example.com/1?utm=x"}
     assert p["Source"] == {"select": {"name": "Workday"}}
     assert p["Fit %"] == {"number": 0.7}                # a fraction, not 70
-    assert p["Signals"] == {"multi_select": [{"name": "junior"}]}
+    assert p["Signals"] == {"multi_select": [{"name": "Entry level"}]}
     assert sent == "Python, SQL, Docker, Git."
     assert set(p) == {"Name", "Company", "Link", "Source", "Fit %", "Signals", "JD"}
 
@@ -110,17 +110,17 @@ def test_source_outside_the_feed_options_is_left_empty(feed):
 
 def test_data_quality_values_show_as_the_one_warning(feed):
     props = nf.build_page(make_job(signals=["low signal", "jd unavailable"]), feed, OVERRIDES)[0]["properties"]
-    assert [s["name"] for s in props["Signals"]["multi_select"]] == ["jd unavailable"]
+    assert [s["name"] for s in props["Signals"]["multi_select"]] == ["No description"]
 
 
 @pytest.mark.parametrize("signals, shown", [
     ([], []),
-    (["junior"], ["junior"]),
-    (["new grad", "recent graduate", "0-2 years", "junior"], ["new grad"]),            # the strongest level tag only
-    (["recent graduate", "0-2 years", "2+ yrs"], ["recent graduate", "2+ yrs"]),         # level, then the warning
-    (["2+ yrs", "P.Eng req"], ["2+ yrs"]),                                               # one warning: the first listed
-    (["entry level", "low signal"], ["entry level", "low signal"]),
-    (["jd unavailable", "junior"], ["junior", "jd unavailable"]),
+    (["junior"], ["Entry level"]),
+    (["new grad", "recent graduate", "0-2 years", "junior"], ["New grad"]),            # the strongest level tag only
+    (["recent graduate", "0-2 years", "2+ yrs"], ["New grad", "Asks 2 yrs"]),           # level, then the warning
+    (["2+ yrs", "P.Eng req"], ["Asks 2 yrs"]),                                           # one warning: the first listed
+    (["entry level", "low signal"], ["Entry level", "Unclear fit"]),
+    (["jd unavailable", "junior"], ["Entry level", "No description"]),
     (["something new"], ["something new"]),                                              # unknown tags are not lost
 ])
 def test_display_signals_keeps_at_most_two_tags(signals, shown):

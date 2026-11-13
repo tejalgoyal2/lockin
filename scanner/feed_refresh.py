@@ -33,7 +33,7 @@ class RefreshReport:
 
 
 def stale_rows(items: list[FeedItem]) -> list[FeedItem]:
-    return [i for i in items if i.source == "Workday" and UNAVAILABLE in i.signals and i.done_del is False]
+    return [i for i in items if i.source == "Workday" and notion_feed.has_tag(i.signals, UNAVAILABLE) and i.done_del is False]
 
 
 def refresh(client, feed: notion_feed.Feed, items: list[FeedItem], cfg: dict, filters: Filters, scorer: Scorer,

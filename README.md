@@ -70,7 +70,7 @@ log). Pick `command` and write `args` the way you would in a terminal:
 |---|---|---|
 | `audit` | `--days 30` (default 14) | Which filter rules stop the fresh Canadian postings, which discarded titles look like jobs you want, which title words the filter does not know. See "The filter audit". |
 | `why` | `"General Motors"` (add `--since 21`) | "I saw this employer post a job, why is it not in the Feed?" Names the first rule that stops each of its Canadian postings, or says the employer is not on the watchlist. |
-| `clean-feed` | `--dry-run` (then run again without it) | Re-checks the rows already in your Feed against today's rules and trashes the ones that now fail, never a row with Interested / Apply / done-del ticked (Notion keeps trashed rows 30 days). `--rescore` also refreshes Fit % and Signals. |
+| `clean-feed` | `--dry-run` (then run again without it) | Re-checks the rows already in your Feed against today's rules and trashes the ones that now fail, never a row with Interested / Apply / done-del ticked (Notion keeps trashed rows 30 days). `--rescore` also refreshes Fit % and Tags. |
 | `discover` | `"Telus" "Bell Canada"`, or `--workday rbc`, `--phenom jobs.bell.ca/ca/en=Bell`, `--successfactors careers.telus.com=Telus` or `--icims careersen-victoria.icims.com=City of Victoria` | Finds an employer's job board and prints the `watchlist.yaml` line to add. |
 
 ## Setup
@@ -85,7 +85,8 @@ log). Pick `command` and write `args` the way you would in a terminal:
    | Link | URL |
    | Source | Select: Workday, Greenhouse, Lever, Ashby, BambooHR, Paylocity, Simplify, Watchlist. Optional extras: YC, Built In, Bay Street Oracle, HN, SmartRecruiters |
    | Fit % | Number, format **Percent** |
-   | Signals | Multi-select, options: new grad, recent graduate, 0-2 years, entry level, junior, low signal, jd unavailable (`2+ yrs`, `P.Eng req` and `talent pool` are created on first use) |
+   | Tags | Multi-select, options: New grad, Entry level, Asks 2 yrs, Needs P.Eng, Talent pool, No description, Unclear fit |
+   | Area | Select (optional), options in this order: BC, Remote, Alberta, Ontario, Canada. Sorting by Area puts BC first |
    | Location | Text (optional: filled when the column exists) |
    | Posted | Date (optional): the posting date, so the Feed sorts newest first. Rows written before the column existed get it from the date in Company on the next run |
    | Pay | Text (optional): the pay the posting states, e.g. "$70,000–$85,000 a year" (empty when it states none) |
@@ -108,12 +109,22 @@ log). Pick `command` and write `args` the way you would in a terminal:
    After that the schedule takes over. The workflow commits to the branch it runs on; if that branch is protected,
    let GitHub Actions push to it.
 
-**Reading the Feed.** A row carries at most two Signals: the strongest level tag (new grad, recent graduate, 0-2 years, entry level,
-junior) and the most important warning (2+ yrs, P.Eng req, talent pool, jd unavailable, low signal). `talent pool`
-means the posting says it is evergreen or not for a current opening: apply if you like it, but expect to wait. The
-full set is in `reports/latest.md`. **Posted** is the date the employer published the job; for the few sources that
-give none (the Canada List) it is the day lockin first saw it. **Fit %** is a keyword match between the posting and your skills, not a prophecy: open the job
-before you fall in love.
+**Reading the Feed.** Sort by **Area** (BC, then remote jobs open to all of Canada, then Alberta and Ontario), then
+**Fit %**. Jobs only in other provinces are not written at all. **Tags**, at most two:
+
+| Tag | Means |
+|---|---|
+| New grad | the posting asks for new or recent graduates |
+| Entry level | it says junior, entry level or 0-2 years |
+| Asks 2 yrs | it asks for 2 years of experience: apply if the rest fits |
+| Needs P.Eng | it requires an engineering licence |
+| Talent pool | it says it is evergreen or not for a current opening: expect to wait |
+| No description | the posting's text could not be read: open the link |
+| Unclear fit | the text names few of your skills, often not a tech job: lowest priority |
+
+**Fit %** is how many of your skills the posting names, not a prophecy: open the job before you fall in love. **Posted**
+is the date the employer published the job (for the Canada List, the day lockin first saw it). **Pay** is what the
+posting states.
 
 Your Notion automation copies a ticked row to your main database and ticks `done-del`; the next run trashes the row,
 and `state/seen.json` makes sure the job never comes back to haunt you.
