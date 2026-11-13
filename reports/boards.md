@@ -2,9 +2,10 @@
 
 What the scanner learned about employer boards (state/boards.json). Boards it found by itself are in `watchlist.auto.yaml`.
 
-## Added this run (1)
+## Added this run (2)
 
-- `workday/sanofi.wd3/sanoficareers` sanofi: 24 Canadian postings, 4 pass the title filters
+- `workday/bakerhughes.wd5/bakerhughes` bakerhughes: 9 Canadian postings, 4 pass the title filters
+- `workday/vaderstad.wd3/external_careers` vaderstad: 14 Canadian postings, 5 pass the title filters
 
 ## Resting (0)
 
@@ -12,7 +13,7 @@ Failed 3+ reads in a row; tried again after the date shown (a working read clear
 
 - none
 
-## Candidates not added (45)
+## Candidates not added (47)
 
 A board is given up after 3 probes that find nothing to add.
 
@@ -38,26 +39,28 @@ A board is given up after 3 probes that find nothing to add.
 - `workday/godirect.wd5/voya_jobs` godirect: dead after 3 probes
 - `workday/gsk.wd5/gskcareers` gsk: dead after 3 probes
 - `workday/guidehouse.wd1/external` guidehouse: dead after 3 probes
-- `workday/hcsc.wd1/hcsc_external` hcsc: empty after 2 probes
+- `workday/hcsc.wd1/hcsc_external` hcsc: dead after 3 probes
 - `workday/highmarkhealth.wd1/highmark` highmarkhealth: dead after 3 probes
-- `workday/hntb.wd5/hntb_careers` hntb: empty after 2 probes
+- `workday/hntb.wd5/hntb_careers` hntb: dead after 3 probes
 - `workday/hpe.wd5/acjobsite` hpe: dead after 3 probes
 - `workday/hpe.wd5/jobsathpe` hpe: dead after 3 probes
 - `workday/hpe.wd5/wfmathpe` hpe: dead after 3 probes
 - `workday/jj.wd5/displacedemployees` jj: dead after 3 probes
 - `workday/lbg.wd3/lbg_careers` lbg: dead after 3 probes
 - `workday/maxar.wd1/vantor` maxar: dead after 3 probes
-- `workday/mbda.wd3/mbda-uk` mbda: empty after 2 probes
+- `workday/mbda.wd3/mbda-uk` mbda: dead after 3 probes
 - `workday/micron.wd1/external` micron: dead after 3 probes
-- `workday/morganlewis.wd5/morganlewis` morganlewis: empty after 2 probes
+- `workday/morganlewis.wd5/morganlewis` morganlewis: dead after 3 probes
 - `workday/msd.wd5/searchjobs` msd: dead after 3 probes
 - `workday/nttlimited.wd3/ntt_careers` nttlimited: empty after 2 probes
-- `workday/optioncare.wd1/optioncare` optioncare: empty after 1 probes
+- `workday/optioncare.wd1/optioncare` optioncare: empty after 2 probes
 - `workday/pae.wd1/amentum_careers` pae: dead after 3 probes
 - `workday/pwc.wd3/crm_experienced_careers_site` pwc: dead after 3 probes
-- `workday/pwc.wd3/global_experienced_careers` pwc: empty after 1 probes
-- `workday/rb.wd5/frs` rb: empty after 1 probes
+- `workday/pwc.wd3/global_experienced_careers` pwc: empty after 2 probes
+- `workday/rb.wd5/frs` rb: empty after 2 probes
 - `workday/regions.wd5/regions_careers` regions: dead after 3 probes
-- `workday/strayer.wd1/sei` strayer: empty after 1 probes
+- `workday/strayer.wd1/sei` strayer: empty after 2 probes
+- `workday/stvinc.wd5/stv` stvinc: empty after 1 probes
 - `workday/terminix.wd1/steritech` terminix: dead after 3 probes
+- `workday/tmobile.wd1/external` tmobile: empty after 1 probes
 - `workday/uline.wd1/uline_careers` uline: dead after 3 probes

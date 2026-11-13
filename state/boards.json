@@ -90,6 +90,15 @@
    "seen": 25,
    "status": "dead"
   },
+  "workday/bakerhughes.wd5/bakerhughes": {
+   "canadian": 9,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "bakerhughes",
+   "probes": 0,
+   "seen": 3,
+   "status": "added"
+  },
   "workday/barclays.wd3/external_career_site_barclays": {
    "canadian": 2,
    "first": "2026-11-12",
@@ -366,9 +375,9 @@
    "first": "2026-11-12",
    "last": "2026-11-13",
    "name": "hcsc",
-   "probes": 2,
+   "probes": 3,
    "seen": 3,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/highmarkhealth.wd1/highmark": {
    "canadian": 0,
@@ -384,9 +393,9 @@
    "first": "2026-11-12",
    "last": "2026-11-13",
    "name": "hntb",
-   "probes": 2,
+   "probes": 3,
    "seen": 3,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/hp.wd5/exteu-ac-careersite": {
    "canadian": 17,
@@ -501,9 +510,9 @@
    "first": "2026-11-12",
    "last": "2026-11-13",
    "name": "mbda",
-   "probes": 2,
+   "probes": 3,
    "seen": 3,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/micron.wd1/external": {
    "canadian": 0,
@@ -519,9 +528,9 @@
    "first": "2026-11-12",
    "last": "2026-11-13",
    "name": "morganlewis",
-   "probes": 2,
+   "probes": 3,
    "seen": 3,
-   "status": "empty"
+   "status": "dead"
   },
   "workday/msd.wd5/searchjobs": {
    "canadian": 0,
@@ -564,7 +573,7 @@
    "first": "2026-11-13",
    "last": "2026-11-13",
    "name": "optioncare",
-   "probes": 1,
+   "probes": 2,
    "seen": 3,
    "status": "empty"
   },
@@ -600,7 +609,7 @@
    "first": "2026-11-13",
    "last": "2026-11-13",
    "name": "pwc",
-   "probes": 1,
+   "probes": 2,
    "seen": 3,
    "status": "empty"
   },
@@ -609,7 +618,7 @@
    "first": "2026-11-13",
    "last": "2026-11-13",
    "name": "rb",
-   "probes": 1,
+   "probes": 2,
    "seen": 3,
    "status": "empty"
   },
@@ -672,6 +681,15 @@
    "first": "2026-11-13",
    "last": "2026-11-13",
    "name": "strayer",
+   "probes": 2,
+   "seen": 3,
+   "status": "empty"
+  },
+  "workday/stvinc.wd5/stv": {
+   "canadian": 0,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "stvinc",
    "probes": 1,
    "seen": 3,
    "status": "empty"
@@ -703,6 +721,15 @@
    "seen": 6,
    "status": "added"
   },
+  "workday/tmobile.wd1/external": {
+   "canadian": 0,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "tmobile",
+   "probes": 1,
+   "seen": 3,
+   "status": "empty"
+  },
   "workday/uline.wd1/uline_careers": {
    "canadian": 0,
    "first": "2026-11-11",
@@ -711,6 +738,15 @@
    "probes": 3,
    "seen": 5,
    "status": "dead"
+  },
+  "workday/vaderstad.wd3/external_careers": {
+   "canadian": 14,
+   "first": "2026-11-13",
+   "last": "2026-11-13",
+   "name": "vaderstad",
+   "probes": 0,
+   "seen": 3,
+   "status": "added"
   },
   "workday/zeissgroup.wd3/external": {
    "canadian": 8,
