@@ -111,6 +111,10 @@
   "name": "Corinex Technologies",
   "checked": "2026-11-06"
  },
+ "BambooHR:danica": {
+  "name": "Danica",
+  "checked": "2026-11-14"
+ },
  "BambooHR:enwave": {
   "name": "Enwave",
   "checked": "2026-11-12"
@@ -118,6 +122,10 @@
  "BambooHR:euna": {
   "name": "Euna Solutions",
   "checked": "2026-11-12"
+ },
+ "BambooHR:fispan": {
+  "name": "FISPAN",
+  "checked": "2026-11-14"
  },
  "BambooHR:frpd": {
   "name": "Fraser River Pile & Dredge",
@@ -203,6 +211,10 @@
   "name": "Traction Rec",
   "checked": "2026-11-10"
  },
+ "BambooHR:trusscore": {
+  "name": "Trusscore",
+  "checked": "2026-11-14"
+ },
  "BambooHR:wesley": {
   "name": "Wesley",
   "checked": "2026-10-30"
@@ -242,6 +254,10 @@
  "Workday:alliance.wd3.myworkdayjobs.com/nissanjobs": {
   "name": "",
   "checked": "2026-11-13"
+ },
+ "Workday:alsglobal.wd103.myworkdayjobs.com/external": {
+  "name": "",
+  "checked": "2026-11-14"
  },
  "Workday:alterra.wd1.myworkdayjobs.com/alpineaerotech": {
   "name": "",
@@ -286,6 +302,10 @@
  "Workday:bcaa.wd3.myworkdayjobs.com/bcaacareers": {
   "name": "",
   "checked": "2026-10-29"
+ },
+ "Workday:bird.wd3.myworkdayjobs.com/birdconstructioncareers": {
+  "name": "",
+  "checked": "2026-11-14"
  },
  "Workday:brenntag.wd3.myworkdayjobs.com/brenntag_jobs": {
   "name": "",
@@ -382,6 +402,10 @@
  "Workday:flir.wd1.myworkdayjobs.com/flircareers": {
   "name": "",
   "checked": "2026-10-30"
+ },
+ "Workday:fugro.wd3.myworkdayjobs.com/careers": {
+  "name": "Fugro",
+  "checked": "2026-11-14"
  },
  "Workday:genesys.wd1.myworkdayjobs.com/genesys": {
   "name": "Genesys",
@@ -550,6 +574,10 @@
  "Workday:rakuten.wd1.myworkdayjobs.com/kobo": {
   "name": "",
   "checked": "2026-11-07"
+ },
+ "Workday:rbi.wd3.myworkdayjobs.com/rbi_external_career_site": {
+  "name": "",
+  "checked": "2026-11-14"
  },
  "Workday:relx.wd3.myworkdayjobs.com/relx": {
   "name": "RELX",

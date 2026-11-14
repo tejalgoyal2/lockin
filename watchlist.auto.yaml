@@ -48,3 +48,9 @@ boards:
   - {ats: workday, slug: hitachi.wd1/hitachi, name: "hitachi"}        # 66 Canadian postings when found, 2026-11-13
   - {ats: workday, slug: sunlife.wd3/campus, name: "sunlife"}        # 2 Canadian postings when found, 2026-11-13
   - {ats: workday, slug: bestbuycanada.wd3/bestbuyca_career, name: "bestbuycanada"}        # 22 Canadian postings when found, 2026-11-13
+  - {ats: workday, slug: saputo.wd5/saputo_external_careers, name: "saputo"}        # 83 Canadian postings when found, 2026-11-14
+  - {ats: workday, slug: jci.wd5/jci, name: "jci"}        # 56 Canadian postings when found, 2026-11-14
+  - {ats: workday, slug: kiongroup.wd3/kion_scs, name: "kiongroup"}        # 4 Canadian postings when found, 2026-11-14
+  - {ats: workday, slug: manulife.wd3/mfcjh_adminjobs, name: "manulife"}        # 8 Canadian postings when found, 2026-11-14
+  - {ats: workday, slug: marmon.wd501/marmon_careers, name: "marmon"}        # 33 Canadian postings when found, 2026-11-14
+  - {ats: workday, slug: mckesson.wd3/external_careers, name: "mckesson"}        # 150 Canadian postings when found, 2026-11-14
