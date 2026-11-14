@@ -145,6 +145,12 @@
    "gaps": [],
    "title": "Systems Specialist - Computer Systems"
   },
+  "0147dbbf89af45f2c251d66532477c60b482ae80": {
+   "company": "bestbuycanada",
+   "date": "2026-11-14",
+   "gaps": [],
+   "title": "Solutions Engineer"
+  },
   "0149c1fb870dd9077478d841e30757dc6e18475e": {
    "company": "Central1Resources",
    "date": "2026-10-14",
@@ -3712,6 +3718,12 @@
    ],
    "title": "Specialist CRM Campaign Personalisation (7-Month FTC)"
   },
+  "1fdbb96f0cadae4bb4f2959885bbd4e8b8c2b5dd": {
+   "company": "Region of Waterloo",
+   "date": "2026-11-14",
+   "gaps": [],
+   "title": "Engineering Progression Program - Design & Construction (Transportation)"
+  },
   "20091403a3fae81a87a3640c0d08da42d63dc2ba": {
    "company": "Intact Healthcare Services Inc.",
    "date": "2026-11-13",
@@ -6371,6 +6383,12 @@
    ],
    "title": "Customer Journey Optimization Developer"
   },
+  "36beae45ba21e092fc84afcb0e3a53086b5efb6c": {
+   "company": "Best Buy Canada",
+   "date": "2026-11-14",
+   "gaps": [],
+   "title": "End User Support Analyst"
+  },
   "36c24c7969c67e845ad4520b6046f4923b43e24b": {
    "company": "UBC",
    "date": "2026-11-04",
@@ -7198,6 +7216,12 @@
    "gaps": [],
    "title": "Security Incident Response Developer"
   },
+  "3de9f93ed4294d557c81972c8fa6bf715ed5bda6": {
+   "company": "Reyes Holdings, L.L.C.",
+   "date": "2026-11-14",
+   "gaps": [],
+   "title": "IT Support Analyst — ERP/WMS Specialist (L2-L3)"
+  },
   "3dfa24326a038391c8ca0bc259457c5082639dec": {
    "company": "Bosch Building Technologies",
    "date": "2026-11-09",
@@ -7458,6 +7482,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Intern, Predictive Insights - Real-time Monitoring & Analytics"
+  },
+  "3fc0b2ddcccae5ffc5456160630b2028f5495d29": {
+   "company": "FortisBC",
+   "date": "2026-11-14",
+   "gaps": [],
+   "title": "Engineering Co-op, Distribution Projects"
   },
   "3fc2ecd138fd35925002798b2ea81e786588c2b7": {
    "company": "Slihrms",
@@ -9196,6 +9226,12 @@
    "gaps": [],
    "title": "IT Co-op - Winter Term 2027"
   },
+  "4dcccf5cd602fc341ec1d27072f0aabf390161fd": {
+   "company": "Fasken",
+   "date": "2026-11-14",
+   "gaps": [],
+   "title": "Service Desk Analyst"
+  },
   "4dd0ef38f93404020b3d170aeea3acbd1bd62a46": {
    "company": "Acosta",
    "date": "2026-11-12",
@@ -9373,6 +9409,12 @@
    "date": "2026-11-09",
    "gaps": [],
    "title": "Associate, Technical Support"
+  },
+  "4f18c8d7ad9fd2c80c256a132c73f83ba19352ef": {
+   "company": "BURNCO ROCK PRODUCTS Ltd",
+   "date": "2026-11-14",
+   "gaps": [],
+   "title": "IT Support Analyst Student"
   },
   "4f193a0cde71025ab58be0ffe3b97f4de7f68ec5": {
    "company": "Oakvalleyhealth",
@@ -10659,6 +10701,15 @@
    "gaps": [],
    "title": "Systems Support/Data Analyst"
   },
+  "59bd8b70ec4cd01edcc3a2bca0e1aa2f7eb193ba": {
+   "company": "Descartes",
+   "date": "2026-11-14",
+   "gaps": [
+    "distributed systems",
+    "microservices"
+   ],
+   "title": ".Net Developer"
+  },
   "59d2b377aee218ead9530cbbd1883d745d0838a1": {
    "company": "Brave",
    "date": "2026-11-07",
@@ -11432,6 +11483,12 @@
    "date": "2026-11-09",
    "gaps": [],
    "title": "IBM Verify Engineer"
+  },
+  "5f77a808ebc0b2418f3c24cd544a86356faad92d": {
+   "company": "The Martin-Brower Co.",
+   "date": "2026-11-14",
+   "gaps": [],
+   "title": "IT Support Analyst - Contract Information Technology and Technical Support New Westminster, British Columbia, Canada See Details"
   },
   "5f78eb1362eadfb5e5c7d47686dd1df2b4883f2a": {
    "company": "Fraser River Pile & Dredge",
@@ -19764,6 +19821,18 @@
    "gaps": [],
    "title": "FP&A Analyst"
   },
+  "a329a24af96b66ee4ffd897bea31fcb44c1c092f": {
+   "company": "Scotiabank",
+   "date": "2026-11-14",
+   "gaps": [
+    "Java",
+    "Kafka",
+    "Maven",
+    "Spring",
+    "microservices"
+   ],
+   "title": "Software Engineer, Global Payments Technology (Backend Java Developer)"
+  },
   "a3417715d7732cb0c2a6bf26b1c4ca3ae0985399": {
    "company": "OPENLANE",
    "date": "2026-10-14",
@@ -20499,6 +20568,12 @@
    "gaps": [],
    "title": "Help Desk Analyst"
   },
+  "aa4561d02690a87b73c3278c71133b23fa943066": {
+   "company": "City of London",
+   "date": "2026-11-14",
+   "gaps": [],
+   "title": "Communications Specialist-C1236"
+  },
   "aa4743071c55e918ffde6fb1055fbea9a15d8cb8": {
    "company": "Kyndryl",
    "date": "2026-11-09",
@@ -20827,6 +20902,12 @@
     "dbt"
    ],
    "title": "Analytics Engineer"
+  },
+  "adeff28ca9a82a4168dbdbcf4665a09d277d4de1": {
+   "company": "Media Resources",
+   "date": "2026-11-14",
+   "gaps": [],
+   "title": "Full Stack Web Developer"
   },
   "adf50571282cfee0704693c15700e9ee7f18bf05": {
    "company": "Thermofisher",
@@ -21736,6 +21817,14 @@
    ],
    "title": "GenAI Software Developer"
   },
+  "b56054bbb2dd7100ec9eb8ff7d43fd908cecbd53": {
+   "company": "Infinity Quest UK",
+   "date": "2026-11-14",
+   "gaps": [
+    "Redshift"
+   ],
+   "title": "Data Modeler"
+  },
   "b5769d02b22e8a3697b789e04f3f27de59fe4c71": {
    "company": "Profoundmedical",
    "date": "2026-11-04",
@@ -22503,6 +22592,14 @@
    "date": "2026-11-09",
    "gaps": [],
    "title": "Software Developer"
+  },
+  "bbf9bf1b1bac47334dc4b3320560c527e5d540a1": {
+   "company": "W.W. Grainger",
+   "date": "2026-11-14",
+   "gaps": [
+    "Vue"
+   ],
+   "title": "Field Operations Analyst Intern"
   },
   "bbfa34af1109ab4f6f4af9d02aa1890035295edd": {
    "company": "Pg",
@@ -25814,6 +25911,12 @@
    "gaps": [],
    "title": "Travel Consultant - Sabre Specialist"
   },
+  "d8a2da20bcc6d1415b6f7e9c74389ea838414f87": {
+   "company": "Nature's Path Foods",
+   "date": "2026-11-14",
+   "gaps": [],
+   "title": "IT Support Analyst"
+  },
   "d8ae3953809a5005e78191df72958e31cdd3bf95": {
    "company": "The Printing House",
    "date": "2026-11-09",
@@ -26505,6 +26608,17 @@
    "gaps": [],
    "title": "Product Support Technical Specialist"
   },
+  "de457312e95f741941c3088c6bba13fd4813cc4f": {
+   "company": "Canadian Tire",
+   "date": "2026-11-14",
+   "gaps": [
+    "Angular",
+    "SSIS",
+    "VBA",
+    "jQuery"
+   ],
+   "title": "Programmer Analyst Intern"
+  },
   "de56e0bd67848ceb4d8b0bc1b3f74cff0a93d40e": {
    "company": "RBC",
    "date": "2026-11-05",
@@ -27020,6 +27134,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Technical Services Technologist Trainee (2 Positions in Winnipeg, 1 Position in Saskatoon)"
+  },
+  "e347f84b7461f655f237ec5c24aa6b7ad8fd6fb9": {
+   "company": "Dynamix Agitators",
+   "date": "2026-11-14",
+   "gaps": [],
+   "title": "Information Technology (IT) Analyst"
   },
   "e3769e0574766c439511fa95cb80b896aa2092f4": {
    "company": "Vaderstad",
@@ -28111,6 +28231,12 @@
     "Ruby"
    ],
    "title": "Software Developer Intern - SOTI XSight (May 2027 12 Months)"
+  },
+  "ebdeaa036b25d2f64ec0f50b02812de149994c1e": {
+   "company": "EBC Inc.",
+   "date": "2026-11-14",
+   "gaps": [],
+   "title": "Information Technology (IT) Analyst"
   },
   "ebf56a16dda6c2ec4d89f2fa1daf8f67aa46e7a1": {
    "company": "Bank of Canada",
@@ -29871,6 +29997,12 @@
    "gaps": [],
    "title": "Cloud Administrator (Intern)"
   },
+  "fbccda81ae6217acbb8baf8521562266d17d42e9": {
+   "company": "Canadian Tire",
+   "date": "2026-11-14",
+   "gaps": [],
+   "title": "Operations Integration Student, Pro Hockey Life (4 Months) - Winter 2027"
+  },
   "fbe71d0cb91a4cef07e6b3347fd228388b183ad6": {
    "company": "Hntb",
    "date": "2026-10-27",
@@ -29923,6 +30055,12 @@
    "gaps": [],
    "title": "QA Operations Specialist (15-month contract)"
   },
+  "fc3cfe768eaf4570917e3e1a95ba97e08e489c5c": {
+   "company": "IFS",
+   "date": "2026-11-14",
+   "gaps": [],
+   "title": "IT Support Analyst - Copperleaf [12-mth Contract, Temporary, Full-Time]"
+  },
   "fc51c685440b4eb4112ddbdc58292234c8f9b210": {
    "company": "Enbridge",
    "date": "2026-10-24",
@@ -29966,6 +30104,12 @@
    "date": "2026-10-17",
    "gaps": [],
    "title": "Analyst, Tenant Management (13-Month Contract)"
+  },
+  "fd0dc96ab2f5656ad64a1fa64a146bd2ad18ac15": {
+   "company": "Kelly",
+   "date": "2026-11-14",
+   "gaps": [],
+   "title": "Information Technology Support Analyst"
   },
   "fd1f427590142076e50177126b42cfa1c2094d57": {
    "company": "UBC",
