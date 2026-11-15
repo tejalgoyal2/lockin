@@ -291,9 +291,7 @@ def test_the_same_url_from_the_dataset_and_a_site_keeps_the_ats_row():
 
 
 def test_every_site_label_is_known_to_the_feed():
-    from scanner import notion_feed as nf
-    assert set(SITE_SOURCES) == set(nf.SITE_SOURCE_OPTIONS) == set(ats.SITES)
-    assert set(SITE_SOURCES).isdisjoint(nf.SOURCE_OPTIONS)        # not required of an existing Feed
+    assert set(SITE_SOURCES) == set(ats.SITES)
 
 
 # --- a site that is down or changed does not stop the run ------------------------------------------
@@ -302,7 +300,7 @@ def test_a_failing_site_is_reported_and_the_others_still_run(monkeypatch, capsys
     cfg = load_config()
     for name in ("feashliaa", "simplify", "watchlist", "baystreet"):
         cfg["sources"][name]["enabled"] = False
-    for name in ("builtin", "jobbank", "bcgov", "canadalist", "jobicy", "adzuna", "googlejobs", "googlealerts", "sitesearch", "jobhive"):
+    for name in ("builtin", "jobbank", "bcgov", "jobicy", "googlejobs", "sitesearch", "jobhive"):
         cfg["sources"][name]["enabled"] = False
     monkeypatch.setattr(yc, "fetch", lambda *a, **k: (_ for _ in ()).throw(yc.YcPageError("no data-page JSON in the page")))
     rec = {"company": "acme", "company_name": "Acme", "title": "Software Developer", "location": "Toronto, ON",

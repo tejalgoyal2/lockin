@@ -14,49 +14,39 @@ Each one is optional: without it the scan still runs and prints "skipped" for th
 
 ## 2. Already in place
 
-- 7-day window, two runs a day (8 am and 4 pm Pacific), up to 500 new rows a run, best Score first.
-- Sources: a dataset of ~1.4 M ATS postings refreshed daily (Feashliaa: Workday, iCIMS, Greenhouse, Lever, Ashby,
-  BambooHR, Paylocity), 200+ employer boards on the watchlist (banks, telcos, BC Crown corporations, cities, Vancouver
-  tech), Job Bank (with CivicJobs.ca municipal postings), BC Public Service, YC, Built In Vancouver, HN "Who is hiring",
-  Jobicy, Simplify new-grad, Bay Street Oracle.
-- **Jobhive**: ats-scrapers' open dataset (5 M postings, 64 hiring systems, refreshed daily) for the systems lockin cannot
-  read itself: Oracle, Eightfold (Microsoft), Dayforce, UKG, Rippling, JazzHR, Breezy, Cornerstone; and every
-  Greenhouse, Lever, Ashby, BambooHR and iCIMS board, not only the ones on the watchlist.
-- **Internships and co-ops** are in the Feed (tagged Internship; Students only when the posting requires enrollment),
-  from the employers' boards and Simplify's internship list. SAP's jobs moved to SmartRecruiters; the watchlist follows.
-- **BC first.** An Area column (BC, Remote, Alberta, Ontario, Canada) sorts the Feed in the owner's order; jobs only in
-  other provinces are left out. Tags are plain words (New grad, Entry level, Asks 2 yrs, Unclear fit ...).
-- **Fewer silent misses.** A posting whose location is only a Canadian city name ("Guelph", "Kelowna", "Halifax",
-  "St. John's") used to be dropped as not Canadian; those cities now count. A Jobhive row in Canada that says only
-  "Remote" reads "Remote, Canada".
-- **talent pool** flag: a posting that says it is evergreen or not for a current opening is tagged, not dropped.
-- **Pay and Posted columns.** `Pay` shows the range the posting states ("$70,000–$85,000 a year"; Ontario and BC require
-  one), the Canadian range when a posting gives a US one too. `Posted` is a real date, so the Feed sorts newest first.
-- The scanner finds new employer boards by itself (`watchlist.auto.yaml`), drops nothing for a missing description, and
-  flags rather than drops the "2+ years" postings.
-- **Two people per job.** Every Feed row has a `Recruiter` and a `Hiring Manager` link: LinkedIn's people search,
-  narrowed to the company and the team, closest connections first.
+- Two scans a day at 08:00 and 16:00 BC time, on time (GitHub's own scheduler ran them 3-6 hours late; see README
+  "Schedule"), a 7-day window, best jobs first.
+- Sources: a dataset of ~1.4 M ATS postings refreshed daily (Feashliaa), 220+ employer boards read live (banks, telcos,
+  BC Crown corporations, cities, Vancouver tech), Jobhive (the hiring systems lockin cannot read itself), Job Bank (with
+  CivicJobs.ca municipal postings), BC Public Service, YC, Built In Vancouver, HN "Who is hiring", Jobicy, Simplify,
+  Bay Street Oracle, Google Jobs and Site Search. The scanner adds new employer boards by itself.
+- **Score 1-5** on every row (role + skills + level) and **Exp 1-3** (the experience asked for), so the Feed sorts
+  into "apply today" first. Nothing asking for more than 2 years gets in.
+- **Province** tags (BC, Remote, Alberta, Ontario, Canada; a job can carry two). Jobs only in other provinces are left out.
+- **Internships and co-ops** stay unless they require current enrollment; they score 3 at most unless they say
+  graduates may apply.
+- Generic titles (Analyst, Specialist, Engineer) are kept only when the description names your tools, so the Feed is
+  not half finance and operations jobs.
+- Jobs you already applied to never come back (`state/seen.json` and the encrypted applied list).
 
 ## 3. How to use the Feed to get interviews
 
-1. **Apply the same day.** Recruiters read applicant lists newest first and stop when they have enough to interview. A
-   University of Chicago study of job-board data found about 39% of all applications go to postings less than 48 hours
-   old. Two runs a day exist so you can be in that first batch.
-2. **Sort by Score and work down.** Ten careful applications a day beat 50 blind ones.
-3. **Write to the two people.** After applying, open the row's `Hiring Manager` link, pick the person who leads that team
-   (a 2nd-degree connection is best: ask the mutual contact for an intro), and send a 3-line note: the role, one thing you
-   built that matches the JD, a link. Then the `Recruiter` link: a one-line note that you applied, with the job title.
-4. **Ask for referrals at companies with several Feed rows.** If a company shows up 3+ times, the people links will show
-   who you know there.
-5. **Use the gap report.** `reports/gaps.md` lists the skills the week's job descriptions ask for that your skills list
-   does not have (this week: Java, SAP, Salesforce, microservices). One small project with the top gap unlocks dozens of
-   postings.
+1. **Apply the same day.** Recruiters read applicant lists newest first and stop when they have enough to interview.
+   Two scans a day exist so you can be in that first batch: do the 5s and 4s of each scan before the next one.
+2. **Sort by Score, then Exp, then Posted.** Ten careful applications a day beat 50 blind ones.
+3. **Write to a person.** After applying, find who leads the team on LinkedIn (a 2nd-degree connection is best: ask the
+   mutual contact for an intro) and send a 3-line note: the role, one thing you built that matches the JD, a link.
+4. **Ask for referrals at companies that keep showing up.**
+5. **Use the gap report.** `reports/gaps.md` lists the tech the week's postings ask for that your skills list does not
+   have. One small project with the top gap unlocks dozens of postings and raises their Score.
+6. **Check the Score against yourself.** `reports/feedback.md` shows your pick rate per Score. If you keep picking 2s
+   or skipping 5s, the rules in `scanner/rating.py` are wrong for you: say so and they get changed.
 
 ## 4. Next things to build
 
-1. **More employer boards.** Name companies you would love to work for and they go on the watchlist; the scanner also
-   keeps adding the busiest boards it meets by itself.
-2. **"Posted < 24 h" signal** in the Feed so the freshest jobs stand out at a glance.
+1. **More employer boards.** Name companies you would love to work for and they go on the watchlist.
+2. **Keep the applied list fresh by itself**: today `state/applied.json.enc` is rebuilt by hand from the applications
+   database.
 
 ## 5. Beyond job boards
 
@@ -78,7 +68,7 @@ Each one is optional: without it the scan still runs and prints "skipped" for th
 - **Anti-detect browsers** (github.com/topics/antidetect-browser) **and JobSpy-style scrapers**: they work by pretending to
   be a person's browser so a site's bot check lets them through. When a site says no to programs, lockin takes the answer
   and gets the same jobs another way (APIs, open datasets, the employer's own board).
-- **Google Alerts and Adzuna**: switched off by choice (`enabled: false`); the code stays in case they are wanted again.
+- **Google Alerts and Adzuna**: never switched on, so their readers were removed. Site Search and Google Jobs cover the same ground.
 - **zapplyjobs/Canada-Jobs-2027** (Canadian entry-level list, updated every 10 minutes): its links go through Zapply's
   own site and land on its sign-up page, not the posting. Its Greenhouse, Lever and Ashby rows are in Jobhive anyway;
   its Workday rows come from employers the watchlist and the Feashliaa dataset already read.
@@ -90,6 +80,7 @@ Each one is optional: without it the scan still runs and prints "skipped" for th
   job. lockin keeps to what the posting itself says (the talent pool flag) and to employers' own boards.
 - **openroles.today**: a good open dataset, but its robots.txt disallows `/data/` for programs, so it is not read.
 - **Reading LinkedIn or Indeed directly**: they refuse automated readers. Their jobs arrive through Google Jobs, and their
-  people through the two links you click yourself.
-- **The hanzili Canada new-grad list**: empty upstream ("No roles currently"). The scanner keeps reading it in case it
-  returns.
+  people you look up yourself.
+- **The hanzili Canada new-grad list**: empty upstream ("No roles currently"), so its reader was removed.
+- **Pay, recruiter and hiring-manager columns, tags and Fit %**: removed from the Feed; Score, Exp and Province carry
+  what is needed to decide.

@@ -1,4 +1,4 @@
-"""Write the best candidates to the Notion "Job Feed" data source (SPEC §6).
+"""Write the best candidates to the Notion "Job Feed" data source.
 
 The scanner only ever writes to the Feed. It never writes the owner's `Interested` / `Apply` / `done-del`
 checkboxes. The only rows it trashes on a daily run are the ones the owner's Notion automation has already
@@ -14,12 +14,10 @@ from datetime import datetime
 
 import requests
 
-from scanner import pay as pay_text
-from scanner import people
-from scanner.company_names import company_cell, display_company, tag_date
+from scanner.company_names import company_cell
 from scanner.dedupe import canonical_url
-from scanner.models import Job
-from scanner.sources.listing import SITE_SOURCES
+from scanner.enrich import rank_key
+from scanner.models import PROVINCES, Job
 from scanner.text import INVISIBLE
 
 log = logging.getLogger(__name__)
@@ -27,39 +25,17 @@ log = logging.getLogger(__name__)
 API = "https://api.notion.com"
 RICH_TEXT_ITEM_MAX = 2000      # characters per rich_text item (Notion request limit)
 ARRAY_MAX = 100                # elements per rich_text array
-JD_ITEMS_MAX = 95              # SPEC §6a: ~190k characters, leaving headroom under the array limit
+JD_ITEMS_MAX = 95              # ~190k characters, leaving headroom under the array limit
 URL_MAX = 2000
 PAYLOAD_MAX_BYTES = 450_000    # Notion's hard limit is 500 KB per request
 TRUNCATED = "\n\n[truncated]"
 
-# What the Feed must look like. Keys are the logical names used in config.yaml.
+# What the Feed must look like. Keys are the logical names used in config.yaml (notion.properties).
 EXPECTED_TYPES = {
-    "name": "title", "company": "rich_text", "link": "url", "source": "select", "fit": "number",
-    "signals": "multi_select", "jd": "rich_text", "interested": "checkbox", "apply": "checkbox",
+    "name": "title", "company": "rich_text", "link": "url", "score": "number", "exp": "number",
+    "province": "multi_select", "posted": "date", "jd": "rich_text", "interested": "checkbox", "apply": "checkbox",
     "done_del": "checkbox",
 }
-# Properties the scanner fills when the Feed has them and leaves alone when it does not, so a new column can be
-# added in Notion before or after the code that writes it ships.
-OPTIONAL_TYPES = {"location": "rich_text", "recruiter": "url", "manager": "url", "posted": "date", "pay": "rich_text",
-                  "area": "select", "verdict": "select", "why": "rich_text"}
-VERDICTS = ("Apply first", "Worth a look", "Long shot")     # the owner's order; Notion sorts a select this way
-AREA_OPTIONS = ("BC", "Remote", "Alberta", "Ontario", "Canada")     # the owner's order; Notion sorts a select this way
-SOURCE_OPTIONS = ("Workday", "Greenhouse", "Lever", "Ashby", "BambooHR", "Paylocity", "Simplify", "Watchlist")
-# Labels of the job sites. Used when the Feed's Source column has the option; a Feed without it leaves Source empty
-# for those rows (they are not required, so the sites can ship before the options exist).
-SITE_SOURCE_OPTIONS = SITE_SOURCES
-# Optional too: a watchlist ATS added after the Feed was built. Without the option in Notion, Source stays empty.
-EXTRA_SOURCE_OPTIONS = ("SmartRecruiters", "Phenom", "SuccessFactors", "iCIMS")
-# What each tag says in the Feed. The scanner's own names ("low signal", "jd unavailable") meant nothing to the owner.
-TAG_LABELS = {"internship": "Internship", "students only": "Students only", "new grad": "New grad", "recent graduate": "New grad", "0-2 years": "Entry level",
-              "entry level": "Entry level", "junior": "Entry level", "2+ yrs": "Asks 2 yrs", "P.Eng req": "Needs P.Eng",
-              "talent pool": "Talent pool", "jd unavailable": "No description", "low signal": "Unclear fit"}
-SIGNAL_OPTIONS = tuple(dict.fromkeys(TAG_LABELS.values()))
-
-
-def has_tag(tags, signal: str) -> bool:
-    """A Feed row carries this signal, under its Feed label or (rows written before the labels) its own name."""
-    return signal in tags or TAG_LABELS.get(signal) in tags
 
 
 _UUID = re.compile(r"[0-9a-fA-F]{8}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{12}")
@@ -149,11 +125,6 @@ class Feed:
     data_source_id: str
     names: dict[str, str]                       # logical name -> Notion property name
     ids: dict[str, str] = field(default_factory=dict)   # logical name -> Notion property id
-    source_options: set[str] = field(default_factory=set)
-
-    def has(self, logical: str) -> bool:
-        """The Feed has this (optional) property."""
-        return logical in self.ids and logical in self.names
 
 
 def validate_schema(schema: dict, names: dict[str, str]) -> list[str]:
@@ -165,23 +136,13 @@ def validate_schema(schema: dict, names: dict[str, str]) -> list[str]:
         prop = props.get(name)
         if prop is None:
             problems.append(f"missing property {name!r} (expected type {expected})")
-            continue
-        if prop.get("type") != expected:
+        elif prop.get("type") != expected:
             problems.append(f"property {name!r} has type {prop.get('type')!r}, expected {expected!r}")
-            continue
-        if logical == "fit" and (prop.get("number") or {}).get("format") != "percent":
-            problems.append(f"property {name!r} has number format {(prop.get('number') or {}).get('format')!r}, "
-                            "expected 'percent'")
-        for logical_opts, wanted in (("source", SOURCE_OPTIONS), ("signals", SIGNAL_OPTIONS)):
-            if logical == logical_opts:
-                have = {o["name"] for o in (prop.get(expected) or {}).get("options", [])}
-                missing = [o for o in wanted if o not in have]
-                if missing:
-                    problems.append(f"property {name!r} is missing options: {', '.join(missing)}")
-    for logical, expected in OPTIONAL_TYPES.items():
-        prop = props.get(names.get(logical, ""))
-        if prop is not None and prop.get("type") != expected:
-            problems.append(f"property {names[logical]!r} has type {prop.get('type')!r}, expected {expected!r}")
+        elif logical == "province":
+            have = {o["name"] for o in (prop.get("multi_select") or {}).get("options", [])}
+            missing = [o for o in PROVINCES if o not in have]
+            if missing:
+                problems.append(f"property {name!r} is missing options: {', '.join(missing)}")
     return problems
 
 
@@ -197,12 +158,7 @@ def load_feed(client: NotionClient, data_source_id: str, names: dict[str, str]) 
     if problems:
         raise SchemaError("Notion Feed schema does not match:\n  - " + "\n  - ".join(problems))
     props = schema["properties"]
-    return Feed(
-        data_source_id=data_source_id,
-        names=names,
-        ids={k: props[v]["id"] for k, v in names.items() if v in props},
-        source_options={o["name"] for o in props[names["source"]]["select"]["options"]},
-    )
+    return Feed(data_source_id=data_source_id, names=names, ids={k: props[v]["id"] for k, v in names.items()})
 
 
 # --- payload --------------------------------------------------------------------------
@@ -247,56 +203,6 @@ def _rich(text: str) -> list[dict]:
     return [{"type": "text", "text": {"content": c}} for c in chunk_text(text)][:ARRAY_MAX]
 
 
-LEVEL_SIGNALS = ("internship", "new grad", "recent graduate", "0-2 years", "entry level", "junior")       # strongest first
-CAUTION_SIGNALS = ("students only", "2+ yrs", "P.Eng req", "talent pool", "jd unavailable", "low signal")                    # most important first
-
-
-HIDDEN_TAGS = ("students only",)     # the owner applies anyway: many such postings also welcome recent grads
-
-
-def verdict(job: Job) -> str:
-    """One word on whether to spend time on the job, from what lockin knows (Fit, the level the posting asks for,
-    its warnings). The Why column shows the evidence."""
-    s, fit = set(job.signals), job.fit_pct
-    junior = bool(s & set(LEVEL_SIGNALS))
-    if s & {"P.Eng req", "talent pool"}:
-        return "Long shot"
-    if fit is None:                                  # no description, or one naming few of the owner's skills
-        return "Worth a look" if junior else "Long shot"
-    if fit >= 60 and "2+ yrs" not in s:
-        return "Apply first"
-    if junior and fit >= 40:
-        return "Apply first"
-    return "Worth a look" if fit >= 40 else "Long shot"
-
-
-def why(job: Job) -> str:
-    """The evidence behind the verdict in one line: the owner's skills the posting names, and the ones it asks for that
-    the owner does not list."""
-    if "jd unavailable" in job.signals:
-        return "Could not read the posting: open the link"
-    have = ", ".join(job.matched[:5])
-    if job.fit_pct is None:
-        return "Names few of your skills: probably not a tech job" + (f" (mentions {have})" if have else "")
-    line = f"You have: {have}" if have else "Names none of your skills"
-    if job.gaps:
-        line += f" · Missing: {', '.join(job.gaps[:3])}"
-    if "2+ yrs" in job.signals:
-        line += " · asks 2 years"
-    return line[:300]
-
-
-def display_signals(signals: list[str]) -> list[str]:
-    """The tags shown in the Feed: the strongest level tag, then the most important warning. A row used to carry
-    up to five tags ("recent graduate, 0-2 years, junior, 2+ yrs"), more than the column shows; the rest say
-    nothing the first two do not, and the full set stays in reports/latest.md."""
-    level = next((s for s in LEVEL_SIGNALS if s in signals), None)
-    rest = [s for s in signals if s not in LEVEL_SIGNALS and s not in HIDDEN_TAGS]
-    rank = lambda s: CAUTION_SIGNALS.index(s) if s in CAUTION_SIGNALS else len(CAUTION_SIGNALS)
-    caution = min(rest, key=rank) if rest else None
-    return [TAG_LABELS.get(s, s) for s in (level, caution) if s]
-
-
 def build_properties(job: Job, feed: Feed, overrides: dict[str, str]) -> tuple[dict, str]:
     """Notion `properties` for one job, plus the JD text actually sent.
 
@@ -308,38 +214,13 @@ def build_properties(job: Job, feed: Feed, overrides: dict[str, str]) -> tuple[d
         n["name"]: {"title": _rich(job.title)[:1] or [{"type": "text", "text": {"content": ""}}]},
         n["company"]: {"rich_text": _rich(company_cell(job, overrides))},
         n["link"]: {"url": job.url},
-        n["signals"]: {"multi_select": [{"name": s} for s in display_signals(job.signals)]},
+        n["score"]: {"number": job.rating},
+        n["exp"]: {"number": job.exp},
+        n["province"]: {"multi_select": [{"name": p} for p in job.provinces if p in PROVINCES]},
+        n["posted"]: {"date": {"start": job.first_seen.date().isoformat()}},
         n["jd"]: {"rich_text": jd_items},
     }
-    if job.source in feed.source_options:
-        props[n["source"]] = {"select": {"name": job.source}}
-    if feed.has("location") and job.location:
-        props[n["location"]] = {"rich_text": _rich(job.location[:200])}
-    if feed.has("posted"):          # a real date, so the Feed sorts newest first (the tag in Company is text)
-        props[n["posted"]] = {"date": {"start": job.first_seen.date().isoformat()}}
-    if feed.has("verdict"):
-        props[n["verdict"]] = {"select": {"name": verdict(job)}}
-    if feed.has("why"):
-        props[n["why"]] = {"rich_text": _rich(why(job))}
-    if feed.has("area") and job.area in AREA_OPTIONS:
-        props[n["area"]] = {"select": {"name": job.area}}
-    if feed.has("pay"):
-        pay = job.pay or pay_text.from_text(job.jd)
-        if pay:
-            props[n["pay"]] = {"rich_text": _rich(pay[:200])}
-    props.update(people_properties(feed, display_company(job, overrides), job.title))
-    props[n["fit"]] = {"number": None if job.fit_pct is None else round(job.fit_pct / 100, 4)}
     return props, jd_sent
-
-
-def people_properties(feed: Feed, company: str, title: str) -> dict:
-    """The two people-search links (scanner/people.py), for the columns the Feed has."""
-    out = {}
-    if feed.has("recruiter"):
-        out[feed.names["recruiter"]] = {"url": people.recruiter_link(company) or None}
-    if feed.has("manager"):
-        out[feed.names["manager"]] = {"url": people.manager_link(company, title) or None}
-    return out
 
 
 def build_page(job: Job, feed: Feed, overrides: dict[str, str]) -> tuple[dict, str]:
@@ -366,26 +247,33 @@ class FeedRow:
     interested: bool | None     # None: property absent from the response
     apply: bool | None
     done_del: bool | None = None   # ticked by the owner's automation once the row is copied to the main DB
-    fit: float | None = None       # the Feed's Fit % cell (a fraction); the next three feed reports/feedback.md
-    source: str = ""
-    signals: tuple[str, ...] = ()
-    company: str = ""
-    posted: str | None = None      # the Posted date (ISO); None when the cell is empty or the Feed has no such column
+    score: int | None = None       # the Score and Exp cells and the Province tags feed reports/feedback.md
+    exp: int | None = None
+    provinces: tuple[str, ...] = ()
 
     @property
     def picked(self) -> bool:
         return bool(self.interested or self.apply)
+
+    @property
+    def untouched(self) -> bool:
+        """No box ticked, and every box readable: the only rows `wipe-feed` trashes."""
+        return self.interested is False and self.apply is False and self.done_del is False
 
 
 def _parse_ts(ts: str) -> datetime:
     return datetime.fromisoformat(ts.replace("Z", "+00:00"))
 
 
+def _int(value) -> int | None:
+    return int(value) if isinstance(value, (int, float)) else None
+
+
 def list_rows(client: NotionClient, feed: Feed) -> list[FeedRow]:
-    """Every row in the Feed (paginated), fetching only Link / Interested / Apply / done-del."""
+    """Every row in the Feed (paginated), without the JD."""
     n, ids = feed.names, feed.ids
-    wanted = ["link", "interested", "apply", "done_del", "fit", "source", "signals", "company", "posted"]
-    params = {"filter_properties[]": [ids[k] for k in wanted if k in ids]}
+    wanted = ["link", "interested", "apply", "done_del", "score", "exp", "province"]
+    params = {"filter_properties[]": [ids[k] for k in wanted]}
     rows, cursor = [], None
     while True:
         body = {"page_size": 100}
@@ -402,11 +290,9 @@ def list_rows(client: NotionClient, feed: Feed) -> list[FeedRow]:
                 interested=(props.get(n["interested"]) or {}).get("checkbox"),
                 apply=(props.get(n["apply"]) or {}).get("checkbox"),
                 done_del=(props.get(n["done_del"]) or {}).get("checkbox"),
-                fit=(props.get(n["fit"]) or {}).get("number"),
-                source=((props.get(n["source"]) or {}).get("select") or {}).get("name") or "",
-                signals=tuple(o["name"] for o in (props.get(n["signals"]) or {}).get("multi_select") or []),
-                company="".join(t.get("plain_text", "") for t in (props.get(n["company"]) or {}).get("rich_text") or []),
-                posted=((props.get(n.get("posted", "")) or {}).get("date") or {}).get("start"),
+                score=_int((props.get(n["score"]) or {}).get("number")),
+                exp=_int((props.get(n["exp"]) or {}).get("number")),
+                provinces=tuple(o["name"] for o in (props.get(n["province"]) or {}).get("multi_select") or []),
             ))
         if not data.get("has_more"):
             return rows
@@ -417,14 +303,14 @@ def list_rows(client: NotionClient, feed: Feed) -> list[FeedRow]:
 
 def select_new(jobs: list[Job], seen: dict[str, str], feed_links: set[str], cap: int
                ) -> tuple[list[Job], dict[str, int]]:
-    """Highest-score jobs not already in seen.json or the Feed (by Link), at most `cap`.
+    """The best jobs (Score, then Exp, then newest) not already in seen.json or the Feed (by Link), at most `cap`.
 
     Returns (to_write, skipped counts by reason).
     """
     canon_links = {canonical_url(link) for link in feed_links}
     skipped: dict[str, int] = {}
     out: list[Job] = []
-    for job in sorted(jobs, key=lambda j: (-j.score, -j.first_seen.timestamp())):
+    for job in sorted(jobs, key=rank_key):
         reason = None
         if job.key in seen:
             reason = "seen"
@@ -455,27 +341,6 @@ def moved_rows(rows: list[FeedRow]) -> list[FeedRow]:
     deletes unwanted rows by hand.
     """
     return [r for r in rows if r.done_del is True]
-
-
-def date_rows(client: NotionClient, feed: Feed, rows: list[FeedRow], today, *, dry_run: bool) -> int:
-    """Fill the Posted date of rows written before the column existed, from the date tag in their Company cell
-    ('RBC · oct6'). Runs once per row: a dated row is never touched again."""
-    if not feed.has("posted"):
-        return 0
-    done = 0
-    for row in rows:
-        when = None if row.posted or row.done_del else tag_date(row.company, today)
-        if when is None:
-            continue
-        if not dry_run:
-            try:
-                client.request("PATCH", f"/v1/pages/{row.page_id}", idempotent=True,
-                               json={"properties": {feed.names["posted"]: {"date": {"start": when.isoformat()}}}})
-            except NotionError as exc:        # a date is a convenience: never stop the run for it
-                log.warning("could not fill a Posted date: %s", exc)
-                continue
-        done += 1
-    return done
 
 
 def trash_rows(client: NotionClient, rows: list[FeedRow], *, dry_run: bool, on_trashed=None) -> int:
@@ -569,9 +434,7 @@ def _visible(text: str) -> str:
 
 def virtual_feed(names: dict[str, str]) -> Feed:
     """A Feed built from config alone, for dry runs that do not contact Notion."""
-    return Feed(data_source_id="<NOTION_FEED_DATA_SOURCE_ID>", names=names,
-                ids={k: f"<{v} id>" for k, v in names.items()},
-                source_options={*SOURCE_OPTIONS, *SITE_SOURCE_OPTIONS, *EXTRA_SOURCE_OPTIONS})
+    return Feed(data_source_id="<NOTION_FEED_DATA_SOURCE_ID>", names=names, ids={k: f"<{v} id>" for k, v in names.items()})
 
 
 def preview_page(page: dict, jd_prop: str) -> dict:

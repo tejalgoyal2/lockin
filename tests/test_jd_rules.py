@@ -10,9 +10,9 @@ from scanner import jd_rules as r
     ("Minimum of 5 years' experience required", 5),
     ("at least three (3) years of relevant experience", 3),
     ("one to two years of experience", 1),
-    ("1 to 3 years experience preferred", 1),
+    ("1 to 3 years experience preferred", None),
     ("Experience: 4 years in a similar role", 4),
-    ("1+ year of SQL experience and 3+ years of Java experience", 1),  # smallest lower bound wins
+    ("1+ year of SQL experience and 3+ years of Java experience", 3),  # the largest lower bound is the requirement
     ("Over 100 years of experience serving our customers", None),    # company boilerplate
     ("We have 25 years of experience in the industry", None),        # >= 20 is never a requirement
     ("Founded 60 years ago, we are a leader", None),                 # no 'experience' nearby
@@ -20,7 +20,7 @@ from scanner import jd_rules as r
     ("up to 3 years of experience", None),
     ("5+ years in software development", None),                      # no 'experience' within the window
     ("1.5 years of experience", 1.5),
-    ("No experience required", None),
+    ("No experience required", 0),
     ("", None),
 ])
 def test_parse_experience_min_years(text, expected):
@@ -154,16 +154,25 @@ def test_graduation_year_rule_moves_with_the_calendar():
     assert not r.requires_enrollment(text, current_year=2027)
 
 
-def test_signals():
-    exp = r.parse_experience("0-2 years of experience")
-    sig = r.detect_signals("Junior Software Engineer", "This is an entry-level, new grad role. Recent graduates welcome.", exp)
-    assert sig == ["new grad", "recent graduate", "0-2 years", "entry level", "junior"]
+def test_level_is_read_from_the_title_and_the_description():
+    assert r.addresses_new_grads("Software Engineer", "Recent graduates welcome.")
+    assert r.addresses_new_grads("2027 Graduate Program, Technology", "") and r.addresses_new_grads("Developer (New Grad)", "")
+    assert not r.addresses_new_grads("Software Engineer", "Build things.")
+    assert r.junior_level("Jr. Developer", "") and r.junior_level("Associate Software Developer", "")
+    assert r.junior_level("Data Analyst I", "") and r.junior_level("Engineer", "This is an entry-level role.")
+    assert not r.junior_level("Software Engineer", "You will mentor junior engineers")       # "junior" counts in the title only
+    assert r.entry_title("Junior Developer") and r.entry_title("Software Developer (New or Recent Graduate)")
+    assert not r.entry_title("Software Developer")
 
 
-def test_junior_signal_is_title_only():
-    assert "junior" not in r.detect_signals("Software Engineer", "You will mentor junior engineers", r.Experience(None))
-    assert "junior" in r.detect_signals("Jr. Developer", "", r.Experience(None))
-
-
-def test_no_signals_for_plain_jd():
-    assert r.detect_signals("Software Engineer", "Build things.", r.parse_experience("2+ years of experience")) == []
+@pytest.mark.parametrize("text, required", [
+    ("You must be currently enrolled in a degree program.", True),
+    ("You're enrolled in a Computer Science or Engineering degree program", True),
+    ("Must be returning to school after the work term", True),
+    ("You're completing or have recently finished a degree", False),
+    ("Currently pursuing or recently completed a Bachelor's degree", False),
+    ("Currently enrolled in a degree program, or a recent graduate", False),
+    ("You will be enrolled in our benefits plan", False),
+])
+def test_a_posting_that_also_takes_graduates_does_not_require_enrollment(text, required):
+    assert r.requires_enrollment(text, 2026) is required

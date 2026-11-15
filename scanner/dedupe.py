@@ -1,10 +1,10 @@
-"""Two-pass dedupe (SPEC §7): canonical URL, then fuzzy company + title within a city."""
+"""Two-pass dedupe: canonical URL, then fuzzy company + title within a city."""
 import re
 from collections.abc import Iterable
 from difflib import SequenceMatcher
 from urllib.parse import parse_qsl, urlencode, urlsplit
 
-from scanner.models import Job
+from scanner.models import Job, province_tags
 from scanner.normalize import job_key, norm_location, norm_text
 from scanner.sources.listing import SITE_SOURCES
 
@@ -66,7 +66,7 @@ def _merge(a: Job, b: Job) -> Job:
     primary.new_grad = primary.new_grad or other.new_grad
     primary.weak_title = primary.weak_title and other.weak_title
     primary.company_name = primary.company_name or other.company_name
-    primary.pay = primary.pay or other.pay
+    primary.provinces = province_tags({*primary.provinces, *other.provinces})
     primary.first_seen = min(primary.first_seen, other.first_seen)
     return primary
 
@@ -104,7 +104,7 @@ def pending_key(url: str) -> str:
 
 
 def _pass_fuzzy(jobs: list[Job]) -> tuple[list[Job], int]:
-    """Same city (SPEC §7 key includes location) + similar company + similar title."""
+    """Same city + similar company + similar title."""
     survivors: dict[str, list[Job]] = {}
     merges = 0
     for job in jobs:

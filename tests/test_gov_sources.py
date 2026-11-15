@@ -225,24 +225,3 @@ LIST = """# 2026 Canadian CS new Grad/Junior Jobs
 ## Security
 _No roles currently_
 """
-
-
-def test_curated_list_rows_become_records_without_emoji_or_id_markers():
-    from scanner.sources import canadalist
-    recs = canadalist.parse(LIST, NOW)
-    assert [(r["title"], r["company"], r["location"], r["url"]) for r in recs] == [
-        ("Fresh Graduate – Java Full Stack Developer", "KTek Resourcing", "Toronto, Ontario (Onsite)", "https://www.linkedin.com/jobs/view/1"),
-        ("Junior Software Developer", "KEV Group", "Toronto, Ontario (Hybrid)", "https://example.com/jobs/2")]
-    assert all(r["source"] == "Canada List" and r["first_seen"] == NOW for r in recs)
-    assert canadalist.parse("no tables here", NOW) == []
-
-
-def test_curated_list_is_a_site_the_feed_knows_and_two_files_do_not_repeat_a_link():
-    from scanner.sources import canadalist
-    assert "Canada List" in SITE_SOURCES
-
-    class Files:
-        def get(self, url, label):
-            return type("R", (), {"text": LIST})()
-
-    assert len(canadalist.fetch(["a", "b"], Files(), NOW)) == 2

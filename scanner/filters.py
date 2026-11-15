@@ -1,4 +1,4 @@
-"""Config-driven title / location / company / language filters (SPEC §4).
+"""Config-driven title / location / company / language filters.
 
 Each predicate returns True when the record should be KEPT.
 """
@@ -6,6 +6,7 @@ import re
 import unicodedata
 from dataclasses import dataclass, field
 
+from scanner.models import PROVINCES, province_tags
 from scanner.normalize import norm_text
 
 
@@ -42,7 +43,7 @@ class Filters:
     loc_exclude: list
     loc_split: re.Pattern
     title_strong: list
-    title_weak: list
+    title_weak: list          # every non-core title word: the tech-flavoured ones and the generic ones
     title_exclude: list
     student: list
     blocklist: list
@@ -58,9 +59,10 @@ class Filters:
     title_exclude_weak: list = field(default_factory=list)
     student_season: list = field(default_factory=list)
     grad_signal: list = field(default_factory=list)
-    areas: list = field(default_factory=list)      # [(area name, [patterns])] in the owner's order of preference
+    areas: list = field(default_factory=list)      # [(province tag, [patterns])] (config location.areas)
     other_area: list = field(default_factory=list)  # patterns for a province the owner does not want
     drop_other_areas: bool = False
+    title_generic: list = field(default_factory=list)   # the generic part of title_weak (engineer, analyst, specialist ...)
 
     @classmethod
     def from_config(cls, cfg: dict) -> "Filters":
@@ -71,7 +73,9 @@ class Filters:
             loc_exclude=_compile(loc.get("exclude")) + _compile(loc.get("exclude_cs"), 0),
             loc_split=re.compile(loc.get("split_on", "[;|]")),
             title_strong=_prefix(title["strong"]) + _words(title.get("strong_words")) + _words(title.get("strong_words_cs"), 0),
-            title_weak=_prefix(title["weak"]) + _words(title.get("weak_words")) + _words(title.get("weak_words_cs"), 0),
+            title_weak=(_prefix(title["weak"]) + _words(title.get("weak_words")) + _words(title.get("weak_words_cs"), 0)
+                        + _prefix(title.get("generic"))),
+            title_generic=_prefix(title.get("generic")),
             title_exclude=(
                 _prefix(title["exclude"])
                 + _words(title.get("exclude_words"))
@@ -129,28 +133,40 @@ class Filters:
             rest = pat.sub(" ", rest)
         return not _any(self.loc_include, rest)
 
-    AREA_ORDER = ("BC", "Remote", "Alberta", "Ontario", "Canada", "Other")
+    def _part_tags(self, part: str) -> set[str]:
+        """One Canadian place -> its tags: the province it names, "Remote" when it says so ("Remote, Ontario" is both),
+        "Canada" when it names no province, "Other" for a province the owner does not want."""
+        remote = _any(dict(self.areas).get("Remote") or [], part)
+        named = {name for name, pats in self.areas if name != "Remote" and _any(pats, part)}
+        if not named and _any(self.other_area, part):
+            return {"Other"}
+        return named | ({"Remote"} if remote else set()) or {"Canada"}
 
-    def _part_area(self, part: str) -> str:
-        """One Canadian place -> its area. A named province wins over "Remote" ("Remote, Ontario" is Ontario)."""
-        for name, pats in self.areas:
-            if name != "Remote" and _any(pats, part):
-                return name
-        if _any(self.other_area, part):
-            return "Other"
-        remote = dict(self.areas).get("Remote") or []
-        return "Remote" if _any(remote, part) else "Canada"
-
-    def area(self, location: str) -> tuple[str, str | None]:
-        """(area, the place it comes from) for the Feed's Area column: the best of the job's Canadian places in the
-        owner's order (BC, Remote, Alberta, Ontario, Canada). ("Other", part) when every place is in a province the
-        owner does not want; ("", None) when nothing in it is Canadian."""
-        best, where = "", None
+    def provinces(self, location: str, title: str = "") -> list[str]:
+        """The Feed's Province tags for a job: every wanted province among its Canadian places, plus "Remote" when a
+        place or the title says so. ["Other"] when every place is in a province the owner does not want; [] when
+        nothing in it is Canadian. "Canada" (no province named) is shown only when there is nothing more precise."""
+        tags: set[str] = set()
         for part in self._canadian_parts(location):
-            name = self._part_area(part)
-            if not best or self.AREA_ORDER.index(name) < self.AREA_ORDER.index(best):
-                best, where = name, part
-        return best, where
+            tags |= self._part_tags(part)
+        if not tags:
+            return []
+        if tags == {"Other"}:
+            return ["Other"]
+        tags.discard("Other")
+        if re.search(r"\bremote\b", title or "", re.IGNORECASE):
+            tags.add("Remote")
+        return province_tags(tags)
+
+    def best_part(self, location: str) -> str | None:
+        """The Canadian place to show and dedupe by: the first one in the owner's order of provinces."""
+        best, where = len(PROVINCES) + 1, None
+        for part in self._canadian_parts(location):
+            tags = self._part_tags(part)
+            rank = min((PROVINCES.index(t) for t in tags if t in PROVINCES), default=len(PROVINCES))
+            if rank < best:
+                best, where = rank, part
+        return where
 
     def location_status(self, location: str) -> tuple[str, str | None]:
         """('ok', part) | ('quebec_only', part) | ('unresolved', location) | ('not_canada', None).
@@ -195,6 +211,17 @@ class Filters:
         if _any(self.title_strong, title):
             return "strong"
         return "weak" if _any(self.title_weak, title) else None
+
+    def role_tier(self, title: str) -> str | None:
+        """How close the title is to the roles the owner targets: "core" (software, data, ML, cloud, security ...),
+        "adjacent" (another tech role: IT, systems, QA, embedded ...), "generic" (Analyst, Engineer, Specialist with no
+        tech word: only the description can vouch for it), None (no title word matches)."""
+        if _any(self.title_strong, title):
+            return "core"
+        if not _any(self.title_weak, title):
+            return None
+        generic = {id(p) for p in self.title_generic}
+        return "adjacent" if any(p.search(title) for p in self.title_weak if id(p) not in generic) else "generic"
 
     def title_not_excluded(self, title: str) -> bool:
         if _any(self.title_exclude, title):

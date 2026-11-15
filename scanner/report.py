@@ -15,8 +15,8 @@ STAGE_LABELS = {
     "language": "not French-only",
     "title_match": "title matches tech roles",
     "title_not_senior": "not senior / non-software",
-    "not_student_only": "not student-only",
-    "weak_title": "  of which weak_title",
+    "not_student_only": "not an intern / co-op / student title",
+    "weak_title": "  of which not a core title",
     "before dedupe": "before dedupe",
     "merged_url": "  merged by canonical URL",
     "merged_fuzzy": "  merged by fuzzy company+title",
@@ -41,11 +41,9 @@ def sample_rows(jobs: list[Job], n: int, seed: int | None = None) -> list[Job]:
 def format_sample(jobs: list[Job]) -> str:
     lines = []
     for j in jobs:
-        fit = "n/a" if j.fit_pct is None else f"{j.fit_pct:g}%"
         lines.append(
             f"- {j.company} | {j.title} | {j.location} | {j.source_label()}\n"
-            f"    Fit {fit} | Cluster {j.cluster or 'n/a'} | Score {j.score:g} | "
-            f"Signals: {', '.join(j.signals) or '-'}\n"
+            f"    Score {j.rating} | Exp {j.exp} | {', '.join(j.provinces)} | {j.role} | {', '.join(j.notes) or '-'}\n"
             f"    Matched: {', '.join(j.matched[:8]) or '-'}\n"
             f"    Gaps: {', '.join(j.gaps[:8]) or '-'}")
     return "\n".join(lines)
@@ -54,56 +52,46 @@ def format_sample(jobs: list[Job]) -> str:
 def render(jobs: list[Job], since_days: float, now: datetime, meta: dict | None,
            stage_blocks: dict[str, list[tuple[str, int]]], total_deduped: int,
            phase2: dict | None = None) -> str:
-    """`phase2` (optional): {"drops": Counter, "fetch": Counter, "fit_dist": [...], "held": int, "rescued": int}."""
+    """The run's full list, best first, with what each Score was built from. `phase2` (optional): the counters of
+    scanner.enrich plus {"ratings": [...], "applied": {...}}."""
     out = [
         "# Canadian entry-level tech jobs: candidates",
         "",
         f"- Generated: {now:%Y-%m-%d %H:%M} UTC",
         f"- Window: first seen in the last {since_days:g} day(s)",
         f"- Feashliaa dataset last updated: {meta['last_updated'] if meta else 'n/a'}",
-        f"- Candidates after dedupe: **{total_deduped}**",
+        f"- New candidates after dedupe: **{total_deduped}**",
     ]
     if phase2:
-        out.append(f"- Remaining after JD rules: **{len(jobs)}** (ranked by Score)")
+        out.append(f"- Kept by the JD rules: **{len(jobs)}** (best Score first)")
         applied = phase2.get("applied") or {}
         if sum(applied.values()):
             out.append(f"- Skipped as already applied to: {sum(applied.values())} "
                        f"(by link {applied['url']}, by company + title {applied['company+title']})")
-    out += ["", "| First Seen | Company | Role | Location | Source | Tier | Fit % | Cluster | Signals | Gaps | URL |"
-            if phase2 else "| First Seen | Company | Role | Location | Source | Tier | URL |",
-            "|---|---|---|---|---|---|---|---|---|---|---|" if phase2 else "|---|---|---|---|---|---|---|"]
+    out += ["", "Score = role + skills + level (scanner/rating.py). Fit is the share of the tech the posting names that "
+                "is in skills.yaml; Skills counts your tools it names.", "",
+            "| Score | Exp | Province | Posted | Company | Role | Title tier | Fit | Skills | Notes | Gaps | Source | URL |"
+            if phase2 else "| Posted | Company | Role | Location | Title tier | Source | URL |",
+            "|---:|---:|---|---|---|---|---|---:|---:|---|---|---|---|" if phase2 else "|---|---|---|---|---|---|---|"]
     for j in jobs:
-        row = (f"| {j.first_seen:%Y-%m-%d} | {_cell(j.company)} | {_cell(j.title)} | "
-               f"{_cell(j.location)} | {j.source_label()} | {'weak' if j.weak_title else 'strong'} | ")
         if phase2:
-            fit = "n/a" if j.fit_pct is None else f"{j.fit_pct:g}"
-            row += (f"{fit} | {j.cluster or ''} | {', '.join(j.signals)} | "
-                    f"{_cell(', '.join(j.gaps[:6]))} | ")
-        out.append(row + f"{j.url} |")
+            fit = "" if j.fit is None else f"{j.fit:.0%}"
+            out.append(f"| {j.rating} | {j.exp} | {', '.join(j.provinces)} | {j.first_seen:%Y-%m-%d} | {_cell(j.company)} | "
+                       f"{_cell(j.title)} | {j.role} | {fit} | {j.hard} | {', '.join(j.notes)} | "
+                       f"{_cell(', '.join(j.gaps[:6]))} | {j.source_label()} | {j.url} |")
+        else:
+            out.append(f"| {j.first_seen:%Y-%m-%d} | {_cell(j.company)} | {_cell(j.title)} | {_cell(j.location)} | "
+                       f"{'generic or adjacent' if j.weak_title else 'core'} | {j.source_label()} | {j.url} |")
     out += ["", "## Stage counts", ""]
     for name, stages in stage_blocks.items():
         out += [f"**{name}**", "", "| Stage | Remaining |", "|---|---:|"]
         out += [f"| {STAGE_LABELS.get(k, k)} | {v:,} |" for k, v in stages]
         out.append("")
     if phase2:
-        out += ["## JD rules", "", "**Drop reasons**", "", "| Reason | Jobs |", "|---|---:|"]
+        out += ["## JD rules", "", "**Drop reasons** (the jobs are in reports/dropped.md)", "", "| Reason | Jobs |", "|---|---:|"]
         out += [f"| {k} | {v} |" for k, v in sorted(phase2["drops"].items(), key=lambda kv: -kv[1])] or ["| none | 0 |"]
-        out += ["", f"Student-titled jobs held for JD check: {phase2['held']}; rescued: {phase2['rescued']}.",
-                "", "**JD fetch status** (source:status)", "", "| Source:status | Jobs |", "|---|---:|"]
+        out += ["", "**JD fetch status** (source:status)", "", "| Source:status | Jobs |", "|---|---:|"]
         out += [f"| {k} | {v} |" for k, v in sorted(phase2["fetch"].items())]
-        if phase2.get("forbidden"):
-            out += ["", "**JD fetch HTTP 403 (permission denied) by host**", "", "| Host | Jobs |", "|---|---:|"]
-            out += [f"| {h} | {n} |" for h, n in phase2["forbidden"].most_common()]
-        if phase2.get("forbidden_jobs"):
-            out += ["", "**Kept without a JD (`jd unavailable`): Workday answered 403**", "",
-                    "The plain request and a second try with browser headers plus career-site cookies were both refused "
-                    "(Workday errorCode S22, a posting id it is not serving). The tenant's job search was then asked for "
-                    "the same title; an exact title match in a Canadian location replaces the id with the live URL "
-                    "(those jobs are not listed here). No proxy or scraping service is used.", "",
-                    "| Company | Role | URL | Live posting |", "|---|---|---|---|"]
-            out += [f"| {_cell(c)} | {_cell(t)} | {u} | {_cell(note)} |" for c, t, u, note in phase2["forbidden_jobs"]]
-        if phase2.get("relocated"):
-            out += ["", f"Workday ids replaced by a live posting with the same title: {phase2['relocated']}."]
         if phase2.get("unresolved_locations"):
             out += ["", "**Kept with an unresolved location** (Workday \"N Locations\": the list could not be read)", "",
                     "| Company | Role | URL |", "|---|---|---|"]
@@ -112,8 +100,8 @@ def render(jobs: list[Job], since_days: float, now: datetime, meta: dict | None,
             out += ["", "**Company names that look like raw slugs** (add them to `company_names.yaml`)", "",
                     "| Slug | Shown as |", "|---|---|"]
             out += [f"| {_cell(slug)} | {_cell(shown)} |" for slug, shown in phase2["slug_names"]]
-        out += ["", "**Fit % distribution (kept jobs)**", "", "| Fit % | Jobs |", "|---|---:|"]
-        out += [f"| {k} | {v} |" for k, v in phase2["fit_dist"]]
+        out += ["", "**Scores (kept jobs)**", "", "| Score | Jobs |", "|---|---:|"]
+        out += [f"| {k} | {v} |" for k, v in phase2["ratings"]]
         out.append("")
     return "\n".join(out) + "\n"
 
@@ -125,21 +113,15 @@ def write(path: str | Path, text: str) -> None:
 
 
 DROP_NOTES = {
-    "experience_3plus": "the JD asks 3+ years of experience",
-    "two_years_no_fit": "the JD asks 2 years and the skills do not fit",
-    "two_years_low_fit": "the JD asks 2 years and Fit % is low",
-    "two_years_excludes_internships": "2 years, internships do not count",
-    "weak_title_few_terms": "a generic title (Analyst, Specialist, Engineer ...) whose JD names too few tech skills",
-    "weak_title_low_fit": "a generic title whose JD matches none of your skills",
-    "weak_title_no_jd": "a generic title with no JD (only when jd.keep_without_jd is false)",
-    "low_signal_not_dev_title": "the JD has too few tech terms for a Fit % and the title is not a developer role",
+    "experience_too_high": "the JD asks for more experience than jd.max_years (2): 3 or more years, or a range that starts at 2",
+    "not_a_tech_job": "the description does not show a tech job: the less the title says, the more of your tools it must name (jd.relevance)",
+    "generic_title_no_description": "a generic title in a plainly non-tech field, and no description to show otherwise",
     "requires_enrollment": "the JD asks for a currently enrolled student",
-    "student_title_not_rescued": "an intern / co-op title whose JD does not welcome recent graduates",
-    "student_title_no_jd": "an intern / co-op title with no JD to show it welcomes graduates",
     "requires_french": "the JD requires French",
     "security_clearance": "the JD requires a security clearance",
     "us_work_authorization": "the JD requires US work authorization",
     "location_quebec_only": "every location it lists is in Quebec",
+    "location_other_province": "every location it lists is in a province outside BC, Alberta and Ontario",
     "location_ats_not_canada": "the employer's own location list has no Canadian place",
     "location_unresolved_url_not_canadian": "\"N Locations\", the description could not be read and the place in the link is not Canadian",
 }

@@ -1,4 +1,4 @@
-"""HTML → plain text with paragraph breaks preserved (SPEC §6a)."""
+"""HTML → plain text with paragraph breaks preserved."""
 import html
 import re
 from html.parser import HTMLParser

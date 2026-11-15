@@ -20,7 +20,6 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
-from scanner import pay
 from scanner.net import http_get
 from scanner.normalize import parse_iso
 from scanner.text import html_to_text
@@ -84,16 +83,6 @@ def _when(value) -> datetime | None:
     return when if when.tzinfo else when.replace(tzinfo=timezone.utc)
 
 
-def pay_line(r: dict) -> str:
-    """The pay the dataset gives as data (min / max / period / currency, or the employer's own pay sentence)."""
-    currency = (r.get("salary_currency") or "").upper()
-    if (r.get("salary_min") or r.get("salary_max")) and currency in ("", "CAD", "USD"):
-        line = pay.fmt(r.get("salary_min"), r.get("salary_max"), r.get("salary_period"), currency)
-        if line:
-            return line
-    return pay.from_text(_text(r.get("salary_summary") or ""))
-
-
 def _text(desc: str) -> str:
     desc = (desc or "").strip()
     return html_to_text(desc) if _TAG.search(desc) else desc
@@ -126,7 +115,7 @@ def records(rows: list[dict], cutoff: datetime, names: dict[str, str] | None = N
         slug = company.lower() == (urlsplit(url).hostname or "").split(".")[0]      # "lenddirect-attainfinance"
         out.append({"company": company or "Jobhive employer", "company_name": "" if slug else company, "title": title,
                     "location": _where(r.get("location")), "url": url, "source": SOURCE, "first_seen": when,
-                    "jd": _text(r.get("description") or ""), "pay": pay_line(r)})
+                    "jd": _text(r.get("description") or "")})
     out.sort(key=lambda rec: rec["first_seen"], reverse=True)
     return out
 

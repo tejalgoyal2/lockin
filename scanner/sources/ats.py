@@ -1,4 +1,4 @@
-"""Direct ATS fetchers for a single job's description text (SPEC §3c).
+"""Direct ATS fetchers for a single job's description text.
 
 `locate(job)` maps a job to an `AtsRef` (which ATS, which endpoint); `fetch_jd(ref, client)`
 returns plain text. Unsupported ATSes (Paylocity, iCIMS, Workable, ...) locate to None.
@@ -62,8 +62,6 @@ def detect_ats(url: str) -> str | None:
         return "BC Gov"
     if host.endswith("jobicy.com"):
         return "Jobicy"
-    if host.endswith("adzuna.ca"):
-        return "Adzuna"
     if icims.is_job_url(url):
         return "iCIMS"
     if phenom.is_job_url(urlsplit(url or "").path):          # a Phenom careers site: any host, /<country>/<lang>/job/<id>
@@ -149,8 +147,6 @@ def _site(ats: str, url: str) -> AtsRef | None:
         return AtsRef(ats, f"https://hn.algolia.com/api/v1/items/{item}") if item.isdigit() else None
     if ats == "YC" and "/jobs/" not in urlsplit(url).path:
         return None                                  # a company or listing page, not a posting
-    if ats == "Adzuna":
-        return None                                  # Adzuna's page redirects to the employer's; the Feed row carries the link
     return AtsRef(ats, url)
 
 
@@ -408,7 +404,7 @@ def relocate_workday(ref: AtsRef, title: str, client, is_canadian) -> Relocated 
     body = {"appliedFacets": {}, "limit": 20, "offset": 0, "searchText": _words(title)}
     try:
         found = client.post_json(f"{host}/wday/cxs/{tenant}/{site}/jobs", ref.ats, json=body).get("jobPostings") or []
-    except Exception:                        # the search is a best effort; the job stays "jd unavailable"
+    except Exception:                        # the search is a best effort; the job stays without a description
         return None
     for posting in found:
         if not _same_title(posting.get("title", ""), title) or not posting.get("externalPath"):

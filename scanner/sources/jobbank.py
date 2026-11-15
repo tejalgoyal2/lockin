@@ -13,7 +13,6 @@ searched specially: its postings fail the location filter like any other.
 import html
 import math
 import re
-import string
 from collections import deque
 from datetime import datetime, timezone
 from urllib.parse import urlencode

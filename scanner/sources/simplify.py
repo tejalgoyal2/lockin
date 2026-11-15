@@ -1,4 +1,4 @@
-"""SimplifyJobs/New-Grad-Positions listings.json (SPEC §3b), and the same project's internship list."""
+"""SimplifyJobs/New-Grad-Positions listings.json, and the same project's internship list."""
 import json
 from collections.abc import Iterator
 from pathlib import Path

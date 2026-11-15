@@ -1,4 +1,4 @@
-"""Feashliaa/job-board-data: daily gzip'd JSON chunks of ATS postings (SPEC §3a)."""
+"""Feashliaa/job-board-data: daily gzip'd JSON chunks of ATS postings."""
 import gzip
 import json
 import logging

@@ -2,7 +2,6 @@
 import pytest
 
 from scanner.jd_rules import requires_peng
-from tests.test_enrich import gh, run
 
 HYDRO = ("Requirements:\n- Undergraduate degree in Engineering\n"
          "- Professional Engineer, licensed or able to be licensed in the province of Ontario\n"
@@ -31,9 +30,3 @@ def test_peng_required(jd):
 ])
 def test_peng_not_required(jd):
     assert not requires_peng(jd), jd
-
-
-def test_a_peng_job_is_kept_with_the_signal():
-    res = run([gh(1, title="Operations Business Intelligence Engineer")], jds={"1": HYDRO})
-    (j,) = res.kept
-    assert "P.Eng req" in j.signals and res.drops == {}

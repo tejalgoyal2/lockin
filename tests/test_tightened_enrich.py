@@ -5,7 +5,6 @@ import pytest
 import requests
 
 from scanner import enrich as E
-from scanner import report
 from scanner.config import load_config
 from scanner.filters import Filters
 from scanner.models import Job
@@ -38,70 +37,16 @@ class FakeClient:
 
 
 def run(cands, jds, held=()):
-    return E.enrich(list(cands), list(held), CFG, FILTERS, SCORER, FakeClient(jds), cache=NOCACHE)
+    return E.enrich(list(cands) + list(held), CFG, FILTERS, SCORER, FakeClient(jds), cache=NOCACHE)
 
 
 # --- experience tiers -----------------------------------------------------------------
-
-def test_config_values():
-    assert CFG["jd"]["min_years_drop"] == 3 and CFG["jd"]["two_year_min_fit"] == 0.6
-    assert CFG["jd"]["two_year_signal"] == "2+ yrs"
-
 
 @pytest.mark.parametrize("exp", ["3+ years of experience.", "Three (3) or more years of experience.",
                                  "a minimum of five years of experience.", "4-6 years of experience."])
 def test_three_or_more_years_is_dropped(exp):
     res = run([job()], {"1": STRONG.format(exp=exp)})
     assert res.kept == [] and res.drops == {E.R_EXPERIENCE: 1}
-
-
-def test_two_years_with_strong_fit_is_kept_with_signal():
-    (j,) = run([job()], {"1": STRONG.format(exp="2+ years of experience.")}).kept
-    assert "2+ yrs" in j.signals and j.fit_pct == 80.0
-
-
-def test_two_to_four_years_uses_the_lower_bound_of_two():
-    (j,) = run([job()], {"1": STRONG.format(exp="2-4 years of experience.")}).kept
-    assert "2+ yrs" in j.signals
-
-
-def test_two_years_dropped_when_internships_do_not_count(monkeypatch):
-    monkeypatch.setitem(CFG["jd"], "two_year_drops", True)
-    res = run([job()], {"1": STRONG.format(exp="2 years of experience (does not include internships or co-ops).")})
-    assert res.kept == [] and res.drops == {E.R_TWO_YEAR_INTERN: 1}
-
-
-def test_two_years_dropped_without_a_fit_percent(monkeypatch):
-    monkeypatch.setitem(CFG["jd"], "two_year_drops", True)
-    # three terms only -> Fit n/a ("low signal")
-    res = run([job()], {"1": "Python, SQL and Docker. 2 years of experience."})
-    assert res.kept == [] and res.drops == {E.R_TWO_YEAR_NO_FIT: 1}
-
-
-def test_two_years_dropped_below_the_fit_threshold(monkeypatch):
-    monkeypatch.setitem(CFG["jd"], "two_year_drops", True)
-    res = run([job()], {"1": WEAK_FIT.format(exp="2 years of experience.")})
-    assert res.kept == [] and res.drops == {E.R_TWO_YEAR_LOW_FIT: 1}
-
-
-def test_two_year_fit_threshold_comes_from_config(monkeypatch):
-    cfg = {**CFG, "jd": {**CFG["jd"], "two_year_min_fit": 0.9, "two_year_drops": True}}
-    res = E.enrich([job()], [], cfg, FILTERS, SCORER, FakeClient({"1": STRONG.format(exp="2 years of experience.")}),
-                   cache=NOCACHE)
-    assert res.drops == {E.R_TWO_YEAR_LOW_FIT: 1}            # 80 % < 90 %
-
-
-def test_masters_route_uses_its_own_years():
-    jd = STRONG.format(exp="Bachelor's with 5 years of experience, or Master's and 2 years of experience.")
-    (j,) = run([job()], {"1": jd}).kept
-    assert "2+ yrs" in j.signals
-    jd3 = STRONG.format(exp="Bachelor's with 5 years of experience, or Master's and 3 years of experience.")
-    assert run([job()], {"1": jd3}).drops == {E.R_EXPERIENCE: 1}
-
-
-def test_one_year_has_no_two_year_signal():
-    (j,) = run([job()], {"1": STRONG.format(exp="1+ year of experience.")}).kept
-    assert "2+ yrs" not in j.signals
 
 
 # --- French JD ------------------------------------------------------------------------
@@ -187,13 +132,6 @@ def test_location_dropped_jobs_leave_the_gaps_report_alone():
 
 
 # --- weak titles still need four skill / gap terms (context terms do not count) ----------
-
-def test_weak_title_needs_four_core_terms_not_context_terms(monkeypatch):
-    monkeypatch.setitem(CFG["scoring"], "weak_title_strict", True)
-    jd = "Python and SQL. Backend, frontend, DevOps and automated testing, with a database."
-    res = run([job(title="Technical Specialist", weak_title=True)], {"1": jd})
-    assert res.drops == {E.R_WEAK_FEW_TERMS: 1}
-
 
 # --- Workday detail: locations and the browser retry ------------------------------------
 
@@ -308,23 +246,3 @@ def test_polite_client_browser_retry_primes_cookies_and_sends_origin_and_referer
 
 
 # --- report sections --------------------------------------------------------------------
-
-def test_report_lists_forbidden_unresolved_and_slug_names():
-    j = job()
-    j.score = 1.0
-    phase2 = {"drops": {}, "fetch": {}, "fit_dist": [], "held": 0, "rescued": 0,
-              "forbidden": __import__("collections").Counter({"bdo.wd3.myworkdayjobs.com": 1}),
-              "forbidden_jobs": [("BDO", "DevOps | Engineer", "https://bdo.wd3.myworkdayjobs.com/x", "searched: no exact Canadian title match")],
-              "unresolved_locations": [("Acme", "Software Engineer", WD_URL)],
-              "slug_names": [("intouchinsight", "Intouchinsight")]}
-    text = report.render([j], 3, T, None, {}, 1, phase2)
-    assert "Kept without a JD" in text and "BDO | DevOps \\| Engineer" in text
-    assert "unresolved location" in text and WD_URL in text
-    assert "raw slugs" in text and "| intouchinsight | Intouchinsight |" in text
-
-
-def test_two_year_jobs_are_kept_by_default_whatever_the_fit_and_the_internship_wording():
-    for jd in ("Python, SQL and Docker. 2 years of experience.", WEAK_FIT.format(exp="2 years of experience."),
-               STRONG.format(exp="2 years of experience (does not include internships or co-ops).")):
-        res = run([job()], {"1": jd})
-        assert len(res.kept) == 1 and "2+ yrs" in res.kept[0].signals and res.drops == {}

@@ -1,4 +1,4 @@
-"""Rules applied to fetched JD text (SPEC §4 'JD rules')."""
+"""Rules applied to fetched JD text."""
 import re
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -10,12 +10,26 @@ _NUM = r"(?:\d{1,3}(?:\.\d+)?|" + "|".join(_WORDS) + r")"
 _PAREN_DIGITS = (r"(?:\s*\(\s*(?:\d{1,2}|" + "|".join(_WORDS) + r")\s*\+?\s*"
                  r"(?:[-–—]\s*(?:\d{1,2}|" + "|".join(_WORDS) + r")\s*\+?\s*)?\))?")
 _YEARS = re.compile(
-    rf"(?<![\d.])(?P<lo>{_NUM}){_PAREN_DIGITS}\s*(?P<plus>\+)?\s*"
+    rf"(?<![\d.,$])(?P<lo>{_NUM}){_PAREN_DIGITS}\s*(?P<plus>\+)?\s*"
     rf"(?:(?:-|–|—|to)\s*(?P<hi>{_NUM}){_PAREN_DIGITS}\s*(?P<plus2>\+)?\s*)?"
     r"(?:(?:or|and)\s+(?:more|greater|above|over)\s+|plus\s+)?"            # "three (3) or more years"
     r"(?:years?|yrs?)\b",
     re.IGNORECASE,
 )
+# "6 months of experience", and Job Bank's "7 months to less than 1 year"
+_MONTHS = re.compile(r"(?<![\d.,$])(\d{1,2})\s*\+?\s*months?['’]?\s+(?:(?:of\s+)?(?:[\w-]+\s+){0,3}?experience|to\s+less\s+than\s+1\s+year)",
+                     re.IGNORECASE)
+# The posting says no experience is needed. "Experience an asset" and "Will train" are Job Bank's wording for it.
+_NO_EXPERIENCE = re.compile(
+    r"no\s+(?:prior\s+|previous\s+)?(?:work\s+)?experience\s+(?:is\s+)?(?:required|necessary|needed)"
+    r"|^\s*(?:experience\s+an\s+asset|will\s+train)\s*$", re.IGNORECASE | re.MULTILINE)
+# "two year college diploma", "12 month contract", "4 years of university": a length of study or of the job, not experience
+_NOT_EXPERIENCE_AFTER = re.compile(r"^\W{0,3}(?:of\s+)?(?:community\s+|technical\s+|post[\s-]secondary\s+)?"
+                                   r"(?:college|university|degree|diploma|program|certificate|contract|term\b|co-?op|internship|"
+                                   r"placement|apprenticeship|warranty|old\b)", re.IGNORECASE)
+# "3-5 years of experience preferred", "2 years would be an asset": wanted, not required
+_PREFERRED = re.compile(r"\b(?:preferred|preferably|an?\s+asset|assets?\b|nice[\s-]to[\s-]have|a\s+plus|bonus|ideally|desirable|"
+                        r"would\s+be\s+(?:great|nice|beneficial))", re.IGNORECASE)
 _EXPERIENCE = re.compile(r"experience|expérience", re.IGNORECASE)
 _UPPER_BOUND_LEAD = re.compile(r"(?:less than|fewer than|up to|under|maximum of|max\.?|no more than)\s*$", re.IGNORECASE)
 _WINDOW = 100          # characters either side of "N years" searched for the word "experience"
@@ -24,15 +38,6 @@ _BOILERPLATE_MIN = 20  # "over 100 years in business", "25 years of history": ne
 _MASTERS = r"(?:master['’]?s?|m\.?\s?sc\.?|\bm\.?s\.?\b|graduate\s+degree|postgraduate)"
 _MASTERS_RE = re.compile(_MASTERS, re.IGNORECASE)
 _MASTERS_AFTER = re.compile(r"^[^.;\n]{0,28}?(?:with|and|plus|holding|having|if)\s+(?:an?\s+|a\s+)?" + _MASTERS, re.IGNORECASE)
-# "does not include internships or co-ops", "excluding co-op terms", "internships do not count"
-_INTERN = r"(?:intern(?:ship)?s?|co-?ops?|placements?)"
-_INTERN_EXCLUDED = re.compile(
-    rf"(?:(?:does|do|did)\s*n[o']?t|doesn['’]t|don['’]t|not)\s+(?:include|including|count|counting|consider|considering|qualify)[^.;\n]{{0,60}}?{_INTERN}"
-    rf"|(?:exclud\w+|exclusive\s+of|other\s+than|aside\s+from|apart\s+from|not\s+counting)[^.;\n]{{0,40}}?{_INTERN}"
-    rf"|{_INTERN}[^.;\n]{{0,50}}?(?:do(?:es)?\s+not|don['’]t|doesn['’]t|(?:is|are)\s+not|isn['’]t|aren['’]t|will\s+not|won['’]t)\s+(?:count|be\s+(?:counted|considered|included|accepted)|qualify|apply)"
-    rf"|without\s+(?:counting\s+)?{_INTERN}",
-    re.IGNORECASE)
-
 _ENROLLMENT_FIXED = re.compile(
     r"currently\s+enrolled|returning\s+to\s+(?:school|studies)|must\s+be\s+a\s+(?:current\s+)?student"
     r"|enrolled\s+in\s+a\s+co-?op\s+program"
@@ -54,9 +59,8 @@ US_AUTH = re.compile(
     r"\bU\.?S\.?\s+citizen(?:ship)?|\bUnited\s+States\s+citizen(?:ship)?"
     r"|(?:authori[sz]ed|eligible|legally\s+(?:able|entitled))\s+to\s+work\s+in\s+the\s+(?:United\s+States|U\.?S\.?A?\.?)\b",
     re.IGNORECASE)
-# A student-titled job is rescued only by explicit eligibility wording ("open to recent graduates",
-# "recent graduates are welcome"). Award / employer-branding text ("Best Employers for Recent
-# Graduates", "our student and new graduate programs") must not rescue it.
+# Explicit eligibility wording ("open to recent graduates", "recent graduates are welcome"). Award / employer-branding
+# text ("Best Employers for Recent Graduates", "our student and new graduate programs") is not.
 _GRAD = r"(?:recent(?:ly)?\s+graduat\w*|new[\s-]?grad\w*)"
 RESCUE_ELIGIBILITY = re.compile(
     rf"open\s+to\s+(?:[\w,'’/&-]+\s+){{0,4}}?{_GRAD}"
@@ -73,10 +77,10 @@ _GRAD_DATE_BACKWARD = re.compile(r"\b(20\d\d)\s+or\s+(?:later|after)\s+graduat\w
 
 @dataclass(frozen=True)
 class Experience:
-    min_years: float | None                # the requirement: smallest lower bound (Master's route if given)
-    ranges: tuple[tuple[float, float | None], ...] = ()   # (lo, hi) per mention
+    min_years: float | None                # the requirement in years; None: the posting states none
+    ranges: tuple[tuple[float, float | None], ...] = ()   # (lo, hi) per mention that counts
     masters_route: bool = False            # min_years came from an "or Master's and N years" alternative
-    excludes_internships: bool = False     # the JD says internships / co-ops do not count as experience
+    max_years: float | None = None         # the upper end of the mention that set min_years ("2-5 years" -> 5)
 
 
 def _num(token: str) -> float:
@@ -102,27 +106,22 @@ def _masters_route(text: str, m: re.Match) -> bool:
     return bool(_MASTERS_AFTER.search(text[m.end():m.end() + 60]))
 
 
-def excludes_internships(text: str) -> bool:
-    """The JD says internships / co-ops do not count towards the experience it asks for."""
-    for m in _INTERN_EXCLUDED.finditer(text or ""):
-        context = text[max(0, m.start() - 160): m.end() + 160]
-        if re.search(r"experience|years?", context, re.IGNORECASE):
-            return True
-    return False
-
-
 def parse_experience(text: str) -> Experience:
-    """Years-of-experience mentions: "2+ years", "3-5 years", "Three (3) or more years", "two years".
+    """The years of experience a posting requires.
 
-    A mention only counts when the word "experience" is within `_WINDOW` characters. Numbers can be
-    digits, words, or both ("Three (3)"). The lower bound of a range is its requirement ("2-4" -> 2,
-    "2-12+" -> 2); across several mentions the smallest lower bound wins ("1+ year SQL, 3+ years
-    Java" asks for 1). If one mention is an "or Master's and N years" alternative, N is the
-    requirement (the owner has a Master's). "Less than 2 years" upper bounds and numbers >= 20
-    (company boilerplate) are ignored.
+    Mentions are read as digits, words or both ("2+ years", "3-5 years", "Three (3) or more years", "6 months") and
+    count only with the word "experience" within `_WINDOW` characters. A posting usually states the overall
+    requirement and then smaller ones per tool ("5+ years in software engineering ... 1+ years with a relational
+    database"), so the requirement is the LARGEST lower bound: taking the smallest let 5-year jobs through as 1-year
+    ones. Not counted: mentions under a nice-to-have heading or in a sentence that says preferred / an asset, upper bounds
+    ("less than 2 years"), lengths of study or of a contract ("two year diploma", "12 month contract") and numbers
+    >= 20 (company boilerplate). If one mention is an "or Master's and N years" alternative, N is the requirement
+    (the owner has a Master's). "No experience required" with no number is 0.
     """
+    from scanner.score import sections      # local: score must not depend on jd_rules
     text = text or ""
-    ranges: list[tuple[float, float | None]] = []
+    nice = [(a, b) for a, b, k in sections(text) if k == "nice"]
+    found: list[tuple[float, float | None]] = []
     masters: list[float] = []
     for m in _YEARS.finditer(text):
         lo = _num(m.group("lo"))
@@ -131,16 +130,23 @@ def parse_experience(text: str) -> Experience:
             continue
         if _UPPER_BOUND_LEAD.search(text[max(0, m.start() - 15):m.start()]):
             continue
-        window = text[max(0, m.start() - _WINDOW):m.end() + _WINDOW]
-        if not _EXPERIENCE.search(window):
+        if _NOT_EXPERIENCE_AFTER.search(text[m.end():m.end() + 40]):
             continue
-        ranges.append((lo, hi))
+        if not _EXPERIENCE.search(text[max(0, m.start() - _WINDOW):m.end() + _WINDOW]):
+            continue
+        if any(a <= m.start() < b for a, b in nice) or _PREFERRED.search(_sentence(text, m.start())):
+            continue
+        found.append((lo, hi))
         if _masters_route(text, m):
             masters.append(lo)
-    lowest = min((lo for lo, _ in ranges), default=None)
-    if masters:
-        return Experience(min(masters), tuple(ranges), True, excludes_internships(text))
-    return Experience(lowest, tuple(ranges), False, excludes_internships(text))
+    for m in _MONTHS.finditer(text):
+        found.append((round(int(m.group(1)) / 12, 2), None))
+    if not found:
+        return Experience(0.0 if _NO_EXPERIENCE.search(text) else None)
+    need = min(masters) if masters else max(lo for lo, _ in found)
+    tops = [hi for lo, hi in found if lo == need]
+    top = None if None in tops else max(tops)
+    return Experience(need, tuple(found), bool(masters), top)
 
 
 def _future_graduation_date(text: str, current_year: int) -> bool:
@@ -148,16 +154,28 @@ def _future_graduation_date(text: str, current_year: int) -> bool:
                for pat in (_GRAD_DATE_FORWARD, _GRAD_DATE_BACKWARD) for m in pat.finditer(text))
 
 
+_ALSO_GRADUATES = re.compile(
+    r"\brecently\s+(?:graduated|completed|finished)|\b(?:have|has|or)\s+(?:recently\s+|already\s+)?(?:graduated|completed|finished)"
+    r"|\bor\s+(?:an?\s+|are\s+an?\s+)?(?:recent|new)\s+grad\w*|\bgraduated\s+(?:within|in\s+the\s+(?:last|past))|\balumni\b", re.IGNORECASE)
+
+
 def requires_enrollment(text: str, current_year: int | None = None) -> bool:
-    """Current-enrollment requirement (SPEC §4), without tripping on benefits boilerplate."""
+    """The posting is for current students only. A sentence that also takes graduates ("currently pursuing or have
+    recently completed a degree") is not such a requirement; benefits boilerplate ("enrolled in our pension plan")
+    is not either."""
     text = text or ""
     current_year = current_year or datetime.now(timezone.utc).year
-    if _ENROLLMENT_FIXED.search(text) or _future_graduation_date(text, current_year):
+    for m in _ENROLLMENT_FIXED.finditer(text):
+        if not _ALSO_GRADUATES.search(_sentence(text, m.start())):
+            return True
+    if _future_graduation_date(text, current_year):
         return True
     for m in _ENROLLED_IN.finditer(text):
         if _NOT_A_STUDY_PROGRAM.search(m.group("span")):
             continue
         if _EMPLOYEE_LEAD.search(text[max(0, m.start() - 25):m.start()]):
+            continue
+        if _ALSO_GRADUATES.search(_sentence(text, m.start())):
             continue
         return True
     return False
@@ -183,8 +201,10 @@ def requires_us_authorization(text: str) -> bool:
 
 
 def welcomes_recent_grads(text: str) -> bool:
-    """Explicit eligibility wording that rescues a student-titled job (not employer branding)."""
-    return bool(RESCUE_ELIGIBILITY.search(text or ""))
+    """A student-titled posting says graduates may apply: explicit eligibility wording ("open to recent graduates"), or
+    a requirement that takes them too ("completing or have recently finished a degree"). Employer branding ("Best
+    Employers for Recent Graduates") does not count."""
+    return bool(RESCUE_ELIGIBILITY.search(text or "") or _ALSO_GRADUATES.search(text or ""))
 
 
 # --- French / bilingual requirement --------------------------------------------------------------
@@ -221,7 +241,7 @@ def requires_french(text: str) -> bool:
     return False
 
 
-# --- P.Eng licence (SPEC §11 #72) ---------------------------------------------
+# --- P.Eng licence ---------------------------------------------
 _PENG = re.compile(
     r"\bP\.\s?Eng\b\.?|\bPEng\b|"                                   # case-sensitive: never "develop engineering"
     r"(?i:professional\s+engineer(?:ing)?\b(?!\s+(?:services|firm|team|staff)))|"
@@ -274,35 +294,27 @@ def talent_pool(jd: str) -> bool:
     return bool(_POOL.search(jd or ""))
 
 
-# --- Notion "Signals" multi-select ------------------------------------------
-_SIGNAL_NEW_GRAD = re.compile(r"new[\s-]?grad(?:uate)?s?\b", re.IGNORECASE)
-_SIGNAL_RECENT = re.compile(r"recent(?:ly)?\s+graduat\w*|graduated\s+within|university\s+grad|college\s+grad", re.IGNORECASE)
-_SIGNAL_ENTRY = re.compile(r"entry[\s-]?level", re.IGNORECASE)
-_SIGNAL_JUNIOR = re.compile(r"\bjunior\b|\bjr\b\.?", re.IGNORECASE)
-_SIGNAL_NO_EXP = re.compile(r"no\s+(?:prior\s+|previous\s+)?(?:work\s+)?experience\s+(?:is\s+)?(?:required|necessary|needed)", re.IGNORECASE)
-
-SIGNAL_ORDER = ("new grad", "recent graduate", "0-2 years", "entry level", "junior")
-TWO_YEARS = "2+ yrs"                 # requirement is exactly 2 years (kept only with a strong Fit, see enrich)
-LOW_SIGNAL = "low signal"            # JD found, but too few tech terms to trust Fit %
-JD_UNAVAILABLE = "jd unavailable"    # no JD text could be fetched
-PENG = "P.Eng req"                   # the JD requires a P.Eng licence (kept, never dropped)
-INTERN = "internship"                # an intern / co-op / student role (kept when jd.keep_student_roles)
-STUDENTS_ONLY = "students only"      # ... whose posting requires current enrollment
-POOL = "talent pool"                 # evergreen / talent-pool posting, not a current opening (kept, never dropped)
+# --- level -------------------------------------------------------------------------------
+_NEW_GRAD = re.compile(r"new[\s-]?grad(?:uate)?s?\b|recent(?:ly)?\s+graduat\w*|graduated\s+within|university\s+grad|college\s+grad"
+                       r"|\bgraduate\s+(?:program|programme|role|rotation|developer|engineer|analyst|scientist)|\bcampus\b|early[\s-]career",
+                       re.IGNORECASE)
+_JUNIOR_TITLE = re.compile(r"\bjunior\b|\bjr\b\.?|entry[\s-]?level|\bassociate\b|\bapprentice\b|\btrainee\b"
+                           r"|\b(?:engineer|developer|analyst|scientist|specialist|administrator|programmer|tester|technologist)\s+(?:I|1)\b",
+                           re.IGNORECASE)
+_ENTRY_JD = re.compile(r"entry[\s-]?level", re.IGNORECASE)
 
 
-def detect_signals(title: str, jd: str, exp: Experience) -> list[str]:
-    """Boost signals. `junior` is title-only (JDs say 'mentor junior engineers' for senior roles)."""
-    both = f"{title}\n{jd}"
-    found = set()
-    if _SIGNAL_NEW_GRAD.search(both):
-        found.add("new grad")
-    if _SIGNAL_RECENT.search(both):
-        found.add("recent graduate")
-    if _SIGNAL_ENTRY.search(both):
-        found.add("entry level")
-    if _SIGNAL_JUNIOR.search(title):
-        found.add("junior")
-    if any(hi is not None and hi <= 2 and lo <= 1 for lo, hi in exp.ranges) or _SIGNAL_NO_EXP.search(jd):
-        found.add("0-2 years")
-    return [s for s in SIGNAL_ORDER if s in found]
+def addresses_new_grads(title: str, jd: str) -> bool:
+    """The title or the description speaks to new or recent graduates."""
+    return bool(_NEW_GRAD.search(f"{title}\n{jd}"))
+
+
+def junior_level(title: str, jd: str) -> bool:
+    """A junior title (Junior, Associate, "Analyst I"), or a description that calls the job entry level. "Junior" is
+    read in the title only: descriptions say "mentor junior engineers" for senior roles."""
+    return bool(_JUNIOR_TITLE.search(title or "") or _ENTRY_JD.search(jd or ""))
+
+
+def entry_title(title: str) -> bool:
+    """The title itself says who the job is for: new grad, junior, associate, "Engineer I"."""
+    return bool(_NEW_GRAD.search(title or "") or _JUNIOR_TITLE.search(title or ""))

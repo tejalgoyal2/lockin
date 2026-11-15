@@ -54,7 +54,7 @@ def test_non_tech_titles_do_not_match(filters, title):
 
 
 @pytest.mark.parametrize("title", [
-    "Facilities Engineer", "Engineering Project Coordinator", "Marketing Specialist - AI",
+    "Facilities Engineer", "Engineering Project Coordinator", "Marketing Specialist, Events",
     "Production Supervisor", "Superviseur de production", "Production Team Leader",
     "Administrative Assistant, Data Entry", "Technical Recruiter",
     "ASSISTANT VICE-PRESIDENT, DATA & AI", "Vice President, Engineering", "Vice-President Data Science",
@@ -135,22 +135,37 @@ def test_bi_means_business_intelligence_only_in_capitals(filters):
     assert filters.title_tier("Server- 38 Hours Bi Weekly; 7am-3pm Shifts") is None
 
 
-@pytest.mark.parametrize("loc, area", [
-    ("Vancouver, BC", "BC"), ("Burnaby", "BC"), ("Victoria, British Columbia, Canada", "BC"),
-    ("Remote, Canada", "Remote"), ("Canada - Remote", "Remote"), ("Remote (Canada)", "Remote"),
-    ("Calgary, AB", "Alberta"), ("Edmonton, Alberta, Canada", "Alberta"),
-    ("Toronto, ON", "Ontario"), ("Waterloo", "Ontario"), ("Remote, Ontario, Canada", "Ontario"),   # remote inside Ontario
-    ("Regina, SK", "Other"), ("Winnipeg, MB, Canada", "Other"), ("Halifax, NS", "Other"), ("St. John's, NL", "Other"),
-    ("Toronto, ON; Vancouver, BC", "BC"), ("Regina, SK; Calgary, AB", "Alberta"),    # the best place wins
-    ("Canada", "Canada"), ("Langbank, Canada", "Canada"),                             # no province named: kept
+@pytest.mark.parametrize("loc, title, tags", [
+    ("Vancouver, BC", "", ["BC"]), ("Burnaby", "", ["BC"]), ("Victoria, British Columbia, Canada", "", ["BC"]),
+    ("Remote, Canada", "", ["Remote"]), ("Canada - Remote", "", ["Remote"]), ("Remote (Canada)", "", ["Remote"]),
+    ("Remote - British Columbia", "", ["BC", "Remote"]),              # two tags on one job
+    ("Remote, Ontario, Canada", "", ["Remote", "Ontario"]),
+    ("Calgary, AB", "", ["Alberta"]), ("Toronto, ON", "", ["Ontario"]), ("Waterloo", "", ["Ontario"]),
+    ("Calgary, AB", "Developer (Remote)", ["Remote", "Alberta"]),     # the title can say it too
+    ("Toronto, ON; Vancouver, BC", "", ["BC", "Ontario"]),            # every wanted province, in the owner's order
+    ("Regina, SK; Calgary, AB", "", ["Alberta"]),
+    ("Regina, SK", "", ["Other"]), ("Winnipeg, MB, Canada", "", ["Other"]), ("Halifax, NS", "", ["Other"]),
+    ("Canada", "", ["Canada"]), ("Langbank, Canada", "", ["Canada"]),
+    ("Toronto, ON; Canada", "", ["Ontario"]),                         # "Canada" only when nothing is more precise
+    ("Seattle, WA", "", []),
 ])
-def test_area_follows_the_owners_order(filters, loc, area):
-    assert filters.area(loc)[0] == area
+def test_province_tags(filters, loc, title, tags):
+    assert filters.provinces(loc, title) == tags
 
 
-def test_the_area_names_the_place_it_came_from(filters):
-    assert filters.area("Regina, SK; Vancouver, BC") == ("BC", "Vancouver, BC")
-    assert filters.area("Seattle, WA") == ("", None)
+def test_the_place_shown_is_the_first_in_the_owners_order(filters):
+    assert filters.best_part("Regina, SK; Toronto, ON; Vancouver, BC") == "Vancouver, BC"
+    assert filters.best_part("Seattle, WA") is None
+
+
+@pytest.mark.parametrize("title, tier", [
+    ("Software Developer", "core"), ("Data Scientist", "core"), ("Marketing Data Analyst", "core"),
+    ("IT Analyst", "adjacent"), ("Junior Systems Analyst", "adjacent"), ("QA Engineer", "adjacent"),
+    ("Treasury Analyst", "generic"), ("Solutions Engineer", "generic"), ("2027 Graduate Program, Enterprise Solutions", "generic"),
+    ("Registered Nurse", None),
+])
+def test_role_tier(filters, title, tier):
+    assert filters.role_tier(title) == tier
 
 
 def test_a_german_posting_relabelled_as_canadian_is_not_kept(filters):

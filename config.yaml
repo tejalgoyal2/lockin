@@ -1,4 +1,4 @@
-# Everything tunable for the scanner lives here (SPEC §4, §10).
+# Everything tunable for the scanner lives here (SPEC.md).
 # Regexes are Python `re` syntax. Patterns under `*_cs` are case-sensitive;
 # all others are case-insensitive.
 
@@ -85,21 +85,8 @@ sources:
       - embedded
       - python
       - java
-  canadalist:              # a hand-curated GitHub list of Canadian junior / new-grad jobs, updated daily (README and FINANCE.md)
-    enabled: true
-    urls:
-      - https://raw.githubusercontent.com/hanzili/canada_sde_junior_new_grad_position/main/README.md
-      - https://raw.githubusercontent.com/hanzili/canada_sde_junior_new_grad_position/main/FINANCE.md
   jobicy:                  # Jobicy: remote jobs open to Canada (public JSON API, no key; one request an hour per query is its limit)
     enabled: true
-  adzuna:                  # Adzuna Canada search engine (free API key: developer.adzuna.com -> secrets ADZUNA_APP_ID / ADZUNA_APP_KEY).
-                           # Off: the owner chose not to use it
-    enabled: false
-    max_pages: 2           # 50 results a page per term: at most 20 x 2 = 40 calls a run, 80 a day, ~2,400 a month (Adzuna's
-                           # default limits: 250 a day, 1,000 a week, 2,500 a month)
-    terms: [software developer, software engineer, data analyst, data scientist, devops, cloud engineer, machine learning,
-            qa analyst, it support, systems administrator, network administrator, cybersecurity, web developer, business intelligence,
-            junior developer, new grad software, full stack developer, backend developer, frontend developer, python developer]
   googlejobs:              # Google for Jobs through SerpApi: LinkedIn, Indeed, Glassdoor and company-site postings, each with its full
                            # description. Free key (serpapi.com, 250 searches a month) -> secret SERPAPI_KEY; skipped without it
     enabled: true
@@ -134,9 +121,6 @@ sources:
     enabled: true
     systems: [oracle, smartrecruiters, eightfold, dayforce, ukg, rippling, jazzhr, breezy, cornerstone, phenom, jobvite,
               recruitee, teamtailor, taleo, adp, workable, gem, greenhouse, lever, ashby, bamboohr, icims, uber, apple]
-  googlealerts:            # Google Alerts on the ATS sites (site:jobs.lever.co Vancouver ...), delivered as RSS. Free; the feed
-                           # addresses would go in the secret GOOGLE_ALERTS_FEEDS. Off: the owner chose not to use it
-    enabled: false
   bcgov:                   # BC Public Service: the provincial government's own job board (one table, about 80 postings)
     enabled: true
   watchlist:               # employers read directly on every run (watchlist.yaml); see scanner/sources/watchlist.py
@@ -196,10 +180,10 @@ location:
     - ',\s*QC\b'
     - '\bQC\s*[,-]'
     - '^QC$'
-  # The Feed's Area column, in the owner's order: British Columbia first (and remote jobs open to all of Canada, which can
-  # be done from BC), then Alberta and Ontario (the same priority). A job listed in several places takes its best area.
-  # A job only in another province (Saskatchewan, Manitoba, the Atlantic provinces, the territories) is dropped
-  # (`drop_other_areas`); one whose place names no province ("Canada", "Smalltown, Canada") is kept as Canada.
+  # The Feed's Province tags. A job gets the tag of every wanted province it lists, plus Remote when a place or the
+  # title says so ("Remote - British Columbia" is BC + Remote). A job only in another province (Saskatchewan, Manitoba,
+  # the Atlantic provinces, the territories) is dropped (`drop_other_areas`); one whose place names no province
+  # ("Canada", "Smalltown, Canada") is tagged Canada.
   areas:
     BC:
       - '\bBritish Columbia\b|\bB\.C\.'
@@ -243,8 +227,9 @@ location:
     - 'US|USA|U\.S\.(?:A\.)?|NYC|UK|EMEA|APAC|LATAM'
 
 title:
-  # Two tiers. "strong" terms pass outright; "weak" terms are generic words that
-  # are kept but tagged weak_title (phase 2 drops them if the JD shows no skill fit).
+  # Three tiers (scanner/filters.py role_tier). `strong` words name a role the owner targets ("core"): the job is kept
+  # unless a full description shows no tech at all. `weak` words name another tech role ("adjacent"); `generic` words
+  # (Analyst, Engineer ...) say nothing by themselves, so the description must name the owner's skills (jd.relevance).
   strong:
     - software
     - developer
@@ -272,10 +257,16 @@ title:
     - SRE
   strong_words_cs:       # upper case only: "BI Developer", never "Bi Weekly" (a restaurant Server shift reached the Feed)
     - BI
-  weak:
+  generic:
     - engineer
     - analyst
     - specialist
+    - scientist
+    - graduate             # "2027 Graduate Program", "New Grad Rotational Analyst": kept only when the description is tech
+    - new grad
+    - rotational
+    - early career
+  weak:
     - test
     - technical
     - technology           # "Graduate Rotational Program (Technology)": a weak word, so the JD must show a skill fit
@@ -300,7 +291,6 @@ title:
     - server administrator
     - linux administrator
     - windows administrator
-    - scientist
     - integration
   weak_words:
     - QA
@@ -317,7 +307,6 @@ title:
     - NOC
   exclude:
     - senior
-    - marketing
     - supervisor
     - superviseur
     - administrative
@@ -360,6 +349,7 @@ title:
   exclude_if_weak:       # excluded only when the title's tech match is a generic word (engineer, analyst, specialist ...);
     - coordinator
     - technician
+    - marketing           # "Marketing Data Analyst" is a data job; "Marketing Specialist" is not
                          # a strong one ("IT Coordinator", "Data Coordinator", "Cloud Technician") passes
   exclude_words:
     - sr
@@ -413,7 +403,8 @@ title:
     - II
     - III
     - IV
-  # Student-only roles. Phase 2 may rescue these when the JD says recent grads are eligible.
+  # Intern / co-op / student titles. They are kept unless the description requires current enrollment (the owner has
+  # graduated), and score at most 3 unless it says graduates may apply.
   student:
     - intern
     - internship
@@ -465,18 +456,17 @@ jd:
     www.jobbank.gc.ca: 5
   max_per_ats: 5
   cache_dir: .cache/jd       # successful fetches are cached by URL
-  cache_ttl_days: 10         # as long as the freshness window: a job still in the window is not downloaded again
-  min_years_drop: 3          # drop when the minimum required experience (lower bound) is >= this
-  two_year_signal: "2+ yrs"  # lower bound of 2 years: kept, with this Signal, unless a rule below drops it
-  two_year_drops: false      # true: drop a 2-year job unless Fit reaches two_year_min_fit and internships count. False: keep it with the
-                             # signal above (a posting that asks 2 years often takes a new graduate; a missed good job costs more than an extra row)
-  two_year_min_fit: 0.6      # ... Fit (a fraction, like the Feed's Fit % column) must reach this for a 2-year job
-  peng_signal: "P.Eng req"   # Signal when the JD requires a P.Eng licence (not when an EIT is accepted); never a drop
-  min_judge_chars: 600       # a JD shorter than this is too thin to judge a generic title by
-  keep_without_jd: true      # a job whose description cannot be read (403, unsupported site, timeout) is still written to the Feed,
-                             # marked "jd unavailable" and ranked lower: you can open the link and read it yourself
-  no_jd_title_exclude:       # for a job whose JD could not be read AND whose title is generic ("Specialist", "Analyst"): these words
-    - warehouse              # name a field that is not tech, so there is nothing to vouch for it. Everything else with no JD is kept.
+  cache_ttl_days: 10         # longer than the freshness window: a job still in the window is not downloaded again
+  max_years: 2               # the most experience a posting may ask for. "1-5 years" passes (it starts at 1); "2 years" and
+                             # "2+ years" pass as long shots (Exp 3, Score at most 2); "2-5 years", "3 years" and "3+" are dropped
+  relevance:                 # is it a tech job? (scanner/enrich.py relevance_reason)
+    min_judge_chars: 600     # a description shorter than this is too thin to rule a tech title out by
+    generic_min_skills: 2    # a generic title (Analyst, Engineer, Specialist) is kept only when a full description names this many
+                             # of the tools in skills.yaml (process words such as Agile do not count); one for a short description
+    core_always: '\b(?:software|developer|programmer|devops|sre|full[\s-]?stack|back[\s-]?end|front[\s-]?end|cyber\w*|machine learning|database)\b'
+                             # titles that are a tech job whatever the description says (Job Bank postings name no tools)
+  no_jd_title_exclude:       # a generic title whose description could not be read is kept as a low score, except these
+    - warehouse              # words: they name a field that is plainly not tech
     - retail
     - greenlight
     - f&i
@@ -489,74 +479,24 @@ jd:
     - pharmac
     - nurs
     - dental hygien
-  keep_student_roles: true    # internships and co-ops reach the Feed tagged Internship (and Students only when the posting
-                              # requires current enrollment); false: only those whose JD welcomes recent grads (below)
-  rescue_student_titles: true  # fetch JDs of student-titled jobs; keep those that welcome recent grads
-
-scoring:
-  weak_title_strict: false   # true: the old rule below (a generic title needs min_terms_for_fit skill terms and weak_title_min_fit % Fit)
-  weak_title_min_terms: 1    # default rule: a generic title (Analyst, Specialist, Engineer ...) is dropped only when a JD of at least
-                             # jd.min_judge_chars names fewer skill terms than this (so: none at all)
-  weak_few_terms_keep:       # a generic title that also matches one of these is never dropped by the rule above
-    - '\bengineer'
-    - '\b(?:it|information technology|technology|technical support|software|developer|data|devops|cloud|cyber|security|automation|programmer)\b'
-  weak_title_min_fit: 20     # (strict rule) a weak_title job is dropped if Fit % is below this or no skill matches
-  # A `low signal` job (JD found, Fit % n/a) is kept only when its title names a developer role: a JD with too few
-  # tech terms and a title like "Cell Operator" or "Underwriter" is not a tech job. Whole words, plural allowed.
-  low_signal_title_nouns: [engineer, developer, programmer, scientist, analyst]
-  low_signal_title_drop: false    # true: apply the rule above. False (default): such a job is kept and shown as "low signal"; the rule had
-                                  # dropped "Information Security Specialist - PCI DSS" and "Consultant, Data Risk"
-  min_terms_for_fit: 4       # Fit % needs this many distinct terms (matched + gaps + context); fewer -> n/a + `low signal`
-  min_core_terms_for_fit: 2  # ... of which at least this many skills or gaps (one skill and three generic words is not a fit)
-  matched_bonus_per_skill: 2 # ranking Score += this per matched skill ...
-  matched_bonus_cap: 10      # ... counting at most this many skills
-  boost:
-    new_grad: 15             # JD/title has "new grad" or "recent graduate"
-    simplify: 10             # listed by the Simplify new-grad feed or the curated Canada list
-    bc_or_remote: 5
-    fresh:                   # a week-long window lets an old posting outrank today's on Fit alone: favour the new ones.
-      days: 4                # +bonus when posted just now, fading to 0 at this age
-      bonus: 6
-  penalty:
-    no_jd: 10
-  bc_or_remote_pattern: '\bBC\b|British Columbia|Vancouver|Burnaby|Victoria|Richmond|Surrey|\bremote\b'
-
-cluster:
-  # The title decides the cluster; JD terms are used only when the title has no keyword.
-  # Clusters are checked in this order and the first hit wins, so "Data Scientist" is ml
-  # and "AI Security Analyst" is security. No keyword and no JD terms -> `default`.
-  title_keywords:
-    security: {terms: [security, cyber]}
-    ml: {terms: [machine learning, scientist], words: [ML, AI]}
-    data: {terms: [data, analytics], words: [BI]}
-  default: software
 
 notion:
   api_version: "2026-03-11"   # Notion-Version header; 2026-03-11 renamed `archived` to `in_trash`
-  daily_cap: 500              # at most this many rows written per run, highest Score first (a week-long window and ~180 boards
-                              # find several hundred jobs; the owner wants them all, so the cap is a safety valve, not a filter)
+  daily_cap: 500              # at most this many rows written per run, best Score first: a safety valve, not a filter
   verify_readback_min_chars: 4000   # after writing, read back a JD at least this long and compare lengths
-  # Property names exactly as they appear in the Feed. The scanner never writes `interested` / `apply` /
-  # `done_del`. At the start of each run it trashes the rows whose `done_del` box is ticked (the owner's
-  # automation ticks it after copying the row to the main database) and no other row.
+  # Property names exactly as they appear in the Feed (every one is required; README "Setup" has the types). The
+  # scanner never writes `interested` / `apply` / `done_del`. At the start of each run it trashes the rows whose
+  # `done_del` box is ticked (the owner's automation ticks it after copying the row to the main database), no other.
   properties:
     name: Name
     company: Company
     link: Link
-    source: Source
-    fit: "Fit %"
-    signals: Tags             # New grad / Entry level, and at most one warning (Asks 2 yrs, Needs P.Eng, Talent pool, ...)
-    verdict: Verdict          # optional (Select: Apply first, Worth a look, Long shot, in that order)
-    why: Why                  # optional (Text): your skills the posting names, the ones it asks that you lack
-    area: Area                # optional (Select column, options BC, Remote, Alberta, Ontario, Canada in that order)
-    location: Location        # optional: filled when the Feed has the column, ignored when it does not
-    recruiter: Recruiter      # optional (URL column): LinkedIn people search for the company's recruiters
-    manager: Hiring Manager   # optional (URL column): LinkedIn people search for the team's managers and leads
-    posted: Posted            # optional (Date column): the posting date, so the Feed sorts newest first; older rows get
-                              # it from the date tag in Company on the next run
-    pay: Pay                  # optional (Text column): the pay range the posting states ("$70,000–$85,000 a year")
+    score: Score              # Number 1-5: how much the job is worth the owner's time (scanner/rating.py)
+    exp: Exp                  # Number 1-3: 1 = asks 0-1 years, 2 = 1-2 years or not stated, 3 = 2 years
+    province: Province        # Multi-select: BC, Remote, Alberta, Ontario, Canada (a job can carry two: BC + Remote)
+    posted: Posted            # Date the posting was published
     jd: JD
-    interested: I             # Interested (shortened to save space)
+    interested: I             # Interested
     apply: A                  # Apply
     done_del: done-del
 

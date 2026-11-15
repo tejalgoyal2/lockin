@@ -23,8 +23,8 @@ def run_stream(
     A record is counted at stage N only if it passed every earlier stage.
     `pre_stages` are (name, predicate(raw_record)) pairs applied before normalisation.
     `tap(fields)` sees every fresh Canadian record, whatever its title (board discovery: scanner.boards).
-    `student_held` are jobs that cleared every stage except the student-only title
-    filter; phase 2 may rescue them from their JD text.
+    `student_held` are the intern / co-op / student titles that cleared every other stage: they face the same JD
+    rules (a posting that requires enrollment is dropped) and score lower.
     """
     cutoff = now - timedelta(days=since_days)
     names = ["raw", *[n for n, _ in pre_stages], "fresh", "location", "not_quebec_only", "wanted_area", "company",
@@ -50,12 +50,12 @@ def run_stream(
         if status == "quebec_only":
             continue
         counts["not_quebec_only"] += 1
-        area = ""
+        provinces: list[str] = []
         if status == "ok":
-            area, part = filters.area(f["location"])
-            if area == "Other" and filters.drop_other_areas:
+            provinces = filters.provinces(f["location"], f["title"])
+            if provinces == ["Other"] and filters.drop_other_areas:
                 continue                # only in a province the owner does not want (config location.areas)
-            loc = part or loc
+            loc = filters.best_part(f["location"]) or loc
         counts["wanted_area"] += 1
         if not filters.company_ok(f["company"]):
             continue
@@ -74,7 +74,7 @@ def run_stream(
             company=f["company"], company_name=f.get("company_name", ""), title=f["title"], location=loc, url=f["url"],
             source=f["source"], first_seen=f["first_seen"], sources={f["source"]},
             new_grad=f["source"] == "Simplify" and not f.get("intern"), weak_title=tier == "weak",
-            location_pending=status == "unresolved", pay=f.get("pay", ""), area=area,
+            location_pending=status == "unresolved", provinces=provinces,
         )
         if not filters.not_student_only(f["title"]):
             job.student = True

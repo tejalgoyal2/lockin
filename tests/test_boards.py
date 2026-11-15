@@ -296,24 +296,6 @@ def test_unknown_title_words_are_ranked_with_examples():
 
 # --- the ranking favours the newest postings -----------------------------------------------------------------
 
-def test_a_posting_from_today_outranks_an_identical_old_one_and_the_bonus_fades_to_nothing():
-    from scanner import enrich
-    from scanner.models import Job
-    cfg = load_config()
-    boost = __import__("re").compile(cfg["scoring"]["bc_or_remote_pattern"])
-    now = datetime.now(timezone.utc)
-
-    def score(age_days):
-        job = Job("acme", "Software Developer", "Toronto, ON", "u", "Greenhouse", now - timedelta(days=age_days))
-        job.fit_pct, job.jd_status = 70.0, "ok"
-        return enrich._score(job, cfg, boost)
-
-    fresh = cfg["scoring"]["boost"]["fresh"]
-    assert score(0) - score(fresh["days"]) == pytest.approx(fresh["bonus"], abs=0.2)
-    assert score(fresh["days"]) == score(9) == 70.0                           # no bonus, no penalty, past the fade
-    assert score(0) > score(1) > score(2) > score(fresh["days"])
-
-
 def test_only_boards_with_a_title_the_filters_accept_are_candidates_and_the_most_useful_come_first(tmp_path):
     f = Filters.from_config(load_config())
     store = boards.BoardStore(tmp_path / "b.json", relevant=lambda t: f.title_tier(t) is not None and f.title_not_excluded(t))

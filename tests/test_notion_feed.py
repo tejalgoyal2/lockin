@@ -16,7 +16,7 @@ def make_job(i=1, jd="Python, SQL, Docker, Git.", **kw):
     base = dict(company="rbc", title="Software Engineer I", location="Toronto, ON",
                 url=f"https://jobs.example.com/{i}?utm=x", source="Workday",
                 first_seen=datetime(2026, 10, 6, 9, tzinfo=timezone.utc), sources={"Workday"},
-                key=f"key{i}", jd=jd, jd_status="ok", fit_pct=70.0, signals=["junior"], score=80.0 - i)
+                key=f"key{i}", jd=jd, jd_status="ok", fit=0.7, rating=4, exp=1, provinces=["BC", "Remote"])
     base.update(kw)
     return Job(**base)
 
@@ -42,7 +42,7 @@ def feed(client):
 # --- schema ---------------------------------------------------------------------------
 
 def test_good_schema_loads_and_resolves_ids(feed):
-    assert feed.ids["jd"] == "p_jd" and "Greenhouse" in feed.source_options
+    assert feed.ids["jd"] == "p_jd" and feed.ids["score"] == "p_score" and feed.ids["province"] == "p_prov"
 
 
 def test_missing_property_is_reported_by_name(client, notion):
@@ -52,17 +52,17 @@ def test_missing_property_is_reported_by_name(client, notion):
     assert "missing property 'JD'" in str(e.value)
 
 
-def test_wrong_type_and_wrong_number_format_and_missing_options_all_listed(client, notion):
+def test_wrong_types_and_missing_province_options_are_all_listed(client, notion):
     p = notion.schema["properties"]
     p["Link"]["type"] = "rich_text"
-    p["Fit %"]["number"]["format"] = "number"
-    p["Signals"]["multi_select"]["options"] = [{"name": "junior"}]
+    p["Score"]["type"] = "select"
+    p["Province"]["multi_select"]["options"] = [{"name": "BC"}]
     with pytest.raises(nf.SchemaError) as e:
         nf.load_feed(client, "ds-1", NAMES)
     msg = str(e.value)
     assert "'Link' has type 'rich_text', expected 'url'" in msg
-    assert "'Fit %' has number format 'number', expected 'percent'" in msg
-    assert "'Signals' is missing options: Internship" in msg and "New grad" in msg and "No description" in msg
+    assert "'Score' has type 'select', expected 'number'" in msg
+    assert "'Province' is missing options: Remote, Alberta, Ontario, Canada" in msg
 
 
 def test_unreadable_data_source_gives_a_sharing_hint(client, notion):
@@ -83,70 +83,21 @@ def test_payload_shape(feed):
     assert p["Name"]["title"][0]["text"]["content"] == "Software Engineer I"
     assert p["Company"]["rich_text"][0]["text"]["content"] == "RBC · oct6"
     assert p["Link"] == {"url": "https://jobs.example.com/1?utm=x"}
-    assert p["Source"] == {"select": {"name": "Workday"}}
-    assert p["Fit %"] == {"number": 0.7}                # a fraction, not 70
-    assert p["Signals"] == {"multi_select": [{"name": "Entry level"}]}
+    assert p["Score"] == {"number": 4} and p["Exp"] == {"number": 1}
+    assert p["Province"] == {"multi_select": [{"name": "BC"}, {"name": "Remote"}]}      # two tags on one job
+    assert p["Posted"] == {"date": {"start": "2026-10-06"}}
     assert sent == "Python, SQL, Docker, Git."
-    assert set(p) == {"Name", "Company", "Link", "Source", "Fit %", "Signals", "JD"}
+    assert set(p) == {"Name", "Company", "Link", "Score", "Exp", "Province", "Posted", "JD"}
 
 
 def test_owner_checkboxes_are_never_written(feed):
     props = nf.build_page(make_job(), feed, OVERRIDES)[0]["properties"]
-    assert "Interested" not in props and "Apply" not in props
-    for extra in ("Matched", "Gaps", "Cluster", "Score"):
-        assert extra not in props
+    assert not {"I", "A", "done-del"} & set(props)
 
 
-def test_fit_empty_when_na_and_fraction_rounding(feed):
-    assert nf.build_page(make_job(fit_pct=None), feed, OVERRIDES)[0]["properties"]["Fit %"] == {"number": None}
-    assert nf.build_page(make_job(fit_pct=85.7), feed, OVERRIDES)[0]["properties"]["Fit %"] == {"number": 0.857}
-    assert nf.build_page(make_job(fit_pct=100.0), feed, OVERRIDES)[0]["properties"]["Fit %"] == {"number": 1.0}
-
-
-def test_source_outside_the_feed_options_is_left_empty(feed):
-    props = nf.build_page(make_job(source="iCIMS"), feed, OVERRIDES)[0]["properties"]
-    assert "Source" not in props         # would otherwise create a new select option silently
-
-
-def test_data_quality_values_show_as_the_one_warning(feed):
-    props = nf.build_page(make_job(signals=["low signal", "jd unavailable"]), feed, OVERRIDES)[0]["properties"]
-    assert [s["name"] for s in props["Signals"]["multi_select"]] == ["No description"]
-
-
-@pytest.mark.parametrize("signals, shown", [
-    ([], []),
-    (["junior"], ["Entry level"]),
-    (["new grad", "recent graduate", "0-2 years", "junior"], ["New grad"]),            # the strongest level tag only
-    (["recent graduate", "0-2 years", "2+ yrs"], ["New grad", "Asks 2 yrs"]),           # level, then the warning
-    (["2+ yrs", "P.Eng req"], ["Asks 2 yrs"]),                                           # one warning: the first listed
-    (["entry level", "low signal"], ["Entry level", "Unclear fit"]),
-    (["jd unavailable", "junior"], ["Entry level", "No description"]),
-    (["something new"], ["something new"]),                                              # unknown tags are not lost
-])
-def test_display_signals_keeps_at_most_two_tags(signals, shown):
-    assert nf.display_signals(signals) == shown
-
-
-def test_location_is_written_when_the_feed_has_the_column(client, notion):
-    notion.schema["properties"]["Location"] = {"id": "p_loc", "type": "rich_text", "rich_text": {}}
-    names = {**NAMES, "location": "Location"}
-    feed = nf.load_feed(client, "ds-1", names)
-    props = nf.build_page(make_job(location="Burnaby, BC"), feed, OVERRIDES)[0]["properties"]
-    assert props["Location"]["rich_text"][0]["text"]["content"] == "Burnaby, BC"
-
-
-def test_a_feed_without_the_location_column_still_works(client):
-    feed = nf.load_feed(client, "ds-1", {**NAMES, "location": "Location"})      # configured, not in Notion
-    assert not feed.has("location")
-    props = nf.build_page(make_job(location="Burnaby, BC"), feed, OVERRIDES)[0]["properties"]
-    assert "Location" not in props
-
-
-def test_location_column_of_the_wrong_type_is_reported(client, notion):
-    notion.schema["properties"]["Location"] = {"id": "p_loc", "type": "number", "number": {}}
-    with pytest.raises(nf.SchemaError) as e:
-        nf.load_feed(client, "ds-1", {**NAMES, "location": "Location"})
-    assert "'Location' has type 'number'" in str(e.value)
+def test_a_province_tag_outside_the_feed_options_is_not_sent(feed):
+    props = nf.build_page(make_job(provinces=["Other", "Ontario"]), feed, OVERRIDES)[0]["properties"]
+    assert props["Province"] == {"multi_select": [{"name": "Ontario"}]}      # would otherwise create an option silently
 
 
 # --- JD chunking ----------------------------------------------------------------------
@@ -186,13 +137,19 @@ def test_long_link_is_skipped():
 
 # --- selection / dedupe ---------------------------------------------------------------
 
-def test_select_new_orders_by_score_and_applies_cap_seen_and_feed_links():
-    jobs = [make_job(i, score=float(i)) for i in range(1, 8)]      # scores 1..7
-    seen = {"key7": "2026-10-01"}                                   # highest score, already written
+def test_select_new_takes_the_best_score_first_and_applies_cap_seen_and_feed_links():
+    jobs = [make_job(i, rating=min(i, 5)) for i in range(1, 8)]     # scores 1, 2, 3, 4, 5, 5, 5
+    seen = {"key7": "2026-10-01"}                                   # already written
     feed_links = {"https://jobs.example.com/6"}                     # same Link (tracking params ignored)
     chosen, skipped = nf.select_new(jobs, seen, feed_links, cap=3)
     assert [j.key for j in chosen] == ["key5", "key4", "key3"]
     assert skipped == {"seen": 1, "link_in_feed": 1, "over_cap": 2}
+
+
+def test_equal_scores_put_the_lowest_experience_then_the_newest_first():
+    old = datetime(2026, 10, 1, tzinfo=timezone.utc)
+    jobs = [make_job(1, exp=2), make_job(2, exp=1, first_seen=old), make_job(3, exp=1)]
+    assert [j.key for j in nf.select_new(jobs, {}, set(), cap=5)[0]] == ["key3", "key2", "key1"]
 
 
 def test_link_check_ignores_tracking_params_but_not_job_ids():
@@ -253,8 +210,13 @@ def test_feed_without_done_del_fails_the_schema_check():
 def test_list_rows_asks_only_for_the_needed_properties(notion, client, feed):
     rows_fixture(notion, client, feed)
     q = [r for r in notion.requests if r["path"].endswith("/query")][-1]
-    assert q["params"] == {"filter_properties[]": ["p_link", "p_int", "p_apply", "p_done", "p_fit", "p_source",
-                                                                "p_signals", "p_company"]}
+    assert q["params"] == {"filter_properties[]": ["p_link", "p_int", "p_apply", "p_done", "p_score", "p_exp", "p_prov"]}
+
+
+def test_only_rows_with_no_box_ticked_are_untouched(notion, client, feed):
+    ids, rows = rows_fixture(notion, client, feed)
+    assert sorted(r.page_id for r in rows if r.untouched) == sorted([ids["old_plain"], ids["fresh_plain"]])
+    assert not nf.FeedRow("p", NOW, "https://a", interested=None, apply=False, done_del=False).untouched
 
 
 # --- writing + read-back --------------------------------------------------------------

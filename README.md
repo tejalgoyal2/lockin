@@ -6,148 +6,140 @@ Job hunting is a full-time job that pays nothing. **lockin** is the intern that 
 day, for free, without ever asking for a coffee.
 
 It reads the public job lists, throws out everything that wants 7 years of experience in a technology invented 4
-years ago, scores what is left against your skills, and drops the best new **entry-level and new-grad tech jobs in
-Canada** into a Notion board. You tick a box. It never writes a cover letter, never calls a model, never costs a
-cent. It runs on GitHub Actions while you do something healthier, like refreshing the same Feed.
+years ago, rates what is left against your skills, and drops the new **entry-level tech jobs in BC, Alberta, Ontario
+and remote Canada** into a Notion board with two numbers on each: how good a bet it is, and how much experience it
+asks for. You tick a box. It never writes a cover letter, never calls a model, never costs a cent. It runs on GitHub
+Actions while you do something healthier, like refreshing the same Feed.
 
-Design notes live in [SPEC.md](SPEC.md). Opinions about the job market do not.
+How it decides is in [SPEC.md](SPEC.md). Using the Feed to get interviews: [docs/IDEAS.md](docs/IDEAS.md).
 
-**Using the Feed to get hired, and the keys worth adding:** [docs/IDEAS.md](docs/IDEAS.md).
+## Reading the Feed
+
+| Column | What it says |
+|---|---|
+| **Name**, **Company** | the job title; the employer and the day it was found (`RBC · nov14`) |
+| **Score** | 1-5, how much the job is worth your time. See below |
+| **Exp** | the experience the posting asks for: **1** = 0-1 years (or it says new grad / junior / intern), **2** = 1-2 years, or it gives no number, **3** = 2 years (a long shot). Anything asking for more is not in the Feed |
+| **Province** | BC, Remote, Alberta, Ontario, Canada (no province named). A job can carry two: `BC` + `Remote` |
+| **Posted** | the date the employer published the job |
+| **Link**, **JD** | the posting, and its full text |
+| **A**, **I**, **done-del** | yours: **A** = Apply, **I** = Interested, **done-del** = finished with the row (the next run removes it) |
+
+**Score** is role + skills + level, read off the posting by fixed rules (no model, so the same posting always gets
+the same number):
+
+- **role**: 2 if the title is a role you target (software, data, ML / AI, cloud, security ...), 1 for a neighbouring
+  tech role (IT, systems, QA, technical support ...), 0 for a generic title (Analyst, Engineer, Specialist).
+- **skills**: 2 if the posting names 4+ of your tools and they are 60 %+ of the tech it asks for, 1 for 2+ tools and
+  40 %+. A tool in the job title counts double ("Java Developer" is a Java job). A targeted role whose posting names
+  no stack at all gets 1.
+- **level**: 1 if it is entry level (Exp = 1).
+
+| Score | Read it as |
+|---|---|
+| **5** | apply today: a role you target, your stack, entry level |
+| **4** | a strong match; the level is not stated or it asks for 1-2 years |
+| **3** | a fair match: part of your stack, or a neighbouring role that uses it |
+| **2** | a long shot or an unknown: asks for 2 years, or the posting could not be read, or it is a talent pool |
+| **1** | probably not worth it: a generic role that barely mentions your tools, or one that needs a P.Eng |
+
+An internship or co-op is kept unless it requires current enrollment, and is a 3 at most unless it says graduates
+may apply. Sort by **Score** (high first), then **Exp**, then **Posted**.
+
+Your Notion automation copies a row you tick to your main database and ticks `done-del`; the next run trashes the
+row, and `state/seen.json` makes sure the job never comes back to haunt you.
 
 ## What a run does
 
-1. Read [Feashliaa/job-board-data](https://github.com/Feashliaa/job-board-data), the
-   [SimplifyJobs new-grad list](https://github.com/SimplifyJobs/New-Grad-Positions), the employer boards in
-   `watchlist.yaml` (read live, so they are as fresh as the employer's own site; boards the scanner finds by itself
-   go in `watchlist.auto.yaml`) and six job sites, Job Bank and the BC Public Service among them (see "Job sites" below).
-2. Filter by freshness, Canadian location, company blocklist, language, title and seniority (`config.yaml`).
-   "Senior", "Staff", "Principal" and "Director of Vibes" do not make it through.
-3. Fetch each JD (Greenhouse, Lever, Ashby, Workday, BambooHR, SmartRecruiters, Phenom, and the job sites), apply the JD rules (3+ years, current
-   enrollment, clearance) and score the fit against `skills.yaml` / `gaps.yaml`.
-4. Write the top `notion.daily_cap` (500) new jobs to the Feed, skipping anything in `state/seen.json` or
-   already in the Feed by Link. At the start of the run, Feed rows whose `done-del` box is ticked (your Notion
-   automation ticks it after copying the row to your main database) are trashed; no other row is ever trashed.
-5. Commit `state/` and `reports/` back to the repo. `reports/latest.md` is the full candidate list; `reports/dropped.md` lists every job
-   the JD rules dropped, by reason (years asked, too few skills, French required ...): read it when you suspect a good job was lost;
-   `reports/boards.md` lists the employer boards the scanner added by itself and the ones resting after failed reads;
-   `reports/gaps.md` (Mondays) lists the tech terms JDs keep asking for that you do not have yet (a to-learn list that
-   writes itself, yay); `reports/feedback.md`
-   shows what you actually pick, by Fit band, source and tag (see "Feedback").
+1. Read [Feashliaa/job-board-data](https://github.com/Feashliaa/job-board-data) (1.4 M ATS postings, refreshed daily),
+   the [SimplifyJobs](https://github.com/SimplifyJobs/New-Grad-Positions) new-grad and internship lists, the 220+
+   employer boards in `watchlist.yaml` / `watchlist.auto.yaml` (read live) and the job sites below.
+2. Filter by freshness (7 days), Canadian location (BC, Alberta, Ontario, remote; not Quebec-only), company
+   blocklist, language, title and seniority (`config.yaml`). "Senior", "Staff", "Principal" and "Director of Vibes" do
+   not make it through.
+3. Fetch each description and apply the JD rules: dropped if it asks for more than 2 years ("2-5 years", "3+"; "1-5
+   years" passes), requires French, a security clearance or current enrollment, or does not show a tech job (the less
+   the title says, the more of your tools the description must name).
+4. Rate what is left (Score, Exp, Province) and write the new jobs to the Feed, best first, skipping anything in
+   `state/seen.json`, already in the Feed by Link, or on the encrypted list of jobs you applied to. Rows whose
+   `done-del` box is ticked are trashed first; no other row is ever trashed by a run.
+5. Commit `state/` and `reports/` back to the repo: `reports/latest.md` (every kept job with what its Score was built
+   from), `reports/dropped.md` (every job the JD rules dropped, by reason: read it when you suspect a good job was
+   lost), `reports/boards.md` (employer boards added or resting), `reports/gaps.md` (Mondays: the tech the week's
+   postings ask for that you do not list) and `reports/feedback.md` (what you pick, by Score: if the pick rate does not
+   rise with the Score, the rules in `scanner/rating.py` need work).
 
-It is scheduled twice a day, at 15:57 and 23:57 UTC. GitHub's cron has no time zones, so those slots sit between the
-two Pacific offsets (07:57 / 15:57 in winter, 08:57 / 16:57 in summer) and GitHub's usual delay of a few minutes to an
-hour lands the runs around 8-9 am and 4-5 pm Pacific. The odd minutes are on purpose: jobs scheduled on the hour are
-the ones GitHub delays most, which is also how it feels waiting for a recruiter. GitHub also forgets a scheduled run
-now and then; the 7-day window (`freshness.default_days`) makes the next run pick up what the lost one would have
-found, and a run only writes jobs not already seen, so nothing comes twice.
+**Schedule.** Scans run at **08:00 and 16:00 in British Columbia** (UTC-7 all year), in time to apply the same day.
+GitHub starts scheduled workflows hours late on this repo (2.5 to 6.5 h, measured), so the workflow is triggered
+every two hours and the first trigger to reach a slot waits for it, scans on time and records the slot in
+`state/last_slot`; the triggers behind it stop in seconds. A slot nobody reached is still run up to 4 hours late, and
+the 7-day window covers anything worse.
 
 ## Running it from GitHub (Actions tab)
 
-Nothing needs installing: open the repo on GitHub, **Actions**, pick a workflow, **Run workflow**.
+**`scan`** is the real thing. Run it by hand with these inputs:
 
-**`scan`** is the real thing (the same run the schedule does). Its inputs:
-
-| Input | Leave blank / default | Use it to |
+| Input | Default | Use it to |
 |---|---|---|
-| `dry_run` | ticked | scan and report without touching Notion or `state/seen.json`. **Untick it for a real run**; keep it ticked to look first. |
-| `since_days` | `7` (`freshness.default_days`) | widen the net: `14` or `30` after a break, a new source or a fix. Safe any time: `state/seen.json` keeps a job from being written twice, so a wide window only costs a longer run. |
-| `max_rows` | `500` (`notion.daily_cap`) | how many new rows this run may write (the best-scoring ones go first; the rest wait for the next run while they are inside the window). `5` to try it, `100` to empty a backlog. |
-
-Typical recipes: *"did the last fix work?"* is `dry_run` ticked, `since_days` 14, then read the log and
-`reports/latest.md`. *"I was away for two weeks"* is `dry_run` unticked, `since_days` 14, `max_rows` 100. From a
-terminal with the GitHub CLI, the same things:
+| `dry_run` | ticked | scan and report without touching Notion or `state/seen.json`. **Untick it for a real run** |
+| `since_days` | `7` | widen the net: `14` or `30` after a break. `state/seen.json` keeps a job from being written twice |
+| `max_rows` | `500` | how many new rows this run may write (best first) |
 
 ```bash
 gh workflow run scan.yml -f dry_run=true  -f since_days=14                 # look first
-gh workflow run scan.yml -f dry_run=false -f since_days=14 -f max_rows=100 # catch up for real
+gh workflow run scan.yml -f dry_run=false -f since_days=14                 # catch up for real
 gh run watch                                                               # follow the run
 ```
 
-**`tools`** are the helpers (nothing is written to the repo, and only `clean-feed` touches Notion; the answer is in the run's Summary and
-log). Pick `command` and write `args` the way you would in a terminal:
+**`tools`** are the helpers (the answer is in the run's Summary and log):
 
 | `command` | `args` | Answers |
 |---|---|---|
-| `audit` | `--days 30` (default 14) | Which filter rules stop the fresh Canadian postings, which discarded titles look like jobs you want, which title words the filter does not know. See "The filter audit". |
-| `why` | `"General Motors"` (add `--since 21`) | "I saw this employer post a job, why is it not in the Feed?" Names the first rule that stops each of its Canadian postings, or says the employer is not on the watchlist. |
-| `clean-feed` | `--dry-run` (then run again without it) | Re-checks the rows already in your Feed against today's rules and trashes the ones that now fail, never a row with Interested / Apply / done-del ticked (Notion keeps trashed rows 30 days). `--rescore` also refreshes Fit % and Tags. |
-| `discover` | `"Telus" "Bell Canada"`, or `--workday rbc`, `--phenom jobs.bell.ca/ca/en=Bell`, `--successfactors careers.telus.com=Telus` or `--icims careersen-victoria.icims.com=City of Victoria` | Finds an employer's job board and prints the `watchlist.yaml` line to add. |
+| `audit` | `--days 30` (default 14) | Which title rules stop the fresh Canadian postings, which discarded titles look like jobs you want, which title words the filter does not know. Run it after changing a filter |
+| `why` | `"General Motors"` | "I saw this employer post a job, why is it not in the Feed?" Names the rule that stops each of its Canadian postings, or says the employer is not on the watchlist |
+| `discover` | `"Telus"`, `--workday rbc`, `--phenom jobs.bell.ca/ca/en=Bell`, `--successfactors careers.telus.com=Telus`, `--icims HOST=Name` | Finds an employer's job board and prints the `watchlist.yaml` line to add |
+| `wipe-feed` | `--dry-run` first | A fresh start: trashes every Feed row with no box ticked (Notion keeps them 30 days). Then empty `state/seen.json` (`{"seen": {}}`) and run `scan` |
 
 ## Setup
 
-1. **Create the Feed database in Notion** with exactly these properties (names and types matter; the scanner
-   refuses to start otherwise and tells you what is wrong):
+1. **Create the Feed database in Notion** with exactly these properties (the scanner refuses to start otherwise and
+   says what is wrong):
 
    | Property | Type |
    |---|---|
    | Name | Title |
    | Company | Text |
+   | Score | Number |
+   | Exp | Number |
+   | Province | Multi-select, options in this order: BC, Remote, Alberta, Ontario, Canada |
+   | Posted | Date |
    | Link | URL |
-   | Source | Select: Workday, Greenhouse, Lever, Ashby, BambooHR, Paylocity, Simplify, Watchlist. Optional extras: YC, Built In, Bay Street Oracle, HN, SmartRecruiters |
-   | Fit % | Number, format **Percent** |
-   | Tags | Multi-select, options: Internship, Students only, New grad, Entry level, Asks 2 yrs, Needs P.Eng, Talent pool, No description, Unclear fit |
-   | Area | Select (optional), options in this order: BC, Remote, Alberta, Ontario, Canada. Sorting by Area puts BC first |
-   | Location | Text (optional: filled when the column exists) |
-   | Posted | Date (optional): the posting date, so the Feed sorts newest first. Rows written before the column existed get it from the date in Company on the next run |
-   | Pay | Text (optional): the pay the posting states, e.g. "$70,000–$85,000 a year" (empty when it states none) |
    | JD | Text |
-   | I | Checkbox (Interested) |
    | A | Checkbox (Apply) |
+   | I | Checkbox (Interested) |
    | done-del | Checkbox |
 
-2. **Create a Notion integration** (an internal connection) at <https://www.notion.so/profile/integrations>
-   with read, update and insert content capabilities. Copy its secret.
-3. **Share the Feed database with the integration** (database menu `...` > Connections). Share nothing else:
-   the scanner never needs your main database, and you do not need a bot reading your life.
-4. **Get the data source ID** of the Feed (database menu `...` > Manage data sources > copy the data source ID).
-   It is not the ID in the database's URL. Yes, that one trips everybody.
-5. **Add two repository secrets** (Settings > Secrets and variables > Actions):
-   `NOTION_TOKEN` (the integration secret) and `NOTION_FEED_DATA_SOURCE_ID`. Never commit either, and never paste a
-   Notion ID anywhere in the repo.
-6. **Run it once by hand**: Actions > scan > Run workflow. Leave `dry_run` ticked first (it validates the Feed
-   schema and shows what it would write), then run again with `dry_run` unticked and `max_rows` = 5.
-   After that the schedule takes over. The workflow commits to the branch it runs on; if that branch is protected,
-   let GitHub Actions push to it.
-
-**Reading the Feed.** Every row has a **Verdict** (Apply first: your skills and level fit; Worth a look: a partial
-match or 2 years asked; Long shot: few of your skills, a P.Eng, or no current opening) and a **Why** line (your skills
-the posting names, and what it asks that you lack). The Feed's **Info** tab repeats this key in one line. Sort by **Area** (BC, then remote jobs open
-to all of Canada, then Alberta and Ontario), then **Fit %**. Jobs only in other provinces are not written at all. **Tags**, at most two:
-
-| Tag | Means |
-|---|---|
-| Internship | an intern or co-op role |
-| Students only | the posting requires current enrollment |
-| New grad | the posting asks for new or recent graduates |
-| Entry level | it says junior, entry level or 0-2 years |
-| Asks 2 yrs | it asks for 2 years of experience: apply if the rest fits |
-| Needs P.Eng | it requires an engineering licence |
-| Talent pool | it says it is evergreen or not for a current opening: expect to wait |
-| No description | the posting's text could not be read: open the link |
-| Unclear fit | the text names few of your skills, often not a tech job: lowest priority |
-
-**Fit %** is how many of your skills the posting names, not a prophecy: open the job before you fall in love. **Posted**
-is the date the employer published the job (for the Canada List, the day lockin first saw it). **Pay** is what the
-posting states.
-
-Your Notion automation copies a ticked row to your main database and ticks `done-del`; the next run trashes the row,
-and `state/seen.json` makes sure the job never comes back to haunt you.
+2. **Create a Notion integration** at <https://www.notion.so/profile/integrations> with read, update and insert
+   content capabilities, and **share the Feed database with it** (database menu `...` > Connections). Share nothing
+   else: you do not need a bot reading your life.
+3. **Add two repository secrets** (Settings > Secrets and variables > Actions): `NOTION_TOKEN` (the integration
+   secret) and `NOTION_FEED_DATA_SOURCE_ID` (database menu `...` > Manage data sources > copy the data source ID; it
+   is not the ID in the database's URL. Yes, that one trips everybody). Never commit either.
+4. **Run it once by hand**: Actions > scan > Run workflow, `dry_run` ticked (it checks the Feed and shows what it
+   would write), then again unticked.
 
 ## Run it locally
 
 ```bash
 pip install --require-hashes -r requirements-dev.txt        # Python 3.12; every package pinned by hash
-python -m scanner run --dry-run --skip-notion --since 7     # scan, score, print Notion payloads; touches nothing
+python -m scanner run --dry-run --skip-notion --since 7     # scan and rate; touches nothing
 NOTION_TOKEN=... NOTION_FEED_DATA_SOURCE_ID=... python -m scanner run --dry-run   # also checks the Feed schema
-NOTION_TOKEN=... NOTION_FEED_DATA_SOURCE_ID=... python -m scanner run --max-rows 5
 pytest
 ```
 
 Dependencies: edit `requirements.in` / `requirements-dev.in`, then regenerate the pinned files with
 `pip-compile --generate-hashes --allow-unsafe --strip-extras requirements.in` (and the same for
 `requirements-dev.in`). Dependabot opens weekly PRs for pip and GitHub Actions.
-
-Useful flags: `--since N`, `--max-rows N`, `--no-jd` (phase 1 only), `--no-notion`, `--gaps-report always`.
 
 ## Watchlist: employers we stalk professionally
 
@@ -201,33 +193,24 @@ changing a filter, or when a job you wanted never showed up.
 
 ## Job sites
 
-| Source label | What is read | How |
-|---|---|---|
-| `YC` | Y Combinator's job pages for Canada, Toronto and Vancouver | JSON embedded in the page; postings asking 3+ years are skipped before anything else |
-| `Built In` | Built In Vancouver, entry-level cards for engineering and data (up to 3 pages each) | server-rendered cards |
-| `Bay Street Oracle` | capital-markets jobs; only postings whose URL words match a tech title are opened | sitemap, then each posting's schema.org data; linked to the employer's own ATS when the scanner reads it |
-| `HN` | the monthly "Ask HN: Who is hiring?" thread; top-level comments whose header line (`Company \| Role \| Location`) names a Canadian place and a role (or whose first lines do) | Algolia HN API; a comment counts as new when first read, not when written |
-| `Jobicy` | remote jobs open to Canada | Jobicy's public JSON API (no key); the JD comes from the posting page |
-| `Adzuna` | Canadian search results for 20 tech keywords | Adzuna's API. Turned off (`enabled: false`): not used |
-| `Google Jobs` | Google for Jobs: the job panel Google shows for a search, which gathers LinkedIn, Indeed, Glassdoor, Talent.com and employers' own sites. 2 of 24 tech searches a run, in turn, for British Columbia | SerpApi's Google Jobs API, each posting with its full description. Needs a free key (serpapi.com, 250 searches a month) saved as the secret `SERPAPI_KEY`; skipped without it. The link is the employer's ATS page when Google lists one, so the JD and location come from the employer |
-| `Google Alerts` | new pages Google indexes on the ATS sites (`site:jobs.lever.co Vancouver` ...): postings often show up here before LinkedIn | Google Alerts RSS. Turned off (`enabled: false`): not used |
-| `Jobhive` | the hiring systems lockin has no reader for: Oracle Recruiting, Eightfold (Microsoft), Dayforce, UKG, Rippling, JazzHR, Breezy, Cornerstone; plus every Greenhouse, Lever, Ashby, BambooHR, iCIMS, SmartRecruiters and Phenom board, not just the watchlist's, and Uber and Apple. About 6,000 Canadian postings a week | ats-scrapers' open dataset (github.com/kalil0321/ats-scrapers, MIT): one Parquet snapshot per system, refreshed daily, free, no key. The Canadian rows inside the window are kept, each with its description; Oracle links are rebuilt to open the posting itself |
-| `Site Search` | the recruiter's Boolean trick on 9 ATS sites at once: `site:jobs.ashbyhq.com ("software engineer" OR "software developer" ...) (Vancouver OR "British Columbia" OR Canada)`, past week only; every host x title group, taken in turn | Brave Search API (`BRAVE_SEARCH_API_KEY`, 15 searches a run) or, without it, SerpApi's Google results (`SERPAPI_KEY`, 2 a run). Each result that is a posting is read on the employer's ATS like any other job |
-| `Job Bank` | the federal Job Bank (jobbank.gc.ca): each tech occupation (NOC code) and a few keywords, paged 25 at a time, newest first | Job Bank's public results pages. They carry the employers' postings **and the partner sites' ones: CivicJobs.ca (the municipal board: city halls, regional districts), Talent.com, Indeed ...** The Atom feed was dropped: it holds only the employer-posted jobs and 10 per keyword. 5 seconds between requests, as its robots.txt asks |
-| `BC Gov` | the BC Public Service (bcpublicservice.hua.hrsmart.com): every external posting, about 80 | one HTML table; the page shows the date opened, so the freshness window works |
+| Source | What is read |
+|---|---|
+| YC | Y Combinator's job pages for Canada, Toronto and Vancouver |
+| Built In | Built In Vancouver's entry-level cards for engineering and data |
+| Bay Street Oracle | capital-markets jobs whose URL names a tech title |
+| HN | the monthly "Ask HN: Who is hiring?" thread: comments that name a Canadian place and a role |
+| Jobicy | remote jobs open to Canada (public JSON API) |
+| Google Jobs | Google's job panel (LinkedIn, Indeed, Glassdoor, company sites) through SerpApi: 2 of 24 searches a run, for British Columbia. Needs `SERPAPI_KEY` |
+| Site Search | the recruiter's Boolean trick on 9 ATS sites (`site:jobs.ashbyhq.com ("software engineer" OR ...) (Vancouver OR Canada)`), past week, through Brave Search (`BRAVE_SEARCH_API_KEY`, 15 searches a run) or SerpApi |
+| Jobhive | [ats-scrapers](https://github.com/kalil0321/ats-scrapers)' open dataset (MIT): the hiring systems lockin has no reader for (Oracle, Eightfold, Dayforce, UKG, Rippling ...) and every Greenhouse, Lever, Ashby, BambooHR and iCIMS board, not just the watchlist's |
+| Job Bank | the federal Job Bank: each tech occupation (NOC code) and a few keywords, newest first; it also carries CivicJobs.ca (municipal) and other partner sites' postings |
+| BC Gov | the BC Public Service's own board |
 
-All of them read only what the sites publish to any visitor, at the same polite pace as the ATS fetchers, under the
-scanner's own name. A site that is down or has changed prints `WARNING <site>: not read (...)` and the run goes on.
-A job a site shares with an ATS board is kept once, with the ATS link. To turn one off set `enabled: false` under
-`sources.<name>` in `config.yaml`. The Feed's Source column needs the options `YC`, `Built In`, `Bay Street Oracle`,
-`HN`, `Job Bank`, `BC Gov`, `Jobicy`, `Adzuna`, `Google Jobs`, `Google Alerts`, `Site Search` and `Jobhive` (and `SmartRecruiters` / `Phenom` / `SuccessFactors` / `iCIMS` for those watchlist boards) to show them (without the option the Source cell stays empty; nothing else changes).
-
-**Municipal jobs.** CivicJobs and CivicInfo BC answer an automated client with a Cloudflare bot challenge (HTTP 403, including
-on the RSS feed CivicInfo advertises). That is the sites saying no, so lockin does not go there: no fake browsers, no challenge
-solvers. Two honest routes instead: Job Bank republishes CivicJobs.ca postings (the `Job Bank` source above), and the cities,
-regional districts, health authorities and Crown corporations are read from their **own** job sites when those are iCIMS or
-SuccessFactors (City of Victoria, City of Vancouver, City of Toronto, ICBC ...: see `watchlist.yaml`). Work at a Startup lists the
-same postings as the YC pages.
+All of them read only what the sites publish to any visitor, at a polite pace, under the scanner's own name. A site
+that is down or has changed prints `WARNING <site>: not read (...)` and the run goes on. A job a site shares with an
+ATS board is kept once, with the ATS link. Turn one off with `enabled: false` under `sources.<name>` in `config.yaml`.
+A site that answers programs with a bot challenge (CivicJobs, LinkedIn, Indeed) is saying no, so lockin does not go
+there: their jobs arrive through Job Bank, Google Jobs and the employers' own boards.
 
 ## Keys and secrets (all optional, all free)
 
@@ -243,27 +226,17 @@ exactly as written and the value. Never paste a key into a file, an issue or a c
 To check: Actions, **scan**, **Run workflow** with *Dry run* ticked. The log shows `Site Search: 15 of 45 searches this run,
 through Brave`, `Google Jobs: N postings` instead of "skipped".
 
-**The Recruiter and Hiring Manager links** need nothing: they are LinkedIn people searches you open yourself, signed in.
-Rows written before the columns existed get them with Actions, **tools**, command `clean-feed`, args `--people-links`.
-
-## Feedback: teaching the robot your taste
-
-Before a `done-del` row is trashed, the run counts it in `state/feedback.json`: reviewed or picked (`Interested` /
-`Apply`), by Fit band, source and its two tags. Counts only, no titles or companies. `reports/feedback.md` prints
-the pick rate per band. If Fit % predicts your picks, the rate rises with the band; if a band is flat, that is
-where Fit % needs work. The first 120 reviewed rows were entered by hand when this started
-(`seeded_through` in the file), so they are never counted twice.
-
 ## What you edit
 
 | File | Purpose |
 |---|---|
-| `config.yaml` | every filter, threshold, Notion property name and the daily cap |
-| `skills.yaml` | your skills and their aliases (drives Fit %) |
-| `gaps.yaml` | common tech terms you do not have yet (shown as gaps) |
+| `config.yaml` | every filter, the experience limit, the relevance rule, the Feed's property names |
+| `skills.yaml` | your skills and their aliases (the tools a posting is matched against) |
+| `gaps.yaml` | common tech terms you do not have yet (they count against the fit) |
 | `company_names.yaml` | display names for the Feed's Company column (`rbc: RBC`) |
 | `watchlist.yaml` | employer job boards read directly on every run |
 | `watchlist.auto.yaml` | boards the scanner added by itself; delete a line to drop one |
+| `scanner/rating.py` | the Score and Exp rules, in 80 lines |
 
 ## Credits
 

@@ -20,7 +20,7 @@ from scanner import jd_rules as J
     ("one to two years of experience", 1),
     ("5+ years of experience", 5),
     ("three plus years of experience", 3),
-    ("1+ year of experience with SQL and 3+ years of experience with Java", 1),     # smallest lower bound
+    ("1+ year of experience with SQL and 3+ years of experience with Java", 3),     # the largest lower bound
     ("Experience: 4 or more years", 4),
 ])
 def test_years_as_digits_words_or_both(text, lo):
@@ -46,20 +46,6 @@ def test_masters_alternative_sets_the_requirement():
     assert c.min_years == 4 and not c.masters_route
     d = J.parse_experience("3 years of experience. Master's preferred.")
     assert d.min_years == 3 and not d.masters_route
-
-
-@pytest.mark.parametrize("text,expected", [
-    ("2 years of experience (this does not include internships or co-ops)", True),
-    ("Minimum 2 years experience; internships and co-ops do not count.", True),
-    ("2 years of professional experience, excluding internships.", True),
-    ("2+ years of experience, not counting co-op terms", True),
-    ("Experience of 2 years. Internship experience does not qualify.", True),
-    ("2 years of experience, including internships and co-ops", False),
-    ("Internships available. 2 years of experience.", False),
-    ("We run an internship program and a co-op program for students.", False),     # nothing about experience
-])
-def test_internships_excluded_from_experience(text, expected):
-    assert J.parse_experience(text).excludes_internships is expected
 
 
 YES_FRENCH = [
@@ -99,3 +85,24 @@ def test_french_required(text):
 @pytest.mark.parametrize("text", NO_FRENCH)
 def test_passing_mention_of_french_is_not_enough(text):
     assert not J.requires_french(text)
+
+
+@pytest.mark.parametrize("text, lo, hi", [
+    ("5+ years of experience in software engineering. 1+ years experience with a relational database", 5, None),
+    ("1-5 years of experience", 1, 5),
+    ("2-5 years of experience", 2, 5),
+    ("2+ years of experience", 2, None),
+    ("At least two years of professional experience.\nPreferred qualifications:\n- Three to five years of industry experience", 2, None),
+    ("Minimum 3 years industrial experience.\n1 - 3 years millwright experience, preferred", 3, None),
+    ("Two year community college diploma.\nExperience: Three to four years' related experience.", 3, 4),
+    ("Salary: $75,000 - $85,000 year (dependent on experience)", None, None),        # "000 year" is not a requirement
+    ("12 month contract. Experience with Python.", None, None),
+    ("6 months of co-op experience", 0.5, None),
+    ("Experience\n\n7 months to less than 1 year", 0.58, None),                       # Job Bank's wording
+    ("Experience\n\n1 year to less than 2 years", 1, None),
+    ("Experience\n\nExperience an asset\n", 0, None),
+    ("Experience\n\nWill train\n", 0, None),
+])
+def test_the_requirement_is_the_largest_lower_bound_that_is_really_asked_for(text, lo, hi):
+    e = J.parse_experience(text)
+    assert (e.min_years, e.max_years) == (lo, hi)

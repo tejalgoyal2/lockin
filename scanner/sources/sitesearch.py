@@ -17,16 +17,52 @@ result that is a posting page on an ATS becomes a record; phase 2 reads the post
 job the ATS lists only outside Canada is dropped there like any other.
 """
 import os
+import html
 import re
 from datetime import datetime, timezone
 from urllib.parse import urlsplit
 
-from scanner.sources.googlealerts import company_from_url, split_title
 from scanner.sources.googlejobs import terms_for_run
 
 SOURCE = "Site Search"
 BRAVE = "https://api.search.brave.com/res/v1/web/search"
 SERPAPI = "https://serpapi.com/search.json"
+_GREENHOUSE = re.compile(r"^Job Application for (?P<title>.+?) at (?P<company>.+)$", re.I)
+_COMPANY_FIRST = re.compile(r"^(?P<company>[^|@]+?) - (?P<title>.+)$")       # Lever, Workable: "Acme - Software Engineer"
+_AT = re.compile(r"^(?P<title>.+?) @ (?P<company>.+)$")                       # Ashby: "Software Engineer @ Acme"
+_PIPE = re.compile(r"^(?P<title>.+?) \| (?P<company>[^|]+?)(?: \| .*)?$")    # many career sites: "Title | Company"
+_SLUG_HOSTS = ("greenhouse.io", "lever.co", "ashbyhq.com", "workable.com", "bamboohr.com", "smartrecruiters.com")
+
+
+def _plain(fragment: str) -> str:
+    return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", "", fragment or ""))).strip()
+
+
+def company_from_url(url: str) -> str:
+    """The employer's slug on a multi-tenant ATS (jobs.lever.co/<slug>/...), the tenant on Workday, else the site's name."""
+    parts = urlsplit(url)
+    host = (parts.hostname or "").lower()
+    segs = [s for s in parts.path.split("/") if s]
+    if host.endswith(_SLUG_HOSTS) and segs:
+        return segs[1] if segs[0] in ("embed", "j", "jobs") and len(segs) > 1 and host.endswith("workable.com") else segs[0]
+    if host.endswith("myworkdayjobs.com"):
+        return host.split(".")[0]
+    labels = [label for label in host.split(".") if label not in ("www", "careers", "jobs", "apply", "boards", "job-boards")]
+    return labels[0] if labels else host
+
+
+def split_title(raw: str, url: str) -> tuple[str, str]:
+    """(job title, company) from the page title Google shows."""
+    text = _plain(raw)
+    host = (urlsplit(url).hostname or "").lower()
+    pats = [_GREENHOUSE, *([_COMPANY_FIRST] if host.endswith(("lever.co", "workable.com")) else []), _AT, _PIPE]
+    for pat in pats:
+        m = pat.match(text)
+        if m:
+            return m.group("title").strip(), m.group("company").strip()
+    return text, ""
+
+
 _ELLIPSIS = re.compile(r"\s*(?:\.\.\.|…)\s*$")
 # A posting page, not a board's index or a company page, on each ATS.
 _POSTING = {
