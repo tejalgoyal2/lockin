@@ -2,10 +2,9 @@
 
 What the scanner learned about employer boards (state/boards.json). Boards it found by itself are in `watchlist.auto.yaml`.
 
-## Added this run (2)
+## Added this run (1)
 
-- `workday/cibc.wd3/campus` cibc: 34 Canadian postings, 25 pass the title filters
-- `workday/pwc.wd3/nonpublic_postings` pwc: 16 Canadian postings, 2 pass the title filters
+- `workday/airliquidehr.wd3/airliquideexternalcareer` airliquidehr: 65 Canadian postings, 4 pass the title filters
 
 ## Resting (28)
 
@@ -40,24 +39,24 @@ Failed 3+ reads in a row; tried again after the date shown (a working read clear
 - `workday/workday.wd5/workday`: 3 failures, back on 2026-11-21 (HTTPError: 521 Server Error: <none> for url: https://workday.wd5.myworkdayjobs.com/wday/cxs/workday/Workday/jobs)
 - `workday/zoom.wd5/zoom`: 3 failures, back on 2026-11-21 (HTTPError: 521 Server Error: <none> for url: https://zoom.wd5.myworkdayjobs.com/wday/cxs/zoom/Zoom/jobs)
 
-## Candidates not added (70)
+## Candidates not added (73)
 
 A board is given up after 3 probes that find nothing to add.
 
-- `workday/aep.wd1/aepcareersite` aep: error after 2 probes HTTPError: 521 Server Error: <none> for url: https://aep.wd1.myworkdayjobs.com/wday/cxs/aep/aepcareersite/jobs
+- `workday/aep.wd1/aepcareersite` aep: dead after 3 probes HTTPError: 521 Server Error: <none> for url: https://aep.wd1.myworkdayjobs.com/wday/cxs/aep/aepcareersite/jobs
 - `workday/aero.wd5/external` aero: dead after 3 probes
 - `workday/alfalaval.wd3/alfa_laval_jobs` alfalaval: dead after 3 probes
-- `workday/aoins.wd5/autoowners` aoins: empty after 2 probes
+- `workday/aoins.wd5/autoowners` aoins: dead after 3 probes
 - `workday/astrazeneca.wd3/broadbean_external` astrazeneca: empty after 2 probes
 - `workday/astrazeneca.wd3/careers` astrazeneca: empty after 2 probes
-- `workday/awg.wd3/broadbean_external` awg: empty after 1 probes
+- `workday/awg.wd3/broadbean_external` awg: empty after 2 probes
 - `workday/bah.wd1/bah_jobs` bah: dead after 3 probes
 - `workday/caci.wd1/external` caci: dead after 3 probes HTTPError: 502 Server Error: Bad Gateway for url: https://caci.wd1.myworkdayjobs.com/wday/cxs/caci/external/jobs
 - `workday/cambiahealth.wd504/external` cambiahealth: dead after 3 probes
 - `workday/centene.wd5/centene_external` centene: empty after 2 probes
 - `workday/cgm.wd3/cgm` cgm: dead after 3 probes
 - `workday/cna.wd1/cna_careers` cna: dead after 3 probes
-- `workday/columbiabank.wd108/columbia` columbiabank: empty after 2 probes
+- `workday/columbiabank.wd108/columbia` columbiabank: dead after 3 probes
 - `workday/dedalus.wd3/external` dedalus: dead after 3 probes
 - `workday/desjardins.wd10/desjardins` desjardins: dead after 3 probes
 - `workday/desjardins.wd10/desjardins2` desjardins: dead after 3 probes
@@ -92,8 +91,8 @@ A board is given up after 3 probes that find nothing to add.
 - `workday/micron.wd1/external` micron: dead after 3 probes
 - `workday/morganlewis.wd5/morganlewis` morganlewis: dead after 3 probes
 - `workday/msd.wd5/searchjobs` msd: dead after 3 probes
-- `workday/mydpr.wd5/11212017` mydpr: empty after 1 probes
-- `workday/nrel.wd5/nlr` nrel: empty after 1 probes
+- `workday/mydpr.wd5/11212017` mydpr: empty after 2 probes
+- `workday/nrel.wd5/nlr` nrel: empty after 2 probes
 - `workday/nttlimited.wd3/ntt_careers` nttlimited: dead after 3 probes
 - `workday/nztagovtnz.wd3/nztagovtnz` nztagovtnz: dead after 3 probes
 - `workday/optioncare.wd1/optioncare` optioncare: empty after 2 probes
@@ -103,14 +102,17 @@ A board is given up after 3 probes that find nothing to add.
 - `workday/pwc.wd3/crm_experienced_careers_site` pwc: dead after 3 probes
 - `workday/pwc.wd3/global_experienced_careers` pwc: empty after 2 probes
 - `workday/rb.wd5/frs` rb: empty after 2 probes
-- `workday/rbs.wd3/rbs` rbs: empty after 2 probes
+- `workday/rbs.wd3/rbs` rbs: dead after 3 probes
 - `workday/regions.wd5/regions_careers` regions: dead after 3 probes
 - `workday/salesforce.wd12/futureforce_newgradroles` salesforce: dead after 3 probes
 - `workday/strayer.wd1/sei` strayer: empty after 2 probes
 - `workday/stvinc.wd5/stv` stvinc: dead after 3 probes HTTPError: 521 Server Error: <none> for url: https://stvinc.wd5.myworkdayjobs.com/wday/cxs/stvinc/stv/jobs
-- `workday/swisscom.wd103/swisscomexternalcareers` swisscom: empty after 1 probes
+- `workday/swisscom.wd103/swisscomexternalcareers` swisscom: empty after 2 probes
 - `workday/terminix.wd1/steritech` terminix: dead after 3 probes
 - `workday/tmobile.wd1/external` tmobile: empty after 1 probes
 - `workday/uline.wd1/uline_careers` uline: dead after 3 probes
+- `workday/valet.wd1/career_site` valet: empty after 1 probes
+- `workday/valmont.wd1/valmontcareers` valmont: empty after 1 probes
 - `workday/vanguard.wd5/vanguard_external` vanguard: dead after 3 probes HTTPError: 521 Server Error: <none> for url: https://vanguard.wd5.myworkdayjobs.com/wday/cxs/vanguard/vanguard_external/
 - `workday/verizon.wd12/verizon-careers` verizon: dead after 3 probes
+- `workday/zoetis.wd5/broadbean_external` zoetis: empty after 1 probes

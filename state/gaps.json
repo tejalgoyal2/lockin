@@ -901,6 +901,14 @@
    "gaps": [],
    "title": "Simulation Software Design Engineer"
   },
+  "07af61034c5bd4d9389d4cca0e7921f1f63ab575": {
+   "company": "City of Calgary",
+   "date": "2026-11-15",
+   "gaps": [
+    "New Relic"
+   ],
+   "title": "Data Mining Analyst"
+  },
   "07c2147bb188128c1c78fa15c3430ef5415a6e27": {
    "company": "Manulife",
    "date": "2026-10-19",
@@ -3141,6 +3149,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Seismic Imaging Analyst"
+  },
+  "1a81f76c6eabaa33003d8fad753f22ebd9f8d558": {
+   "company": "Bell Canada",
+   "date": "2026-11-15",
+   "gaps": [],
+   "title": "Software Engineer"
   },
   "1a8e8fe6ef5afcaf97254fda2fd3fe4390faaabd": {
    "company": "Ciena",
@@ -9763,6 +9777,12 @@
    ],
    "title": "AI Engineering Intern"
   },
+  "50c851c77179b8b9c26d0f85efb5cb68a9a970ea": {
+   "company": "PolicyMe",
+   "date": "2026-11-15",
+   "gaps": [],
+   "title": "Junior Software Engineer"
+  },
   "50c8637178e4dfbb93f48c23f10b96107a802221": {
    "company": "Maarut",
    "date": "2026-11-09",
@@ -12660,6 +12680,12 @@
    "date": "2026-11-12",
    "gaps": [],
    "title": "Imaging Systems Administrator"
+  },
+  "68b773f13386a1e75a618d46a7e377e9104cb8a8": {
+   "company": "Vancouver Coastal Health",
+   "date": "2026-11-15",
+   "gaps": [],
+   "title": "Healthy Environments & Climate Change Analyst"
   },
   "68bb21d4f71c9ffaf0a0bf1bfb6af11f85976714": {
    "company": "Uwaterloo",
@@ -19042,6 +19068,15 @@
     "Tableau"
    ],
    "title": "Procurement Analyst (8 Month) - Winter 2027 Co-op"
+  },
+  "9b6cae897b2e6ddfcbb64974b94151d92fec78ab": {
+   "company": "Samsara",
+   "date": "2026-11-15",
+   "gaps": [
+    "Airflow",
+    "GCP"
+   ],
+   "title": "Data Engineer"
   },
   "9b81e49002e651fb8fd3af6af229ca2b3edcbca5": {
    "company": "Telesat",
@@ -27689,6 +27724,12 @@
    "gaps": [],
    "title": "Business Systems Analyst"
   },
+  "e4927e0634ef9c2cd5a18f5c82abefed2be23778": {
+   "company": "Zion Robotics & Controls Inc",
+   "date": "2026-11-15",
+   "gaps": [],
+   "title": "Robotics Programmer"
+  },
   "e4a7371f37ead28c37ed553cfc0d33d5caee40b8": {
    "company": "NIYA FREIGHT & LOGISTICS",
    "date": "2026-11-09",
@@ -28965,6 +29006,15 @@
    "date": "2026-11-03",
    "gaps": [],
    "title": "Property Field Appraisal Specialist"
+  },
+  "ef5c74d2260b8f50e095b321f6e147f5cc9dfe95": {
+   "company": "Aarorn Technologies Inc.",
+   "date": "2026-11-15",
+   "gaps": [
+    "Angular",
+    "MySQL"
+   ],
+   "title": "Software Developer"
   },
   "ef6735ede0ac55a8e24e5c7c0d1bbb4a627aff51": {
    "company": "Loblaw",
