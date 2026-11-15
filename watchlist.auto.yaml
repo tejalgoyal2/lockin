@@ -54,3 +54,5 @@ boards:
   - {ats: workday, slug: manulife.wd3/mfcjh_adminjobs, name: "manulife"}        # 8 Canadian postings when found, 2026-11-14
   - {ats: workday, slug: marmon.wd501/marmon_careers, name: "marmon"}        # 33 Canadian postings when found, 2026-11-14
   - {ats: workday, slug: mckesson.wd3/external_careers, name: "mckesson"}        # 150 Canadian postings when found, 2026-11-14
+  - {ats: workday, slug: cibc.wd3/campus, name: "cibc"}        # 34 Canadian postings when found, 2026-11-15
+  - {ats: workday, slug: pwc.wd3/nonpublic_postings, name: "pwc"}        # 16 Canadian postings when found, 2026-11-15

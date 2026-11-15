@@ -299,6 +299,10 @@
   "name": "",
   "checked": "2026-11-13"
  },
+ "Workday:bb.wd3.myworkdayjobs.com/student": {
+  "name": "",
+  "checked": "2026-11-15"
+ },
  "Workday:bcaa.wd3.myworkdayjobs.com/bcaacareers": {
   "name": "",
   "checked": "2026-10-29"
@@ -422,6 +426,10 @@
  "Workday:harriscomputer.wd3.myworkdayjobs.com/htn": {
   "name": "",
   "checked": "2026-11-13"
+ },
+ "Workday:hp.wd5.myworkdayjobs.com/externalcareersite": {
+  "name": "",
+  "checked": "2026-11-15"
  },
  "Workday:hrsystem.wd1.myworkdayjobs.com/careers": {
   "name": "",
