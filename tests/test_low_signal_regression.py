@@ -16,8 +16,8 @@ FIX = Path(__file__).parent / "fixtures" / "low_signal"
 SCORER = Scorer.load()
 
 
-def fit(name, min_terms=4):
-    return SCORER.evaluate((FIX / f"{name}.txt").read_text(encoding="utf-8"), min_terms)
+def fit(name):
+    return SCORER.evaluate((FIX / f"{name}.txt").read_text(encoding="utf-8"))
 
 
 @pytest.mark.parametrize("name,matched,context", [
@@ -30,7 +30,7 @@ def test_jd_terms_found(name, matched, context):
     f = fit(name)
     assert matched <= set(f.matched)
     assert context <= set(f.context)
-    assert f.n_terms >= 4 and f.fit_pct is not None          # was: n/a + `low signal`
+    assert f.n_terms >= 4 and f.fit is not None          # was: n/a + `low signal`
 
 
 def go_found(text):
@@ -50,13 +50,11 @@ def test_go_is_found_in_a_language_list_and_nowhere_else():
         assert go_found(text), text
 
 
-def test_context_terms_count_towards_the_minimum_but_never_move_fit():
-    base = SCORER.evaluate("Python, SQL, Docker.", 1)
-    more = SCORER.evaluate("Python, SQL, Docker. Backend and frontend with DevOps, a database and networking.", 1)
-    assert base.fit_pct == more.fit_pct == 75.0                  # 3 / (3 + 1)
+def test_context_terms_never_move_fit():
+    base = SCORER.evaluate("Python, SQL, Docker.")
+    more = SCORER.evaluate("Python, SQL, Docker. Backend and frontend with DevOps, a database and networking.")
+    assert base.fit == more.fit == 0.75                          # 3 / (3 + 1)
     assert base.n_terms == 3 and more.n_terms == 8 and more.n_core == 3
-    assert SCORER.evaluate("Python, SQL, Docker. Backend and frontend.", 4).fit_pct == 75.0
-    assert SCORER.evaluate("Python, SQL, Docker.", 4).fit_pct is None
 
 
 def test_context_terms_are_not_gaps():
@@ -71,6 +69,6 @@ def test_more_requirement_headings_are_recognised():
 
 
 def test_thin_match_cannot_reach_100_percent():
-    f = SCORER.evaluate("Python, SQL, Docker, Git, AWS, Linux, React, Azure.", 4)
-    assert f.fit_pct == 88.9                                      # 8 / (8 + 1)
-    assert SCORER.evaluate("Python.", 1).fit_pct == 50.0             # 1 / (1 + 1)
+    f = SCORER.evaluate("Python, SQL, Docker, Git, AWS, Linux, React, Azure.")
+    assert f.fit == pytest.approx(0.889, abs=0.001)                                      # 8 / (8 + 1)
+    assert SCORER.evaluate("Python.").fit == pytest.approx(0.500, abs=0.001)             # 1 / (1 + 1)

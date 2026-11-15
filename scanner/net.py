@@ -1,4 +1,4 @@
-"""Thin network clients so everything else is testable with fixtures (SPEC §10)."""
+"""Thin network clients so everything else is testable with fixtures."""
 import subprocess
 import threading
 import time
@@ -48,7 +48,7 @@ def http_get(url: str, *, retries: int = 4, timeout: int = 120, **kwargs) -> req
 
 
 class PoliteClient:
-    """Rate-limited JSON/text client for ATS endpoints (SPEC §3c politeness rules).
+    """Rate-limited JSON/text client for ATS endpoints.
 
     Sequential per host with a minimum gap, at most `per_ats` requests in flight per ATS.
     Thread-safe: callers may fan out across a thread pool.

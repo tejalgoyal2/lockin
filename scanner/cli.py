@@ -10,21 +10,20 @@ from pathlib import Path
 
 from scanner import audit as audit_mod
 from scanner import boards as boards_mod
-from scanner import discover, feed_clean, feed_refresh, gaps_report, notion_feed, report
+from scanner import discover, gaps_report, notion_feed, report
 from scanner.applied import AppliedKeyError, AppliedSet
-from scanner.ats_names import NameStore, ats_name, fill_names
+from scanner.ats_names import NameStore, fill_names
 from scanner.company_names import display_company, load_overrides, slug_names
 from scanner.config import load_config
-from scanner.dedupe import canonical_url, dedupe
-from scanner.enrich import enrich, fit_distribution
+from scanner.dedupe import dedupe
+from scanner.enrich import enrich, rating_distribution
 from scanner.feedback import FeedbackStore
 from scanner.filters import Filters
-from scanner.models import Job
 from scanner.net import client_from_config
 from scanner.pipeline import run_stream
 from scanner.score import Scorer
-from scanner.sources import (ats, baystreet, bcgov, builtin, canadalist, feashliaa, googlealerts, googlejobs, hn, jobbank, jobhive, sitesearch,
-                             jobicy, adzuna, listing, simplify, supplied, watchlist, yc)
+from scanner.sources import (ats, baystreet, bcgov, builtin, feashliaa, googlejobs, hn, jobbank, jobhive, jobicy, listing,
+                             simplify, sitesearch, supplied, watchlist, yc)
 from scanner.state import GapsStore, SeenStore
 
 log = logging.getLogger("scanner")
@@ -90,7 +89,7 @@ def collect(cfg, args, filters, now, since, store=None):
     http = client_from_config(cfg["jd"])
     sites = [      # (label, config key, reader(config) -> records, pre-stages)
         ("YC", "yc", lambda c: yc.fetch(c["pages"], http, now),
-         (("experience_ok", lambda r: yc.experience_ok(r, cfg["jd"]["min_years_drop"])),)),
+         (("experience_ok", lambda r: yc.experience_ok(r, cfg["jd"]["max_years"] + 1)),)),
         ("Built In", "builtin", lambda c: builtin.fetch(c["base_url"], c["paths"], c["max_pages"], http, now, since), ()),
         ("Bay Street Oracle", "baystreet",
          lambda c: baystreet.fetch(c["sitemap_url"], http, now, lambda words: filters.title_tier(words) is not None,
@@ -103,16 +102,13 @@ def collect(cfg, args, filters, now, since, store=None):
                                  max_queries=c.get("max_queries", jobbank.MAX_QUERIES)), ()),
         ("BC Gov", "bcgov", lambda c: bcgov.fetch(http), ()),
         ("Jobicy", "jobicy", lambda c: jobicy.fetch(http, now), ()),
-        ("Adzuna", "adzuna", lambda c: adzuna.fetch(http, c.get("terms", []), since, now, max_pages=c.get("max_pages", adzuna.MAX_PAGES)), ()),
         ("Google Jobs", "googlejobs",
          lambda c: googlejobs.fetch(http, c.get("terms", []), c.get("location", "Canada"), now,
                                     per_run=c.get("queries_per_run", googlejobs.QUERIES_PER_RUN),
                                     prefer=lambda url: ats.detect_ats(url) in ats.SUPPORTED and ats.detect_ats(url) not in ats.SITES), ()),
-        ("Google Alerts", "googlealerts", lambda c: googlealerts.fetch(http, now), ()),
         ("Site Search", "sitesearch",
          lambda c: sitesearch.fetch(http, c.get("hosts", []), c.get("titles", []), c.get("where", ""), now,
                                     brave_per_run=c.get("brave_per_run", 15), serpapi_per_run=c.get("serpapi_per_run", 2)), ()),
-        ("Canada List", "canadalist", lambda c: canadalist.fetch(c["urls"], http, now), ()),
         ("Jobhive", "jobhive", lambda c: jobhive.fetch(c.get("systems") or jobhive.SYSTEMS, since, now), ()),
     ]
     for label, key, read, pre_stages in sites:
@@ -155,27 +151,20 @@ def boards_step(cfg, store, filters, now, *, dry_run: bool) -> None:
 
 def print_phase2(result, n_candidates, final, phase2):
     print("\nJD rules:")
-    print(f"  candidates entering phase 2      {n_candidates:>10,}")
-    print(f"  student-titled jobs held         {result.held_total:>10,} (rescued {result.rescued})")
+    print(f"  candidates entering phase 2      {n_candidates:>10,} ({result.held_total} intern / co-op titles)")
     print("  drop reasons:")
     for reason, n in sorted(result.drops.items(), key=lambda kv: -kv[1]):
-        print(f"    {reason:<30}{n:>8,}")
+        print(f"    {reason:<38}{n:>8,}")
     if phase2.get("applied"):
         a = phase2["applied"]
         print(f"  skipped, already applied to      {sum(a.values()):>10,} (link {a['url']}, company+title {a['company+title']})")
-    print(f"  remaining                        {len(final):>10,}")
+    print(f"  kept                             {len(final):>10,}")
     if phase2.get("unresolved_locations"):
         print(f"  kept with an unresolved Workday location {len(phase2['unresolved_locations']):>4,} (listed in the report)")
     if phase2.get("slug_names"):
         print(f"  company names that look like raw slugs {len(phase2['slug_names']):>6,} (listed in the report)")
     print("  JD fetch (source:status):", dict(sorted(result.fetch.items())))
-    if result.forbidden:
-        print(f"  HTTP 403 tenants ({sum(result.forbidden.values())} jobs, kept without JD if strong title):")
-        for host, n in result.forbidden.most_common():
-            print(f"    {host:<44}{n:>4}")
-    print("  Fit % distribution:")
-    for label, n in phase2["fit_dist"]:
-        print(f"    {label:<30}{n:>8,}")
+    print("  Scores:", ", ".join(f"{label} = {n}" for label, n in phase2["ratings"]))
 
 
 def notion_credentials(args):
@@ -217,9 +206,6 @@ def trash_moved_rows(client, feed, *, dry_run: bool, feedback=None, feedback_rep
         if feedback_report:
             report.write(feedback_report, feedback.render())
     print(f"Notion: Feed has {len(rows)} rows; {'would trash' if dry_run else 'trashed'} {done} with done-del ticked")
-    dated = notion_feed.date_rows(client, feed, rows, datetime.now(timezone.utc).date(), dry_run=dry_run)
-    if dated:
-        print(f"Notion: {'would fill' if dry_run else 'filled'} the Posted date of {dated} older rows")
     return done
 
 
@@ -232,7 +218,7 @@ def notion_step(cfg, args, client, feed, final, seen, overrides, now):
     if client:
         rows = notion_feed.list_rows(client, feed)
         feed_links = {r.link for r in rows if r.link}
-    candidates = sorted(final, key=lambda j: -j.score)[:args.top] if args.top else final
+    candidates = final[:args.top] if args.top else final          # `final` is best first
     if not args.dry_run:
         remembered = [j for j in notion_feed.already_in_feed(candidates, feed_links) if j.key not in seen.seen]
         for job in remembered:
@@ -246,7 +232,7 @@ def notion_step(cfg, args, client, feed, final, seen, overrides, now):
     if args.dry_run:
         for job in to_write[:args.show_payloads]:
             page, _ = notion_feed.build_page(job, feed, overrides)
-            print(f"\n--- payload (score {job.score:g}; JD shortened for display) ---")
+            print("\n--- payload (JD shortened for display) ---")
             print(json.dumps(notion_feed.preview_page(page, feed.names["jd"]), indent=2, ensure_ascii=False))
         print("\nDry run: nothing written to Notion; state/seen.json not updated.")
         return 0
@@ -314,42 +300,34 @@ def run(args: argparse.Namespace) -> int:
     result = phase2 = None
     final, applied_skipped = applied.filter(deduped)
     if use_jd:
+        # Intern / co-op titles go through the same rules (a posting that requires enrollment is dropped there).
         held_deduped, _ = dedupe(held)
         keys = {d.key for d in deduped}
-        held_deduped = [h for h in held_deduped if h.key not in keys]
+        deduped += [h for h in held_deduped if h.key not in keys]
         # A job already written to the Feed (seen.json) is skipped when the Feed rows are chosen, so its description is
-        # not fetched, scored or counted again: with a ten-day window that is most of the candidates on most runs.
-        # (A Workday "N Locations" job gets its final key only after its detail is read, so it is not skipped here.)
+        # not fetched or rated again. (A Workday "N Locations" job gets its final key only after its detail is read,
+        # so it is not skipped here.)
         n_all = len(deduped)
         deduped = [d for d in deduped if d.key not in seen.seen]
-        held_deduped = [h for h in held_deduped if h.key not in seen.seen]
         print(f"Already in the Feed (state/seen.json): {n_all - len(deduped):,} of {n_all:,} candidates skipped, "
               f"{len(deduped):,} new", flush=True)
         jdcfg = cfg["jd"]
         client_jd = client_from_config(jdcfg)
         scorer = Scorer.load()
-        result = enrich(deduped, held_deduped, cfg, filters, scorer, client_jd,
-                        progress=lambda m: print(m, flush=True))
+        result = enrich(deduped, cfg, filters, scorer, client_jd, progress=lambda m: print(m, flush=True))
         final, applied_skipped = applied.filter(result.kept)
         names = NameStore(state_dir / "company_names.json")
         named = fill_names(final, overrides, names, client_jd, today)
         names.save()
         print(f"Company names from the ATS: {named} jobs", flush=True)
-        final_ids = {id(j) for j in final}      # identity: Job has field-wise __eq__
-        phase2 = {"drops": result.drops, "fetch": result.fetch, "forbidden": result.forbidden,
-                  "held": result.held_total, "rescued": result.rescued, "fit_dist": fit_distribution(final),
+        phase2 = {"drops": result.drops, "fetch": result.fetch, "ratings": rating_distribution(final),
                   "applied": {k: len(v) for k, v in applied_skipped.items()},
-                  "forbidden_jobs": [(display_company(j, overrides), j.title, j.url,
-                                      "searched: no exact Canadian title match" if j.relocation == "no_match"
-                                      else "not searched (location not Canadian)")
-                                     for j in result.forbidden_jobs if id(j) in final_ids],
-                  "relocated": sum(1 for j in final if j.relocation == "matched"),
                   "unresolved_locations": [(display_company(j, overrides), j.title, j.url) for j in final
                                            if j.location_unresolved],
                   "slug_names": slug_names(final, overrides)}
 
         # Gaps: every job whose JD was fetched, kept or dropped, once per job.
-        added = gaps_report.record_gaps(gaps, deduped + held_deduped, scorer, today, overrides)
+        added = gaps_report.record_gaps(gaps, deduped, scorer, today, overrides)
         gaps.prune(today, cfg["state"]["prune_days"])
         gaps.save()
         print(f"Gaps: recorded {added} new jobs ({len(gaps.jobs)} in state/gaps.json)")
@@ -381,10 +359,10 @@ def run(args: argparse.Namespace) -> int:
     return code
 
 
-def run_clean_feed(args: argparse.Namespace) -> int:
-    """Apply the current rules to the rows already in the Feed (see scanner.feed_clean)."""
+def run_wipe_feed(args: argparse.Namespace) -> int:
+    """A fresh start: trash every Feed row the owner has not touched (no box ticked). Notion keeps trashed rows for 30
+    days. Follow it with an emptied state/seen.json and a scan, and the Feed is rebuilt under the current rules."""
     cfg = load_config(args.config)
-    filters = Filters.from_config(cfg)
     token = os.environ.get("NOTION_TOKEN", "").strip()
     ds_id = os.environ.get("NOTION_FEED_DATA_SOURCE_ID", "").strip()
     if not (token and ds_id):
@@ -394,69 +372,11 @@ def run_clean_feed(args: argparse.Namespace) -> int:
         feed = notion_feed.load_feed(client, ds_id, cfg["notion"]["properties"])
     except notion_feed.SchemaError as exc:
         raise UsageError(str(exc)) from None
-    items = feed_clean.list_items(client, feed)
-    print(f"Feed: {len(items)} rows read", flush=True)
-    if args.people_links:                          # fill the two people-search links on every row (a new column)
-        if not (feed.has("recruiter") or feed.has("manager")):
-            print("The Feed has neither a Recruiter nor a Hiring Manager URL column: nothing to fill")
-            return 0
-        done = 0
-        for item in items:
-            props = notion_feed.people_properties(feed, item.company, item.title)
-            if not args.dry_run:
-                client.request("PATCH", f"/v1/pages/{item.page_id}", json={"properties": props})
-            done += 1
-        print(f"People links: {'would fill' if args.dry_run else 'filled'} {done} rows")
-        return 0
-    if args.wipe_all:                              # a fresh start: every row the owner has not touched goes (Notion keeps them 30 days)
-        rep = feed_clean.CleanReport([feed_clean.Verdict(i, "wipe (fresh start)") for i in items])
-        print(feed_clean.render(rep, dry_run=args.dry_run))
-        if not args.dry_run:
-            print(f"Trashed {feed_clean.trash(client, rep, dry_run=False)} rows")
-        return 0
-    scorer = Scorer.load()
-    http = client_from_config(cfg["jd"])
-    refreshed = None
-    if not args.skip_refresh:                      # Workday rows without a JD: find the live posting first
-        refreshed = feed_refresh.refresh(client, feed, items, cfg, filters, scorer, http, dry_run=args.dry_run)
-        print(feed_refresh.render(refreshed, dry_run=args.dry_run), flush=True)
-    records = feed_clean.find_records({i.link for i in items}, cfg, args.feashliaa_dir)
-    locations = feed_clean.locations_from(records)
-    if refreshed:
-        locations.update(refreshed.locations)
-        for new_link, old_link in refreshed.moved.items():       # a re-found posting keeps its company data
-            if old_link in records:
-                records[new_link] = records[old_link]
-    print(f"Locations found in the source data for {len(locations)} of {len(items)} rows", flush=True)
-
-    # Workday "N Locations": read the real list from the job detail, as a new job would be.
-    jd_locations: dict[str, list[str]] = {}
-    pending = [i for i in items if filters.location_status(locations.get(canonical_url(i.link), ("", ""))[0])[0] == "unresolved"]
-    if pending:
-        for item in pending:
-            probe = Job(company=item.company, title=item.title, location="", url=item.link, source=item.source,
-                        first_seen=datetime.now(timezone.utc))
-            ref = ats.locate(probe)
-            try:
-                jd_locations[canonical_url(item.link)] = ats.fetch_full(ref, http).locations if ref else []
-            except Exception as exc:                      # unresolved rows are kept, not guessed
-                log.debug("location lookup failed: %s", exc)
-    rep = feed_clean.clean(items, locations, cfg, filters, scorer, jd_locations)
-    print(feed_clean.render(rep, dry_run=args.dry_run))
-    if not args.dry_run:
-        done = feed_clean.trash(client, rep, dry_run=False)
-        print(f"Trashed {done} rows")
-    if args.rescore:                               # the rows that stay: recompute Company, Fit % and Signals
-        kept = [v for v in rep.verdicts if not v.rule]
-        store = NameStore(Path(cfg["state"]["dir"]) / "company_names.json")
-        today = datetime.now(timezone.utc).date()
-        changes = feed_clean.rescore(kept, records, cfg, filters, scorer, load_overrides(),
-                                     name_for=lambda link: ats_name(link, store, http, today))
-        store.save()
-        eligible = sum(1 for v in kept if v.item.untouched)
-        print(feed_clean.render_changes(changes, eligible, dry_run=args.dry_run))
-        done = feed_clean.apply_changes(client, feed, changes, dry_run=args.dry_run)
-        print(f"{'Would update' if args.dry_run else 'Updated'} {done} rows")
+    rows = notion_feed.list_rows(client, feed)
+    untouched = [r for r in rows if r.untouched]
+    print(f"Feed: {len(rows)} rows, {len(rows) - len(untouched)} with a box ticked (kept)")
+    done = notion_feed.trash_rows(client, untouched, dry_run=args.dry_run)
+    print(f"{'Would trash' if args.dry_run else 'Trashed'} {done} rows")
     return 0
 
 
@@ -562,12 +482,12 @@ def main(argv: list[str] | None = None) -> int:
     sub = parser.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("run", help="scan sources, score, and write the best new jobs to the Notion Feed")
     p.add_argument("--since", type=float,
-                   help="only jobs first seen in the last N days (default: freshness.default_days = 10, or 14 on the first run)")
+                   help="only jobs first seen in the last N days (default: freshness.default_days)")
     p.add_argument("--dry-run", action="store_true",
                    help="no Notion writes or trashing, no seen.json update; print what would be written")
     p.add_argument("--max-rows", type=int, help="rows to write this run (default notion.daily_cap)")
     p.add_argument("--top", type=int,
-                   help="testing aid: only consider the N highest-scoring jobs (so a rerun repeats the same set)")
+                   help="testing aid: only consider the N best jobs (so a rerun repeats the same set)")
     p.add_argument("--show-payloads", type=int, default=5, help="dry run: print the first N Notion payloads")
     p.add_argument("--no-notion", action="store_true", help="scan and report only; skip Notion entirely")
     p.add_argument("--skip-notion", action="store_true",
@@ -582,20 +502,9 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--sample", type=int, default=0, help="print N random result rows")
     p.add_argument("--seed", type=int, default=None, help="seed for --sample")
     p.add_argument("--simplify-file", help="use a local listings.json instead of downloading")
-    c = sub.add_parser("clean-feed", help="apply the current rules to the rows already in the Notion Feed "
-                                         "and trash the ones that fail (never a row with Interested / Apply / done-del ticked)")
-    c.add_argument("--dry-run", action="store_true", help="report what would be trashed; trash nothing")
-    c.add_argument("--wipe-all", action="store_true",
-                   help="trash every row, whatever the rules say, except those with Interested / Apply / done-del ticked "
-                        "(then a scan with an empty state/seen.json refills the Feed from scratch)")
-    c.add_argument("--people-links", action="store_true",
-                   help="fill the Recruiter / Hiring Manager search links on every row, then stop")
-    c.add_argument("--rescore", action="store_true",
-                   help="also recompute Company, Fit % and Signals of the rows that stay (all boxes unticked)")
-    c.add_argument("--skip-refresh", action="store_true",
-                   help="do not look for live postings for Workday rows without a JD")
+    c = sub.add_parser("wipe-feed", help="trash every Feed row with no box ticked (a fresh start; Notion keeps them 30 days)")
+    c.add_argument("--dry-run", action="store_true", help="count the rows; trash nothing")
     c.add_argument("--config", help="path to config.yaml")
-    c.add_argument("--feashliaa-dir", help="use this local job-board-data clone as-is (no git sync)")
     d = sub.add_parser("discover", help="find the job board of an employer (Greenhouse, Lever, Ashby, SmartRecruiters, "
                                         "Workday) and print the watchlist.yaml line; writes nothing")
     d.add_argument("names", nargs="*", help="company names")
@@ -624,7 +533,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     try:
-        return {"clean-feed": run_clean_feed, "discover": run_discover, "why": run_why,
+        return {"wipe-feed": run_wipe_feed, "discover": run_discover, "why": run_why,
                 "audit": run_audit}.get(args.cmd, run)(args)
     except UsageError as exc:
         print(f"error: {exc}", file=sys.stderr)

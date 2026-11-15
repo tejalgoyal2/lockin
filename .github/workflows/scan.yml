@@ -2,15 +2,12 @@ name: scan
 
 on:
   schedule:
-    # Two runs a day, morning and late afternoon. GitHub cron is UTC only and has no time zones, so the slots sit between
-    # the two Pacific offsets: 15:57 UTC is 07:57 PST (winter) / 08:57 PDT (summer); 23:57 UTC is 15:57 PST / 16:57 PDT.
-    # GitHub starts a scheduled run a few minutes to an hour after its slot (more on the hour: hence the odd minutes),
-    # which lands the morning run in 8-9 am and the afternoon one in 4-5 pm.
-    # The dataset (Feashliaa) always finishes by 18:15 UTC, so the afternoon run sees the day's data.
-    # GitHub also drops a scheduled run now and then; the 7-day window (config.yaml) picks the jobs up on the next one,
-    # and a run only writes jobs not already seen, so nothing comes twice.
-    - cron: "57 15 * * *"       # ~08:00 Pacific
-    - cron: "57 23 * * *"       # ~16:00 Pacific
+    # Two scans a day, at 08:00 and 16:00 in British Columbia (UTC-7 all year: 15:00 and 23:00 UTC).
+    # GitHub starts a scheduled run hours after its cron time on this repo (2.5 to 6.5 h, measured), so a cron set to the
+    # wanted hour lands in the afternoon. The workflow is triggered every two hours instead; the `gate` job makes the
+    # first trigger to reach a slot wait for it and scan on time, and the triggers behind it stop in seconds
+    # (scanner/schedule.py, state/last_slot). A trigger that arrives up to 4 h after a slot nobody ran still runs it.
+    - cron: "23 7,9,11,13,15,17,19,21 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -29,28 +26,63 @@ on:
 permissions:
   contents: write                # commit state/ and reports/ back
 
-concurrency:
-  group: scan
-  cancel-in-progress: false
-
 jobs:
-  scan:
+  gate:
     runs-on: ubuntu-latest
-    timeout-minutes: 150
+    timeout-minutes: 345
+    permissions:
+      contents: read
+    outputs:
+      slot: ${{ steps.plan.outputs.slot }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.ref_name }}      # the branch as it is now, not as it was when the trigger was queued
+      - id: plan
+        env:
+          EVENT: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT" != "schedule" ]; then echo "slot=manual" >> "$GITHUB_OUTPUT"; exit 0; fi
+          python3 -m scanner.schedule | tee plan.txt
+          grep '^slot=' plan.txt >> "$GITHUB_OUTPUT"
+          wait=$(grep '^wait=' plan.txt | cut -d= -f2)
+          if [ "$wait" -gt 0 ]; then echo "waiting ${wait}s for the slot"; sleep "$wait"; fi
+
+  scan:
+    needs: gate
+    if: needs.gate.outputs.slot != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    concurrency:                 # one scan at a time; a second trigger that waited for the same slot finds it done
+      group: scan
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.ref_name }}      # the latest state/, committed by the scan before this one
+
+      - name: Skip a slot that was already scanned
+        id: due
+        env:
+          SLOT: ${{ needs.gate.outputs.slot }}
+        run: |
+          last=$(cat state/last_slot 2>/dev/null || true)
+          if [ "$SLOT" != "manual" ] && [ ! "$SLOT" \> "$last" ]; then echo "slot $SLOT already scanned"; else echo "run=true" >> "$GITHUB_OUTPUT"; fi
 
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        if: steps.due.outputs.run == 'true'
         with:
           python-version: "3.12"
           cache: pip
 
-      - run: pip install --require-hashes -r requirements.txt   # every package pinned by hash (requirements.in)
+      - if: steps.due.outputs.run == 'true'
+        run: pip install --require-hashes -r requirements.txt   # every package pinned by hash (requirements.in)
 
-      # Job descriptions already downloaded (config.yaml jd.cache_dir, 10-day TTL). Without this every run downloads
-      # the JD of every candidate in the 10-day window again, twice a day. A new entry is saved per run; GitHub
-      # drops entries unused for 7 days.
+      # Job descriptions already downloaded (config.yaml jd.cache_dir). Without this every run downloads the JD of
+      # every candidate in the window again, twice a day. A new entry is saved per run; GitHub drops entries unused
+      # for 7 days.
       - name: Restore the JD cache
+        if: steps.due.outputs.run == 'true'
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .cache/jd
@@ -58,7 +90,9 @@ jobs:
           restore-keys: jd-
 
       - name: Scan and write to the Notion Feed
+        if: steps.due.outputs.run == 'true'
         env:
+          SLOT: ${{ needs.gate.outputs.slot }}
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_FEED_DATA_SOURCE_ID: ${{ secrets.NOTION_FEED_DATA_SOURCE_ID }}
           SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}            # optional: Google for Jobs and Site Search (skipped without it)
@@ -74,13 +108,14 @@ jobs:
           [ -n "$MAX_ROWS" ] && args+=(--max-rows "$MAX_ROWS")
           [ -n "$SINCE_DAYS" ] && args+=(--since "$SINCE_DAYS")
           python -m scanner run "${args[@]}"
+          if [ "$SLOT" != "manual" ]; then echo "$SLOT" > state/last_slot; fi    # only after a scan that worked: a failed one is retried by the next trigger
 
       - name: Prune the JD cache
-        if: always()
+        if: always() && steps.due.outputs.run == 'true'
         run: find .cache/jd -type f -mtime +10 -delete 2>/dev/null || true     # past the TTL: never read again
 
       - name: Commit state and reports
-        if: always()             # rows already written must reach seen.json even if the run failed later
+        if: always() && steps.due.outputs.run == 'true'             # rows already written must reach seen.json even if the run failed later
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

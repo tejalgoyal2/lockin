@@ -1,12 +1,9 @@
 from datetime import datetime, timezone
 from types import SimpleNamespace
-from urllib.parse import unquote
 
 import pytest
 import requests
 
-from scanner import notion_feed as nf
-from scanner import people
 from scanner.sources import ats, sitesearch
 
 NOW = datetime(2026, 11, 11, 16, 0, tzinfo=timezone.utc)
@@ -85,24 +82,3 @@ def test_skipped_without_keys_and_errors_never_carry_a_key(monkeypatch, capsys):
     with pytest.raises(sitesearch.SiteSearchError) as err:
         sitesearch.fetch(bad, ["h"], ["t"], "", NOW)
     assert "sekret" not in str(err.value) and "401" in str(err.value)
-
-
-# --- people links ------------------------------------------------------------------------------------
-
-def test_two_people_links_per_job_narrowed_to_company_and_team():
-    rec = unquote(people.recruiter_link("Sun Life Financial Inc."))
-    assert rec.startswith(people.SEARCH) and '"Sun Life Financial"' in rec and "talent acquisition" in rec
-    mgr = unquote(people.manager_link("Scotiabank · nov6", "Data Scientist"))
-    assert '"Scotiabank"' in mgr and "machine learning" in mgr and "manager" in mgr
-    assert "security" in unquote(people.manager_link("Acme", "Security Analyst"))
-    assert "IT OR infrastructure" in unquote(people.manager_link("Acme", "IT Support Analyst"))
-    assert "engineering" in unquote(people.manager_link("Acme", "Junior Developer"))
-    assert people.recruiter_link("") == "" and people.manager_link("", "x") == ""
-
-
-def test_feed_rows_get_the_links_only_when_the_columns_exist():
-    names = {"recruiter": "Recruiter", "manager": "Hiring Manager"}
-    feed = nf.Feed("ds", names, ids={"recruiter": "r1", "manager": "m1"})
-    props = nf.people_properties(feed, "Acme", "Data Analyst")
-    assert set(props) == {"Recruiter", "Hiring Manager"} and props["Recruiter"]["url"].startswith(people.SEARCH)
-    assert nf.people_properties(nf.Feed("ds", names), "Acme", "Data Analyst") == {}

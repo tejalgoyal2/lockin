@@ -1,4 +1,4 @@
-"""Phase 2: fetch JD text, apply JD rules, score (SPEC §4, §5, §9)."""
+"""Phase 2: fetch JD text, apply JD rules, score."""
 import hashlib
 import json
 import logging
@@ -8,14 +8,12 @@ from collections import Counter
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlsplit
 
 import requests
 
-from scanner import jd_rules
-from scanner.cluster import ClusterResolver
+from scanner import jd_rules, rating
 from scanner.filters import Filters
 from scanner.models import Job
 from scanner.normalize import job_key
@@ -29,22 +27,15 @@ _warned: set[str] = set()   # one warning per ATS; per-job failures go to debug
 R_ENROLLMENT = "requires_enrollment"
 R_CLEARANCE = "security_clearance"
 R_US_AUTH = "us_work_authorization"
-R_EXPERIENCE = "experience_3plus"
-R_TWO_YEAR_INTERN = "two_years_excludes_internships"
-R_TWO_YEAR_NO_FIT = "two_years_no_fit"
-R_TWO_YEAR_LOW_FIT = "two_years_low_fit"
-R_LOW_SIGNAL_TITLE = "low_signal_not_dev_title"
+R_EXPERIENCE = "experience_too_high"
 R_FRENCH = "requires_french"
 R_QUEBEC_ONLY = "location_quebec_only"
 R_NOT_CANADA = "location_not_canada"
 R_OTHER_AREA = "location_other_province"
 R_UNRESOLVED_FOREIGN = "location_unresolved_url_not_canadian"
 R_ATS_NOT_CANADA = "location_ats_not_canada"
-R_WEAK = "weak_title_low_fit"
-R_WEAK_NO_JD = "weak_title_no_jd"
-R_WEAK_FEW_TERMS = "weak_title_few_terms"
-R_STUDENT_NO_JD = "student_title_no_jd"
-R_STUDENT = "student_title_not_rescued"
+R_NOT_TECH = "not_a_tech_job"
+R_NO_JD_GENERIC = "generic_title_no_description"
 
 
 @dataclass
@@ -54,8 +45,7 @@ class EnrichResult:
     fetch: Counter = field(default_factory=Counter)        # "<ATS>:<status>" -> count
     forbidden: Counter = field(default_factory=Counter)    # host -> jobs whose JD fetch got HTTP 403
     forbidden_jobs: list[Job] = field(default_factory=list)  # the jobs behind `forbidden`
-    held_total: int = 0
-    rescued: int = 0
+    held_total: int = 0                                    # intern / co-op / student titles among the candidates
     dropped: list = field(default_factory=list)            # (reason, Job): the jobs behind `drops`, for reports/dropped.md
 
     def drop(self, reason: str, job: Job) -> None:
@@ -213,24 +203,6 @@ def fetch_all(jobs: list[Job], client, cache: JDCache, workers: int, filters: Fi
             fut.result()
 
 
-def _score(job: Job, cfg: dict, boost_re: re.Pattern) -> float:
-    sc = cfg["scoring"]
-    total = (job.fit_pct or 0.0) + min(len(job.matched), sc["matched_bonus_cap"]) * sc["matched_bonus_per_skill"]
-    if "new grad" in job.signals or "recent graduate" in job.signals:
-        total += sc["boost"]["new_grad"]
-    if job.new_grad or "Simplify" in job.sources or "Canada List" in job.sources:
-        total += sc["boost"]["simplify"]
-    if boost_re.search(job.location) or re.search(r"\bremote\b", job.title, re.IGNORECASE):
-        total += sc["boost"]["bc_or_remote"]
-    if job.jd_status != "ok":
-        total -= sc["penalty"]["no_jd"]
-    fresh = sc["boost"].get("fresh") or {}
-    if fresh.get("bonus") and fresh.get("days"):
-        age = max(0.0, (datetime.now(timezone.utc) - job.first_seen).total_seconds() / 86400)
-        total += fresh["bonus"] * max(0.0, 1 - age / fresh["days"])        # a posting from today is the one still open
-    return round(total, 1)
-
-
 def url_location(url: str) -> str:
     """The location slug in a Workday URL (.../job/Toronto-ON-CAN/Title_R1 -> "Toronto ON CAN"): the job's
     primary location, the only one visible when the detail cannot be read."""
@@ -295,189 +267,152 @@ def _ats_location(job: Job, filters: Filters) -> str | None:
     return None
 
 
-def _tech_flavoured(title: str, sc: dict) -> bool:
-    """A generic title that still names a tech word ("Founding Engineer", "IT Analyst", "Technical Support Agent") is never
-    dropped for naming few skills: recall matters more than a clean Feed."""
-    pats = sc.get("weak_few_terms_keep") or []
-    return any(re.search(p, title or "", re.I) for p in pats)
-
-
-def two_year_reason(exp: jd_rules.Experience, fit_pct: float | None, jdcfg: dict) -> str | None:
-    """A 2-year requirement is kept only with a strong, evidenced fit and when internships count (`jd.two_year_drops`;
-    off by default: a posting asking 2 years is shown with the "2+ yrs" Signal and the owner decides)."""
-    if not jdcfg.get("two_year_drops", False):
-        return None
-    if exp.excludes_internships:
-        return R_TWO_YEAR_INTERN
-    if fit_pct is None:
-        return R_TWO_YEAR_NO_FIT
-    if fit_pct / 100 < jdcfg["two_year_min_fit"]:
-        return R_TWO_YEAR_LOW_FIT
-    return None
-
-
-def dev_title(title: str, cfg: dict) -> bool:
-    """The title names a developer role (engineer, developer, programmer, scientist, analyst; plural allowed)."""
-    nouns = cfg["scoring"].get("low_signal_title_nouns") or []
-    return not nouns or bool(re.search(r"\b(?:" + "|".join(map(re.escape, nouns)) + r")s?\b", title or "", re.IGNORECASE))
-
-
 def _no_jd_junk(title: str, jdcfg: dict) -> bool:
-    """A generic title ("Specialist", "Analyst") naming a clearly non-tech field, with no JD to say otherwise. Applies only
-    to jobs whose JD could not be read: a readable JD decides on its own skills."""
+    """A generic title naming a clearly non-tech field ("Warehouse Specialist"), with no description to say otherwise."""
     words = jdcfg.get("no_jd_title_exclude") or []
     return bool(words) and bool(re.search(r"\b(?:" + "|".join(re.escape(w) for w in words) + ")", title or "", re.IGNORECASE))
 
 
-def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer,
-                clusters: ClusterResolver | None = None) -> str | None:
-    """Fill phase-2 fields on `job`; return a drop reason, or None to keep it."""
-    clusters = clusters or ClusterResolver(cfg)
-    job.cluster = clusters.resolve(job.title, None)   # overwritten below when a JD adds terms
+def experience_reason(exp: jd_rules.Experience, jdcfg: dict) -> str | None:
+    """Why the experience a posting asks for is too much, or None. The owner's line: up to 2 years. "1-5 years" passes
+    (it starts at 1); "2 years" and "2+ years" pass as long shots; "2-5 years", "3 years" and "3+" do not."""
+    need, limit = exp.min_years, jdcfg.get("max_years", 2)
+    if need is None or need < limit:
+        return None
+    if need > limit:
+        return f"asks {need:g}+ years"
+    if exp.max_years is not None and exp.max_years > limit:
+        return f"asks {need:g}-{exp.max_years:g} years"
+    return None
+
+
+def relevance_reason(job: Job, fit, jdcfg: dict) -> str | None:
+    """Why a posting whose description was read is not a tech job, or None. The less the title says, the more the
+    description has to:
+
+      core title, unmistakable ("Software Developer", "DevOps Engineer": `core_always`)  never doubted
+      core title, ambiguous ("Event Security", "Field Data Collector")  a full description with no tech word at all fails
+      another tech title ("IT Analyst", "Systems Specialist")           a full description must name one tool or gap term
+      generic title ("Analyst", "Specialist", "Engineer")               it must name `generic_min_skills` of the owner's
+                                                                        tools (one, when it is shorter than `min_judge_chars`)
+    """
+    rel = jdcfg.get("relevance") or {}
+    full = len(job.jd) >= rel.get("min_judge_chars", 600)
+    if job.role == "core":
+        if not full or fit.n_terms or re.search(rel.get("core_always", "$^"), job.title, re.IGNORECASE):
+            return None
+        return "no tech term in the description"
+    if job.role == "adjacent":
+        return None if not full or fit.hard or fit.gaps else "no tool or technology named in the description"
+    need = rel.get("generic_min_skills", 2) if full else 1
+    return None if fit.hard >= need else f"generic title, {fit.hard} of your tools in the description (needs {need})"
+
+
+def apply_rules(job: Job, cfg: dict, filters: Filters, scorer: Scorer) -> str | None:
+    """Fill phase-2 fields on `job` (provinces, fit, notes, exp, rating); return a drop reason, or None to keep it."""
     reason = resolve_location(job, filters, cfg)
     if reason:
         return reason
-    if job.jd_locations:                     # the posting's own, current places decide the Area
-        area, part = filters.area(" ; ".join(job.jd_locations))
-        if area == "Other" and filters.drop_other_areas:
+    if job.jd_locations:                     # the posting's own, current places decide the Province tags
+        places = " ; ".join(job.jd_locations)
+        tags = filters.provinces(places, job.title)
+        if tags == ["Other"] and filters.drop_other_areas:
             job.location_dropped = True
             return R_OTHER_AREA
-        if area:
-            job.area = area
-            if part and filters.area(job.location)[0] != area:
+        if tags:
+            part = filters.best_part(places)
+            if part and tags != job.provinces:
                 job.location = part
+            job.provinces = tags
+    if not job.provinces:                    # a Workday "N Locations" row resolved in phase 2, or a bare "Canada"
+        job.provinces = filters.provinces(job.location, job.title) or ["Canada"]
+    job.role = filters.role_tier(job.title) or "generic"
     jdcfg = cfg["jd"]
+    notes = [rating.INTERN] if job.student else []
     if job.jd_status == "ok":
         jd = job.jd
         exp = jd_rules.parse_experience(jd)
-        fit = scorer.evaluate(jd, cfg["scoring"]["min_terms_for_fit"], (job.company, job.company_name),
-                              cfg["scoring"].get("min_core_terms_for_fit", 1))
-        job.fit_pct, job.matched, job.gaps = fit.fit_pct, fit.matched, fit.gaps
-        job.cluster = clusters.resolve(job.title, fit.cluster)
-        job.signals = jd_rules.detect_signals(job.title, jd, exp)
-        if fit.fit_pct is None:
-            job.signals.append(jd_rules.LOW_SIGNAL)
-        if jd_rules.requires_peng(jd):
-            job.signals.append(jdcfg.get("peng_signal", jd_rules.PENG))
-        if jd_rules.talent_pool(jd):
-            job.signals.append(jd_rules.POOL)
+        fit = scorer.evaluate(jd, (job.company, job.company_name), title=job.title)
+        job.fit, job.matched, job.gaps, job.hard = fit.fit, fit.matched, fit.gaps, fit.hard
+        job.min_years = exp.min_years
         if cfg.get("language", {}).get("drop_french_required_jd", True) and jd_rules.requires_french(jd):
             return R_FRENCH
-        if jd_rules.requires_enrollment(jd):
-            if not (job.student and jdcfg.get("keep_student_roles")):
-                return R_ENROLLMENT
-            job.signals.append(jd_rules.STUDENTS_ONLY)
+        if jd_rules.requires_enrollment(jd):         # the owner has graduated
+            return R_ENROLLMENT
         if jd_rules.requires_clearance(jd):
             return R_CLEARANCE
         if jd_rules.requires_us_authorization(jd) and filters.canadian_location(job.location) is None:
             return R_US_AUTH
-        if exp.min_years is not None and exp.min_years >= jdcfg["min_years_drop"]:
-            job.drop_note = f"asks {exp.min_years:g}+ years"
-            return R_EXPERIENCE
-        if exp.min_years is not None and exp.min_years >= 2:
-            reason = two_year_reason(exp, fit.fit_pct, jdcfg)
-            if reason:
-                job.drop_note = f"asks 2 years, Fit {fit.fit_pct if fit.fit_pct is not None else 'n/a'}"
-                return reason
-            job.signals.append(jdcfg["two_year_signal"])
-        if job.weak_title:
-            sc = cfg["scoring"]
-            if sc.get("weak_title_strict", False):
-                # The old rule: a generic title must be vouched for by the JD: >= min_terms distinct skill / gap terms, and a real fit.
-                if fit.n_core < sc["min_terms_for_fit"]:
-                    job.drop_note = f"{fit.n_core} skill terms in the JD"
-                    return R_WEAK_FEW_TERMS
-                if not job.matched or (job.fit_pct or 0) < sc["weak_title_min_fit"]:
-                    job.drop_note = f"Fit {job.fit_pct if job.fit_pct is not None else 'n/a'}, {len(job.matched)} skills matched"
-                    return R_WEAK
-            elif (len(jd) >= jdcfg.get("min_judge_chars", 600) and fit.n_core < sc.get("weak_title_min_terms", 1)
-                  and not _tech_flavoured(job.title, sc)):
-                # Default: a generic title is dropped only when a full-length JD names no skill at all. A short JD is too thin
-                # to judge by ("Founding Engineer" had a 3-line posting), and one or two skills are enough to keep it.
-                job.drop_note = f"{fit.n_core} skill terms in a {len(jd):,}-character JD"
-                return R_WEAK_FEW_TERMS
-        if fit.fit_pct is None and cfg["scoring"].get("low_signal_title_drop", False) and not dev_title(job.title, cfg):
-            return R_LOW_SIGNAL_TITLE          # "Automation Cell Operator", "Associate Underwriter - Cyber"
+        if not job.student:                          # a bank's intern posting carries its "4-6 years" template line
+            job.drop_note = experience_reason(exp, jdcfg) or ""
+            if job.drop_note:
+                return R_EXPERIENCE
+        else:
+            job.min_years = None
+        job.drop_note = relevance_reason(job, fit, jdcfg) or ""
+        if job.drop_note:
+            return R_NOT_TECH
+        if job.new_grad or "Simplify" in job.sources or jd_rules.addresses_new_grads(job.title, jd):
+            notes.append(rating.NEW_GRAD)
+        if jd_rules.junior_level(job.title, jd):
+            notes.append(rating.JUNIOR)
+        if job.min_years is not None and job.min_years >= 2:
+            notes.append(rating.TWO_YEARS)
+        if jd_rules.requires_peng(jd):
+            notes.append(rating.PENG)
+        if jd_rules.talent_pool(jd):
+            notes.append(rating.POOL)
+        if job.student and jd_rules.welcomes_recent_grads(jd):
+            notes.append(rating.GRADS_OK)
+        if fit.n_core <= rating.THIN_TERMS:
+            notes.append(rating.THIN)
     else:
-        # No JD: the job stays, with the penalty and the "jd unavailable" signal: the owner can open the link and read it
-        # himself. (jd.keep_without_jd: false brings back the old rule that dropped a generic title nothing vouches for.)
-        if job.weak_title and not jdcfg.get("keep_without_jd", True):
-            return R_WEAK_NO_JD
-        if job.weak_title and _no_jd_junk(job.title, jdcfg):
-            job.drop_note = "generic title in a non-tech field, and no JD to show otherwise"
-            return R_WEAK_NO_JD
-        job.signals = jd_rules.detect_signals(job.title, "", jd_rules.Experience(None))
-        job.signals.append(jd_rules.JD_UNAVAILABLE)
+        # No description: nothing confirms the job, nothing rules it out. It is kept as a low score (the owner can open
+        # the link), except a generic title in a field that is plainly not tech.
+        if job.role == "generic" and _no_jd_junk(job.title, jdcfg):
+            job.drop_note = "generic title in a non-tech field, and no description to show otherwise"
+            return R_NO_JD_GENERIC
+        if job.new_grad or "Simplify" in job.sources or jd_rules.addresses_new_grads(job.title, ""):
+            notes.append(rating.NEW_GRAD)
+        if jd_rules.junior_level(job.title, ""):
+            notes.append(rating.JUNIOR)
+        notes.append(rating.NO_JD)
+    job.notes = notes
+    job.exp = rating.exp_range(job.min_years, notes, jd_rules.entry_title(job.title))
+    job.rating = rating.score(job)
     return None
 
 
-def enrich(candidates: list[Job], held: list[Job], cfg: dict, filters: Filters, scorer: Scorer,
+def enrich(candidates: list[Job], cfg: dict, filters: Filters, scorer: Scorer,
            client, *, cache: JDCache | None = None,
            progress: Callable[[str], None] = lambda _msg: None) -> EnrichResult:
+    """Fetch every candidate's description, apply the rules, rate what is left. Best first."""
     jdcfg = cfg["jd"]
     cache = cache or JDCache(jdcfg.get("cache_dir"), jdcfg.get("cache_ttl_days", 7))
-    held = held if jdcfg.get("rescue_student_titles", True) else []
-    res = EnrichResult(held_total=len(held))
-    boost_re = re.compile(cfg["scoring"]["bc_or_remote_pattern"], re.IGNORECASE)
-    clusters = ClusterResolver(cfg)
-
-    progress(f"fetching JDs for {len(candidates)} candidates + {len(held)} student-titled jobs")
-    fetch_all(candidates + held, client, cache, jdcfg["workers"], filters)
-    for job in candidates + held:
+    res = EnrichResult(held_total=sum(1 for j in candidates if j.student))
+    progress(f"fetching JDs for {len(candidates)} candidates ({res.held_total} intern / co-op titles)")
+    fetch_all(candidates, client, cache, jdcfg["workers"], filters)
+    for job in candidates:
         res.fetch[f"{job.source}:{job.jd_status}"] += 1
         if job.jd_error == "http 403":
             res.forbidden[urlsplit(job.url).netloc] += 1
             res.forbidden_jobs.append(job)
-
-    for job in candidates:
-        reason = apply_rules(job, cfg, filters, scorer, clusters)
+        reason = apply_rules(job, cfg, filters, scorer)
         if reason:
             res.drop(reason, job)
-            continue
-        job.score = _score(job, cfg, boost_re)
-        res.kept.append(job)
-
-    keep_students = jdcfg.get("keep_student_roles", False)
-    for job in held:
-        if keep_students:                       # the owner wants internships and co-ops too, tagged as such
-            reason = apply_rules(job, cfg, filters, scorer, clusters)
-            if reason:
-                res.drop(reason, job)
-                continue
-            job.signals.insert(0, jd_rules.INTERN)
-            res.rescued += 1
-            job.score = _score(job, cfg, boost_re)
+        else:
             res.kept.append(job)
-            continue
-        if job.jd_status != "ok":
-            res.drop(R_STUDENT_NO_JD, job)
-            continue
-        if jd_rules.requires_enrollment(job.jd):
-            res.drop(R_ENROLLMENT, job)
-            continue
-        if not jd_rules.welcomes_recent_grads(job.jd):
-            res.drop(R_STUDENT, job)
-            continue
-        reason = apply_rules(job, cfg, filters, scorer, clusters)
-        if reason:
-            res.drop(reason, job)
-            continue
-        res.rescued += 1
-        job.score = _score(job, cfg, boost_re)
-        res.kept.append(job)
-
-    res.kept.sort(key=lambda j: (-j.score, -j.first_seen.timestamp()))
+    res.kept.sort(key=rank_key)
     return res
 
 
-def fit_distribution(jobs: list[Job]) -> list[tuple[str, int]]:
-    """Histogram of Fit % in 20-point buckets plus 'no JD / no terms'."""
-    buckets = [("0-19", 0), ("20-39", 0), ("40-59", 0), ("60-79", 0), ("80-100", 0)]
-    counts = [0] * 5
-    none = 0
-    for j in jobs:
-        if j.fit_pct is None:
-            none += 1
-        else:
-            counts[min(int(j.fit_pct // 20), 4)] += 1
-    return [(label, c) for (label, _), c in zip(buckets, counts)] + [("n/a (no JD or no tech terms)", none)]
+def rank_key(job: Job):
+    """Feed order when a run has more jobs than it may write: best Score first, then the lowest experience asked,
+    then the newest posting."""
+    return (-job.rating, job.exp, -job.first_seen.timestamp())
+
+
+def rating_distribution(jobs: list[Job]) -> list[tuple[str, int]]:
+    """How many kept jobs got each Score."""
+    counts = Counter(j.rating for j in jobs)
+    return [(f"Score {n}", counts.get(n, 0)) for n in (5, 4, 3, 2, 1)]

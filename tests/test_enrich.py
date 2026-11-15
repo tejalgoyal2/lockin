@@ -33,8 +33,13 @@ class FakeClient:
         return {"content": f"<p>{val}</p>".replace("\n", "</p><p>")}
 
 
+def _student(j):
+    j.student = True
+    return j
+
+
 def run(cands, held=(), jds=None):
-    return E.enrich(list(cands), list(held), CFG, FILTERS, SCORER, FakeClient(jds or {}), cache=NOCACHE)
+    return E.enrich(list(cands) + [_student(h) for h in held], CFG, FILTERS, SCORER, FakeClient(jds or {}), cache=NOCACHE)
 
 
 def gh(i, **kw):
@@ -48,15 +53,6 @@ def http_error(code):
 
 
 GOOD = "Requirements:\nPython, SQL, Docker and Git. 0-2 years of experience. Recent graduates welcome."
-
-
-def test_good_job_is_scored_with_fit_cluster_and_signals():
-    res = run([gh(1, title="Junior Data Analyst")], jds={"1": GOOD})
-    (j,) = res.kept
-    assert j.jd_status == "ok" and j.fit_pct == 80.0 and j.cluster == "data"   # title says data; 4 / (4 + 1)
-    assert j.signals == ["recent graduate", "0-2 years", "junior"]
-    assert j.matched == ["Docker", "Git", "Python", "SQL"]
-    assert j.score == 103.0   # Fit 80 + 4 matched x 2 + new-grad boost 15 (recent graduate)
 
 
 @pytest.mark.parametrize("jd,reason", [
@@ -81,126 +77,9 @@ def test_us_authorization_only_drops_without_canadian_location():
     assert res.drops == {E.R_US_AUTH: 1}
 
 
-def test_weak_title_dropped_when_few_terms_no_match_or_low_fit(strict_weak):
-    none = run([gh(1, title="Technical Specialist", weak_title=True)], jds={"1": "Greet customers."})
-    low = run([gh(2, title="Technical Specialist", weak_title=True)],
-              jds={"2": "Python. Java, Kafka, Golang, Kotlin, Scala, Spring Boot, Elasticsearch."})
-    ok = run([gh(3, title="Technical Specialist", weak_title=True)], jds={"3": "Python, SQL, Docker, Git."})
-    assert none.drops == {E.R_WEAK_FEW_TERMS: 1}      # no terms at all
-    assert low.drops == {E.R_WEAK: 1}                 # 8 terms, Fit 12.5 < 20
-    assert len(ok.kept) == 1
-
-
-def test_fit_needs_four_terms_else_na_and_low_signal():
-    three = run([gh(1)], jds={"1": "Python, SQL and Docker."}).kept[0]
-    four = run([gh(2)], jds={"2": "Python, SQL, Docker and Git."}).kept[0]
-    assert three.fit_pct is None and "low signal" in three.signals
-    assert three.matched == ["Docker", "Python", "SQL"]            # terms are still listed
-    assert three.score == 6.0                                      # no Fit, but 3 matched x 2
-    assert four.fit_pct == 80.0 and "low signal" not in four.signals          # 4 / (4 + 1)
-
-
-def test_gap_terms_count_toward_the_four_term_minimum():
-    j = run([gh(1)], jds={"1": "Python and SQL. Java and Kafka are a plus."}).kept[0]
-    assert j.fit_pct == 40.0 and "low signal" not in j.signals                # 2 / (2 + 2 + 1)
-
-
-def test_low_signal_applies_when_jd_has_no_terms_at_all():
-    j = run([gh(1)], jds={"1": "Greet customers."}).kept[0]
-    assert j.fit_pct is None and j.signals == ["low signal"] and j.score == 0.0
-
-
-def test_matched_count_breaks_fit_ties_and_is_capped():
-    few = gh(1); many = gh(2); lots = gh(3)
-    jds = {"1": "Python, SQL, Docker, Git.",
-           "2": "Python, SQL, Docker, Git, AWS, Linux, React, Azure.",
-           "3": "Python SQL Docker Git AWS Linux React Azure Terraform Kubernetes Flask Playwright Rust Bash"}
-    res = run([few, many, lots], jds=jds)
-    scores = {j.url[-1]: j.score for j in res.kept}
-    assert scores == {"1": 88.0, "2": 104.9, "3": 113.3}   # cap: at most 10 matched skills count
-    assert [j.url[-1] for j in res.kept] == ["3", "2", "1"]
-
-
-def test_weak_title_with_sparse_or_unmatched_jd_is_dropped(strict_weak):
-    sparse = run([gh(1, title="Technical Specialist", weak_title=True)], jds={"1": "Python and SQL."})
-    none = run([gh(2, title="Technical Specialist", weak_title=True)], jds={"2": "Java, Kafka, Golang, Kotlin and Scala."})
-    assert sparse.drops == {E.R_WEAK_FEW_TERMS: 1}
-    assert none.drops == {E.R_WEAK: 1}      # 4 terms but nothing matched
-
-
-def test_strong_title_is_not_dropped_for_low_fit():
-    res = run([gh(1, title="Data Analyst")], jds={"1": "Java, Kafka, Go, Kotlin, Scala."})
-    assert len(res.kept) == 1 and res.kept[0].fit_pct == 0.0
-
-
-@pytest.fixture
-def strict_weak(monkeypatch):
-    """The old rule: a generic title needs 4+ skill terms and a Fit (scoring.weak_title_strict: true)."""
-    monkeypatch.setitem(CFG["scoring"], "weak_title_strict", True)
-
-
-@pytest.fixture
-def strict_no_jd(monkeypatch):
-    """The old rule: a generic title with no JD to vouch for it is dropped (jd.keep_without_jd: false)."""
-    monkeypatch.setitem(CFG["jd"], "keep_without_jd", False)
-
-
-def test_missing_jd_keeps_every_job_by_default_weak_titles_included():
-    res = run([gh(1, weak_title=True), gh(2, title="Data Analyst")], jds={"1": http_error(500), "2": http_error(404)})
-    assert sorted(j.title for j in res.kept) == ["Data Analyst", "Software Engineer"] and res.drops == {}
-    assert all(j.signals == ["jd unavailable"] and j.score == -10.0 for j in res.kept)
-
-
-def test_missing_jd_strong_titles_kept_with_penalty_weak_titles_dropped(strict_no_jd):
-    res = run([job(url="https://recruiting.paylocity.com/recruiting/Jobs/Details/1", source="Paylocity"),
-               gh(2, weak_title=True), gh(3, weak_title=True), gh(4, title="Data Analyst")],
-              jds={"2": http_error(500), "3": http_error(404), "4": http_error(500)})
-    assert sorted(j.title for j in res.kept) == ["Data Analyst", "Software Engineer"]
-    assert all(j.score == -10.0 and j.fit_pct is None for j in res.kept)
-    assert all(j.signals == ["jd unavailable"] for j in res.kept)
-    assert res.drops == {E.R_WEAK_NO_JD: 2}
-    assert res.fetch == {"Paylocity:unsupported": 1, "Greenhouse:error": 2, "Greenhouse:not_found": 1}
-
-
-def test_weak_title_on_unsupported_ats_is_dropped_too(strict_no_jd):
-    res = run([job(url="https://recruiting.paylocity.com/recruiting/Jobs/Details/1", source="Paylocity",
-                   weak_title=True)])
-    assert res.kept == [] and res.drops == {E.R_WEAK_NO_JD: 1}
-
-
 def test_404_is_not_found_and_other_errors_are_error():
     res = run([gh(1), gh(2)], jds={"1": http_error(404), "2": RuntimeError("boom")})
     assert res.fetch == {"Greenhouse:not_found": 1, "Greenhouse:error": 1}
-
-
-def test_student_titled_jobs_rescued_only_when_jd_welcomes_recent_grads():
-    held = [gh(1, title="Software Engineer Intern"), gh(2, title="Developer Co-op"),
-            gh(3, title="Data Intern"), gh(4, title="Dev Intern")]
-    jds = {"1": "Python. Recent graduates are welcome to apply.",
-           "2": "Python. Must be enrolled in a co-op program.",
-           "3": "Python. Summer role for students. Best Employers for Recent Graduates 2025.",
-           "4": http_error(500)}
-    old = {**CFG, "jd": {**CFG["jd"], "keep_student_roles": False}}       # the rule before the owner asked for internships
-    res = E.enrich([], list(held), old, FILTERS, SCORER, FakeClient(jds), cache=NOCACHE)
-    assert [j.title for j in res.kept] == ["Software Engineer Intern"]
-    assert res.rescued == 1 and res.held_total == 4
-    assert res.drops == {E.R_ENROLLMENT: 1, E.R_STUDENT: 1, E.R_STUDENT_NO_JD: 1}
-
-
-def test_rescued_student_job_still_faces_other_rules():
-    res = run([], [gh(1, title="Software Engineer Intern")],
-              {"1": "Recent graduates welcome. 5+ years of experience."})
-    assert res.kept == [] and res.drops == {E.R_EXPERIENCE: 1}
-
-
-def test_scoring_boosts_and_ranking():
-    plain = gh(1, title="Software Engineer", loc="Toronto, ON")
-    bc = gh(2, title="Software Engineer", loc="Vancouver, BC")
-    simp = gh(3, title="Software Engineer", loc="Toronto, ON", new_grad=True)
-    jd = "Python, SQL, Docker and Git."   # 4 terms: Fit 80 + 4 matched x 2 = 88
-    res = run([plain, bc, simp], jds={"1": jd, "2": jd, "3": jd})
-    assert {j.url[-1]: j.score for j in res.kept} == {"1": 88.0, "2": 93.0, "3": 98.0}
-    assert [j.url[-1] for j in res.kept] == ["3", "2", "1"]
 
 
 def test_cache_roundtrip(tmp_path):
@@ -211,64 +90,12 @@ def test_cache_roundtrip(tmp_path):
     assert E.fetch_one(j, FakeClient({}), cache) == ("ok", "Python and SQL.", "")   # served from cache, no network
 
 
-def test_fit_distribution_buckets():
-    jobs = []
-    for fit in (None, 0.0, 19.9, 20.0, 59.9, 60.0, 100.0):
-        j = gh(1); j.fit_pct = fit; jobs.append(j)
-    assert dict(E.fit_distribution(jobs)) == {
-        "0-19": 2, "20-39": 1, "40-59": 1, "60-79": 1, "80-100": 1, "n/a (no JD or no tech terms)": 1}
-
-
-def test_cluster_title_first_then_jd_terms_then_software():
-    jd_data = "SQL, Power BI, Databricks and Spark."
-    res = run([gh(1, title="Software Engineer"), gh(2, title="Machine Learning Engineer"),
-               gh(3, title="Software Programmer"), gh(4, title="Software Developer")],
-              jds={"1": jd_data, "2": jd_data, "3": "Greet customers.", "4": http_error(404)})
-    clusters = {j.url[-1]: j.cluster for j in res.kept}
-    # 3: no title keyword and no JD terms -> default; 4: no JD at all -> default
-    assert clusters == {"1": "data", "2": "ml", "3": "software", "4": "software"}
-
-
-def test_http_403_tenants_are_listed_and_strong_titles_kept(strict_no_jd):
-    wd = [job(url=f"https://{t}.wd3.myworkdayjobs.com/site/job/Toronto/Dev_R{i}", source="Workday",
-              title="Software Developer") for i, t in enumerate(["bmo", "bmo", "equifax"])]
-
-    class Forbidden:
-        def get_json(self, url, ats_name, **kw):
-            resp = requests.Response()
-            resp.status_code = 403
-            raise requests.HTTPError(response=resp)
-
-    res = E.enrich(wd + [job(source="Workday", url="https://acme.wd3.myworkdayjobs.com/s/job/T/X_1",
-                             title="Technical Specialist", weak_title=True)],
-                   [], CFG, FILTERS, SCORER, Forbidden(), cache=NOCACHE)
-    assert len(res.kept) == 3 and all("jd unavailable" in j.signals for j in res.kept)
-    assert res.forbidden == {"bmo.wd3.myworkdayjobs.com": 2, "equifax.wd3.myworkdayjobs.com": 1,
-                             "acme.wd3.myworkdayjobs.com": 1}
-    assert res.drops == {E.R_WEAK_NO_JD: 1}
-    assert {j.jd_error for j in res.kept} == {"http 403"}
-
-
 def test_fetch_error_details():
     j = gh(1)
     assert E.fetch_one(j, FakeClient({"1": http_error(500)}), NOCACHE)[::2] == ("error", "http 500")
     assert E.fetch_one(j, FakeClient({"1": http_error(404)}), NOCACHE)[::2] == ("not_found", "http 404")
     assert E.fetch_one(j, FakeClient({"1": RuntimeError("x")}), NOCACHE)[::2] == ("error", "RuntimeError")
     assert E.fetch_one(job(url="https://recruiting.paylocity.com/x"), FakeClient({}), NOCACHE)[0] == "unsupported"
-
-
-def test_weak_title_needs_four_terms_even_when_it_has_a_match(strict_weak):
-    few = run([gh(1, title="Technical Specialist", weak_title=True)], jds={"1": "Python, SQL and Docker."})
-    enough = run([gh(2, title="Technical Specialist", weak_title=True)], jds={"2": "Python, SQL, Docker and Git."})
-    gap_terms_count = run([gh(3, title="Technical Specialist", weak_title=True)],
-                          jds={"3": "Python and SQL. Java and Kafka."})
-    assert few.kept == [] and few.drops == {E.R_WEAK_FEW_TERMS: 1}
-    assert len(enough.kept) == 1 and gap_terms_count.kept[0].fit_pct == 40.0
-
-
-def test_strong_title_with_few_terms_still_kept():
-    res = run([gh(1, title="Data Analyst")], jds={"1": "Python and SQL."})
-    assert len(res.kept) == 1 and "low signal" in res.kept[0].signals
 
 
 def test_student_job_with_future_graduation_date_is_not_rescued():
@@ -283,10 +110,10 @@ def test_greenhouse_company_name_is_kept_and_cached(tmp_path):
             return {"content": "&lt;p&gt;Python, SQL, Docker, Git.&lt;/p&gt;", "company_name": "Acme Corp"}
     cache = E.JDCache(tmp_path, 1)
     j = gh(1)
-    res = E.enrich([j], [], CFG, FILTERS, SCORER, GH(), cache=cache)
+    res = E.enrich([j], CFG, FILTERS, SCORER, GH(), cache=cache)
     assert res.kept[0].company_name == "Acme Corp"
     j2 = gh(1)                                           # second run: served from the cache, name preserved
-    E.enrich([j2], [], CFG, FILTERS, SCORER, FakeClient({}), cache=cache)
+    E.enrich([j2], CFG, FILTERS, SCORER, FakeClient({}), cache=cache)
     assert j2.company_name == "Acme Corp"
 
 
@@ -295,7 +122,7 @@ def test_simplify_name_wins_over_the_ats_name():
         def get_json(self, url, ats_name, **kw):
             return {"content": "Python, SQL, Docker, Git.", "company_name": "ATS Name"}
     j = gh(1, company_name="Simplify Name")
-    E.enrich([j], [], CFG, FILTERS, SCORER, GH(), cache=NOCACHE)
+    E.enrich([j], CFG, FILTERS, SCORER, GH(), cache=NOCACHE)
     assert j.company_name == "Simplify Name"
 
 
@@ -328,51 +155,4 @@ def test_a_slow_host_gets_its_own_lane_and_does_not_hold_up_the_others():
     assert len(slow_threads) == 1 and fast_done < 0.5            # one lane for Job Bank; the Greenhouse jobs did not wait for it
 
 
-def test_a_generic_title_in_a_non_tech_field_is_dropped_only_when_there_is_no_jd():
-    jds = {"1": http_error(500), "2": http_error(500), "3": "Python, SQL, Docker, Git and Kafka for the warehouse systems team."}
-    res = run([gh(1, title="Warehouse Specialist", weak_title=True), gh(2, title="IT Support Specialist", weak_title=True),
-               gh(3, title="Warehouse Systems Specialist", weak_title=True)], jds=jds)
-    assert sorted(j.title for j in res.kept) == ["IT Support Specialist", "Warehouse Systems Specialist"]
-    assert res.drops == {E.R_WEAK_NO_JD: 1} and res.dropped[0][1].title == "Warehouse Specialist"
-    assert "non-tech field" in res.dropped[0][1].drop_note
-
-
-def test_every_drop_is_kept_with_its_job_for_the_report():
-    from scanner import report
-    res = run([gh(1, title="Software Engineer")], jds={"1": "We need 5+ years of experience with Python."})
-    (reason, job), = res.dropped
-    assert reason == E.R_EXPERIENCE and job.drop_note == "asks 5+ years"
-    text = report.render_dropped(res.dropped)
-    assert "experience_3plus: 1" in text and "asks 5+ years" in text and "asks 3+ years of experience" in text
-
-
 LONG_FILLER = "We are a friendly team that values collaboration, ownership and clear communication in everything we do. " * 8
-
-
-def test_by_default_a_generic_title_is_dropped_only_when_a_full_length_jd_names_no_skill():
-    none = run([gh(1, title="Technical Specialist", weak_title=True)], jds={"1": LONG_FILLER})
-    one = run([gh(2, title="Technical Specialist", weak_title=True)], jds={"2": LONG_FILLER + " Python is an asset."})
-    unmatched = run([gh(3, title="Technical Specialist", weak_title=True)], jds={"3": LONG_FILLER + " Java and Kafka."})
-    thin = run([gh(4, title="Founding Engineer", weak_title=True)], jds={"4": "Build the product with us."})
-    assert none.drops == {E.R_WEAK_FEW_TERMS: 1} and "0 skill terms" in none.dropped[0][1].drop_note
-    assert len(one.kept) == len(unmatched.kept) == len(thin.kept) == 1
-
-
-def test_tech_flavoured_generic_title_is_not_dropped_for_few_terms():
-    from scanner.enrich import _tech_flavoured
-    sc = CFG["scoring"]
-    assert _tech_flavoured("Founding Engineer", sc)
-    assert _tech_flavoured("Information Technology (IT) Analyst", sc)
-    assert not _tech_flavoured("Mobile Mortgage Specialist", sc)
-    assert not _tech_flavoured("Fraud Analyst", sc)
-
-
-def test_internships_and_co_ops_are_kept_with_their_tags_when_the_owner_wants_them():
-    held = [gh(1, title="Software Engineer Intern", student=True), gh(2, title="Developer Co-op", student=True)]
-    jds = {"1": "Python, SQL, Docker. Recent graduates are welcome to apply.",
-           "2": "Python, SQL, Docker. Must be enrolled in a co-op program."}
-    res = run([], held, jds)
-    tags = {j.title: j.signals for j in res.kept}
-    assert set(tags) == {"Software Engineer Intern", "Developer Co-op"}
-    assert tags["Software Engineer Intern"][0] == "internship" and "students only" not in tags["Software Engineer Intern"]
-    assert "students only" in tags["Developer Co-op"]

@@ -1,4 +1,4 @@
-"""Readable company names for the Notion `Company` column (SPEC §6a)."""
+"""Readable company names for the Notion `Company` column."""
 import re
 from pathlib import Path
 

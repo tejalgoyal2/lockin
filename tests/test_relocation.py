@@ -4,10 +4,6 @@ import pytest
 import requests
 
 from scanner import enrich as E
-from scanner import feed_clean as FC
-from scanner import feed_refresh as FR
-from scanner import notion_feed
-from scanner.cluster import ClusterResolver
 from scanner.config import load_config
 from scanner.filters import Filters
 from scanner.models import Job
@@ -140,83 +136,6 @@ def test_fetch_all_swaps_the_url_and_the_cache_remembers_it(tmp_path):
     assert again.url.endswith("JR7194") and again.jd_status == "ok"
 
 
-# --- Feed rows that were written without a JD -------------------------------------------------
-
-def item(title=TITLE, company="BDO", link=OLD, signals=("new grad", "jd unavailable"), source="Workday", page="p1",
-         interested=False, apply=False):
-    return FC.FeedItem(page, title, company, link, source, "", list(signals), interested, apply)
-
-
-class Notion:
-    def __init__(self):
-        self.patched = []
-
-    def request(self, method, path, json=None, **kw):
-        assert method == "PATCH", (method, path)
-        self.patched.append((path, json))
-        return {}
-
-
-def feed():
-    names = CFG["notion"]["properties"]
-    return notion_feed.Feed("ds", names, {k: f"id_{k}" for k in names}, {"Workday"})
-
-
-def refresh(items, client, dry_run=False):
-    notion = Notion()
-    rep = FR.refresh(notion, feed(), items, CFG, FILTERS, SCORER, client, dry_run=dry_run)
-    return rep, notion
-
-
-def test_stale_workday_row_gets_link_jd_fit_and_signals_in_place():
-    it = item()
-    rep, notion = refresh([it], WD({OLD_API: gone(), LIVE_API: detail()}, [posting()]))
-    assert [(i.title, link) for i, link in rep.updated] == [(TITLE, "https://bdo.wd3.myworkdayjobs.com/bdo" + LIVE_PATH)]
-    (path, body), = notion.patched
-    assert path == "/v1/pages/p1"
-    props = body["properties"]
-    assert set(props) == {"Link", "JD", "Fit %", "Tags"}                  # nothing else, never the checkboxes
-    assert props["Link"]["url"].endswith("JR7194")
-    assert props["Fit %"]["number"] == 0.8                                  # 4 / (4 + 1)
-    assert "jd unavailable" not in [s["name"] for s in props["Tags"]["multi_select"]]
-    assert "Python" in props["JD"]["rich_text"][0]["text"]["content"]
-    assert it.link.endswith("JR7194") and "jd unavailable" not in it.signals     # the in-memory row follows
-    assert rep.locations[FC.canonical_url(it.link)] == ("Toronto, Ontario", "ats")
-
-
-def test_dry_run_changes_nothing_but_reports():
-    rep, notion = refresh([item()], WD({OLD_API: gone(), LIVE_API: detail()}, [posting()]), dry_run=True)
-    assert len(rep.updated) == 1 and notion.patched == []
-
-
-def test_row_without_a_match_is_left_alone_and_listed():
-    it = item(title="Associate, Software Engineer, New Grad", company="Capital One")
-    rep, notion = refresh([it], WD({OLD_API: gone()}, [posting(title="Associate, Software Engineer, New Grad Card Expansion")]))
-    assert rep.no_match == [it] and notion.patched == [] and it.link == OLD and "jd unavailable" in it.signals
-    assert "Still `jd unavailable`" in FR.render(rep, dry_run=False) and "Capital One" in FR.render(rep, dry_run=False)
-
-
-def test_the_old_id_working_again_still_fills_the_row():
-    rep, notion = refresh([item()], WD({OLD_API: detail()}))
-    assert len(rep.updated) == 1 and notion.patched[0][1]["properties"]["Link"]["url"] == OLD
-
-
-def test_live_link_that_is_already_a_row_is_not_duplicated():
-    other = item(title="Other", link="https://bdo.wd3.myworkdayjobs.com/bdo" + LIVE_PATH, signals=(), page="p2")
-    rep, notion = refresh([item(), other], WD({OLD_API: gone(), LIVE_API: detail()}, [posting()]))
-    assert len(rep.duplicate) == 1 and notion.patched == []
-
-
-def test_only_workday_rows_with_the_unavailable_signal_are_looked_at():
-    rows = [item(signals=("new grad",)), item(source="Greenhouse", page="p2"), item(page="p3")]
-    assert [i.page_id for i in FR.stale_rows(rows)] == ["p3"]
-
-
-def test_checkbox_state_does_not_matter_to_a_refresh_and_is_never_written():
-    rep, notion = refresh([item(interested=True)], WD({OLD_API: gone(), LIVE_API: detail()}, [posting()]))
-    assert len(rep.updated) == 1 and "Interested" not in notion.patched[0][1]["properties"]
-
-
 # --- 2K: a Simplify row follows its ATS location -------------------------------------------------
 
 SIMPLIFY_LOCATIONS = "Vancouver, BC, Canada ; Dublin, Ireland ; United States"
@@ -238,7 +157,7 @@ def two_k(sources=("Simplify",), loc=SIMPLIFY_LOCATIONS):
 
 
 def run_2k(job, ats_location):
-    return E.enrich([job], [], CFG, FILTERS, SCORER, GH(ats_location), cache=NOCACHE)
+    return E.enrich([job], CFG, FILTERS, SCORER, GH(ats_location), cache=NOCACHE)
 
 
 def test_simplify_row_passes_phase_1_on_its_programme_wide_location_list():
@@ -302,19 +221,3 @@ def test_lever_and_ashby_and_bamboo_detail_locations():
         def get_json(self, url, ats_name, **kw):
             return {"result": {"jobOpening": {"description": "d", "location": {"city": "Waterloo", "state": "Ontario"}}}}
     assert ats.fetch_full(ats.locate(bamboo), B()).locations == ["Waterloo, Ontario"]
-
-
-def test_feed_row_for_2k_is_trashed_because_its_ats_location_is_dublin():
-    it = FC.FeedItem("p", "Engineering Graduate Program", "2K", GH_URL, "Simplify", "Python, SQL, Docker, Git.", [],
-                     False, False)
-    v = FC.evaluate(it, "Dublin, Ireland", CFG, FILTERS, SCORER, ClusterResolver(CFG), origin="ats")
-    assert v.rule == E.R_ATS_NOT_CANADA
-    rep = FC.CleanReport([v])
-    assert rep.trashable() == [v]
-
-
-def test_a_simplify_only_location_that_is_not_canadian_is_trashed():
-    it = FC.FeedItem("p", "Engineering Graduate Program", "2K", GH_URL, "Simplify", "Python, SQL, Docker, Git.", [],
-                     False, False)
-    v = FC.evaluate(it, "Dublin, Ireland", CFG, FILTERS, SCORER, ClusterResolver(CFG), origin="simplify")
-    assert v.rule == E.R_NOT_CANADA and FC.CleanReport([v]).trashable() == [v]

@@ -1,4 +1,4 @@
-"""state/seen.json and state/gaps.json: small JSON stores committed back to the repo (SPEC §7)."""
+"""state/seen.json and state/gaps.json: small JSON stores committed back to the repo."""
 import json
 from datetime import date, timedelta
 from pathlib import Path

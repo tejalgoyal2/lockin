@@ -1,4 +1,4 @@
-"""Company display names from the ATS itself (SPEC §11 #68).
+"""Company display names from the ATS itself.
 
 The datasets only carry the ATS slug ("tjx", "cityofhamilton", "sandboxaq"). Each ATS publishes the employer's
 own name somewhere:

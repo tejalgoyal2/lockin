@@ -1,4 +1,4 @@
-"""Skills-overlap Fit %, cluster, and ranking Score (SPEC §5)."""
+"""How much of the tech a posting asks for the owner has: matched skills, gaps and their weighted share (Fit)."""
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -8,7 +8,6 @@ import yaml
 from scanner.normalize import norm_text
 
 _ROOT = Path(__file__).resolve().parent.parent
-CLUSTER_ORDER = ("software", "data", "ml", "security")
 
 # --- JD sections ------------------------------------------------------------------------
 # A heading is a short line that is not a list item. It is classified by the first family that matches, in
@@ -43,7 +42,8 @@ REQUIREMENT_WEIGHT = 1.0   # a term the requirements section asks for
 OTHER_WEIGHT = 0.5         # ... only elsewhere (responsibilities, intro, nice-to-have) when a requirements section exists
 NICE_WEIGHT = 0.5          # ... only under a nice-to-have / preferred heading (always)
 PROCESS_WEIGHT = 0.5       # skills in the `process` cluster (Agile, Jira, UAT, ...) count half wherever they appear
-FIT_SMOOTHING = 1          # Fit % = matched / (matched + gaps + 1), in requirement-term units
+TITLE_WEIGHT = 2.0         # a term in the job title is the stack of the job: "Java Developer", "Power BI Analyst"
+FIT_SMOOTHING = 1          # Fit = matched / (matched + gaps + 1), in requirement-term units
 
 
 def heading_kind(line: str) -> str | None:
@@ -119,12 +119,12 @@ def _terms(entries, cluster: str | None) -> list[Term]:
 class Fit:
     matched: list[str] = field(default_factory=list)   # skill names, strongest first
     gaps: list[str] = field(default_factory=list)
-    fit_pct: float | None = None                       # None: fewer than `min_terms` terms found
-    cluster: str | None = None                         # from JD terms only (see scanner.cluster for titles)
+    fit: float | None = None                           # 0-1; None: no skill or gap term found
+    hard: int = 0                                      # matched skills outside the `process` cluster (tools, techniques)
     n_terms: int = 0                                   # distinct matched + gap + context terms (signal strength)
     n_core: int = 0                                    # distinct matched + gap terms only
     context: list[str] = field(default_factory=list)   # generic engineering terms found (count towards n_terms only)
-    weights: dict[str, float] = field(default_factory=dict)   # term -> weight used (1.0 required, 0.5 elsewhere)
+    weights: dict[str, float] = field(default_factory=dict)   # term -> weight used
 
 
 class Scorer:
@@ -133,7 +133,7 @@ class Scorer:
         self.gaps = _terms(gaps["terms"], None)
         # Generic engineering vocabulary ("backend", "DevOps", "Excel", "kernel", ...). It shows that a JD is
         # technical, so it counts towards the term threshold, but it is neither a skill nor a gap and does not
-        # move Fit %. Without it, JDs for systems, consulting and analyst roles read as "low signal".
+        # move Fit. It keeps a "Data Analyst" or "Security Analyst" whose description names no tool a tech job.
         self.context = _terms(gaps.get("context", []), None)
 
     @classmethod
@@ -144,16 +144,16 @@ class Scorer:
             gaps = yaml.safe_load(fh)
         return cls(skills, gaps)
 
-    def evaluate(self, jd: str, min_terms: int = 1, companies=(), min_core: int = 1) -> Fit:
-        """Fit % = matched / (matched + gaps + FIT_SMOOTHING), each term weighted by the JD section it appears in.
+    def evaluate(self, jd: str, companies=(), title: str = "") -> Fit:
+        """Fit = matched / (matched + gaps + FIT_SMOOTHING), each term weighted by where the posting names it.
 
         A term counts 1.0 when the requirements section asks for it. When the JD has a requirements section, a term
         found only elsewhere counts 0.5; when it has none, every term counts 1.0 (it cannot be told apart). A term
-        found only under a nice-to-have / preferred heading always counts 0.5. Options in a list of alternatives
-        ("React, Angular, or Vue", "e.g. Snowflake, Databricks") are not gaps when the owner has one of them, and
-        count as one gap between them when the owner has none (see _apply_alternatives). Terms named like the hiring company
-        (`companies`: slug and display name, e.g. GitLab at GitLab) are ignored. Fit % is only reported when at
-        least `min_terms` distinct terms (matched + gaps + context) are found, `min_core` of them skills or gaps.
+        found only under a nice-to-have / preferred heading always counts 0.5, and a term in the job title counts 2.0:
+        the title names the stack of the job. Options in a list of alternatives ("React, Angular, or Vue",
+        "e.g. Snowflake, Databricks") are not gaps when the owner has one of them, and count as one gap between them
+        when the owner has none (see _apply_alternatives). Terms named like the hiring company (`companies`: slug and
+        display name, e.g. GitLab at GitLab) are ignored. Fit is None when the text names no skill and no gap.
         """
         jd = jd or ""
         spans = sections(jd)
@@ -175,29 +175,28 @@ class Scorer:
         hits = _drop_nested(hits)
         _apply_alternatives(jd, hits)
 
-        weights_m, weights_g, cluster_hits = {}, {}, {}
+        weights_m, weights_g = {}, {}
         for h in hits:
             book = weights_m if h.owned else weights_g
             book[h.term.name] = max(book.get(h.term.name, 0.0), h.weight)
         weights_m = {n: w for n, w in weights_m.items() if w}
         weights_g = {n: w for n, w in weights_g.items() if w}
-        for term in self.skills:
-            if term.name in weights_m:
-                cluster_hits[term.cluster] = cluster_hits.get(term.cluster, 0) + 1
+        if title:
+            for terms, book in ((self.skills, weights_m), (self.gaps, weights_g)):
+                for term in terms:
+                    if norm_text(term.name) not in own and term.count_in(title):
+                        book[term.name] = TITLE_WEIGHT
+        process = {t.name for t in self.skills if t.cluster == "process"}
         context = sorted(t.name for t in self.context if t.count_in(jd))
         wm, wg = sum(weights_m.values()), sum(weights_g.values())
         n_core = len(weights_m) + len(weights_g)
         n_terms = n_core + len(context)
-        cluster = None
-        if any(cluster_hits.get(c) for c in CLUSTER_ORDER):
-            cluster = max(CLUSTER_ORDER, key=lambda c: cluster_hits.get(c, 0))
         return Fit(
             matched=sorted(weights_m, key=lambda n: (-weights_m[n], n)),
             gaps=sorted(weights_g, key=lambda n: (-weights_g[n], n)),
             # matched / (total + 1): a thin match cannot reach 100 %
-            fit_pct=(round(100 * wm / (wm + wg + FIT_SMOOTHING), 1)
-                     if wm + wg and n_terms >= min_terms and n_core >= min_core else None),
-            cluster=cluster,
+            fit=round(wm / (wm + wg + FIT_SMOOTHING), 3) if wm + wg else None,
+            hard=sum(1 for n in weights_m if n not in process),
             n_terms=n_terms,
             n_core=n_core,
             context=context,

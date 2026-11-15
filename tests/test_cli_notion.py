@@ -28,7 +28,7 @@ def env(tmp_path):
 
 
 def jobs(n=4):
-    return [make_job(i, jd="Python, SQL, Docker, Git. " * 200, score=100.0 - i) for i in range(1, n + 1)]
+    return [make_job(i, jd="Python, SQL, Docker, Git. " * 200, first_seen=NOW - timedelta(hours=i)) for i in range(1, n + 1)]
 
 
 def test_real_run_writes_top_rows_records_seen_and_verifies_readback(env, capsys):
@@ -110,7 +110,7 @@ def test_offline_dry_run_uses_a_virtual_feed(capsys):
     code = cli.notion_step(CFG, args(dry_run=True, show_payloads=1), None, feed, jobs(2), SeenStore("/nonexistent/s.json"),
                            {"rbc": "RBC"}, NOW)
     out = capsys.readouterr().out
-    assert code == 0 and "RBC · oct6" in out and "<hidden>" in out
+    assert code == 0 and "RBC · oct7" in out and "<hidden>" in out
 
 
 def test_failed_rows_are_not_marked_seen(env):
@@ -153,7 +153,7 @@ def test_main_rejects_no_jd_when_writing(monkeypatch, capsys):
 
 def test_schema_problem_exits_2_with_the_list_and_writes_nothing(monkeypatch, capsys):
     notion = FakeNotion()
-    del notion.schema["properties"]["Apply"]
+    del notion.schema["properties"]["A"]
     notion.schema["properties"]["Link"]["type"] = "title"
     monkeypatch.setenv("NOTION_TOKEN", "t")
     monkeypatch.setenv("NOTION_FEED_DATA_SOURCE_ID", "ds-1")
