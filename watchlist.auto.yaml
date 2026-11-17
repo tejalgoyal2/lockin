@@ -57,3 +57,4 @@ boards:
   - {ats: workday, slug: cibc.wd3/campus, name: "cibc"}        # 34 Canadian postings when found, 2026-11-15
   - {ats: workday, slug: pwc.wd3/nonpublic_postings, name: "pwc"}        # 16 Canadian postings when found, 2026-11-15
   - {ats: workday, slug: airliquidehr.wd3/airliquideexternalcareer, name: "airliquidehr"}        # 65 Canadian postings when found, 2026-11-15
+  - {ats: lever, slug: evr, name: "evr"}        # 44 Canadian postings when found, 2026-11-17

@@ -183,6 +183,10 @@
   "name": "Morison Insurance Brokers",
   "checked": "2026-11-15"
  },
+ "BambooHR:newtrack": {
+  "name": "ISSofBC Job Shares",
+  "checked": "2026-11-17"
+ },
  "BambooHR:owi": {
   "name": "Offworld industries",
   "checked": "2026-10-28"
@@ -222,6 +226,10 @@
  "BambooHR:trusscore": {
   "name": "Trusscore",
   "checked": "2026-11-14"
+ },
+ "BambooHR:wasauksing": {
+  "name": "Wasauksing",
+  "checked": "2026-11-17"
  },
  "BambooHR:wesley": {
   "name": "Wesley",
