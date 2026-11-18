@@ -63,3 +63,5 @@ boards:
   - {ats: lever, slug: flynncompanies, name: "flynncompanies"}        # 100 Canadian postings when found, 2026-11-18
   - {ats: workday, slug: allstate.wd5/allstate_careers, name: "allstate"}        # 88 Canadian postings when found, 2026-11-18
   - {ats: greenhouse, slug: greenhouse, name: "greenhouse"}        # 9 Canadian postings when found, 2026-11-18
+  - {ats: greenhouse, slug: sonypicturesimageworks, name: "Sony Pictures Imageworks"}        # 32 Canadian postings when found, 2026-11-18
+  - {ats: lever, slug: getmaple, name: "getmaple"}        # 12 Canadian postings when found, 2026-11-18

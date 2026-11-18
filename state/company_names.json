@@ -127,6 +127,10 @@
   "name": "Danica",
   "checked": "2026-11-14"
  },
+ "BambooHR:datamundi": {
+  "name": "Summa Linguae Technologies",
+  "checked": "2026-11-18"
+ },
  "BambooHR:enwave": {
   "name": "Enwave",
   "checked": "2026-11-12"
@@ -203,6 +207,10 @@
   "name": "Pontosense",
   "checked": "2026-11-09"
  },
+ "BambooHR:protocase": {
+  "name": "Protocase Inc./45Drives",
+  "checked": "2026-11-18"
+ },
  "BambooHR:ralmax": {
   "name": "Ralmax",
   "checked": "2026-11-13"
@@ -214,6 +222,10 @@
  "BambooHR:samsters": {
   "name": "samdesk Canada",
   "checked": "2026-10-28"
+ },
+ "BambooHR:seoplus": {
+  "name": "seoplus+",
+  "checked": "2026-11-18"
  },
  "BambooHR:solace": {
   "name": "Solace",
