@@ -60,3 +60,6 @@ boards:
   - {ats: lever, slug: evr, name: "evr"}        # 44 Canadian postings when found, 2026-11-17
   - {ats: lever, slug: beautybarrage, name: "beautybarrage"}        # 12 Canadian postings when found, 2026-11-17
   - {ats: greenhouse, slug: cloudbedsthirdpartyboard, name: "cloudbedsthirdpartyboard"}        # 6 Canadian postings when found, 2026-11-17
+  - {ats: lever, slug: flynncompanies, name: "flynncompanies"}        # 100 Canadian postings when found, 2026-11-18
+  - {ats: workday, slug: allstate.wd5/allstate_careers, name: "allstate"}        # 88 Canadian postings when found, 2026-11-18
+  - {ats: greenhouse, slug: greenhouse, name: "greenhouse"}        # 9 Canadian postings when found, 2026-11-18

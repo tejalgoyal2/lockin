@@ -115,6 +115,10 @@
   "name": "Commissionaires Nova Scotia",
   "checked": "2026-11-09"
  },
+ "BambooHR:conetec": {
+  "name": "ConeTec Group",
+  "checked": "2026-11-18"
+ },
  "BambooHR:corinexcom": {
   "name": "Corinex Technologies",
   "checked": "2026-11-06"
@@ -234,6 +238,10 @@
  "BambooHR:trusscore": {
   "name": "Trusscore",
   "checked": "2026-11-14"
+ },
+ "BambooHR:vuereal": {
+  "name": "VueReal",
+  "checked": "2026-11-18"
  },
  "BambooHR:wasauksing": {
   "name": "Wasauksing",
