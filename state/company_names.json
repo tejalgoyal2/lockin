@@ -79,6 +79,10 @@
   "name": "Catulpa Community Support Services",
   "checked": "2026-11-13"
  },
+ "BambooHR:chrysos": {
+  "name": "Chrysos",
+  "checked": "2026-11-17"
+ },
  "BambooHR:cityofhamilton": {
   "name": "City of Hamilton",
   "checked": "2026-11-09"
@@ -223,6 +227,10 @@
   "name": "Traction Rec",
   "checked": "2026-11-10"
  },
+ "BambooHR:truecontext": {
+  "name": "TrueContext",
+  "checked": "2026-11-17"
+ },
  "BambooHR:trusscore": {
   "name": "Trusscore",
   "checked": "2026-11-14"
@@ -335,6 +343,10 @@
   "name": "",
   "checked": "2026-11-14"
  },
+ "Workday:blgllp.wd10.myworkdayjobs.com/blg-external": {
+  "name": "",
+  "checked": "2026-11-17"
+ },
  "Workday:brenntag.wd3.myworkdayjobs.com/brenntag_jobs": {
   "name": "",
   "checked": "2026-11-09"
@@ -418,6 +430,10 @@
  "Workday:extendicare.wd10.myworkdayjobs.com/extendicare2023": {
   "name": "",
   "checked": "2026-11-09"
+ },
+ "Workday:extendicare.wd10.myworkdayjobs.com/paramed2023": {
+  "name": "",
+  "checked": "2026-11-17"
  },
  "Workday:fairstone.wd3.myworkdayjobs.com/fairstonecareers": {
   "name": "",

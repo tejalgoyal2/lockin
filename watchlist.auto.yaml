@@ -58,3 +58,5 @@ boards:
   - {ats: workday, slug: pwc.wd3/nonpublic_postings, name: "pwc"}        # 16 Canadian postings when found, 2026-11-15
   - {ats: workday, slug: airliquidehr.wd3/airliquideexternalcareer, name: "airliquidehr"}        # 65 Canadian postings when found, 2026-11-15
   - {ats: lever, slug: evr, name: "evr"}        # 44 Canadian postings when found, 2026-11-17
+  - {ats: lever, slug: beautybarrage, name: "beautybarrage"}        # 12 Canadian postings when found, 2026-11-17
+  - {ats: greenhouse, slug: cloudbedsthirdpartyboard, name: "cloudbedsthirdpartyboard"}        # 6 Canadian postings when found, 2026-11-17
