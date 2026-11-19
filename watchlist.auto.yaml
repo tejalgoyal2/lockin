@@ -65,3 +65,4 @@ boards:
   - {ats: greenhouse, slug: greenhouse, name: "greenhouse"}        # 9 Canadian postings when found, 2026-11-18
   - {ats: greenhouse, slug: sonypicturesimageworks, name: "Sony Pictures Imageworks"}        # 32 Canadian postings when found, 2026-11-18
   - {ats: lever, slug: getmaple, name: "getmaple"}        # 12 Canadian postings when found, 2026-11-18
+  - {ats: greenhouse, slug: jensenhughes, name: "jensenhughes"}        # 5 Canadian postings when found, 2026-11-19
