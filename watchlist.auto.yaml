@@ -67,3 +67,6 @@ boards:
   - {ats: lever, slug: getmaple, name: "getmaple"}        # 12 Canadian postings when found, 2026-11-18
   - {ats: greenhouse, slug: jensenhughes, name: "jensenhughes"}        # 5 Canadian postings when found, 2026-11-19
   - {ats: lever, slug: kepler, name: "kepler"}        # 12 Canadian postings when found, 2026-11-19
+  - {ats: lever, slug: bis, name: "BIS Safety Software"}        # 6 Canadian postings when found, 2026-11-20
+  - {ats: workday, slug: blgllp.wd10/blg-external, name: "blgllp"}        # 19 Canadian postings when found, 2026-11-20
+  - {ats: ashby, slug: absorblms, name: "absorblms"}        # 9 Canadian postings when found, 2026-11-20

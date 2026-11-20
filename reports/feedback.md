@@ -1,19 +1,19 @@
 # What gets picked
 
-Reviewed rows (ticked `done-del`) since 2026-11-15: **49**, picked (`I` or `A`): **19** (39%). Counts only; a rate needs 10+ rows. If Score is doing its job, the pick rate rises with it.
+Reviewed rows (ticked `done-del`) since 2026-11-15: **50**, picked (`I` or `A`): **20** (40%). Counts only; a rate needs 10+ rows. If Score is doing its job, the pick rate rises with it.
 
 ## Score
 
 | Score | Reviewed | Picked | Pick rate |
 |---|---:|---:|---:|
-| 5 | 21 | 10 | 48% |
+| 5 | 22 | 11 | 50% |
 | 4 | 28 | 9 | 32% |
 
 ## Exp
 
 | Exp | Reviewed | Picked | Pick rate |
 |---|---:|---:|---:|
-| 1 | 26 | 11 | 42% |
+| 1 | 27 | 12 | 44% |
 | 2 | 23 | 8 | 35% |
 
 ## Province
@@ -23,5 +23,5 @@ Reviewed rows (ticked `done-del`) since 2026-11-15: **49**, picked (`I` or `A`):
 | Alberta | 8 | 4 | - |
 | BC | 18 | 5 | 28% |
 | Canada | 1 | 0 | - |
-| Ontario | 21 | 8 | 38% |
+| Ontario | 22 | 9 | 41% |
 | Remote | 9 | 4 | - |

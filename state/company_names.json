@@ -259,6 +259,10 @@
   "name": "Trusscore",
   "checked": "2026-11-14"
  },
+ "BambooHR:vertexca": {
+  "name": "Vertex Resource Group",
+  "checked": "2026-11-20"
+ },
  "BambooHR:vuereal": {
   "name": "VueReal",
   "checked": "2026-11-18"
@@ -274,6 +278,10 @@
  "BambooHR:wisi": {
   "name": "WISI",
   "checked": "2026-11-15"
+ },
+ "BambooHR:yuja": {
+  "name": "YuJa",
+  "checked": "2026-11-20"
  },
  "Greenhouse:dept": {
   "name": "DEPT®",
