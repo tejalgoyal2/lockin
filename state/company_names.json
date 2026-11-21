@@ -243,6 +243,10 @@
   "name": "Solace",
   "checked": "2026-11-12"
  },
+ "BambooHR:spoonity": {
+  "name": "Spoonity",
+  "checked": "2026-11-21"
+ },
  "BambooHR:tantalussystems": {
   "name": "Tantalus",
   "checked": "2026-11-04"
@@ -262,6 +266,10 @@
  "BambooHR:trusscore": {
   "name": "Trusscore",
   "checked": "2026-11-14"
+ },
+ "BambooHR:versabank": {
+  "name": "VersaBank",
+  "checked": "2026-11-21"
  },
  "BambooHR:vertexca": {
   "name": "Vertex Resource Group",
@@ -551,6 +559,10 @@
   "name": "",
   "checked": "2026-11-09"
  },
+ "Workday:knitwellgroup.wd1.myworkdayjobs.com/canada_jobs": {
+  "name": "",
+  "checked": "2026-11-21"
+ },
  "Workday:kyndryl.wd5.myworkdayjobs.com/ismcareers": {
   "name": "",
   "checked": "2026-11-13"
@@ -602,6 +614,10 @@
  "Workday:mlse.wd3.myworkdayjobs.com/mlse": {
   "name": "",
   "checked": "2026-11-09"
+ },
+ "Workday:mufgub.wd3.myworkdayjobs.com/mufg-careers": {
+  "name": "",
+  "checked": "2026-11-21"
  },
  "Workday:multimatic.wd10.myworkdayjobs.com/mmec": {
   "name": "",
@@ -746,6 +762,10 @@
  "Workday:toyota.wd503.myworkdayjobs.com/toyota_ca": {
   "name": "",
   "checked": "2026-11-09"
+ },
+ "Workday:trendmicro.wd3.myworkdayjobs.com/external": {
+  "name": "",
+  "checked": "2026-11-21"
  },
  "Workday:tricon.wd3.myworkdayjobs.com/tricon": {
   "name": "",
