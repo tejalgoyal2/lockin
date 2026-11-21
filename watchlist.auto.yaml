@@ -71,3 +71,4 @@ boards:
   - {ats: workday, slug: blgllp.wd10/blg-external, name: "blgllp"}        # 19 Canadian postings when found, 2026-11-20
   - {ats: ashby, slug: absorblms, name: "absorblms"}        # 9 Canadian postings when found, 2026-11-20
   - {ats: ashby, slug: hopper, name: "hopper"}        # 10 Canadian postings when found, 2026-11-20
+  - {ats: workday, slug: bdc.wd10/bdc_careers, name: "bdc"}        # 13 Canadian postings when found, 2026-11-21

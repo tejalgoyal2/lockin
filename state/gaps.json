@@ -2662,6 +2662,12 @@
    "gaps": [],
    "title": "Water Resources Engineer/Designer"
   },
+  "1257fa8164cb3fc2dc65799ffc98d75844a05b18": {
+   "company": "Mosaic Smart Farm",
+   "date": "2026-11-21",
+   "gaps": [],
+   "title": "Software Developer"
+  },
   "12675633463350a729c62fbc8fadfcb462a5dab2": {
    "company": "LAPORTE L.E.I.",
    "date": "2026-10-10",
@@ -2947,6 +2953,15 @@
     "SAP"
    ],
    "title": "Strategic Sourcing Specialist"
+  },
+  "142746ea148377b9ee32cf4076bee81f9cccb06a": {
+   "company": "Match Point Solutions",
+   "date": "2026-11-21",
+   "gaps": [
+    "DynamoDB",
+    "microservices"
+   ],
+   "title": "Web Developer"
   },
   "142d1d1e5174964a0edb10af0f53e2bf9d7cd657": {
    "company": "UBC",
@@ -5259,6 +5274,12 @@
    ],
    "title": "Technical Consultant - Patient Monitoring (Field: Vancouver, BC)"
   },
+  "22f70b7a87c2556bcee2b963a11d79cfee0168f9": {
+   "company": "Convverge",
+   "date": "2026-11-21",
+   "gaps": [],
+   "title": "Junior Developer Co-op"
+  },
   "22f96746363e18857b13b346c40ab02c3551be38": {
    "company": "KittySpout",
    "date": "2026-11-09",
@@ -6444,6 +6465,14 @@
    "date": "2026-10-23",
    "gaps": [],
    "title": "Deep Learning Model and System Optimization Engineering Intern – 2027"
+  },
+  "2b4f54f2ae99bc97ac0db492f437636bce69663b": {
+   "company": "FortisBC",
+   "date": "2026-11-21",
+   "gaps": [
+    "Ansible"
+   ],
+   "title": "Technical Analyst 4 (Ansible/Linux)"
   },
   "2b5218aa325c61d6c2872265c983d284a820b76b": {
    "company": "Henryschein",
@@ -11022,6 +11051,14 @@
    "gaps": [],
    "title": "Junior Treasury Analyst - (6 Month Contract)"
   },
+  "48e33ddfb9a01fb3c96add5ea0309488e1952732": {
+   "company": "Gradient MSP",
+   "date": "2026-11-21",
+   "gaps": [
+    "CircleCI"
+   ],
+   "title": "Junior Full Stack Developer"
+  },
   "48e48980d2a49f8aeb0f1e857f5796d4f5a0cd34": {
    "company": "Iress",
    "date": "2026-10-29",
@@ -13890,6 +13927,12 @@
    "gaps": [],
    "title": "System Safety Engineer"
   },
+  "5c542ad9e1d2885a9600d75e034e74f250ab479c": {
+   "company": "Keplar",
+   "date": "2026-11-21",
+   "gaps": [],
+   "title": "Software Engineer New Grad"
+  },
   "5c56ed71702da775db1688c084e071c9287902b4": {
    "company": "CIBC",
    "date": "2026-10-10",
@@ -14112,6 +14155,12 @@
     "Vue"
    ],
    "title": "Full-Stack .Net Web Developer, Digital Platforms & Integrations"
+  },
+  "5d8d97c72e6a254a4c45e515996b0347197ac1c8": {
+   "company": "Wisedocs AI",
+   "date": "2026-11-21",
+   "gaps": [],
+   "title": "Web Developer"
   },
   "5d8f5193923c311ea1ed73ca095413d86691dd41": {
    "company": "Artelia",
@@ -15692,6 +15741,12 @@
    "date": "2026-11-05",
    "gaps": [],
    "title": "BUSINESS ADVISOR, OPERATIONAL EFFICIENCY (Automation) - Calgary"
+  },
+  "685741a17c784c424768c42da86b4eac2850593f": {
+   "company": "Via Cognitive Health",
+   "date": "2026-11-21",
+   "gaps": [],
+   "title": "Information Technology (IT) Analyst"
   },
   "6873f3079d9c5e905db28cdf7bcd5ec740fefd05": {
    "company": "SaskPower",
@@ -20564,6 +20619,12 @@
    "gaps": [],
    "title": "AI Enablement Engineer"
   },
+  "88c767a76b1253d5e5a002dbc1a43dd680821d77": {
+   "company": "Cam Tran",
+   "date": "2026-11-21",
+   "gaps": [],
+   "title": "Information Technology (IT) Analyst"
+  },
   "88da1004e1ee3ac625a38ad7cd55b221c7f639f0": {
    "company": "Centricsoftware",
    "date": "2026-10-10",
@@ -21865,6 +21926,12 @@
    "date": "2026-11-17",
    "gaps": [],
    "title": "Brand Specialist - St. Catharines, ON, CAN"
+  },
+  "90ec496289d210dbde6142283e5f5622b71b3d72": {
+   "company": "Litera",
+   "date": "2026-11-21",
+   "gaps": [],
+   "title": "Instructional Design Specialist"
   },
   "90fe42ba00b65865df210a995512f00a3fb8e3d1": {
    "company": "Cenovus",
@@ -25318,6 +25385,16 @@
    "date": "2026-10-10",
    "gaps": [],
    "title": "Strategic Sourcing Specialist"
+  },
+  "a78c659c499f816d46b6a6619ac1759b4df398df": {
+   "company": "Scotiabank",
+   "date": "2026-11-21",
+   "gaps": [
+    "Hibernate",
+    "Java",
+    "microservices"
+   ],
+   "title": "Software Engineer- Global Payments Engineering"
   },
   "a79716a85aed499fcba4d2ced79a06876b9c9369": {
    "company": "GSK",
@@ -28922,6 +28999,12 @@
    "gaps": [],
    "title": "Front End Associate: Part Time - SQUAMISH"
   },
+  "bf9f74982e2b4450d6deecf12babdf80d56581ab": {
+   "company": "Tonertech Document Solutions Ltd.",
+   "date": "2026-11-21",
+   "gaps": [],
+   "title": "Computer Systems Engineer"
+  },
   "bfa84d5943d0a30484a469952b0707616629fe23": {
    "company": "Recrute Action",
    "date": "2026-11-19",
@@ -30043,6 +30126,14 @@
     "Java"
    ],
    "title": "AI Engineer Intern"
+  },
+  "c732daafd1aad58aedf03c42db0279cac7208013": {
+   "company": "Scotiabank",
+   "date": "2026-11-21",
+   "gaps": [
+    "New Relic"
+   ],
+   "title": "PAM Solution Support Engineer"
   },
   "c734bd5b871d9bb407b58d35e00f2398cf2739bf": {
    "company": "Genesys",
@@ -31488,6 +31579,12 @@
     "ServiceNow"
    ],
    "title": "Technical Generalist Consultant"
+  },
+  "d15624667ba01497630bd7961ce4b7a5378a107e": {
+   "company": "Celestica",
+   "date": "2026-11-21",
+   "gaps": [],
+   "title": "Student Intern, AI Project Coordinator"
   },
   "d15908201b81c1c928ccb7730809557147a0587c": {
    "company": "Autodesk",
@@ -34136,6 +34233,12 @@
    "gaps": [],
    "title": "Instrumentation and Control Engineer Part-Time Contractor (15-20 hrs/week)"
   },
+  "e2aae2d6c8e5d5eb0bcad80db2946a752252329e": {
+   "company": "Method",
+   "date": "2026-11-21",
+   "gaps": [],
+   "title": "Engineering Resident Intern"
+  },
   "e2c140376c749340910ebbe6737fdbf99089856c": {
    "company": "Lyft",
    "date": "2026-10-07",
@@ -34519,6 +34622,12 @@
    "gaps": [],
    "title": "Engineering INTERNSHIP - Project Engineer"
   },
+  "e5002dde60b6be1e5dfbf302ae2cd1aade59d51a": {
+   "company": "FortisBC",
+   "date": "2026-11-21",
+   "gaps": [],
+   "title": "Engineering Co-op, Stations"
+  },
   "e51055c4886e6cb40a7245b741230b8fab97e4b0": {
    "company": "ISSofBC Job Shares",
    "date": "2026-11-17",
@@ -34785,6 +34894,14 @@
     "SAP"
    ],
    "title": "Cloud Email Services Administrator (Term)"
+  },
+  "e6e730ea5d4d16150817b889fc0193b648958fb6": {
+   "company": "MDA Space",
+   "date": "2026-11-21",
+   "gaps": [
+    "MATLAB"
+   ],
+   "title": "Engineering Student Co-op - AI/ML Specialist"
   },
   "e6ed1cb34e689773c9bb78125d2422e8865fc969": {
    "company": "Marvell",

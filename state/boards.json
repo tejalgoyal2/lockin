@@ -18,6 +18,15 @@
    "seen": 6,
    "status": "added"
   },
+  "greenhouse/aon3d": {
+   "canadian": 0,
+   "first": "2026-11-21",
+   "last": "2026-11-21",
+   "name": "aon3d",
+   "probes": 1,
+   "seen": 2,
+   "status": "empty"
+  },
   "greenhouse/capco": {
    "canadian": 31,
    "first": "2026-11-11",
@@ -340,14 +349,14 @@
    "status": "added"
   },
   "workday/bdc.wd10/bdc_careers": {
-   "canadian": 0,
+   "canadian": 13,
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://bdc.wd10.myworkdayjobs.com/wday/cxs/bdc/bdc_careers/jobs",
    "first": "2026-11-20",
-   "last": "2026-11-20",
+   "last": "2026-11-21",
    "name": "bdc",
    "probes": 1,
    "seen": 3,
-   "status": "error"
+   "status": "added"
   },
   "workday/bdo.wd3/bdo": {
    "canadian": 98,
@@ -501,9 +510,9 @@
    "canadian": 0,
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://ci.wd3.myworkdayjobs.com/wday/cxs/ci/ci_financial_extern",
    "first": "2026-11-20",
-   "last": "2026-11-20",
+   "last": "2026-11-21",
    "name": "ci",
-   "probes": 1,
+   "probes": 2,
    "seen": 2,
    "status": "error"
   },
@@ -511,9 +520,9 @@
    "canadian": 0,
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://ci.wd3.myworkdayjobs.com/wday/cxs/ci/corient_external_ca",
    "first": "2026-11-20",
-   "last": "2026-11-20",
+   "last": "2026-11-21",
    "name": "ci",
-   "probes": 1,
+   "probes": 2,
    "seen": 2,
    "status": "error"
   },
@@ -530,9 +539,9 @@
    "canadian": 0,
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://clearesult.wd1.myworkdayjobs.com/wday/cxs/clearesult/cle",
    "first": "2026-11-20",
-   "last": "2026-11-20",
+   "last": "2026-11-21",
    "name": "clearesult",
-   "probes": 1,
+   "probes": 2,
    "seen": 2,
    "status": "error"
   },
@@ -654,9 +663,9 @@
    "canadian": 0,
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://dow.wd1.myworkdayjobs.com/wday/cxs/dow/externalcareers/j",
    "first": "2026-11-20",
-   "last": "2026-11-20",
+   "last": "2026-11-21",
    "name": "dow",
-   "probes": 1,
+   "probes": 2,
    "seen": 2,
    "status": "error"
   },
@@ -664,9 +673,9 @@
    "canadian": 0,
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://dxctechnology.wd1.myworkdayjobs.com/wday/cxs/dxctechnolo",
    "first": "2026-11-20",
-   "last": "2026-11-20",
+   "last": "2026-11-21",
    "name": "dxctechnology",
-   "probes": 1,
+   "probes": 2,
    "seen": 2,
    "status": "error"
   },
@@ -968,6 +977,16 @@
    "seen": 5,
    "status": "dead"
   },
+  "workday/hiscox.wd3/hiscox_external_site": {
+   "canadian": 0,
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://hiscox.wd3.myworkdayjobs.com/wday/cxs/hiscox/hiscox_exte",
+   "first": "2026-11-21",
+   "last": "2026-11-21",
+   "name": "hiscox",
+   "probes": 1,
+   "seen": 2,
+   "status": "error"
+  },
   "workday/hitachi.wd1/hitachi": {
    "canadian": 66,
    "first": "2026-11-13",
@@ -1036,11 +1055,11 @@
    "canadian": 0,
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://hypertherm.wd503.myworkdayjobs.com/wday/cxs/hypertherm/h",
    "first": "2026-11-19",
-   "last": "2026-11-20",
+   "last": "2026-11-21",
    "name": "hypertherm",
-   "probes": 2,
+   "probes": 3,
    "seen": 2,
-   "status": "error"
+   "status": "dead"
   },
   "workday/infios.wd502/infios": {
    "canadian": 0,
@@ -1075,9 +1094,9 @@
    "canadian": 0,
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://invesco.wd1.myworkdayjobs.com/wday/cxs/invesco/ivz/jobs",
    "first": "2026-11-20",
-   "last": "2026-11-20",
+   "last": "2026-11-21",
    "name": "invesco",
-   "probes": 1,
+   "probes": 2,
    "seen": 3,
    "status": "error"
   },
@@ -1183,6 +1202,16 @@
    "probes": 0,
    "seen": 8,
    "status": "added"
+  },
+  "workday/litera.wd12/litera_careers": {
+   "canadian": 0,
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://litera.wd12.myworkdayjobs.com/wday/cxs/litera/litera_car",
+   "first": "2026-11-21",
+   "last": "2026-11-21",
+   "name": "litera",
+   "probes": 1,
+   "seen": 2,
+   "status": "error"
   },
   "workday/manulife.wd3/mfcjh_adminjobs": {
    "canadian": 8,
@@ -1351,9 +1380,9 @@
    "canadian": 0,
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://organon.wd5.myworkdayjobs.com/wday/cxs/organon/searchjob",
    "first": "2026-11-20",
-   "last": "2026-11-20",
+   "last": "2026-11-21",
    "name": "organon",
-   "probes": 1,
+   "probes": 2,
    "seen": 5,
    "status": "error"
   },
@@ -1765,12 +1794,12 @@
  "health": {
   "successfactors/careers.celestica.com": {
    "fails": 0,
-   "last_ok": "2026-11-20"
+   "last_ok": "2026-11-21"
   },
   "workday/3m.wd1/search": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://3m.wd1.myworkdayjobs.com/wday/cxs/3m/Search/jobs",
-   "fails": 1,
-   "last_fail": "2026-11-20",
+   "fails": 2,
+   "last_fail": "2026-11-21",
    "last_ok": "2026-11-20"
   },
   "workday/abb.wd3/external_career_page": {
@@ -1780,10 +1809,10 @@
    "next_try": "2026-11-24"
   },
   "workday/abbott.wd5/abbottcareers": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://abbott.wd5.myworkdayjobs.com/wday/cxs/abbott/abbottcareers/jobs",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://abbott.wd5.myworkdayjobs.com/wday/cxs/abbott/abbottcaree",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/accenture.wd103/avanadecareers": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://accenture.wd103.myworkdayjobs.com/wday/cxs/accenture/Ava",
@@ -1804,10 +1833,10 @@
    "next_try": "2026-11-24"
   },
   "workday/agilent.wd5/agilent_careers": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://agilent.wd5.myworkdayjobs.com/wday/cxs/agilent/agilent_careers/jobs",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://agilent.wd5.myworkdayjobs.com/wday/cxs/agilent/agilent_c",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/aig.wd1/aig": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://aig.wd1.myworkdayjobs.com/wday/cxs/aig/aig/jobs",
@@ -1862,10 +1891,10 @@
    "next_try": "2026-11-25"
   },
   "workday/bakerhughes.wd5/bakerhughes": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://bakerhughes.wd5.myworkdayjobs.com/wday/cxs/bakerhughes/bakerhughes/",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://bakerhughes.wd5.myworkdayjobs.com/wday/cxs/bakerhughes/b",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/barclays.wd3/external_career_site_barclays": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://barclays.wd3.myworkdayjobs.com/wday/cxs/barclays/externa",
@@ -1893,9 +1922,8 @@
    "next_try": "2026-11-24"
   },
   "workday/blgllp.wd10/blg-external": {
-   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://blgllp.wd10.myworkdayjobs.com/wday/cxs/blgllp/blg-extern",
-   "fails": 1,
-   "last_fail": "2026-11-20"
+   "fails": 0,
+   "last_ok": "2026-11-21"
   },
   "workday/bmo.wd3/external": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://bmo.wd3.myworkdayjobs.com/wday/cxs/bmo/External/jobs",
@@ -1931,10 +1959,10 @@
    "next_try": "2026-11-24"
   },
   "workday/brookfield.wd5/brookfield": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://brookfield.wd5.myworkdayjobs.com/wday/cxs/brookfield/brookfield/job",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://brookfield.wd5.myworkdayjobs.com/wday/cxs/brookfield/bro",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/cae.wd3/career": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://cae.wd3.myworkdayjobs.com/wday/cxs/cae/career/jobs",
@@ -1986,22 +2014,22 @@
    "next_try": "2026-11-24"
   },
   "workday/ciena.wd5/careers": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://ciena.wd5.myworkdayjobs.com/wday/cxs/ciena/Careers/jobs",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://ciena.wd5.myworkdayjobs.com/wday/cxs/ciena/Careers/jobs",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/cisco.wd5/cisco_careers": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://cisco.wd5.myworkdayjobs.com/wday/cxs/cisco/cisco_careers/jobs",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://cisco.wd5.myworkdayjobs.com/wday/cxs/cisco/cisco_careers",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/citi.wd5/2": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://citi.wd5.myworkdayjobs.com/wday/cxs/citi/2/jobs",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://citi.wd5.myworkdayjobs.com/wday/cxs/citi/2/jobs",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/clio.wd3/cliocareersite": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://clio.wd3.myworkdayjobs.com/wday/cxs/clio/ClioCareerSite/",
@@ -2023,10 +2051,10 @@
    "next_try": "2026-11-26"
   },
   "workday/crowdstrike.wd5/crowdstrikecareers": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://crowdstrike.wd5.myworkdayjobs.com/wday/cxs/crowdstrike/crowdstrikec",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://crowdstrike.wd5.myworkdayjobs.com/wday/cxs/crowdstrike/c",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/enbridge.wd3/enbridge_careers": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://enbridge.wd3.myworkdayjobs.com/wday/cxs/enbridge/enbridg",
@@ -2042,10 +2070,8 @@
    "next_try": "2026-11-25"
   },
   "workday/equifax.wd5/external": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://equifax.wd5.myworkdayjobs.com/wday/cxs/equifax/External/jobs",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "fails": 0,
+   "last_ok": "2026-11-21"
   },
   "workday/equinix.wd1/external": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://equinix.wd1.myworkdayjobs.com/wday/cxs/equinix/external/",
@@ -2061,16 +2087,16 @@
    "next_try": "2026-11-24"
   },
   "workday/fis.wd5/searchjobs": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://fis.wd5.myworkdayjobs.com/wday/cxs/fis/SearchJobs/jobs",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://fis.wd5.myworkdayjobs.com/wday/cxs/fis/SearchJobs/jobs",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/fiserv.wd5/ext": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://fiserv.wd5.myworkdayjobs.com/wday/cxs/fiserv/EXT/jobs",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://fiserv.wd5.myworkdayjobs.com/wday/cxs/fiserv/EXT/jobs",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/flir.wd1/flircareers": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://flir.wd1.myworkdayjobs.com/wday/cxs/flir/flircareers/job",
@@ -2086,22 +2112,22 @@
    "next_try": "2026-11-24"
   },
   "workday/generac.wd5/external": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://generac.wd5.myworkdayjobs.com/wday/cxs/generac/external/jobs",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://generac.wd5.myworkdayjobs.com/wday/cxs/generac/external/",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/generalmotors.wd5/careers_gm": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://generalmotors.wd5.myworkdayjobs.com/wday/cxs/generalmoto",
-   "fails": 1,
-   "last_fail": "2026-11-20",
+   "fails": 2,
+   "last_fail": "2026-11-21",
    "last_ok": "2026-11-20"
   },
   "workday/gevernova.wd5/vernova_externalsite": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://gevernova.wd5.myworkdayjobs.com/wday/cxs/gevernova/vernova_external",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://gevernova.wd5.myworkdayjobs.com/wday/cxs/gevernova/verno",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/ghr.wd1/lateral-canada": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://ghr.wd1.myworkdayjobs.com/wday/cxs/ghr/lateral-canada/jo",
@@ -2111,10 +2137,10 @@
    "next_try": "2026-11-24"
   },
   "workday/globalhr.wd5/rec_rtx_ext_gateway": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://globalhr.wd5.myworkdayjobs.com/wday/cxs/globalhr/rec_rtx_ext_gatewa",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://globalhr.wd5.myworkdayjobs.com/wday/cxs/globalhr/rec_rtx",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/hitachi.wd1/hitachi": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://hitachi.wd1.myworkdayjobs.com/wday/cxs/hitachi/hitachi/j",
@@ -2124,22 +2150,22 @@
    "next_try": "2026-11-24"
   },
   "workday/homedepot.wd5/careerdepotcanada": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://homedepot.wd5.myworkdayjobs.com/wday/cxs/homedepot/CareerDepotCanad",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://homedepot.wd5.myworkdayjobs.com/wday/cxs/homedepot/Caree",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/hp.wd5/externalcareersite": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://hp.wd5.myworkdayjobs.com/wday/cxs/hp/ExternalCareerSite/jobs",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://hp.wd5.myworkdayjobs.com/wday/cxs/hp/ExternalCareerSite/",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/hp.wd5/exteu-ac-careersite": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://hp.wd5.myworkdayjobs.com/wday/cxs/hp/exteu-ac-careersite/jobs",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://hp.wd5.myworkdayjobs.com/wday/cxs/hp/exteu-ac-careersite",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/ia.wd3/professional": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://ia.wd3.myworkdayjobs.com/wday/cxs/ia/Professional/jobs",
@@ -2181,7 +2207,7 @@
   },
   "workday/keyera.wd10/keyera_careers": {
    "fails": 0,
-   "last_ok": "2026-11-20"
+   "last_ok": "2026-11-21"
   },
   "workday/kiongroup.wd3/kion_scs": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://kiongroup.wd3.myworkdayjobs.com/wday/cxs/kiongroup/kion_",
@@ -2196,16 +2222,14 @@
    "next_try": "2026-11-24"
   },
   "workday/kyndryl.wd5/kyndrylearlycareers": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://kyndryl.wd5.myworkdayjobs.com/wday/cxs/kyndryl/KyndrylEarlyCareers/",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://kyndryl.wd5.myworkdayjobs.com/wday/cxs/kyndryl/KyndrylEa",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/kyndryl.wd5/kyndrylprofessionalcareers": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://kyndryl.wd5.myworkdayjobs.com/wday/cxs/kyndryl/KyndrylProfessionalC",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "fails": 0,
+   "last_ok": "2026-11-21"
   },
   "workday/ledcor.wd3/ledcor_external": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://ledcor.wd3.myworkdayjobs.com/wday/cxs/ledcor/ledcor_exte",
@@ -2233,7 +2257,7 @@
   },
   "workday/marmon.wd501/marmon_careers": {
    "fails": 0,
-   "last_ok": "2026-11-20"
+   "last_ok": "2026-11-21"
   },
   "workday/mars.wd3/external": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://mars.wd3.myworkdayjobs.com/wday/cxs/mars/external/jobs",
@@ -2275,7 +2299,7 @@
   },
   "workday/navcanada.wd10/nav_careers": {
    "fails": 0,
-   "last_ok": "2026-11-20"
+   "last_ok": "2026-11-21"
   },
   "workday/nvidia.wd5/nvidiaexternalcareersite": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://nvidia.wd5.myworkdayjobs.com/wday/cxs/nvidia/NVIDIAExter",
@@ -2284,10 +2308,10 @@
    "next_try": "2026-12-04"
   },
   "workday/paloaltonetworks.wd5/panwexternalcareers": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://paloaltonetworks.wd5.myworkdayjobs.com/wday/cxs/paloaltonetworks/pa",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://paloaltonetworks.wd5.myworkdayjobs.com/wday/cxs/paloalto",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/paypal.wd1/jobs": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://paypal.wd1.myworkdayjobs.com/wday/cxs/paypal/jobs/jobs",
@@ -2321,10 +2345,10 @@
    "next_try": "2026-11-24"
   },
   "workday/redhat.wd5/jobs": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://redhat.wd5.myworkdayjobs.com/wday/cxs/redhat/Jobs/jobs",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://redhat.wd5.myworkdayjobs.com/wday/cxs/redhat/Jobs/jobs",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/roche.wd3/roche-ext": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://roche.wd3.myworkdayjobs.com/wday/cxs/roche/roche-ext/job",
@@ -2386,10 +2410,8 @@
    "next_try": "2026-11-25"
   },
   "workday/spgi.wd5/spgi_careers": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://spgi.wd5.myworkdayjobs.com/wday/cxs/spgi/spgi_careers/jobs",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "fails": 0,
+   "last_ok": "2026-11-21"
   },
   "workday/sunlife.wd3/campus": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://sunlife.wd3.myworkdayjobs.com/wday/cxs/sunlife/campus/jo",
@@ -2429,10 +2451,10 @@
    "next_try": "2026-11-24"
   },
   "workday/thermofisher.wd5/thermofishercareers": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://thermofisher.wd5.myworkdayjobs.com/wday/cxs/thermofisher/thermofish",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://thermofisher.wd5.myworkdayjobs.com/wday/cxs/thermofisher",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/thomsonreuters.wd5/external_career_site": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://thomsonreuters.wd5.myworkdayjobs.com/wday/cxs/thomsonreu",
@@ -2454,10 +2476,10 @@
    "next_try": "2026-11-24"
   },
   "workday/transunion.wd5/transunion": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://transunion.wd5.myworkdayjobs.com/wday/cxs/transunion/TransUnion/job",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://transunion.wd5.myworkdayjobs.com/wday/cxs/transunion/Tra",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/trimble.wd1/trimblecareers": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://trimble.wd1.myworkdayjobs.com/wday/cxs/trimble/TrimbleCa",
@@ -2497,10 +2519,10 @@
    "next_try": "2026-11-24"
   },
   "workday/workday.wd5/workday": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://workday.wd5.myworkdayjobs.com/wday/cxs/workday/Workday/jobs",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://workday.wd5.myworkdayjobs.com/wday/cxs/workday/Workday/j",
+   "fails": 4,
+   "last_fail": "2026-11-21",
+   "next_try": "2026-12-05"
   },
   "workday/zebra.wd501/zebra_careers": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://zebra.wd501.myworkdayjobs.com/wday/cxs/zebra/Zebra_caree",
@@ -2515,10 +2537,8 @@
    "next_try": "2026-11-24"
   },
   "workday/zoom.wd5/zoom": {
-   "error": "HTTPError: 521 Server Error: <none> for url: https://zoom.wd5.myworkdayjobs.com/wday/cxs/zoom/Zoom/jobs",
-   "fails": 3,
-   "last_fail": "2026-11-14",
-   "next_try": "2026-11-21"
+   "fails": 0,
+   "last_ok": "2026-11-21"
   }
  },
  "version": 1
