@@ -2194,6 +2194,12 @@
    "gaps": [],
    "title": "Controls Integration Specialist"
   },
+  "0ec289d529d3d8c9a1dbc88bbc841d54c5e931a7": {
+   "company": "Celestica",
+   "date": "2026-11-22",
+   "gaps": [],
+   "title": "Linux Desktop Engineer"
+  },
   "0ef45e940606ea3bd428843169908bf4cf3eb0aa": {
    "company": "Square One Insurance Services",
    "date": "2026-11-09",
@@ -11788,6 +11794,14 @@
    ],
    "title": "Network Engineer"
   },
+  "4b9b3af0eeab32da63099388ff1913df7c3190e7": {
+   "company": "Alimentiv",
+   "date": "2026-11-22",
+   "gaps": [
+    "GCP"
+   ],
+   "title": "Clinical Compliance Specialist"
+  },
   "4ba49aa0535964bc145d7cdb49a946d8335e5cdd": {
    "company": "HelloFresh",
    "date": "2026-10-30",
@@ -17239,6 +17253,12 @@
    "date": "2026-10-15",
    "gaps": [],
    "title": "Plant Engineer Intern"
+  },
+  "6f59ae6f09ed5e47f811765d47bbdb0c07c0e265": {
+   "company": "Barclays",
+   "date": "2026-11-22",
+   "gaps": [],
+   "title": "Banking Associate Graduate Program 2027 Toronto"
   },
   "6f60097686e356a46e7162c3ced664d6a9d086ec": {
    "company": "BMO",
@@ -24473,6 +24493,12 @@
    "gaps": [],
    "title": "Product Developer, Apparel (6 Month Contract)"
   },
+  "9d636fafbf7f52362f37e9667aef504e692ede90": {
+   "company": "NearSource",
+   "date": "2026-11-22",
+   "gaps": [],
+   "title": "Information Technology (IT) Analyst"
+  },
   "9d7c378ed38f005e894b94502ce324f5ca9638db": {
    "company": "Ciena",
    "date": "2026-10-28",
@@ -28353,6 +28379,12 @@
    "gaps": [],
    "title": "Revenue & Data Specialist"
   },
+  "b73325039815b70c0983f544f3caeab61334b601": {
+   "company": "Regional District of North Okanagan",
+   "date": "2026-11-22",
+   "gaps": [],
+   "title": "SCADA Network Systems Analyst"
+  },
   "b7340745d0b0d3f71835284d04e7a2d3e4551d67": {
    "company": "PurposeMed",
    "date": "2026-10-14",
@@ -30660,6 +30692,20 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Clinical Applications Specialist - Monitoring Solutions (Bilingual)"
+  },
+  "c5f067df819a4c89daa5eba592f994a54974af7e": {
+   "company": "Rogers",
+   "date": "2026-11-22",
+   "gaps": [
+    "Dart",
+    "GraphQL",
+    "Kotlin",
+    "Maven",
+    "New Relic",
+    "React Native",
+    "Swift"
+   ],
+   "title": "Developer"
   },
   "c5f5e602d4af1d2ca4ae1951dcb0f04ba2f522fa": {
    "company": "Mercury",
