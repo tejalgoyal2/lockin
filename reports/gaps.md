@@ -1,63 +1,63 @@
 # Gap terms: what JDs ask for that skills.yaml does not cover
 
-Generated 2026-11-16 (UTC). Counts are jobs, not mentions: each job is counted once, from every JD fetched (including jobs the filters later dropped). Move a term from `gaps.yaml` to `skills.yaml` once you have it.
+Generated 2026-11-23 (UTC). Counts are jobs, not mentions: each job is counted once, from every JD fetched (including jobs the filters later dropped). Move a term from `gaps.yaml` to `skills.yaml` once you have it.
 
-## Top 25 gap terms, last 7 days (1230 jobs with a JD)
-
-| Term | Jobs | Example titles |
-|---|---:|---|
-| Salesforce | 38 | GTM Systems Analyst (Ashby); CRM & CDP Solution Analyst (Vacances Air Canada Vacations /Air Canada Rouge); Dental Software Technical Support (ClearDent) |
-| SAP | 37 | Financial Analyst, Accounts Payable (Sinai Health); Business Systems Specialist - Computer Systems (City of Burnaby); Quality Specialist (NSG Group) |
-| Oracle | 33 | Administrator, Enterprise Systems (Sectigo); Payroll and Accounting Specialist (Canadian Cancer Society); Financial Analyst, Accounts Payable (Sinai Health) |
-| Java | 30 | Student Intern, Test Development (Celestica); SAP iXp Intern - Full-stack Software Developer (SAP); AI Engineer Intern (TMX Group) |
-| distributed systems | 28 | Data Engineer (eBay); .Net Developer (Descartes); Software Engineer (Platform/Backend) - UEM Reporting Pipeline (Omnissa) |
-| GCP | 21 | Full Stack Web Developer, IS (Mitsubishi Motor Sales of Canada Inc.); Data Engineer (Samsara); Cloud Solutions Administrator (JANA Corporation) |
-| microservices | 21 | AWS Cloud Engineer (TEEMA Group); Software Developer Intern 8 Months - Winter 2027 (Dayforce); Software Quality Engineer - AI (Boomi) |
-| Go | 20 | Mobile Core Engineer, Carrier (textnowinc); Cloud Infrastructure/DevOps Developer (Fortinet); Platform Engineer (Dye & Durham Corporation) |
-| Cisco | 19 | Cloud Engineer 1, Site Reliability Engineering (Early Career, Junior level) (Kinaxis Inc.); Systems Engineer, Land C5ISR - Tactical Communications (General Dynamics Missions System International); Network Administrator - Full Time - Markham Stouffville Hospital (Oakvalleyhealth) |
-| unit testing | 17 | Registration Business Analyst (Providence Health Care); Software Engineer (Sysco); Software Quality Engineer - AI (Boomi) |
-| Kafka | 16 | Junior Developer (Citi); Platform Engineer (Matchgroup); Software Engineer (Velora) |
-| Tableau | 15 | Summer Student - Data Science (Capitalpower); Summer Student - Data Analytics (Capital Power); Full Stack Data Engineer (Manulife) |
-| Snowflake | 14 | GTM Systems Analyst (Ashby); Data Engineer (Passion Dental Group Inc.); Data Architecture & Governance Advisor (Ellisdon) |
-| Jenkins | 13 | DevOps Specialist (MDA Space); QA Co-op (8‑Month Term – January 4th Start \| Final Year Students) (WISI); DevOps Engineer CI​/CD Automation (Placements24) |
-| integration testing | 13 | Full Stack Web Developer, IS (Mitsubishi Motor Sales of Canada Inc.); Software Engineer-AI Platforms (Novara); CRM & CDP Technical - Integration Analyst (Vacances Air Canada Vacations /Air Canada Rouge) |
-| Airflow | 10 | Data Engineer (Passion Dental Group Inc.); Data Engineer (Samsara); Cloud Solutions Administrator (JANA Corporation) |
-| Angular | 10 | SAP iXp Intern - Full-stack Software Developer (SAP); Full Stack Web Developer, IS (Mitsubishi Motor Sales of Canada Inc.); Software Developer (Aarorn Technologies Inc.) |
-| Grafana | 10 | DevOps Specialist (Canadian Bank Note Company); Cloud Infrastructure/DevOps Developer (Fortinet); Production Reliability Engineer, AI Platform (Equinix) |
-| MySQL | 10 | Full Stack Web Developer, IS (Mitsubishi Motor Sales of Canada Inc.); DevOps Specialist (Canadian Bank Note Company); Software Developer (Aarorn Technologies Inc.) |
-| Prometheus | 10 | DevOps Specialist (Canadian Bank Note Company); Cloud Infrastructure/DevOps Developer (Fortinet); Production Reliability Engineer, AI Platform (Equinix) |
-| VBA | 10 | Testing Centre Information Management Specialist - App. D/Temp. Assignment (Nov. 2026 - March 2027) (Mohawk College); Student Intern, Power Infrastructure - Pricing Management and Product Data Analysis (Celestica); Business Applications Specialist (Computershare) |
-| Vue | 9 | Performance Engineer, Sustainability Infrastructure Services (jci); Software Engineer (Velora); Field Operations Analyst Intern (W.W. Grainger) |
-| Ansible | 8 | DevOps Specialist (Canadian Bank Note Company); DevOps Engineer CI​/CD Automation (Placements24); DevSecOps, Specialist (Interac) |
-| VLANs | 8 | Systems Engineer, Land C5ISR - Tactical Communications (General Dynamics Missions System International); Cloud Infrastructure/DevOps Developer (Fortinet); Systems Engineer (Company 3) |
-| GitLab | 7 | DevOps Specialist (MDA Space); QNX DevOps Developer (Bb); Quality Assurance Automation Developer (Iaejup) |
-
-## Top 25 gap terms, last 30 days (3357 jobs with a JD)
+## Top 25 gap terms, last 7 days (1075 jobs with a JD)
 
 | Term | Jobs | Example titles |
 |---|---:|---|
-| Java | 131 | Student Intern, Test Development (Celestica); SAP iXp Intern - Full-stack Software Developer (SAP); AI Engineer Intern (TMX Group) |
-| SAP | 117 | Financial Analyst, Accounts Payable (Sinai Health); Business Systems Specialist - Computer Systems (City of Burnaby); Quality Specialist (NSG Group) |
-| Salesforce | 107 | GTM Systems Analyst (Ashby); CRM & CDP Solution Analyst (Vacances Air Canada Vacations /Air Canada Rouge); Dental Software Technical Support (ClearDent) |
-| Oracle | 94 | Administrator, Enterprise Systems (Sectigo); Payroll and Accounting Specialist (Canadian Cancer Society); Financial Analyst, Accounts Payable (Sinai Health) |
-| microservices | 83 | AWS Cloud Engineer (TEEMA Group); Software Developer Intern 8 Months - Winter 2027 (Dayforce); Software Quality Engineer - AI (Boomi) |
-| distributed systems | 76 | Data Engineer (eBay); .Net Developer (Descartes); Software Engineer (Platform/Backend) - UEM Reporting Pipeline (Omnissa) |
-| GCP | 70 | Full Stack Web Developer, IS (Mitsubishi Motor Sales of Canada Inc.); Data Engineer (Samsara); Cloud Solutions Administrator (JANA Corporation) |
-| Tableau | 60 | Summer Student - Data Science (Capitalpower); Summer Student - Data Analytics (Capital Power); Full Stack Data Engineer (Manulife) |
-| unit testing | 53 | Registration Business Analyst (Providence Health Care); Software Engineer (Sysco); Software Quality Engineer - AI (Boomi) |
-| Go | 49 | Mobile Core Engineer, Carrier (textnowinc); Cloud Infrastructure/DevOps Developer (Fortinet); Platform Engineer (Dye & Durham Corporation) |
-| Jenkins | 45 | DevOps Specialist (MDA Space); QA Co-op (8‑Month Term – January 4th Start \| Final Year Students) (WISI); DevOps Engineer CI​/CD Automation (Placements24) |
-| Kafka | 41 | Junior Developer (Citi); Platform Engineer (Matchgroup); Software Engineer (Velora) |
-| Angular | 38 | SAP iXp Intern - Full-stack Software Developer (SAP); Full Stack Web Developer, IS (Mitsubishi Motor Sales of Canada Inc.); Software Developer (Aarorn Technologies Inc.) |
-| Snowflake | 38 | GTM Systems Analyst (Ashby); Data Engineer (Passion Dental Group Inc.); Data Architecture & Governance Advisor (Ellisdon) |
-| Cisco | 36 | Cloud Engineer 1, Site Reliability Engineering (Early Career, Junior level) (Kinaxis Inc.); Systems Engineer, Land C5ISR - Tactical Communications (General Dynamics Missions System International); Network Administrator - Full Time - Markham Stouffville Hospital (Oakvalleyhealth) |
-| Spring | 32 | Java Software Engineer (TEKsystems); Software Engineer (Sysco); Software Engineer, Global Payments Technology (Backend Java Developer) (Scotiabank) |
-| Vue | 31 | Performance Engineer, Sustainability Infrastructure Services (jci); Software Engineer (Velora); Field Operations Analyst Intern (W.W. Grainger) |
-| integration testing | 31 | Full Stack Web Developer, IS (Mitsubishi Motor Sales of Canada Inc.); Software Engineer-AI Platforms (Novara); CRM & CDP Technical - Integration Analyst (Vacances Air Canada Vacations /Air Canada Rouge) |
-| MySQL | 29 | Full Stack Web Developer, IS (Mitsubishi Motor Sales of Canada Inc.); DevOps Specialist (Canadian Bank Note Company); Software Developer (Aarorn Technologies Inc.) |
-| Grafana | 27 | DevOps Specialist (Canadian Bank Note Company); Cloud Infrastructure/DevOps Developer (Fortinet); Production Reliability Engineer, AI Platform (Equinix) |
-| VBA | 27 | Testing Centre Information Management Specialist - App. D/Temp. Assignment (Nov. 2026 - March 2027) (Mohawk College); Student Intern, Power Infrastructure - Pricing Management and Product Data Analysis (Celestica); Business Applications Specialist (Computershare) |
-| MATLAB | 26 | Data Analyst / Consultant (Fire / EMS) (Darkhorse Emergency); Data Engineer (Data Intuition Inc); Electro-Optics Hardware Designer (Ciena) |
-| Splunk | 26 | CSIRT L3 Relay – Cybersecurity Operational Coordinator (Sopra Steria); Information Security Specialist - Attack Surface Reduction (Cyber Threat Hunting) (TD Bank); Associate-Automation Developer (PwC) |
-| Kotlin | 24 | SAP iXp Intern – Concur Travel Core & AI Software Developer (SAP); Software Engineer, Android, Level 4 Bitmoji (Snap); Software Engineer, Design Systems & AI Tooling (Citi) |
-| Prometheus | 24 | DevOps Specialist (Canadian Bank Note Company); Cloud Infrastructure/DevOps Developer (Fortinet); Production Reliability Engineer, AI Platform (Equinix) |
+| Java | 46 | Middle Full-Stack Engineer (React, Java) (Miratech); Python/AI Developer (Citi); Software Programmer (Ancile Canada Inc) |
+| microservices | 33 | Middle Full-Stack Engineer (React, Java) (Miratech); Junior Backend Engineer - Features Team (samdesk Canada); Quantitative Developer (Alpha Research Team) - GAM, Summer 2027 (Co-op/Internship) - 12 months (BMO) |
+| SAP | 31 | Enterprise Resource Planning (ERP) Analyst (Shah Trading Company Ltd); Information Technology (IT) Analyst (Mobis Parts Canada Corporation); Production Scheduling Analyst (GN Corporations) |
+| Oracle | 30 | Technical Analyst - Tandem (HPE NonStop) Infrastructure (Scotiabank); Python/AI Developer (Citi); Production Scheduling Analyst (GN Corporations) |
+| Salesforce | 30 | Engineering - Internal AI Transformation (Elevenlabs); AI Engineer (Trexo Robotics); Technical Solutions Specialist (Sterling Fleet Outfitters) |
+| Cisco | 23 | AI Governance Analyst in Remote (Careers at Canada); Support Engineer (Network Dept.) Intern (Touch & Solve); Support Engineer (Touch & Solve) |
+| integration testing | 17 | Full-Stack Software Engineer (Cardata); Junior Backend Engineer - Features Team (samdesk Canada); Meter Lab Engineer (Inabia Software & Consulting Inc.) |
+| unit testing | 17 | .NET Azure Developer (ELITS); Data Integration Specialist - UW Analytics (Co-operators); QA Engineer - Partnership Intelligence (Two Circles) |
+| Dart | 16 | Developer (Rogers); Metering Application Support Engineer (Inabia Software & Consulting Inc.); AMI / MDM Engineer (Inabia Software & Consulting Inc.) |
+| GCP | 16 | Cloud Applications Consultant (OpenText); Clinical Quality Specialist (AbCellera); Systems Administrator (Kastech Software Solutions Group) |
+| distributed systems | 16 | SAP iXp Intern - Agile Developer, Business Data Cloud (SAP); MTS 2 Full Stack Engineer (eBay); Platform Engineer - Depop (eBay) |
+| Spring | 13 | Middle Full-Stack Engineer (React, Java) (Miratech); Python/AI Developer (Citi); Software Programmer (Ancile Canada Inc) |
+| Jenkins | 12 | Middle Full-Stack Engineer (React, Java) (Miratech); Full Stack Java Engineer (Miratech); Full Stack Java Engineer (Miratech) |
+| Grafana | 11 | Cloud Engineer, Automation, TTP Remote ON (TEEMA Group); Platform Engineer - Depop (eBay); Cloud DevOps Engineer (Alquemy Search & Consulting) |
+| Kafka | 11 | Middle Full-Stack Engineer (React, Java) (Miratech); Technical Consultant (Kastech Software Solutions Group); Systems Administrator (Kastech Software Solutions Group) |
+| MySQL | 11 | Web Developer (Starlight Trading Co., Ltd.); Information Technology (IT) Data Analyst (IT Minds Inc.); QA Analyst (Air Tek) |
+| Go | 10 | Proposal Specialist (AECOM); Proposal Specialist (AECOM); Proposal Specialist (AECOM) |
+| Vue | 10 | Software Developer (Phantom Screens); Aircraft Maintenance Engineer (Aerotek); Warehouse Worker - Record Center Specialist (Aerotek) |
+| PHP | 9 | Software Programmer (Ancile Canada Inc); Web Developer (Starlight Trading Co., Ltd.); Technical Support Engineer (Lorvale Academy) |
+| Prometheus | 9 | Cloud Engineer, Automation, TTP Remote ON (TEEMA Group); Platform Engineer - Depop (eBay); Cloud DevOps Engineer (Alquemy Search & Consulting) |
+| Tableau | 9 | AI Engineer (Trexo Robotics); Analyst, Analytics Delivery 2 (BCLC); EverPro - Product Analyst (Evercommerce) |
+| VBA | 8 | Product Support Specialist (Fidelity Canada); ASP.NET Developer (Inabia Software & Consulting Inc.); Software Developer (Phantom Screens) |
+| Angular | 7 | Transmission & Distribution Business Analyst (Inabia Software & Consulting Inc.); Java Full Stack Developer-React AND AngularJS (Inabia Software & Consulting Inc.); T&D Functional Analyst (Inabia Software & Consulting Inc.) |
+| Ansible | 7 | Systems Administrator (Kastech Software Solutions Group); Technical Analyst 4 (Ansible/Linux) (FortisBC); DevOps Engineer (EIZIE) |
+| GraphQL | 7 | Junior Backend Engineer - Features Team (samdesk Canada); Developer (Rogers); Scientific QA - User Testing \| Luma (Dotmatics) |
+
+## Top 25 gap terms, last 30 days (3975 jobs with a JD)
+
+| Term | Jobs | Example titles |
+|---|---:|---|
+| Java | 149 | Middle Full-Stack Engineer (React, Java) (Miratech); Python/AI Developer (Citi); Software Programmer (Ancile Canada Inc) |
+| SAP | 134 | Enterprise Resource Planning (ERP) Analyst (Shah Trading Company Ltd); Information Technology (IT) Analyst (Mobis Parts Canada Corporation); Production Scheduling Analyst (GN Corporations) |
+| Salesforce | 125 | Engineering - Internal AI Transformation (Elevenlabs); AI Engineer (Trexo Robotics); Technical Solutions Specialist (Sterling Fleet Outfitters) |
+| microservices | 106 | Middle Full-Stack Engineer (React, Java) (Miratech); Junior Backend Engineer - Features Team (samdesk Canada); Quantitative Developer (Alpha Research Team) - GAM, Summer 2027 (Co-op/Internship) - 12 months (BMO) |
+| Oracle | 96 | Technical Analyst - Tandem (HPE NonStop) Infrastructure (Scotiabank); Python/AI Developer (Citi); Production Scheduling Analyst (GN Corporations) |
+| distributed systems | 78 | SAP iXp Intern - Agile Developer, Business Data Cloud (SAP); MTS 2 Full Stack Engineer (eBay); Platform Engineer - Depop (eBay) |
+| Cisco | 59 | AI Governance Analyst in Remote (Careers at Canada); Support Engineer (Network Dept.) Intern (Touch & Solve); Support Engineer (Touch & Solve) |
+| unit testing | 59 | .NET Azure Developer (ELITS); Data Integration Specialist - UW Analytics (Co-operators); QA Engineer - Partnership Intelligence (Two Circles) |
+| GCP | 58 | Cloud Applications Consultant (OpenText); Clinical Quality Specialist (AbCellera); Systems Administrator (Kastech Software Solutions Group) |
+| Tableau | 51 | AI Engineer (Trexo Robotics); Analyst, Analytics Delivery 2 (BCLC); EverPro - Product Analyst (Evercommerce) |
+| Jenkins | 49 | Middle Full-Stack Engineer (React, Java) (Miratech); Full Stack Java Engineer (Miratech); Full Stack Java Engineer (Miratech) |
+| Kafka | 48 | Middle Full-Stack Engineer (React, Java) (Miratech); Technical Consultant (Kastech Software Solutions Group); Systems Administrator (Kastech Software Solutions Group) |
+| integration testing | 48 | Full-Stack Software Engineer (Cardata); Junior Backend Engineer - Features Team (samdesk Canada); Meter Lab Engineer (Inabia Software & Consulting Inc.) |
+| Go | 46 | Proposal Specialist (AECOM); Proposal Specialist (AECOM); Proposal Specialist (AECOM) |
+| Spring | 38 | Middle Full-Stack Engineer (React, Java) (Miratech); Python/AI Developer (Citi); Software Programmer (Ancile Canada Inc) |
+| Snowflake | 36 | Full-Stack Software Engineer (Cardata); Junior Software Engineer - Cloud & AI Tools (Planview); Software Developer (HUB International) |
+| Angular | 35 | Transmission & Distribution Business Analyst (Inabia Software & Consulting Inc.); Java Full Stack Developer-React AND AngularJS (Inabia Software & Consulting Inc.); T&D Functional Analyst (Inabia Software & Consulting Inc.) |
+| Grafana | 35 | Cloud Engineer, Automation, TTP Remote ON (TEEMA Group); Platform Engineer - Depop (eBay); Cloud DevOps Engineer (Alquemy Search & Consulting) |
+| VBA | 35 | Product Support Specialist (Fidelity Canada); ASP.NET Developer (Inabia Software & Consulting Inc.); Software Developer (Phantom Screens) |
+| Vue | 34 | Software Developer (Phantom Screens); Aircraft Maintenance Engineer (Aerotek); Warehouse Worker - Record Center Specialist (Aerotek) |
+| MySQL | 31 | Web Developer (Starlight Trading Co., Ltd.); Information Technology (IT) Data Analyst (IT Minds Inc.); QA Analyst (Air Tek) |
+| Prometheus | 31 | Cloud Engineer, Automation, TTP Remote ON (TEEMA Group); Platform Engineer - Depop (eBay); Cloud DevOps Engineer (Alquemy Search & Consulting) |
+| Kotlin | 27 | Developer (Rogers); App Developer (Spoonity); React Developer (Mobile) (Reactiv) |
+| Postman | 27 | QA Analyst (Air Tek); Software Developer - Digital (Servus); Scientific QA - User Testing \| Luma (Dotmatics) |
+| Splunk | 27 | Future Opportunity - SOC Analyst, Junior (Long View); Cyber Security Analyst (Bank of Canada); SOC Analyst, Junior (Long View Systems) |
