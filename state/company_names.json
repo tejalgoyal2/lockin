@@ -83,6 +83,10 @@
   "name": "Catulpa Community Support Services",
   "checked": "2026-11-13"
  },
+ "BambooHR:cd": {
+  "name": "Citadel Drilling / Opla Energy",
+  "checked": "2026-11-25"
+ },
  "BambooHR:chrysos": {
   "name": "Chrysos",
   "checked": "2026-11-17"
@@ -251,6 +255,10 @@
   "name": "Tantalus",
   "checked": "2026-11-04"
  },
+ "BambooHR:teldio": {
+  "name": "Teldio",
+  "checked": "2026-11-25"
+ },
  "BambooHR:torontobluejays": {
   "name": "Toronto Blue Jays",
   "checked": "2026-11-09"
@@ -306,6 +314,10 @@
  "Greenhouse:robinhood": {
   "name": "Robinhood",
   "checked": "2026-11-09"
+ },
+ "Greenhouse:tenstorrentuniversity": {
+  "name": "Tenstorrent University",
+  "checked": "2026-11-25"
  },
  "Workday:aggreko.wd3.myworkdayjobs.com/aggreko_careers_1": {
   "name": "",

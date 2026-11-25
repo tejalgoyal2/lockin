@@ -74,3 +74,5 @@ boards:
   - {ats: workday, slug: bdc.wd10/bdc_careers, name: "bdc"}        # 13 Canadian postings when found, 2026-11-21
   - {ats: lever, slug: lvs1, name: "lvs1"}        # 40 Canadian postings when found, 2026-11-22
   - {ats: workday, slug: multimatic.wd10/mmec, name: "multimatic"}        # 58 Canadian postings when found, 2026-11-22
+  - {ats: ashby, slug: 3y-health, name: "3y-health"}        # 5 Canadian postings when found, 2026-11-25
+  - {ats: greenhouse, slug: brave, name: "Brave"}        # 3 Canadian postings when found, 2026-11-25

@@ -2,9 +2,10 @@
 
 What the scanner learned about employer boards (state/boards.json). Boards it found by itself are in `watchlist.auto.yaml`.
 
-## Added this run (0)
+## Added this run (2)
 
-- none
+- `ashby/3y-health` 3y-health: 5 Canadian postings, 3 pass the title filters
+- `greenhouse/brave` Brave: 3 Canadian postings, 3 pass the title filters
 
 ## Resting (114)
 
@@ -23,7 +24,7 @@ Failed 3+ reads in a row; tried again after the date shown (a working read clear
 - `workday/altera.wd1/altera`: 4 failures, back on 2026-12-08 (HTTPError: 429 Client Error: Too Many Requests for url: https://altera.wd1.myworkdayjobs.com/wday/cxs/altera/altera/jobs)
 - `workday/analogdevices.wd1/external`: 4 failures, back on 2026-12-08 (HTTPError: 429 Client Error: Too Many Requests for url: https://analogdevices.wd1.myworkdayjobs.com/wday/cxs/analogdevic)
 - `workday/aritzia.wd3/external`: 4 failures, back on 2026-12-08 (HTTPError: 429 Client Error: Too Many Requests for url: https://aritzia.wd3.myworkdayjobs.com/wday/cxs/aritzia/External/)
-- `workday/aviva.wd1/external`: 3 failures, back on 2026-11-25 (HTTPError: 429 Client Error: Too Many Requests for url: https://aviva.wd1.myworkdayjobs.com/wday/cxs/aviva/External/jobs)
+- `workday/aviva.wd1/external`: 4 failures, back on 2026-12-09 (HTTPError: 429 Client Error: Too Many Requests for url: https://aviva.wd1.myworkdayjobs.com/wday/cxs/aviva/External/jobs)
 - `workday/bakerhughes.wd5/bakerhughes`: 4 failures, back on 2026-12-05 (HTTPError: 429 Client Error: Too Many Requests for url: https://bakerhughes.wd5.myworkdayjobs.com/wday/cxs/bakerhughes/b)
 - `workday/barclays.wd3/external_career_site_barclays`: 4 failures, back on 2026-12-08 (HTTPError: 429 Client Error: Too Many Requests for url: https://barclays.wd3.myworkdayjobs.com/wday/cxs/barclays/externa)
 - `workday/bdo.wd3/bdo`: 4 failures, back on 2026-12-06 (HTTPError: 429 Client Error: Too Many Requests for url: https://bdo.wd3.myworkdayjobs.com/wday/cxs/bdo/bdo/jobs)
@@ -51,7 +52,7 @@ Failed 3+ reads in a row; tried again after the date shown (a working read clear
 - `workday/cppib.wd10/cppinvestments`: 3 failures, back on 2026-11-26 (HTTPError: 429 Client Error: Too Many Requests for url: https://cppib.wd10.myworkdayjobs.com/wday/cxs/cppib/cppinvestmen)
 - `workday/crowdstrike.wd5/crowdstrikecareers`: 4 failures, back on 2026-12-05 (HTTPError: 429 Client Error: Too Many Requests for url: https://crowdstrike.wd5.myworkdayjobs.com/wday/cxs/crowdstrike/c)
 - `workday/enbridge.wd3/enbridge_careers`: 4 failures, back on 2026-12-08 (HTTPError: 429 Client Error: Too Many Requests for url: https://enbridge.wd3.myworkdayjobs.com/wday/cxs/enbridge/enbridg)
-- `workday/enmax.wd3/enmaxcareers`: 3 failures, back on 2026-11-25 (HTTPError: 429 Client Error: Too Many Requests for url: https://enmax.wd3.myworkdayjobs.com/wday/cxs/enmax/ENMAXCareers/)
+- `workday/enmax.wd3/enmaxcareers`: 4 failures, back on 2026-12-09 (HTTPError: 429 Client Error: Too Many Requests for url: https://enmax.wd3.myworkdayjobs.com/wday/cxs/enmax/ENMAXCareers/)
 - `workday/equifax.wd5/external`: 3 failures, back on 2026-11-29 (HTTPError: 429 Client Error: Too Many Requests for url: https://equifax.wd5.myworkdayjobs.com/wday/cxs/equifax/External/)
 - `workday/equinix.wd1/external`: 4 failures, back on 2026-12-08 (HTTPError: 429 Client Error: Too Many Requests for url: https://equinix.wd1.myworkdayjobs.com/wday/cxs/equinix/external/)
 - `workday/fil.wd3/fidelitycanada`: 4 failures, back on 2026-12-08 (HTTPError: 429 Client Error: Too Many Requests for url: https://fil.wd3.myworkdayjobs.com/wday/cxs/fil/fidelitycanada/jo)
@@ -84,7 +85,7 @@ Failed 3+ reads in a row; tried again after the date shown (a working read clear
 - `workday/mars.wd3/external`: 4 failures, back on 2026-12-08 (HTTPError: 429 Client Error: Too Many Requests for url: https://mars.wd3.myworkdayjobs.com/wday/cxs/mars/external/jobs)
 - `workday/mastercard.wd1/corporatecareers`: 4 failures, back on 2026-12-08 (HTTPError: 429 Client Error: Too Many Requests for url: https://mastercard.wd1.myworkdayjobs.com/wday/cxs/mastercard/Cor)
 - `workday/mckesson.wd3/external_careers`: 4 failures, back on 2026-12-08 (HTTPError: 429 Client Error: Too Many Requests for url: https://mckesson.wd3.myworkdayjobs.com/wday/cxs/mckesson/externa)
-- `workday/mitel.wd3/mitelcareers`: 3 failures, back on 2026-11-25 (HTTPError: 429 Client Error: Too Many Requests for url: https://mitel.wd3.myworkdayjobs.com/wday/cxs/mitel/mitelcareers/)
+- `workday/mitel.wd3/mitelcareers`: 4 failures, back on 2026-12-09 (HTTPError: 429 Client Error: Too Many Requests for url: https://mitel.wd3.myworkdayjobs.com/wday/cxs/mitel/mitelcareers/)
 - `workday/moneris.wd3/moneris`: 4 failures, back on 2026-12-08 (HTTPError: 429 Client Error: Too Many Requests for url: https://moneris.wd3.myworkdayjobs.com/wday/cxs/moneris/Moneris/j)
 - `workday/myview.wd3/paradox_careers`: 4 failures, back on 2026-12-08 (HTTPError: 429 Client Error: Too Many Requests for url: https://myview.wd3.myworkdayjobs.com/wday/cxs/myview/paradox_car)
 - `workday/nvidia.wd5/nvidiaexternalcareersite`: 4 failures, back on 2026-12-04 (HTTPError: 429 Client Error: Too Many Requests for url: https://nvidia.wd5.myworkdayjobs.com/wday/cxs/nvidia/NVIDIAExter)
@@ -103,7 +104,7 @@ Failed 3+ reads in a row; tried again after the date shown (a working read clear
 - `workday/saputo.wd5/saputo_external_careers`: 4 failures, back on 2026-12-08 (HTTPError: 429 Client Error: Too Many Requests for url: https://saputo.wd5.myworkdayjobs.com/wday/cxs/saputo/saputo_exte)
 - `workday/semtech.wd1/semtechcareers`: 4 failures, back on 2026-12-08 (HTTPError: 429 Client Error: Too Many Requests for url: https://semtech.wd1.myworkdayjobs.com/wday/cxs/semtech/SemtechCa)
 - `workday/slihrms.wd3/careers`: 4 failures, back on 2026-12-08 (HTTPError: 429 Client Error: Too Many Requests for url: https://slihrms.wd3.myworkdayjobs.com/wday/cxs/slihrms/careers/j)
-- `workday/soti.wd3/soti-next-gen`: 3 failures, back on 2026-11-25 (HTTPError: 429 Client Error: Too Many Requests for url: https://soti.wd3.myworkdayjobs.com/wday/cxs/soti/soti-next-gen/j)
+- `workday/soti.wd3/soti-next-gen`: 4 failures, back on 2026-12-09 (HTTPError: 429 Client Error: Too Many Requests for url: https://soti.wd3.myworkdayjobs.com/wday/cxs/soti/soti-next-gen/j)
 - `workday/spgi.wd5/spgi_careers`: 3 failures, back on 2026-11-29 (HTTPError: 429 Client Error: Too Many Requests for url: https://spgi.wd5.myworkdayjobs.com/wday/cxs/spgi/spgi_careers/jo)
 - `workday/sunlife.wd3/campus`: 4 failures, back on 2026-12-08 (HTTPError: 429 Client Error: Too Many Requests for url: https://sunlife.wd3.myworkdayjobs.com/wday/cxs/sunlife/campus/jo)
 - `workday/sunlife.wd3/experienced-jobs`: 4 failures, back on 2026-12-08 (HTTPError: 429 Client Error: Too Many Requests for url: https://sunlife.wd3.myworkdayjobs.com/wday/cxs/sunlife/Experienc)
@@ -125,17 +126,18 @@ Failed 3+ reads in a row; tried again after the date shown (a working read clear
 - `workday/zeissgroup.wd3/external`: 4 failures, back on 2026-12-08 (HTTPError: 429 Client Error: Too Many Requests for url: https://zeissgroup.wd3.myworkdayjobs.com/wday/cxs/zeissgroup/ext)
 - `workday/zoom.wd5/zoom`: 3 failures, back on 2026-11-29 (HTTPError: 429 Client Error: Too Many Requests for url: https://zoom.wd5.myworkdayjobs.com/wday/cxs/zoom/Zoom/jobs)
 
-## Candidates not added (143)
+## Candidates not added (150)
 
 A board is given up after 3 probes that find nothing to add.
 
 - `greenhouse/aon3d` aon3d: dead after 3 probes
+- `greenhouse/artefactlinkedin` artefactlinkedin: empty after 1 probes
 - `greenhouse/method` Method: empty after 1 probes
 - `greenhouse/workstream` Workstream: empty after 1 probes
 - `lever/mirego` mirego: empty after 2 probes
 - `workday/aep.wd1/aepcareersite` aep: dead after 3 probes HTTPError: 521 Server Error: <none> for url: https://aep.wd1.myworkdayjobs.com/wday/cxs/aep/aepcareersite/jobs
 - `workday/aero.wd5/external` aero: dead after 3 probes
-- `workday/aes.wd1/aes_clean_energy` aes: error after 2 probes HTTPError: 429 Client Error: Too Many Requests for url: https://aes.wd1.myworkdayjobs.com/wday/cxs/aes/aes_clean_energy/
+- `workday/aes.wd1/aes_clean_energy` aes: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://aes.wd1.myworkdayjobs.com/wday/cxs/aes/aes_clean_energy/
 - `workday/agloan.wd5/americanagcredit` agloan: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://agloan.wd5.myworkdayjobs.com/wday/cxs/agloan/americanagc
 - `workday/alcoa.wd5/careers` alcoa: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://alcoa.wd5.myworkdayjobs.com/wday/cxs/alcoa/careers/jobs
 - `workday/alfalaval.wd3/alfa_laval_jobs` alfalaval: dead after 3 probes
@@ -150,7 +152,7 @@ A board is given up after 3 probes that find nothing to add.
 - `workday/astrazeneca.wd3/careers` astrazeneca: empty after 2 probes
 - `workday/awg.wd3/broadbean_external` awg: dead after 3 probes
 - `workday/bah.wd1/bah_jobs` bah: dead after 3 probes
-- `workday/broadridge.wd5/careers` broadridge: error after 2 probes HTTPError: 429 Client Error: Too Many Requests for url: https://broadridge.wd5.myworkdayjobs.com/wday/cxs/broadridge/car
+- `workday/broadridge.wd5/careers` broadridge: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://broadridge.wd5.myworkdayjobs.com/wday/cxs/broadridge/car
 - `workday/caci.wd1/external` caci: dead after 3 probes HTTPError: 502 Server Error: Bad Gateway for url: https://caci.wd1.myworkdayjobs.com/wday/cxs/caci/external/jobs
 - `workday/cambiahealth.wd504/external` cambiahealth: dead after 3 probes
 - `workday/cat.wd5/caterpillarcareers` cat: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://cat.wd5.myworkdayjobs.com/wday/cxs/cat/caterpillarcareer
@@ -161,6 +163,7 @@ A board is given up after 3 probes that find nothing to add.
 - `workday/christmanco.wd108/careers` christmanco: error after 2 probes HTTPError: 429 Client Error: Too Many Requests for url: https://christmanco.wd108.myworkdayjobs.com/wday/cxs/christmanco
 - `workday/ci.wd3/ci_financial_external_career-site` ci: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://ci.wd3.myworkdayjobs.com/wday/cxs/ci/ci_financial_extern
 - `workday/ci.wd3/corient_external_career-site` ci: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://ci.wd3.myworkdayjobs.com/wday/cxs/ci/corient_external_ca
+- `workday/city.wd1/cityus` city: error after 1 probes HTTPError: 429 Client Error: Too Many Requests for url: https://city.wd1.myworkdayjobs.com/wday/cxs/city/cityus/jobs
 - `workday/clearesult.wd1/clearesult_external_careers` clearesult: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://clearesult.wd1.myworkdayjobs.com/wday/cxs/clearesult/cle
 - `workday/cna.wd1/cna_careers` cna: dead after 3 probes
 - `workday/columbiabank.wd108/columbia` columbiabank: dead after 3 probes
@@ -190,7 +193,7 @@ A board is given up after 3 probes that find nothing to add.
 - `workday/firstam.wd1/firstamericancareers` firstam: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://firstam.wd1.myworkdayjobs.com/wday/cxs/firstam/firstamer
 - `workday/flcancer.wd1/flcancer_careers` flcancer: dead after 3 probes
 - `workday/flowserve.wd1/applied` flowserve: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://flowserve.wd1.myworkdayjobs.com/wday/cxs/flowserve/appli
-- `workday/flsmidth.wd3/fls_global` flsmidth: error after 2 probes HTTPError: 429 Client Error: Too Many Requests for url: https://flsmidth.wd3.myworkdayjobs.com/wday/cxs/flsmidth/fls_glo
+- `workday/flsmidth.wd3/fls_global` flsmidth: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://flsmidth.wd3.myworkdayjobs.com/wday/cxs/flsmidth/fls_glo
 - `workday/flywheel.wd5/job_duck_careers` flywheel: dead after 3 probes
 - `workday/frostbank.wd5/external` frostbank: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://frostbank.wd5.myworkdayjobs.com/wday/cxs/frostbank/exter
 - `workday/fugro.wd3/careers` fugro: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://fugro.wd3.myworkdayjobs.com/wday/cxs/fugro/careers/jobs
@@ -204,6 +207,7 @@ A board is given up after 3 probes that find nothing to add.
 - `workday/hansoninc.wd501/hps` hansoninc: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://hansoninc.wd501.myworkdayjobs.com/wday/cxs/hansoninc/hps
 - `workday/harriscomputer.wd3/htn` harriscomputer: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://harriscomputer.wd3.myworkdayjobs.com/wday/cxs/harriscomp
 - `workday/hcsc.wd1/hcsc_external` hcsc: dead after 3 probes
+- `workday/heidrick.wd1/heidrickandstruggles` heidrick: error after 1 probes HTTPError: 429 Client Error: Too Many Requests for url: https://heidrick.wd1.myworkdayjobs.com/wday/cxs/heidrick/heidric
 - `workday/highmarkhealth.wd1/highmark` highmarkhealth: dead after 3 probes
 - `workday/hiscox.wd3/hiscox_external_site` hiscox: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://hiscox.wd3.myworkdayjobs.com/wday/cxs/hiscox/hiscox_exte
 - `workday/hntb.wd5/hntb_careers` hntb: dead after 3 probes
@@ -220,6 +224,7 @@ A board is given up after 3 probes that find nothing to add.
 - `workday/iqvia.wd1/iqvia` iqvia: error after 2 probes HTTPError: 429 Client Error: Too Many Requests for url: https://iqvia.wd1.myworkdayjobs.com/wday/cxs/iqvia/iqvia/jobs
 - `workday/jadeglobal.wd5/jade_careers` jadeglobal: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://jadeglobal.wd5.myworkdayjobs.com/wday/cxs/jadeglobal/jad
 - `workday/jj.wd5/displacedemployees` jj: dead after 3 probes
+- `workday/kone.wd3/careers` kone: error after 1 probes HTTPError: 429 Client Error: Too Many Requests for url: https://kone.wd3.myworkdayjobs.com/wday/cxs/kone/careers/jobs
 - `workday/lbg.wd3/broadbean_external` lbg: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://lbg.wd3.myworkdayjobs.com/wday/cxs/lbg/broadbean_externa
 - `workday/lbg.wd3/lbg_careers` lbg: dead after 3 probes
 - `workday/litera.wd12/litera_careers` litera: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://litera.wd12.myworkdayjobs.com/wday/cxs/litera/litera_car
@@ -241,6 +246,7 @@ A board is given up after 3 probes that find nothing to add.
 - `workday/organon.wd5/searchjobs` organon: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://organon.wd5.myworkdayjobs.com/wday/cxs/organon/searchjob
 - `workday/pae.wd1/amentum_careers` pae: dead after 3 probes
 - `workday/peoplecorporation.wd10/people_corporation` peoplecorporation: error after 1 probes HTTPError: 429 Client Error: Too Many Requests for url: https://peoplecorporation.wd10.myworkdayjobs.com/wday/cxs/people
+- `workday/pfizer.wd1/pfizercareers` pfizer: error after 1 probes HTTPError: 429 Client Error: Too Many Requests for url: https://pfizer.wd1.myworkdayjobs.com/wday/cxs/pfizer/pfizercaree
 - `workday/philips.wd3/internal-job-postings-list-for-philips-contingent-workers` philips: error after 1 probes HTTPError: 429 Client Error: Too Many Requests for url: https://philips.wd3.myworkdayjobs.com/wday/cxs/philips/internal-
 - `workday/premierresearch.wd12/premierresearch` premierresearch: dead after 3 probes
 - `workday/pretiumenterpriseservices.wd1/pretium-enterprise-services` pretiumenterpriseservices: dead after 3 probes HTTPError: 521 Server Error: <none> for url: https://pretiumenterpriseservices.wd1.myworkdayjobs.com/wday/cxs/pretiument
@@ -253,7 +259,9 @@ A board is given up after 3 probes that find nothing to add.
 - `workday/rxo.wd501/rxojobs` rxo: dead after 3 probes
 - `workday/salesforce.wd12/futureforce_newgradroles` salesforce: dead after 3 probes
 - `workday/salesforce.wd12/mulesoft_careersite` salesforce: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://salesforce.wd12.myworkdayjobs.com/wday/cxs/salesforce/mu
+- `workday/sierraspace.wd1/sierra_space_external_career_site` sierraspace: error after 1 probes HTTPError: 429 Client Error: Too Many Requests for url: https://sierraspace.wd1.myworkdayjobs.com/wday/cxs/sierraspace/s
 - `workday/slrconsulting.wd103/slrcareers` slrconsulting: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://slrconsulting.wd103.myworkdayjobs.com/wday/cxs/slrconsul
+- `workday/snapchat.wd1/snap` snapchat: error after 1 probes HTTPError: 429 Client Error: Too Many Requests for url: https://snapchat.wd1.myworkdayjobs.com/wday/cxs/snapchat/snap/jo
 - `workday/strayer.wd1/sei` strayer: empty after 2 probes
 - `workday/stvinc.wd5/stv` stvinc: dead after 3 probes HTTPError: 521 Server Error: <none> for url: https://stvinc.wd5.myworkdayjobs.com/wday/cxs/stvinc/stv/jobs
 - `workday/suse.wd3/jobsatsuse` suse: dead after 3 probes HTTPError: 429 Client Error: Too Many Requests for url: https://suse.wd3.myworkdayjobs.com/wday/cxs/suse/jobsatsuse/jobs
