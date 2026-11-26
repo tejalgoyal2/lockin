@@ -76,3 +76,5 @@ boards:
   - {ats: workday, slug: multimatic.wd10/mmec, name: "multimatic"}        # 58 Canadian postings when found, 2026-11-22
   - {ats: ashby, slug: 3y-health, name: "3y-health"}        # 5 Canadian postings when found, 2026-11-25
   - {ats: greenhouse, slug: brave, name: "Brave"}        # 3 Canadian postings when found, 2026-11-25
+  - {ats: workday, slug: peoplecorporation.wd10/people_corporation, name: "peoplecorporation"}        # 49 Canadian postings when found, 2026-11-26
+  - {ats: lever, slug: syntronic, name: "syntronic"}        # 24 Canadian postings when found, 2026-11-26
