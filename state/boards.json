@@ -41,9 +41,9 @@
    "first": "2026-11-25",
    "last": "2026-11-26",
    "name": "artefactlinkedin",
-   "probes": 2,
+   "probes": 3,
    "seen": 7,
-   "status": "empty"
+   "status": "dead"
   },
   "greenhouse/brave": {
    "canadian": 3,
@@ -245,6 +245,16 @@
    "seen": 3,
    "status": "dead"
   },
+  "workday/aes.wd1/aes_us": {
+   "canadian": 0,
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://aes.wd1.myworkdayjobs.com/wday/cxs/aes/aes_us/jobs",
+   "first": "2026-11-26",
+   "last": "2026-11-26",
+   "name": "aes",
+   "probes": 1,
+   "seen": 2,
+   "status": "error"
+  },
   "workday/ag.wd3/airbus": {
    "canadian": 16,
    "first": "2026-11-10",
@@ -291,6 +301,16 @@
    "probes": 3,
    "seen": 2,
    "status": "dead"
+  },
+  "workday/alcon.wd5/careers_alcon": {
+   "canadian": 0,
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://alcon.wd5.myworkdayjobs.com/wday/cxs/alcon/careers_alcon",
+   "first": "2026-11-26",
+   "last": "2026-11-26",
+   "name": "alcon",
+   "probes": 1,
+   "seen": 2,
+   "status": "error"
   },
   "workday/alfalaval.wd3/alfa_laval_jobs": {
    "canadian": 0,
@@ -576,11 +596,11 @@
    "canadian": 0,
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://cbrands.wd5.myworkdayjobs.com/wday/cxs/cbrands/cbi_exter",
    "first": "2026-11-23",
-   "last": "2026-11-24",
+   "last": "2026-11-26",
    "name": "cbrands",
-   "probes": 2,
+   "probes": 3,
    "seen": 3,
-   "status": "error"
+   "status": "dead"
   },
   "workday/centene.wd5/centene_external": {
    "canadian": 0,
@@ -655,9 +675,9 @@
    "first": "2026-11-25",
    "last": "2026-11-26",
    "name": "city",
-   "probes": 2,
+   "probes": 3,
    "seen": 3,
-   "status": "error"
+   "status": "dead"
   },
   "workday/clearesult.wd1/clearesult_external_careers": {
    "canadian": 0,
@@ -872,12 +892,13 @@
   },
   "workday/erm.wd3/erm_experiencedprofessionals": {
    "canadian": 0,
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://erm.wd3.myworkdayjobs.com/wday/cxs/erm/erm_experiencedpr",
    "first": "2026-11-14",
-   "last": "2026-11-14",
+   "last": "2026-11-26",
    "name": "erm",
-   "probes": 1,
-   "seen": 3,
-   "status": "empty"
+   "probes": 2,
+   "seen": 2,
+   "status": "error"
   },
   "workday/evercommerce.wd1/evercommerce_careers": {
    "canadian": 0,
@@ -1148,9 +1169,9 @@
    "first": "2026-11-25",
    "last": "2026-11-26",
    "name": "heidrick",
-   "probes": 2,
+   "probes": 3,
    "seen": 3,
-   "status": "error"
+   "status": "dead"
   },
   "workday/highmarkhealth.wd1/highmark": {
    "canadian": 0,
@@ -1375,9 +1396,9 @@
    "first": "2026-11-25",
    "last": "2026-11-26",
    "name": "kone",
-   "probes": 2,
+   "probes": 3,
    "seen": 3,
-   "status": "error"
+   "status": "dead"
   },
   "workday/lbg.wd3/broadbean_external": {
    "canadian": 0,
@@ -1664,9 +1685,9 @@
    "first": "2026-11-25",
    "last": "2026-11-26",
    "name": "pfizer",
-   "probes": 2,
+   "probes": 3,
    "seen": 3,
-   "status": "error"
+   "status": "dead"
   },
   "workday/philips.wd3/internal-job-postings-list-for-philips-contingent-workers": {
    "canadian": 0,
@@ -1730,7 +1751,7 @@
    "first": "2026-11-26",
    "last": "2026-11-26",
    "name": "qvc",
-   "probes": 1,
+   "probes": 2,
    "seen": 3,
    "status": "error"
   },
@@ -1832,9 +1853,9 @@
    "first": "2026-11-25",
    "last": "2026-11-26",
    "name": "sierraspace",
-   "probes": 2,
+   "probes": 3,
    "seen": 3,
-   "status": "error"
+   "status": "dead"
   },
   "workday/slihrms.wd3/careers": {
    "canadian": 266,
@@ -1861,9 +1882,9 @@
    "first": "2026-11-25",
    "last": "2026-11-26",
    "name": "snapchat",
-   "probes": 2,
+   "probes": 3,
    "seen": 8,
-   "status": "error"
+   "status": "dead"
   },
   "workday/soti.wd3/soti-next-gen": {
    "canadian": 21,
@@ -2168,9 +2189,10 @@
   },
   "workday/algonquincollege.wd3/careeropportunities": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://algonquincollege.wd3.myworkdayjobs.com/wday/cxs/algonqui",
-   "fails": 2,
+   "fails": 3,
    "last_fail": "2026-11-26",
-   "last_ok": "2026-11-24"
+   "last_ok": "2026-11-24",
+   "next_try": "2026-12-03"
   },
   "workday/allstate.wd5/allstate_careers": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://allstate.wd5.myworkdayjobs.com/wday/cxs/allstate/allstat",
@@ -2541,10 +2563,8 @@
    "next_try": "2026-12-05"
   },
   "workday/kyndryl.wd5/kyndrylprofessionalcareers": {
-   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://kyndryl.wd5.myworkdayjobs.com/wday/cxs/kyndryl/KyndrylPr",
-   "fails": 2,
-   "last_fail": "2026-11-26",
-   "last_ok": "2026-11-24"
+   "fails": 0,
+   "last_ok": "2026-11-26"
   },
   "workday/ledcor.wd3/ledcor_external": {
    "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://ledcor.wd3.myworkdayjobs.com/wday/cxs/ledcor/ledcor_exte",
