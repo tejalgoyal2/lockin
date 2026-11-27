@@ -81,3 +81,4 @@ boards:
   - {ats: workday, slug: ubc.wd10/ubcstudentjob, name: "ubc"}        # 11 Canadian postings when found, 2026-11-27
   - {ats: workday, slug: extendicare.wd10/extendicare2023, name: "extendicare"}        # 386 Canadian postings when found, 2026-11-27
   - {ats: workday, slug: hoopp.wd10/hoopp, name: "hoopp"}        # 29 Canadian postings when found, 2026-11-27
+  - {ats: lever, slug: metergysolutions, name: "metergysolutions"}        # 15 Canadian postings when found, 2026-11-27

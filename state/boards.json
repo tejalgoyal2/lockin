@@ -93,9 +93,9 @@
   "greenhouse/method": {
    "canadian": 0,
    "first": "2026-11-22",
-   "last": "2026-11-22",
+   "last": "2026-11-27",
    "name": "Method",
-   "probes": 1,
+   "probes": 2,
    "seen": 2,
    "status": "empty"
   },
@@ -180,14 +180,23 @@
    "seen": 2,
    "status": "added"
   },
+  "lever/metergysolutions": {
+   "canadian": 15,
+   "first": "2026-11-27",
+   "last": "2026-11-27",
+   "name": "metergysolutions",
+   "probes": 0,
+   "seen": 2,
+   "status": "added"
+  },
   "lever/mirego": {
    "canadian": 0,
    "first": "2026-11-19",
-   "last": "2026-11-22",
+   "last": "2026-11-27",
    "name": "mirego",
-   "probes": 2,
+   "probes": 3,
    "seen": 2,
-   "status": "empty"
+   "status": "dead"
   },
   "lever/syntronic": {
    "canadian": 24,
@@ -251,9 +260,9 @@
    "first": "2026-11-26",
    "last": "2026-11-27",
    "name": "aes",
-   "probes": 2,
+   "probes": 3,
    "seen": 2,
-   "status": "error"
+   "status": "dead"
   },
   "workday/ag.wd3/airbus": {
    "canadian": 16,
@@ -308,9 +317,9 @@
    "first": "2026-11-26",
    "last": "2026-11-27",
    "name": "alcon",
-   "probes": 2,
+   "probes": 3,
    "seen": 2,
-   "status": "error"
+   "status": "dead"
   },
   "workday/alfalaval.wd3/alfa_laval_jobs": {
    "canadian": 0,
@@ -375,7 +384,7 @@
    "first": "2026-11-27",
    "last": "2026-11-27",
    "name": "amcor",
-   "probes": 1,
+   "probes": 2,
    "seen": 2,
    "status": "error"
   },
@@ -417,6 +426,16 @@
    "probes": 3,
    "seen": 2,
    "status": "dead"
+  },
+  "workday/aspentech.wd5/aspentech": {
+   "canadian": 0,
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://aspentech.wd5.myworkdayjobs.com/wday/cxs/aspentech/aspen",
+   "first": "2026-11-27",
+   "last": "2026-11-27",
+   "name": "aspentech",
+   "probes": 1,
+   "seen": 2,
+   "status": "error"
   },
   "workday/astrazeneca.wd3/broadbean_external": {
    "canadian": 0,
@@ -1320,9 +1339,9 @@
    "first": "2026-11-22",
    "last": "2026-11-27",
    "name": "insperity",
-   "probes": 2,
+   "probes": 3,
    "seen": 2,
-   "status": "error"
+   "status": "dead"
   },
   "workday/insulet.wd5/insuletcareers": {
    "canadian": 0,
@@ -1407,7 +1426,7 @@
    "first": "2026-11-27",
    "last": "2026-11-27",
    "name": "keybank",
-   "probes": 1,
+   "probes": 2,
    "seen": 2,
    "status": "error"
   },
@@ -1559,6 +1578,16 @@
    "seen": 3,
    "status": "added"
   },
+  "workday/mechanicsbank.wd5/mechanicsbank": {
+   "canadian": 0,
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://mechanicsbank.wd5.myworkdayjobs.com/wday/cxs/mechanicsba",
+   "first": "2026-11-27",
+   "last": "2026-11-27",
+   "name": "mechanicsbank",
+   "probes": 1,
+   "seen": 2,
+   "status": "error"
+  },
   "workday/micron.wd1/external": {
    "canadian": 0,
    "first": "2026-11-10",
@@ -1567,6 +1596,16 @@
    "probes": 3,
    "seen": 8,
    "status": "dead"
+  },
+  "workday/monolithicpower.wd12/mps_careers": {
+   "canadian": 0,
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://monolithicpower.wd12.myworkdayjobs.com/wday/cxs/monolith",
+   "first": "2026-11-27",
+   "last": "2026-11-27",
+   "name": "monolithicpower",
+   "probes": 1,
+   "seen": 2,
+   "status": "error"
   },
   "workday/morganlewis.wd5/morganlewis": {
    "canadian": 0,
@@ -1585,6 +1624,16 @@
    "probes": 3,
    "seen": 8,
    "status": "dead"
+  },
+  "workday/mufgub.wd3/mufg-careers": {
+   "canadian": 0,
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://mufgub.wd3.myworkdayjobs.com/wday/cxs/mufgub/mufg-career",
+   "first": "2026-11-27",
+   "last": "2026-11-27",
+   "name": "mufgub",
+   "probes": 1,
+   "seen": 2,
+   "status": "error"
   },
   "workday/multimatic.wd10/mmec": {
    "canadian": 58,
@@ -2620,7 +2669,9 @@
    "next_try": "2026-12-05"
   },
   "workday/kyndryl.wd5/kyndrylprofessionalcareers": {
-   "fails": 0,
+   "error": "HTTPError: 429 Client Error: Too Many Requests for url: https://kyndryl.wd5.myworkdayjobs.com/wday/cxs/kyndryl/KyndrylPr",
+   "fails": 1,
+   "last_fail": "2026-11-27",
    "last_ok": "2026-11-27"
   },
   "workday/ledcor.wd3/ledcor_external": {
