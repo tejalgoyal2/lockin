@@ -2,6 +2,6 @@
 #   pip-compile --generate-hashes --allow-unsafe --strip-extras requirements.in
 # The workflow installs with `pip install --require-hashes -r requirements.txt`.
 requests>=2.31
-pyyaml>=6.0
+pyyaml>=6.0.4
 cryptography>=42
 pyarrow>=17      # reads the Jobhive dataset's Parquet snapshots
