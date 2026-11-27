@@ -143,6 +143,10 @@
   "name": "Marketing Impact",
   "checked": "2026-11-19"
  },
+ "BambooHR:encepta": {
+  "name": "Encepta",
+  "checked": "2026-11-27"
+ },
  "BambooHR:enwave": {
   "name": "Enwave",
   "checked": "2026-11-12"
@@ -174,6 +178,10 @@
  "BambooHR:innfromthecold": {
   "name": "Inn From The Cold",
   "checked": "2026-11-09"
+ },
+ "BambooHR:integrity360": {
+  "name": "Integrity360",
+  "checked": "2026-11-27"
  },
  "BambooHR:issbc": {
   "name": "Immigrant Services Society of BC",
@@ -215,6 +223,10 @@
   "name": "Navitas",
   "checked": "2026-11-19"
  },
+ "BambooHR:netagen": {
+  "name": "Netagen",
+  "checked": "2026-11-27"
+ },
  "BambooHR:newtrack": {
   "name": "ISSofBC Job Shares",
   "checked": "2026-11-17"
@@ -234,6 +246,10 @@
  "BambooHR:ralmax": {
   "name": "Ralmax",
   "checked": "2026-11-13"
+ },
+ "BambooHR:regionalgroup": {
+  "name": "Regional Group",
+  "checked": "2026-11-27"
  },
  "BambooHR:relicentertainment": {
   "name": "Relic",

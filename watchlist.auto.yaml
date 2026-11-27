@@ -78,3 +78,6 @@ boards:
   - {ats: greenhouse, slug: brave, name: "Brave"}        # 3 Canadian postings when found, 2026-11-25
   - {ats: workday, slug: peoplecorporation.wd10/people_corporation, name: "peoplecorporation"}        # 49 Canadian postings when found, 2026-11-26
   - {ats: lever, slug: syntronic, name: "syntronic"}        # 24 Canadian postings when found, 2026-11-26
+  - {ats: workday, slug: ubc.wd10/ubcstudentjob, name: "ubc"}        # 11 Canadian postings when found, 2026-11-27
+  - {ats: workday, slug: extendicare.wd10/extendicare2023, name: "extendicare"}        # 386 Canadian postings when found, 2026-11-27
+  - {ats: workday, slug: hoopp.wd10/hoopp, name: "hoopp"}        # 29 Canadian postings when found, 2026-11-27
