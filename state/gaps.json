@@ -88,6 +88,14 @@
    "gaps": [],
    "title": "Mental Health Specialist Dispatch, Temporary"
   },
+  "00b081191fb50af270e9e559afdf981da6f06607": {
+   "company": "Cresta",
+   "date": "2026-11-28",
+   "gaps": [
+    "Helm"
+   ],
+   "title": "Infrastructure Engineer/SRE"
+  },
   "00b28f66bdb9243310baa4ade7f2233147acc4fe": {
    "company": "Eleven-X",
    "date": "2026-11-22",
@@ -3601,6 +3609,14 @@
    "date": "2026-11-09",
    "gaps": [],
    "title": "Business Data Analyst"
+  },
+  "14afff0e18356c7efa3351aeb25c12c65f32effd": {
+   "company": "Alimentiv",
+   "date": "2026-11-28",
+   "gaps": [
+    "SAP"
+   ],
+   "title": "ERP System Administrator (Acumatica)"
   },
   "14b727fe40c3ddb2b327d9e0fa83eb48981ddbcc": {
    "company": "Loblaw",
@@ -12447,6 +12463,12 @@
    "date": "2026-10-07",
    "gaps": [],
    "title": "Sourcing and Procurement Analyst"
+  },
+  "46ad44faac785a2b4c96745618794c9a3ec928f4": {
+   "company": "Eventhash",
+   "date": "2026-11-28",
+   "gaps": [],
+   "title": "React Developer - Remote"
   },
   "46b1f7bc1ec7a5e09c167fd2aceed0fe1e3a8661": {
    "company": "Magnet Forensics",
@@ -37632,6 +37654,12 @@
    "date": "2026-10-10",
    "gaps": [],
    "title": "Analyst, Procurement Delivery"
+  },
+  "d6c4c1e216e835b92211509dded52fb45f642e95": {
+   "company": "Surrey Police Service",
+   "date": "2026-11-28",
+   "gaps": [],
+   "title": "Systems Analyst 1 (Telephony)"
   },
   "d6cca7ba3c5497beba039e7dcbf3da1bfde21297": {
    "company": "Spark Power",
