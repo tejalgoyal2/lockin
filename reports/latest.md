@@ -1,42 +1,35 @@
 # Canadian entry-level tech jobs: candidates
 
-- Generated: 2026-11-27 17:30 UTC
+- Generated: 2026-11-28 02:01 UTC
 - Window: first seen in the last 7 day(s)
-- Feashliaa dataset last updated: 2026-11-26T18:41:55.671810Z
-- New candidates after dedupe: **1048**
-- Kept by the JD rules: **26** (best Score first)
-- Skipped as already applied to: 6 (by link 0, by company + title 6)
+- Feashliaa dataset last updated: 2026-11-27T18:27:38.127247Z
+- New candidates after dedupe: **1035**
+- Kept by the JD rules: **19** (best Score first)
+- Skipped as already applied to: 7 (by link 0, by company + title 7)
 
 Score = role + skills + level (scanner/rating.py). Fit is the share of the tech the posting names that is in skills.yaml; Skills counts your tools it names.
 
 | Score | Exp | Province | Posted | Company | Role | Title tier | Fit | Skills | Notes | Gaps | Source | URL |
 |---:|---:|---|---|---|---|---|---:|---:|---|---|---|---|
-| 4 | 1 | BC | 2026-11-27 | Orion Digital | Software Developer | core | 59% | 10 |  | Datadog, MySQL, RabbitMQ, React Native, Ruby, microservices | Job Bank | https://www.jobbank.gc.ca/jobsearch/jobposting/50812486 |
-| 4 | 2 | BC, Ontario | 2026-11-27 | anthropic | Anthropic Fellows Program, AI Safety & Security | core | 82% | 4 |  |  | Site Search | https://job-boards.greenhouse.io/anthropic/jobs/5183044008 |
-| 4 | 2 | Ontario | 2026-11-27 | jobs.scotiabank.com | Software Engineer- Cash Management Technology | core | 68% | 5 |  | Spring, GCP, unit testing | SuccessFactors | https://jobs.scotiabank.com/job/Toronto-Software-Engineer-Cash-Management-Technology-ON-M5H-4A9/608452417/ |
-| 4 | 2 | Ontario | 2026-11-27 | Maarut | Cloud Engineer | core | 87% | 12 |  | Elasticsearch | Job Bank | https://www.jobbank.gc.ca/jobsearch/jobposting/50812532 |
-| 4 | 2 | Ontario | 2026-11-26 | Providius | Software Engineer, AI Test & Evaluation | core | 92% | 17 |  |  | Jobhive | https://apply.workable.com/j/B90A37F447 |
-| 4 | 2 | Ontario | 2026-11-26 | Jobs for Humanity | Copy of Data Scientist | core | 88% | 7 |  |  | Jobhive | https://jobs.smartrecruiters.com/jobsforhumanity/744000163815574 |
-| 4 | 2 | Ontario | 2026-11-26 | Royal Bank of Canada | Cloud Engineer | core | 77% | 8 |  | Elasticsearch, Kafka | Jobhive | https://jobs.rbc.com/ca/en/job/R-0000188099 |
-| 4 | 2 | BC | 2026-11-26 | Saltworks Technologies | Software Developer | core | 96% | 21 |  |  | Job Bank | https://www.jobbank.gc.ca/jobsearch/jobposting/50811424 |
-| 4 | 2 | BC | 2026-11-26 | Saltworks Technologies | Full Stack Developer | core | 96% | 21 |  |  | Jobhive | https://saltworkstech.applytojob.com/apply/jobs/details/oNUwfRojJY |
-| 4 | 2 | Ontario | 2026-11-26 | First National Financial | Security Analyst, Information Security | core | 83% | 5 |  |  | Jobhive | https://jobs.dayforcehcm.com/en-US/firstnational/CANDIDATEPORTAL/jobs/27302 |
-| 3 | 1 | BC | 2026-11-27 | Encepta | GIS Data Technician Intern | core | 75% | 3 | internship, new grad |  | Simplify | https://encepta.bamboohr.com/careers/181/ |
-| 3 | 1 | Canada | 2026-11-26 | Nokia | Optical Test Coop/Intern | adjacent | 92% | 9 | internship |  | Jobhive | https://fa-evmr-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/40113 |
-| 3 | 2 | BC | 2026-11-27 | careers.aircanada.com/ca/en | Technical Data Controller - Stock - Inventory Audits | core | 50% | 1 | thin description |  | Phenom | https://careers.aircanada.com/ca/en/job/40602 |
-| 3 | 2 | Ontario | 2026-11-27 | careers.aircanada.com/ca/en | Technical Data Controller - Inventory Audits | core | 50% | 1 | thin description |  | Phenom | https://careers.aircanada.com/ca/en/job/40594 |
-| 3 | 2 | BC | 2026-11-27 | REW.ca | Technical Support Engineer | adjacent | 70% | 6 |  | Jenkins, Ruby | Job Bank | https://www.jobbank.gc.ca/jobsearch/jobposting/50812543 |
-| 3 | 2 | BC | 2026-11-26 | REW.ca | Internal Technical Support Engineer | adjacent | 67% | 9 |  | Jenkins, Nginx, Ruby, Grafana, New Relic | Jobhive | https://rewca.applytojob.com/apply/jobs/details/Jld922ATDN |
-| 3 | 2 | Ontario | 2026-11-26 | OMERS | Investment Reporting Analyst | generic | 78% | 4 |  |  | Jobhive | https://careers.omers.com/ca/en/job/JR-8590 |
-| 3 | 2 | Ontario | 2026-11-26 | Royal Bank of Canada | AI-Delivery Life Cycle Product Enablement Engineer | core | 75% | 2 |  |  | Jobhive | https://jobs.rbc.com/ca/en/job/R-0000192568 |
-| 3 | 2 | Ontario | 2026-11-26 | Polar Amp | AI Engineer | core | 67% | 2 | thin description |  | Jobhive | https://polaramp.bamboohr.com/careers/95 |
-| 2 | 1 | Remote | 2026-11-27 | Orion Digital | Junior Full Stack AI Engineer | core |  | 0 | new grad, junior, no description |  | Simplify | https://mogo.applytojob.com/apply/yLhCvCiypq/Junior-Full-Stack-AI-Engineer |
-| 2 | 3 | Ontario | 2026-11-26 | Ejov | Technical Application Support Specialist | adjacent | 81% | 12 | asks 2 years | Grafana, Postman | Jobhive | https://ejov.fa.ca2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX/job/29575 |
-| 1 | 2 | Ontario | 2026-11-26 | Aerotek | QA/QC Inspector | adjacent | 0% | 0 | thin description | Vue | Jobhive | https://jobs.aerotek.com/us/en/job/JP-006445140 |
-| 1 | 2 | Ontario | 2026-11-26 | Hammond Power Solutions | Specialist Compensation - 6 Month Contract | generic | 71% | 3 |  |  | Jobhive | https://recruiting.ultipro.ca/HAM5000HAMM/JobBoard/d886e470-2a21-498f-9532-54d7b09cb302/OpportunityDetail?opportunityId=3fcb2c3d-13b2-4f82-ab6d-4fc8571b94a9 |
-| 1 | 2 | Canada | 2026-11-24 | Vale | Specialist, Operational Risk | generic |  | 0 | no description |  | Jobhive | https://vale.eightfold.ai/careers/job/45735635 |
+| 5 | 1 | Ontario | 2026-11-27 | Intercept | Analytics & Intelligence Co-op | core | 64% | 4 | internship, new grad, open to graduates | Cisco, SAP | Simplify | https://intercept.bamboohr.com/careers/50/ |
+| 3 | 2 | Canada | 2026-11-27 | sapsol-technologies-inc | Servicenow Developer PSDS | core | 83% | 3 |  |  | Built In | https://builtinvancouver.org/job/servicenow-developer-psds/12573014 |
+| 3 | 2 | BC | 2026-11-27 | Surrey Police Service | Systems Analyst | adjacent | 82% | 4 |  |  | Job Bank | https://www.jobbank.gc.ca/jobsearch/jobposting/50817005 |
+| 2 | 1 | Remote | 2026-11-27 | neurohire.ai | Data Engineer | core |  | 0 | new grad, no description |  | Simplify | https://apply.workable.com/neurohire-dot-a-i/j/C81E83EEFA/apply |
+| 2 | 1 | Ontario | 2026-11-27 | Ciena | Automation Engineer – Global Technical Support Intern | core |  | 0 | internship, new grad, no description |  | Simplify | https://ciena.wd5.myworkdayjobs.com/Careers/job/Ottawa/Automation-engineer---Global-Technical-Support-Intern_R032186 |
+| 2 | 1 | Ontario | 2026-11-25 | Manulife Financial | Associate Data Scientist | core |  | 0 | new grad, junior, no description |  | Simplify | https://manulife.wd3.myworkdayjobs.com/en-US/MFCJH_Jobs/job/Boston-Massachusetts/Associate-Data-Scientist_JR26110981 |
+| 2 | 1 | Canada | 2026-11-25 | NVIDIA | Accounting AI Solution Engineer Intern | core |  | 0 | internship, new grad, no description |  | Simplify | https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite/job/US-CA-Santa-Clara/Accounting-AI-Solution-Engineer-Intern---Summer-2027_JR2029155-1 |
+| 2 | 1 | Canada | 2026-11-25 | NVIDIA | Finance AI Engineer Intern | core |  | 0 | internship, new grad, no description |  | Simplify | https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite/job/US-CA-Santa-Clara/Finance-AI-Engineering-Intern---Summer-2027_JR2029131 |
+| 2 | 1 | Canada | 2026-11-25 | NVIDIA | Software Engineer Intern - Simulation Technology | core |  | 0 | internship, new grad, no description |  | Simplify | https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite/job/US-CA-Santa-Clara/Software-Engineering-Intern--Simulation-Technology---Summer-2027_JR2029531 |
+| 2 | 1 | Canada | 2026-11-25 | NVIDIA | AI and Quant Devtech Engineering Intern | core |  | 0 | internship, new grad, no description |  | Simplify | https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite/job/US-CA-Santa-Clara/AI-and-Quant-DevTech-Engineering-Intern---Summer-2027_JR2030517 |
+| 2 | 1 | Canada | 2026-11-25 | NVIDIA | Developer Technology Intern | core |  | 0 | internship, new grad, no description |  | Simplify | https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite/job/US-CA-Santa-Clara/Developer-Technology-Intern--AI---Summer-2027_JR2030178 |
+| 2 | 1 | Ontario | 2026-11-23 | iA Financial Group | AI Specialist Intern | core |  | 0 | internship, new grad, no description |  | Simplify | https://ia.wd3.myworkdayjobs.com/Professional/job/Toronto-Ontario/AI-Specialist_JR10028300 |
+| 2 | 2 | Ontario | 2026-11-27 | osc | Data Engineer | core |  | 0 | no description |  | Workday | https://osc.wd3.myworkdayjobs.com/osccareers/job/CA-ON-Toronto/Data-Engineer_JR101010 |
+| 2 | 3 | Ontario | 2026-11-27 | 1password | Customer Support Technical Representative | adjacent | 82% | 11 | asks 2 years | Datadog, Oracle | Ashby | https://jobs.ashbyhq.com/1password/6834777e-7707-4376-960f-c47db08eea8b |
+| 1 | 2 | Ontario | 2026-11-27 | osc | Business Analyst, Workday | generic |  | 0 | no description |  | Workday | https://osc.wd3.myworkdayjobs.com/osccareers/job/CA-ON-Toronto/Business-Analyst--Workday_JR101005-1 |
+| 1 | 2 | Canada | 2026-11-27 | sanimax | Infrastructure Analyst, IT | adjacent |  | 0 | no description |  | Workday | https://sanimax.wd3.myworkdayjobs.com/sanimaxext/job/Montral-Qubec-Canada/Analyste--infrastructure-TI_R05727 |
+| 1 | 2 | Alberta | 2026-11-27 | wgl | AltaGas - Project Engineer, NEBC | generic |  | 0 | no description |  | Workday | https://wgl.wd5.myworkdayjobs.com/altagas/job/Calgary-AB/AltaGas---Project-Engineer--NEBC_R7201 |
 | 1 | 2 | Ontario | 2026-11-23 | fil | Product Support Specialist | generic | 56% | 3 |  | VBA | Workday | https://fil.wd3.myworkdayjobs.com/fidelitycanada/job/Mississauga-Office/Product-Support-Specialist_J73596 |
-| 1 | 3 | BC | 2026-11-26 | enapply-danone | Retail Development Specialist – Victoria, British Columbia and surronding areas - Danone Canada | generic | 60% | 2 | asks 2 years, thin description |  | Jobhive | https://enapply-danone.icims.com/jobs/33428/retail-development-specialist---victoria%2c-bc/job |
+| 1 | 3 | Remote | 2026-11-27 | velora | Accounting Implementation Specialist | generic | 67% | 2 | asks 2 years, thin description |  | Greenhouse | https://job-boards.greenhouse.io/velora/jobs/4519456009 |
 
 ## Stage counts
 
@@ -44,50 +37,50 @@ Score = role + skills + level (scanner/rating.py). Fit is the share of the tech 
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 1,334,645 |
-| first seen within window | 68,369 |
-| Canadian location | 5,161 |
-| not Quebec-only | 4,875 |
-| BC, Alberta, Ontario or remote | 4,727 |
-| not on blocklist | 4,521 |
-| not French-only | 4,514 |
-| title matches tech roles | 1,554 |
-| not senior / non-software | 645 |
-| not an intern / co-op / student title | 593 |
-|   of which not a core title | 415 |
+| raw records | 1,311,369 |
+| first seen within window | 73,593 |
+| Canadian location | 5,522 |
+| not Quebec-only | 5,205 |
+| BC, Alberta, Ontario or remote | 5,043 |
+| not on blocklist | 4,797 |
+| not French-only | 4,790 |
+| title matches tech roles | 1,630 |
+| not senior / non-software | 680 |
+| not an intern / co-op / student title | 627 |
+|   of which not a core title | 441 |
 
 **Simplify**
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 35,918 |
-| active, visible, tech category | 5,623 |
-| first seen within window | 326 |
-| Canadian location | 24 |
-| not Quebec-only | 21 |
-| BC, Alberta, Ontario or remote | 21 |
-| not on blocklist | 21 |
-| not French-only | 21 |
-| title matches tech roles | 20 |
-| not senior / non-software | 18 |
-| not an intern / co-op / student title | 10 |
+| raw records | 36,028 |
+| active, visible, tech category | 5,811 |
+| first seen within window | 308 |
+| Canadian location | 31 |
+| not Quebec-only | 29 |
+| BC, Alberta, Ontario or remote | 29 |
+| not on blocklist | 29 |
+| not French-only | 29 |
+| title matches tech roles | 28 |
+| not senior / non-software | 27 |
+| not an intern / co-op / student title | 11 |
 |   of which not a core title | 2 |
 
 **Watchlist**
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 16,594 |
-| first seen within window | 2,120 |
-| Canadian location | 1,300 |
-| not Quebec-only | 1,192 |
-| BC, Alberta, Ontario or remote | 1,110 |
-| not on blocklist | 1,110 |
-| not French-only | 1,109 |
-| title matches tech roles | 322 |
-| not senior / non-software | 122 |
-| not an intern / co-op / student title | 107 |
-|   of which not a core title | 62 |
+| raw records | 16,582 |
+| first seen within window | 2,055 |
+| Canadian location | 1,298 |
+| not Quebec-only | 1,189 |
+| BC, Alberta, Ontario or remote | 1,102 |
+| not on blocklist | 1,102 |
+| not French-only | 1,101 |
+| title matches tech roles | 309 |
+| not senior / non-software | 117 |
+| not an intern / co-op / student title | 103 |
+|   of which not a core title | 67 |
 
 **YC**
 
@@ -111,14 +104,14 @@ Score = role + skills + level (scanner/rating.py). Fit is the share of the tech 
 | Stage | Remaining |
 |---|---:|
 | raw records | 64 |
-| first seen within window | 19 |
-| Canadian location | 18 |
-| not Quebec-only | 18 |
-| BC, Alberta, Ontario or remote | 18 |
-| not on blocklist | 18 |
-| not French-only | 18 |
-| title matches tech roles | 14 |
-| not senior / non-software | 7 |
+| first seen within window | 15 |
+| Canadian location | 15 |
+| not Quebec-only | 15 |
+| BC, Alberta, Ontario or remote | 15 |
+| not on blocklist | 15 |
+| not French-only | 15 |
+| title matches tech roles | 12 |
+| not senior / non-software | 6 |
 | not an intern / co-op / student title | 6 |
 |   of which not a core title | 0 |
 
@@ -158,29 +151,29 @@ Score = role + skills + level (scanner/rating.py). Fit is the share of the tech 
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 227 |
-| first seen within window | 227 |
-| Canadian location | 227 |
-| not Quebec-only | 187 |
-| BC, Alberta, Ontario or remote | 162 |
-| not on blocklist | 162 |
-| not French-only | 162 |
-| title matches tech roles | 151 |
-| not senior / non-software | 134 |
-| not an intern / co-op / student title | 134 |
-|   of which not a core title | 79 |
+| raw records | 239 |
+| first seen within window | 239 |
+| Canadian location | 239 |
+| not Quebec-only | 199 |
+| BC, Alberta, Ontario or remote | 172 |
+| not on blocklist | 172 |
+| not French-only | 172 |
+| title matches tech roles | 160 |
+| not senior / non-software | 141 |
+| not an intern / co-op / student title | 141 |
+|   of which not a core title | 83 |
 
 **BC Gov**
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 64 |
-| first seen within window | 25 |
-| Canadian location | 25 |
-| not Quebec-only | 25 |
-| BC, Alberta, Ontario or remote | 25 |
-| not on blocklist | 25 |
-| not French-only | 25 |
+| raw records | 63 |
+| first seen within window | 26 |
+| Canadian location | 26 |
+| not Quebec-only | 26 |
+| BC, Alberta, Ontario or remote | 26 |
+| not on blocklist | 26 |
+| not French-only | 26 |
 | title matches tech roles | 3 |
 | not senior / non-software | 2 |
 | not an intern / co-op / student title | 2 |
@@ -190,30 +183,30 @@ Score = role + skills + level (scanner/rating.py). Fit is the share of the tech 
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 147 |
-| first seen within window | 147 |
-| Canadian location | 97 |
-| not Quebec-only | 97 |
-| BC, Alberta, Ontario or remote | 97 |
-| not on blocklist | 97 |
-| not French-only | 97 |
-| title matches tech roles | 61 |
-| not senior / non-software | 18 |
-| not an intern / co-op / student title | 17 |
+| raw records | 146 |
+| first seen within window | 146 |
+| Canadian location | 96 |
+| not Quebec-only | 96 |
+| BC, Alberta, Ontario or remote | 96 |
+| not on blocklist | 96 |
+| not French-only | 96 |
+| title matches tech roles | 60 |
+| not senior / non-software | 17 |
+| not an intern / co-op / student title | 16 |
 |   of which not a core title | 3 |
 
 **Google Jobs**
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 5 |
-| first seen within window | 1 |
-| Canadian location | 1 |
-| not Quebec-only | 1 |
-| BC, Alberta, Ontario or remote | 1 |
-| not on blocklist | 1 |
-| not French-only | 1 |
-| title matches tech roles | 1 |
+| raw records | 10 |
+| first seen within window | 4 |
+| Canadian location | 4 |
+| not Quebec-only | 4 |
+| BC, Alberta, Ontario or remote | 4 |
+| not on blocklist | 4 |
+| not French-only | 4 |
+| title matches tech roles | 4 |
 | not senior / non-software | 0 |
 | not an intern / co-op / student title | 0 |
 |   of which not a core title | 0 |
@@ -222,42 +215,42 @@ Score = role + skills + level (scanner/rating.py). Fit is the share of the tech 
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 1 |
-| first seen within window | 1 |
-| Canadian location | 1 |
-| not Quebec-only | 1 |
-| BC, Alberta, Ontario or remote | 1 |
-| not on blocklist | 1 |
-| not French-only | 1 |
-| title matches tech roles | 1 |
-| not senior / non-software | 1 |
-| not an intern / co-op / student title | 1 |
+| raw records | 0 |
+| first seen within window | 0 |
+| Canadian location | 0 |
+| not Quebec-only | 0 |
+| BC, Alberta, Ontario or remote | 0 |
+| not on blocklist | 0 |
+| not French-only | 0 |
+| title matches tech roles | 0 |
+| not senior / non-software | 0 |
+| not an intern / co-op / student title | 0 |
 |   of which not a core title | 0 |
 
 **Jobhive**
 
 | Stage | Remaining |
 |---|---:|
-| raw records | 10,027 |
-| first seen within window | 10,027 |
-| Canadian location | 9,898 |
-| not Quebec-only | 8,563 |
-| BC, Alberta, Ontario or remote | 6,792 |
-| not on blocklist | 6,584 |
-| not French-only | 6,568 |
-| title matches tech roles | 1,373 |
-| not senior / non-software | 598 |
-| not an intern / co-op / student title | 576 |
-|   of which not a core title | 423 |
+| raw records | 9,346 |
+| first seen within window | 9,346 |
+| Canadian location | 9,231 |
+| not Quebec-only | 8,016 |
+| BC, Alberta, Ontario or remote | 6,309 |
+| not on blocklist | 6,102 |
+| not French-only | 6,087 |
+| title matches tech roles | 1,240 |
+| not senior / non-software | 549 |
+| not an intern / co-op / student title | 528 |
+|   of which not a core title | 387 |
 
 **Combined**
 
 | Stage | Remaining |
 |---|---:|
-| before dedupe | 1,451 |
-|   merged by canonical URL | 128 |
-|   merged by fuzzy company+title | 88 |
-| after dedupe | 1,235 |
+| before dedupe | 1,439 |
+|   merged by canonical URL | 125 |
+|   merged by fuzzy company+title | 90 |
+| after dedupe | 1,224 |
 
 ## JD rules
 
@@ -265,49 +258,62 @@ Score = role + skills + level (scanner/rating.py). Fit is the share of the tech 
 
 | Reason | Jobs |
 |---|---:|
+| location_not_canada | 278 |
 | experience_too_high | 263 |
-| location_not_canada | 261 |
-| not_a_tech_job | 259 |
-| location_unresolved_url_not_canadian | 143 |
-| security_clearance | 33 |
-| requires_french | 26 |
+| not_a_tech_job | 244 |
+| location_unresolved_url_not_canadian | 130 |
+| security_clearance | 31 |
+| requires_french | 27 |
 | requires_enrollment | 20 |
-| location_quebec_only | 9 |
+| location_quebec_only | 14 |
 | location_other_province | 2 |
 
 **JD fetch status** (source:status)
 
 | Source:status | Jobs |
 |---|---:|
-| Ashby:ok | 10 |
+| Ashby:ok | 12 |
 | BC Gov:ok | 2 |
-| BambooHR:ok | 15 |
+| BambooHR:ok | 21 |
 | Bay Street Oracle:ok | 1 |
 | Built In:ok | 1 |
-| Greenhouse:ok | 22 |
+| Greenhouse:ok | 25 |
 | HN:ok | 1 |
-| Job Bank:ok | 50 |
-| Jobhive:ok | 393 |
-| Jobhive:unsupported | 1 |
-| Jobicy:ok | 9 |
-| Lever:ok | 17 |
-| Phenom:ok | 10 |
-| Simplify:ok | 3 |
+| Job Bank:ok | 52 |
+| Jobhive:ok | 345 |
+| Jobicy:ok | 8 |
+| Lever:ok | 20 |
+| Phenom:ok | 7 |
+| Simplify:error | 9 |
+| Simplify:ok | 4 |
 | Simplify:unsupported | 1 |
-| Site Search:ok | 1 |
-| SmartRecruiters:ok | 3 |
-| SuccessFactors:ok | 40 |
-| Workday:error | 143 |
-| Workday:ok | 321 |
+| SmartRecruiters:ok | 1 |
+| SuccessFactors:ok | 38 |
+| Workday:error | 133 |
+| Workday:not_found | 1 |
+| Workday:ok | 349 |
 | iCIMS:ok | 4 |
+
+**Kept with an unresolved location** (Workday "N Locations": the list could not be read)
+
+| Company | Role | URL |
+|---|---|---|
+| Sanimax | Infrastructure Analyst, IT | https://sanimax.wd3.myworkdayjobs.com/sanimaxext/job/Montral-Qubec-Canada/Analyste--infrastructure-TI_R05727 |
+
+**Company names that look like raw slugs** (add them to `company_names.yaml`)
+
+| Slug | Shown as |
+|---|---|
+| osc | Osc |
+| sanimax | Sanimax |
 
 **Scores (kept jobs)**
 
 | Score | Jobs |
 |---|---:|
-| Score 5 | 0 |
-| Score 4 | 10 |
-| Score 3 | 9 |
-| Score 2 | 2 |
+| Score 5 | 1 |
+| Score 4 | 0 |
+| Score 3 | 2 |
+| Score 2 | 11 |
 | Score 1 | 5 |
 

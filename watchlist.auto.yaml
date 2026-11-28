@@ -82,3 +82,5 @@ boards:
   - {ats: workday, slug: extendicare.wd10/extendicare2023, name: "extendicare"}        # 386 Canadian postings when found, 2026-11-27
   - {ats: workday, slug: hoopp.wd10/hoopp, name: "hoopp"}        # 29 Canadian postings when found, 2026-11-27
   - {ats: lever, slug: metergysolutions, name: "metergysolutions"}        # 15 Canadian postings when found, 2026-11-27
+  - {ats: greenhouse, slug: clutch, name: "clutch"}        # 85 Canadian postings when found, 2026-11-28
+  - {ats: lever, slug: ataccama, name: "ataccama"}        # 5 Canadian postings when found, 2026-11-28

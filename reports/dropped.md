@@ -2,17 +2,34 @@
 
 Read this when you suspect a good job is being lost: each reason names the rule, then lists the jobs it dropped (up to 40, newest first). A reason that drops a job you wanted is a rule to loosen in `config.yaml`.
 
+## location_not_canada: 278
+
+Not a Canadian posting; not listed.
+
 ## experience_too_high: 263
 
 _the JD asks for more experience than jd.max_years (2): 3 or more years, or a range that starts at 2_
 
+- [Business & Configuration Analyst](https://ubc.wd10.myworkdayjobs.com/ubcstaffjobs/job/UBC-Vancouver-Campus---Vancouver-BC-Canada/Business---Configuration-Analyst_JR26815) | UBC | UBC Vancouver Campus - Vancouver, BC, Canada | 2026-11-28 (asks 5+ years)
+- [Technical Support Engineer](https://jobs.lever.co/magnetforensics/12b14267-06c2-4f35-916a-7684426c31c9) | Magnet Forensics | Waterloo / Ontario | 2026-11-27 (asks 2-4 years)
+- [IT Support & Network Analyst](https://exportpackers.bamboohr.com/careers/138) | exportpackers | Brampton, Ontario | 2026-11-27 (asks 3+ years)
+- [IT Operations & Support Analyst](https://central1resources.wd10.myworkdayjobs.com/central1/job/Vancouver/IT-Operations---Support-Analyst_R1774) | central1resources | Vancouver | 2026-11-27 (asks 5+ years)
+- [HR Analyst](https://quadreal.wd10.myworkdayjobs.com/quadreal/job/Vancouver/HR-Analyst_R0007074-1) | quadreal | Vancouver | 2026-11-27 (asks 3+ years)
+- [Graduate Program Assistant](https://ubc.wd10.myworkdayjobs.com/ubcstaffjobs/job/UBC-Vancouver-Campus---Vancouver-BC-Canada/Graduate-Program-Assistant_JR26790) | UBC | UBC Vancouver Campus - Vancouver, BC, Canada | 2026-11-27 (asks 4+ years)
+- [Cyber Security Analyst Contract 10 Months](https://woodbineentertainment.wd10.myworkdayjobs.com/ext/job/Etobicoke-Ontario/Cyber-Security-Analyst-Contract-10-Months_JR1374) | woodbineentertainment | Etobicoke, Ontario | 2026-11-27 (asks 3+ years)
 - [OrioleDB Developer (AMER)](https://jobicy.com/jobs/154087-orioledb-developer-amer) | Supabase | Remote, Canada | 2026-11-27 (asks 8+ years)
 - [Database Support Engineer (AMER)](https://jobicy.com/jobs/154076-database-support-engineer-amer) | Supabase | Remote, Canada | 2026-11-27 (asks 7+ years)
+- [Systems Technical Support Analyst](https://www.jobbank.gc.ca/jobsearch/jobposting/50814661) | Central 1 Credit Union | Vancouver, BC | 2026-11-27 (asks 5+ years)
 - [Database Developer (Oracle / MS SQL)](https://jobs.scotiabank.com/job/Toronto-Database-Developer-%28Oracle-MS-SQL%29-ON-M5H-1H1/600521817/) | Scotiabank | Toronto, ON, CA, M5H 1H1 | 2026-11-27 (asks 6+ years)
 - [Software Engineer, Java, Global Payments Engineering (Future Opportunities)](https://jobs.scotiabank.com/job/Toronto-Software-Engineer%2C-Java%2C-Global-Payments-Engineering-%28Future-Opportunities%29-ON/605706517/) | Scotiabank | Toronto, ON, CA | 2026-11-27 (asks 5+ years)
+- [Network Systems Administrator](https://jobs.utoronto.ca/job/Toronto-Network-Systems-Administrator-ON/608490017/) | University of Toronto | Toronto, ON | 2026-11-27 (asks 4+ years)
+- [Community Engagement and Knowledge Mobilization Specialist (Term)](https://jobs.utoronto.ca/job/Mississauga-Community-Engagement-and-Knowledge-Mobilization-Specialist-%28Term%29-ON/608484117/) | University of Toronto | Mississauga, ON | 2026-11-27 (asks 5+ years)
+- [Web Developer](https://www.jobbank.gc.ca/jobsearch/jobposting/50815401) | ELYAS SADEQI ABDULLAH | North York, ON | 2026-11-27 (asks 3+ years)
 - [Artificial Intelligence (AI) Designer](https://www.jobbank.gc.ca/jobsearch/jobposting/50814077) | Aplicata Technologies Inc. | Burnaby, BC | 2026-11-27 (asks 5+ years)
-- [Graduate Program Assistant](https://ubc.wd10.myworkdayjobs.com/ubcstaffjobs/job/UBC-Vancouver-Campus---Vancouver-BC-Canada/Graduate-Program-Assistant_JR26790) | UBC | UBC Vancouver Campus - Vancouver, BC, Canada | 2026-11-27 (asks 4+ years)
+- [Network Specialist - Computer Systems](https://www.jobbank.gc.ca/jobsearch/jobposting/50817000) | Surrey Police Service | Surrey, BC | 2026-11-27 (asks 4+ years)
 - [Data Warehouse Analyst](https://www.jobbank.gc.ca/jobsearch/jobposting/50814029) | Credible Group | Concord, ON | 2026-11-27 (asks 3+ years)
+- [Devops Engineer](https://www.jobbank.gc.ca/jobsearch/jobposting/50816514) | LabsCubed | Kitchener, ON | 2026-11-27 (asks 5+ years)
+- [Network Administrator](https://www.jobbank.gc.ca/jobsearch/jobposting/50817719) | ADVANCED PRECAST INC. | Bolton, ON | 2026-11-27 (asks 3+ years)
 - [26-80 Leader, IT Development](https://recruiting.ultipro.ca/BRI5000/JobBoard/70d2813a-3f44-e8eb-07c7-d55d82a0f98a/OpportunityDetail?opportunityId=c31790da-b5e1-4692-931d-782ceeea841a) | Technical Safety BC | Vancouver, BC, Canada | 2026-11-26 (asks 7+ years)
 - [Software Development Engineer in Test, Non-Functional Engineering](https://recruiting.ultipro.com/VAN5000VCSCU/JobBoard/a46cbdaa-ca2c-49b6-8d2b-e0ceaafa0e25/OpportunityDetail?opportunityId=06f2d6bb-1149-4683-a8c2-975b75237960) | Vancity | Vancity Centre, Vancouver, BC, Canada | 2026-11-26 (asks 10+ years)
 - [Project Engineer, Pipeline MOP (Contract)](https://jobs.smartrecruiters.com/sgs/744000163926344) | SGS | Calgary, AB, ca | 2026-11-26 (asks 5+ years)
@@ -25,6 +42,7 @@ _the JD asks for more experience than jd.max_years (2): 3 or more years, or a ra
 - [Frontend Developer - React/Node.js](https://job-boards.greenhouse.io/capco/jobs/8418222) | capco | Canada - Toronto | 2026-11-26 (asks 3+ years)
 - [Backend Developer - Java/Spring Boot](https://job-boards.greenhouse.io/capco/jobs/8418203) | capco | Canada - Toronto | 2026-11-26 (asks 3+ years)
 - [Firmware Engineer](https://careers.actalentservices.com/us/en/job/JP-006445180) | Actalent | Richmond, British Columbia, Canada | 2026-11-26 (asks 3+ years)
+- [PMO Analyst](https://jobs.lever.co/sait/ca9b2b25-395d-49c8-b7f2-dc4b249618a1) | SAIT | Calgary, AB | 2026-11-26 (asks 3+ years)
 - [Professional Services Engineer](https://onni.wd10.myworkdayjobs.com/onni_external_careers/job/Vancouver/Professional-Services-Engineer_R-102913-1) | onni | Vancouver | 2026-11-26 (asks 5+ years)
 - [Functional Business Analyst, Finance Systems](https://southbow.wd10.myworkdayjobs.com/southbow/job/Calgary-Alberta/Functional-Business-Analyst--Finance-Systems_JR-7600-1) | southbow | Calgary, Alberta | 2026-11-26 (asks 5+ years)
 - [Legal Document Specialist - After Hours - Calgary or Vancouver](https://recruiting.ultipro.ca/CAR5001CARS/JobBoard/048eb299-c116-4fad-8152-4015b53361bb/OpportunityDetail?opportunityId=6d6adb1e-7bda-4717-93ea-12c8ff59d6da) | Osler | Calgary, AB, Canada | 2026-11-26 (asks 5+ years)
@@ -32,35 +50,21 @@ _the JD asks for more experience than jd.max_years (2): 3 or more years, or a ra
 - [Analyst Level 2 - Research and Development](https://jobs.smartrecruiters.com/sgs/744000163904225) | SGS | Mississauga, ON, ca | 2026-11-26 (asks 3+ years)
 - [Accounts Payable Specialist](https://jobs.smartrecruiters.com/sia/744000163905799) | Sia | Toronto, ON, ca | 2026-11-26 (asks 2-4 years)
 - [Customer Compliance & Logistics Analyst](https://recruiting.ultipro.com/HIG5000/JobBoard/1759e4e9-be78-e7e5-a0d6-292be61bb45e/OpportunityDetail?opportunityId=7cae0e64-a6be-429a-a2fd-4b209ff1c2bc) | High Liner Foods | Mississauga, ON, Canada | 2026-11-26 (asks 5+ years)
-- [Automation Engineer](https://recruiting.ultipro.ca/ATL5003ALPK/JobBoard/77a570b3-57a8-4408-8e2f-50e6ebfb4deb/OpportunityDetail?opportunityId=61c5dee3-c4ae-4610-b3a5-b8b049e798fb) | Atlantic Packaging | Tiffield, Toronto, ON, Canada | 2026-11-26 (asks 5+ years)
-- [Organic Social Specialist](https://apply.workable.com/j/49C94C0B17) | AlgaeCal | Vancouver, BC, CA | 2026-11-26 (asks 12+ years)
-- [Business Systems Analyst](https://recruiting.ultipro.com/COO5000COOP/JobBoard/163383cc-cbae-4201-956e-c5e437bbfeb3/OpportunityDetail?opportunityId=ab2a3a3f-0fcd-40d3-b58b-6431af2ac7cd) | Co-operators | Guelph, ON, Canada | 2026-11-26 (asks 3+ years)
-- [Full-stack Developer - Agentic Platform Support](https://careers.aircanada.com/ca/en/job/40625) | Air Canada | TORONTO, ONTARIO, CANADA | 2026-11-26 (asks 3+ years)
-- [Labour Relations Specialist - Southern Ontario](https://recruiting.ultipro.ca/TOR5001TIL/JobBoard/24cbbe4b-86ee-4afa-9385-92863afdf1bd/OpportunityDetail?opportunityId=779ddcc1-fdad-4c3e-90db-fe70510ec9f3) | Toromont Cat | Concord, ON, Canada | 2026-11-26 (asks 3+ years)
-- [Transmission Lines Engineer](https://jobs.smartrecruiters.com/cima2/744000163872210) | CIMA+ | Vancouver, British Columbia, ca | 2026-11-26 (asks 8+ years)
-- [Transmission Lines Engineer](https://jobs.smartrecruiters.com/cima2/744000163872759) | CIMA+ | Kelowna, British Columbia, ca | 2026-11-26 (asks 8+ years)
-- [Transmission Lines Engineer](https://jobs.smartrecruiters.com/cima2/744000163872559) | CIMA+ | Calgary, Alberta, ca | 2026-11-26 (asks 8+ years)
-- [Transmission Lines Engineer](https://jobs.smartrecruiters.com/cima2/744000163872509) | CIMA+ | Edmonton, Alberta, ca | 2026-11-26 (asks 8+ years)
-- [Transmission Lines Engineer](https://jobs.smartrecruiters.com/cima2/744000163871814) | CIMA+ | Ottawa, Ontario, ca | 2026-11-26 (asks 8+ years)
-- [Transmission Lines Engineer](https://jobs.smartrecruiters.com/cima2/744000163871551) | CIMA+ | Kitchener, Ontario, ca | 2026-11-26 (asks 8+ years)
-- [Transmission Lines Engineer](https://jobs.smartrecruiters.com/cima2/744000163871979) | CIMA+ | Markham, Ontario, ca | 2026-11-26 (asks 8+ years)
-- [Transmission Lines Engineer](https://jobs.smartrecruiters.com/cima2/744000163871879) | CIMA+ | Mississauga, Ontario, ca | 2026-11-26 (asks 8+ years)
-- [Compensation & Benefits Specialist (Temporary Contract)](https://jobs.dayforcehcm.com/en-CA/intouchcx/CANDIDATEPORTAL/jobs/19832) | IntouchCX | Calgary, AB, CA | 2026-11-26 (asks 5+ years)
 
-## location_not_canada: 261
-
-Not a Canadian posting; not listed.
-
-## not_a_tech_job: 259
+## not_a_tech_job: 244
 
 _the description does not show a tech job: the less the title says, the more of your tools it must name (jd.relevance)_
 
-- [AI Research + AI Engineering roles](https://news.ycombinator.com/item?id=50348566) | Aloe | ONSITE Vancouver, BC, Canada | 2026-11-27 (no tech term in the description)
+- [AI Research + AI Engineering roles](https://news.ycombinator.com/item?id=50348566) | Aloe | ONSITE Vancouver, BC, Canada | 2026-11-28 (no tech term in the description)
+- [Solutions Engineer Co-op](https://intercept.bamboohr.com/careers/49/) | Intercept | Toronto, ON, Canada | 2026-11-27 (generic title, 0 of your tools in the description (needs 2))
+- [Customer Onboarding Specialist](https://jobs.ashbyhq.com/jobber/320245aa-78b1-45df-bbd8-3367797bae12) | Jobber | Vancouver | 2026-11-27 (generic title, 0 of your tools in the description (needs 2))
 - [Technical Support Specialist](https://jobicy.com/jobs/164557-technical-support-specialist-2) | Elation Health | Remote, Canada | 2026-11-27 (no tool or technology named in the description)
 - [CA - Specialist](https://jobs.apple.com/en-us/details/114438004/ca-specialist) | Apple | Canada | 2026-11-27 (generic title, 0 of your tools in the description (needs 2))
 - [Information Technology (IT) Analyst](https://www.jobbank.gc.ca/jobsearch/jobposting/50813729) | Oxford International | Vancouver, BC | 2026-11-27 (no tool or technology named in the description)
+- [Information Technology (IT) Analyst](https://www.jobbank.gc.ca/jobsearch/jobposting/50817252) | WoodGreen Community Services | Toronto, ON | 2026-11-27 (no tool or technology named in the description)
 - [Mortgage Specialist - Edmonton & North Alberta](https://jobs.scotiabank.com/job/Edmonton-Mortgage-Specialist-Edmonton-&amp;-North-Alberta-AB/595859317/) | Scotiabank | Edmonton, AB, CA | 2026-11-27 (generic title, 0 of your tools in the description (needs 2))
 - [Network Administrator](https://www.jobbank.gc.ca/jobsearch/jobposting/50811986) | Hare Motors Ltd. | Surrey, BC | 2026-11-27 (no tool or technology named in the description)
+- [SCM Contracting & Procurement (C&P) Analyst](https://keyera.wd10.myworkdayjobs.com/keyera_careers/job/Grande-Prairie-Alberta/SCM-Contracting---Procurement--C-P--Analyst_JR2959-2) | keyera | Grande Prairie, Alberta | 2026-11-27 (generic title, 0 of your tools in the description (needs 2))
 - [Mortgage Specialist - Lethbridge and Medicine Hat 1](https://jobs.scotiabank.com/job/Lethbridge-Mortgage-Specialist-Lethbridge-and-Medicine-Hat-1-AB/605726317/) | Scotiabank | Lethbridge, AB, CA | 2026-11-27 (generic title, 0 of your tools in the description (needs 2))
 - [Collision Experience Specialist](https://recruiting.ultipro.ca/CRA5100CCLD/JobBoard/3ce97e3a-c3f6-45a9-9952-4d2f7458b385/OpportunityDetail?opportunityId=13b23e7d-6557-4a9a-8b9f-915c7e2336be) | Craftsman Collision | Duncan, BC, Canada | 2026-11-26 (generic title, 0 of your tools in the description (needs 2))
 - [Support Services Specialist - Temporary Full Time](https://recruiting.ultipro.ca/HOP5102HOSS/JobBoard/18f69c50-b67b-40ba-ae83-fd81303defd6/OpportunityDetail?opportunityId=85bb8c14-9733-4592-a42b-371cb3c9b2b4) | Hopewell Support Services | Guelph, ON, Canada | 2026-11-26 (generic title, 0 of your tools in the description (needs 2))
@@ -91,16 +95,13 @@ _the description does not show a tech job: the less the title says, the more of 
 - [Work From Home - Protection Planning Specialist](https://jobs.lever.co/aogarciaagency/991f068d-b001-4780-b0ee-bfa37e06aa30) | AO Garcia Agency | Coquitlam, British Columbia | 2026-11-26 (generic title, 0 of your tools in the description (needs 2))
 - [Work From Home - Benefits Navigation Specialist](https://jobs.lever.co/aogarciaagency/46a8468a-ab7b-469b-a635-337ab9642dd1) | AO Garcia Agency | Abbotsford, British Columbia | 2026-11-26 (generic title, 0 of your tools in the description (needs 2))
 - [Beverage Quality Analyst - Temp](https://careers.molsoncoors.com/us/en/job/40555) | Molson Coors | Chilliwack, CA-BC, Canada | 2026-11-26 (generic title, 0 of your tools in the description (needs 2))
-- [Procurement Specialist](https://jobs.dayforcehcm.com/en-US/vmac/CANDIDATEPORTAL/jobs/689) | VMAC Global Technology Inc. | 1333 Kipp Road, Nanaimo, BC, CAN | 2026-11-26 (generic title, 0 of your tools in the description (needs 2))
-- [Electronics Quality Specialist](https://voltera.bamboohr.com/careers/150) | Voltera | Waterloo, Ontario, Canada | 2026-11-26 (generic title, 0 of your tools in the description (needs 2))
-- [Signature Specialist](https://jobs.scotiabank.com/job/Toronto-Signature-Specialist-ON-M5H-4A9/608412417/) | Scotiabank | Toronto, ON, CA, M5H 4A9 | 2026-11-26 (generic title, 0 of your tools in the description (needs 2))
-- [Information Technology (IT) Analyst](https://www.jobbank.gc.ca/jobsearch/jobposting/50811432) | OceanMD | Toronto, ON | 2026-11-26 (no tool or technology named in the description)
 
-## location_unresolved_url_not_canadian: 143
+## location_unresolved_url_not_canadian: 130
 
 _"N Locations", the description could not be read and the place in the link is not Canadian_
 
-- [Custody Operations Analyst 2](https://usbank.wd1.myworkdayjobs.com/us_bank_careers/job/Saint-Paul-MN/Custody-Operations-Analyst-2_2026-0036166) | usbank | 2 Locations | 2026-11-26
+- [Network Security Engineer](https://verizon.wd12.myworkdayjobs.com/verizon-careers/job/Chennai-India/Network-Security-Engineer_R-1095617) | verizon | 2 Locations | 2026-11-27
+- [Health & Safety Transportation Specialist](https://sanimax.wd3.myworkdayjobs.com/sanimaxext/job/Green-Bay-Wisconsin-United-States/Health---Safety-Transportation-Specialist_R05787) | sanimax | 2 Locations | 2026-11-27
 - [Transmission Lines Engineers](https://aurecongroup.wd3.myworkdayjobs.com/aurecon/job/Wellington/Senior-Transmission-Line-Engineer---Electrical_R33564) | aurecongroup | 5 Locations | 2026-11-26
 - [Crisis Intervention Specialist, Upper Bucks/Grand View, Part-Time (Nights)](https://sluhn.wd1.myworkdayjobs.com/sluhn/job/Quakertown-PA---3000-John-Fries-Highway/Crisis-Intervention-Specialist--Upper-Bucks-Grand-View--Part-Time--Nights-_R146630-1) | sluhn | 2 Locations | 2026-11-25
 - [Associate Project Engineer I](https://aspentech.wd5.myworkdayjobs.com/aspentech/job/Mexico-City/Associate-Project-Engineer-I_R9646) | aspentech | 2 Locations | 2026-11-25
@@ -121,27 +122,26 @@ _"N Locations", the description could not be read and the place in the link is n
 - [Subrogation Specialist](https://holmesmurphy.wd1.myworkdayjobs.com/holmesmurphycareers/job/West-Des-Moines---Remote/Subrogation-Specialist_R0001070-1) | holmesmurphy | 5 Locations | 2026-11-25
 - [Customer Financial Services Specialist - Associate](https://fedex.wd1.myworkdayjobs.com/fxe-meisa-external/job/FXE-MEISAINDDELSNDELSNNew-Delhi/Customer-Financial-Services-Specialist---Associate_RC782801-1) | fedex | 3 Locations | 2026-11-25
 - [WLAN Engineer](https://hpe.wd5.myworkdayjobs.com/acjobsite/job/Chennai-Tamil-Nadu-India/WLAN-Engineer_1209083-3) | hpe | 2 Locations | 2026-11-25
-- [Analyst, Leasing](https://linklogistics.wd5.myworkdayjobs.com/link/job/MN---Minneapolis/Analyst--Leasing_JR101920) | linklogistics | 2 Locations | 2026-11-25
 - [Plan Build Specialist](https://godirect.wd5.myworkdayjobs.com/voya_jobs/job/Minneapolis-MN/Plan-Build-Specialist_JR0033411) | godirect | 2 Locations | 2026-11-25
 - [Business Banking Portfolio Specialist](https://huntington.wd12.myworkdayjobs.com/hnbcareers/job/Columbus-OH/Business-Banking-Portfolio-Specialist_R0078008) | huntington | 2 Locations | 2026-11-25
-- [Research Specialist](https://northwest.wd1.myworkdayjobs.com/northwest_careers/job/Warren-PA/Research-Specialist_R-102578) | northwest | 6 Locations | 2026-11-25
 - [Component Engineer – Wiring and Connection Systems](https://rockwellautomation.wd1.myworkdayjobs.com/external_rockwell_automation/job/Mayfield-Heights-Ohio-United-States/Component-Engineer---Wiring-and-Connection-Systems_R26-3702) | rockwellautomation | 2 Locations | 2026-11-24
 - [Customer Solutions Engineer](https://kone.wd3.myworkdayjobs.com/careers/job/Brno/Customer-Solutions-Engineer_R0666844) | kone | 3 Locations | 2026-11-24
 - [Lift Repair Engineer - South East](https://kone.wd3.myworkdayjobs.com/careers/job/Basingstoke/Lift-Repair-Engineer---South-East_R0666742-1) | kone | 2 Locations | 2026-11-24
 - [Lift Service and Repairs Engineer](https://kone.wd3.myworkdayjobs.com/careers/job/Glasgow/Lift-Service-and-Repairs-Engineer_R0666855) | kone | 2 Locations | 2026-11-24
 - [Info Security Consultant](https://keybank.wd5.myworkdayjobs.com/external_career_site/job/4910-Tiedeman-Road-Brooklyn-OH/Info-Security-Consultant_R-41714) | keybank | 2 Locations | 2026-11-24
 - [Market Access Specialist](https://myhrabc.wd5.myworkdayjobs.com/global/job/WEMEA--Spain--Barcelona/Market-Access-Specialist_R2620423) | myhrabc | 2 Locations | 2026-11-24
-- [Data Engineer – Python, PySpark, SQL & ETL](https://synechron.wd1.myworkdayjobs.com/synechroncareers/job/Bengaluru---GTP/Data-Engineer---Python--PySpark--SQL---ETL_JR1043684) | synechron | 2 Locations | 2026-11-24
 - [Platform Engineer – AWS Cloud Foundations, Terraform, Python & Kubernetes](https://synechron.wd1.myworkdayjobs.com/synechroncareers/job/Bengaluru---Client-Location/Platform-Engineer---AWS-Cloud-Foundations--Terraform--Python---Kubernetes_JR1045048) | synechron | 2 Locations | 2026-11-24
 - [Security Engineer, Level 4](https://snapchat.wd1.myworkdayjobs.com/snap/job/Los-Angeles-California/Security-Engineer--Level-4_H226SWES2-1) | snapchat | 3 Locations | 2026-11-24
-- [Security Engineer, Level 5, Detection & Response](https://snapchat.wd1.myworkdayjobs.com/snap/job/Los-Angeles-California/Security-Engineer--Level-5--Detection---Response_H226SE6) | snapchat | 3 Locations | 2026-11-24
 - [Thermal Engineer](https://snapchat.wd1.myworkdayjobs.com/snap/job/Los-Angeles-California/Thermal-Engineer_R0047537-1) | snapchat | 2 Locations | 2026-11-24
 - [Privacy Engineer, Level 4](https://snapchat.wd1.myworkdayjobs.com/snap/job/Los-Angeles-California/Privacy-Engineer--Level-4_R0046612-1) | snapchat | 4 Locations | 2026-11-24
 - [Software Engineer, iOS, Level 5](https://snapchat.wd1.myworkdayjobs.com/snap/job/Los-Angeles-California/Software-Engineer--iOS--Level-5_Q426SWEI6-2) | snapchat | 5 Locations | 2026-11-24
 - [Strategic Sourcing Specialist (IFM)](https://jll.wd1.myworkdayjobs.com/jllcareers/job/Evansville-IN/Strategic-Sourcing-Specialist--IFM-_REQ548886) | jll | 6 Locations | 2026-11-24
-- [Curam Technical Consultant](https://merative.wd12.myworkdayjobs.com/external_career_site/job/Bengaluru/Curam-Technical-Consultant_JR01587) | merative | 2 Locations | 2026-11-24
+- [Operations Specialist](https://draftkings.wd1.myworkdayjobs.com/draftkings/job/Remote---Bulgaria/Operations-Specialist_JR15390-1) | draftkings | 2 Locations | 2026-11-24
+- [Maintenance Engineer](https://aes.wd1.myworkdayjobs.com/aes_clean_energy/job/US-Long-Beach-CA/Maintenance-Engineer_R1065585-2) | aes | 4 Locations | 2026-11-24
+- [Technical Support Engineer](https://fullsteam.wd1.myworkdayjobs.com/external/job/Remote---US/Technical-Support-Engineer_JR102364) | fullsteam | 2 Locations | 2026-11-24
+- [Pharmacist - IT](https://sfmc.wd1.myworkdayjobs.com/sfhs/job/US-MO-Remote/Pharmacist---IT_2026-110533) | sfmc | 2 Locations | 2026-11-24
 
-## security_clearance: 33
+## security_clearance: 31
 
 _the JD requires a security clearance_
 
@@ -176,13 +176,13 @@ _the JD requires a security clearance_
 - [Web Designer](https://www.jobbank.gc.ca/jobsearch/jobposting/50788128) | CIC Job Agency (CANADA) | Edmonton, AB | 2026-11-23
 - [Power Engineer - 4th Class](https://fa-evcg-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/234409) | Fa Evcg Saasfaprod1 | Barrhead, AB, Canada | 2026-11-23
 - [Technical Service Analyst](https://boeing.wd1.myworkdayjobs.com/external_careers/job/CAN---Ottawa-Canada/Technical-Service-Analyst_JR2026527564-1) | boeing | CAN - Ottawa, Canada | 2026-11-22
-- [Specialist, Radio Frequency (RF)](https://jobs.smartrecruiters.com/houseofcommonscanadachambredescommunescanada/744000162820019) | House of Commons (Canada) / Chambre des communes (Canada) | Ottawa, ON, ca | 2026-11-20
-- [Software Engineer – Defence & Sonar Systems C++/Java](https://jobs.smartrecruiters.com/gdmsi/744000162792867) | General Dynamics Missions System International | Ottawa, ON, ca | 2026-11-20
 
-## requires_french: 26
+## requires_french: 27
 
 _the JD requires French_
 
+- [Information System Reporting Analyst, BORN Ontario - Permanent Full-Time (1.0)](https://cheo.wd10.myworkdayjobs.com/external_site/job/Ottawa-ON/Information-System-Reporting-Analyst--BORN-Ontario---Permanent-Full-Time--10-_JR8514) | cheo | Ottawa, ON | 2026-11-27
+- [Automotive Technical Specialist, Claim Resolutions - Hybrid](https://openlane.wd115.myworkdayjobs.com/openlane_careers/job/CAN---ON---Brampton-Toronto/Automotive-Technical-Specialist--Claim-Resolutions---Hybrid_R-255374) | openlane | CAN - ON - Brampton (Toronto) | 2026-11-27
 - [2027 Graduate Programme - Canada](https://careers.macegroup.com/gb/en/job/48584) | Mace | Toronto, Canada, Canada | 2026-11-26
 - [Data Center Asset Management, Specialist](https://jobs.bell.ca/ca/en/job/433411) | Bell | Toronto, Ontario | 2026-11-26
 - [Support Engineer in Test (Bilingual – French/English)](https://yuja.bamboohr.com/careers/537) | yuja | North York, Ontario, Canada | 2026-11-26
@@ -194,11 +194,11 @@ _the JD requires French_
 - [Industry Development Specialist - Canada](https://nvidia.eightfold.ai/careers/job/893398605614) | NVIDIA Corporation | Toronto, ON, CA | 2026-11-25
 - [Bilingual Technical Support Services Analyst](https://jobs.rbc.com/ca/en/job/R-0000174067) | Royal Bank of Canada | TORONTO, Ontario, Canada | 2026-11-25
 - [Financial Planning Analyst](https://jobs.rbc.com/ca/en/job/R-0000193562) | Royal Bank of Canada | TORONTO, Ontario, Canada | 2026-11-25
+- [Flight Service Specialist (FS Specialist) Careers - Montreal Flight Information Region (Quebec and National Capital) (YUL FIR)](https://navcanada.wd10.myworkdayjobs.com/nav_careers/job/Canada/Flight-Service-Specialist---Airport-Advisory-Services--AAS----Quebec_JR-6512) | navcanada | Canada | 2026-11-24
 - [Job Developer](https://jobs.smartrecruiters.com/WCGInternationalConsultantsLtd/3743990017068376) | WCG International Consultants Ltd. | Kelowna, BC, ca | 2026-11-24
 - [Bilingual Credit & Collections Analyst - Canada](https://recruiting.ultipro.com/PIE1006PPINC/JobBoard/ccbd8ad3-8aac-47c4-9b6a-fd3d6ffefd7f/OpportunityDetail?opportunityId=e680ee4c-3ba5-45dc-a4b9-a9a5f58ffb7a) | Piedmont Plastics | Scarborough, ON, Canada | 2026-11-24
 - [Information Technology (IT) Analyst](https://www.jobbank.gc.ca/jobsearch/jobposting/50796964) | Recrute Action | Toronto, ON | 2026-11-24
 - [Bilingual HR Specialist](https://ekaw.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/176827) | Securitas Canada | Ottawa, ON, Canada | 2026-11-24
-- [Flight Service Specialist (FS Specialist) Careers - Montreal Flight Information Region (Quebec and National Capital) (YUL FIR)](https://navcanada.wd10.myworkdayjobs.com/nav_careers/job/Canada/Flight-Service-Specialist---Airport-Advisory-Services--AAS----Quebec_JR-6512) | navcanada | Canada | 2026-11-24
 - [Security Systems Technician (CCTV, Access Control, etc.)](https://jobs.smartrecruiters.com/CanadianBankNoteCompany/744000163334279) | Canadian Bank Note Company | Ottawa, ON, ca | 2026-11-23
 - [Service Desk Consultant - French](https://jobs.lever.co/lvs1/c2dbb0ec-526c-42f2-94b1-08e51c7785f8) | lvs1 | Remote Opportunities - Canada | 2026-11-23
 - [FOUNDER EXPERIENCE SPECIALIST](https://acceleratorcentre.bamboohr.com/careers/32) | acceleratorcentre | Waterloo, Ontario | 2026-11-23
@@ -208,18 +208,18 @@ _the JD requires French_
 - [4th Class Stationary Engineer, Data Centre Operations](https://jobs.bell.ca/ca/en/job/433410) | Bell | Kamloops, British Columbia | 2026-11-23
 - [CRM Technical Implementation & Integration Specialist (Microsoft Dynamics 365 CRM and Bloomreach (CDP))](https://jobs.dayforcehcm.com/en-CA/acvrouge/ACVCLIENTCAREERSITEV2/jobs/13093) | Vacances Air Canada Vacations /Air Canada Rouge | 5925 Airport Road, Mississauga, ON, CAN | 2026-11-23
 - [Technical Business Analyst](https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=7da0a9eb-c7f2-490d-a0f7-779c58f6fd8b&ccId=19000101_000001&lang=en_CA&jobId=9201636119331_26&source=CC2) | Canadian Cancer Society | Vancouver, BC, CA | 2026-11-21
-- [Application Engineer - Mining](https://jobs.smartrecruiters.com/VeoliaEnvironnementSA/744000162790269) | Veolia Environnement SA | Oakville, ON, ca | 2026-11-20
 
 ## requires_enrollment: 20
 
 _the JD asks for a currently enrolled student_
 
+- [Developer, Co-op](https://carfaxcanada.bamboohr.com/careers/84) | CARFAX Canada | London, Ontario | 2026-11-27
 - [Student Intern, Aerospace and Defense, Material Pricing and Product Data](https://careers.celestica.com/job/Toronto-Student-Intern%2C-Aerospace-and-Defense%2C-Material-Pricing-and-Product-Data-ON/1452685833/) | Celestica | Toronto, ON, CA | 2026-11-27
 - [Student Intern, Industrial Engineering Associate](https://careers.celestica.com/job/Remote-Employee-Canada-Student-Intern%2C-Industrial-Engineering-Associate-ON/1452651333/) | Celestica | Remote Employee Canada, ON, CA | 2026-11-27
 - [Associate AI Marketing Builder (Co-op)](https://yokegtm.breezy.hr/p/5e98a6de3b31-associate-ai-marketing-builder-co-op) | Yoke | Vancouver, BC | 2026-11-26
+- [Graduate Teaching Assistant - NLP 3: Analysis of User Generated Content Course](https://ubc.wd10.myworkdayjobs.com/ubcstudentjob/job/UBC-Hospital-Site---Vancouver-BC-Canada/Graduate-Teaching-Assistant---NLP-3--Analysis-of-User-Generated-Content-Course_JR26699) | ubc | UBC Hospital Site - Vancouver, BC, Canada | 2026-11-26
 - [Engineering Intern - Airport Projects](https://jobs.smartrecruiters.com/aecom2/744000163769529) | AECOM | Mississauga, ON, ca | 2026-11-25
 - [Engineering Co-op, Distribution Lines](https://careers.fortisbc.com/job/Kelowna-Engineering-Co-op%2C-Distribution-Lines-BC/607404617/) | FortisBC | Kelowna, BC, CA | 2026-11-25
-- [Graduate Teaching Assistant - NLP 3: Analysis of User Generated Content Course](https://ubc.wd10.myworkdayjobs.com/ubcstudentjob/job/UBC-Hospital-Site---Vancouver-BC-Canada/Graduate-Teaching-Assistant---NLP-3--Analysis-of-User-Generated-Content-Course_JR26699) | ubc | UBC Hospital Site - Vancouver, BC, Canada | 2026-11-25
 - [Student Intern, SCM Data Scientist](https://careers.celestica.com/job/Toronto-Student-Intern%2C-SCM-Data-Scientist-ON/1442072133/) | Celestica | Toronto, ON, CA | 2026-11-25
 - [Geotechnical Engineering Student](https://ehaa.fa.ca2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CNRL-Professional/job/2425698) | CNRL Professional | Calgary, AB, Canada | 2026-11-25
 - [Information Systems Co-op](https://careers.fortisbc.com/job/Kelowna-Information-Systems-Co-op-BC/608392317/) | FortisBC | Kelowna, BC, CA | 2026-11-25
@@ -228,17 +228,21 @@ _the JD asks for a currently enrolled student_
 - [Electrical & Instrumentation Engineering Student](https://ehaa.fa.ca2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CNRL-Professional/job/2425508) | CNRL Professional | Fort McMurray, AB, Canada | 2026-11-24
 - [Quantitative Developer (Alpha Research Team) - GAM, Summer 2027 (Co-op/Internship) - 12 months](https://bmo.wd3.myworkdayjobs.com/privileged/job/Toronto-ON-CAN/Quantitative-Developer--Alpha-Research-Team----GAM--Summer-2027--Co-op-Internship----12-months_R260026715-2) | bmo | Toronto, ON, CAN | 2026-11-23
 - [SAP iXp Intern - Agile Developer, Business Data Cloud](https://jobs.smartrecruiters.com/SAPITBusinessSysteme/744000163257740) | SAP | Vancouver, British Columbia, CA | 2026-11-23
+- [Software Development Student Intern](https://canadiantirecorporation.wd3.myworkdayjobs.com/Enterprise_External_Careers_Site/job/Toronto-ON/Software-Development-Student--4-Months----Winter-2027_JR168222) | Canadian Tire | Toronto, ON, Canada | 2026-11-23
 - [Graduate Teaching Assistant - NLP 1: Overview of NLP and Large Language Models Course](https://ubc.wd10.myworkdayjobs.com/ubcstudentjob/job/UBC-Hospital-Site---Vancouver-BC-Canada/Graduate-Teaching-Assistant---NLP-1--Overview-of-NLP-and-Large-Language-Models-Course_JR24111) | ubc | UBC Hospital Site - Vancouver, BC, Canada | 2026-11-21
 - [Graduate Teaching Assistant - NLP 2: Extraction and Analysis of Clinical Documents Course](https://ubc.wd10.myworkdayjobs.com/ubcstudentjob/job/UBC-Hospital-Site---Vancouver-BC-Canada/Graduate-Teaching-Assistant---NLP-2--Extraction-and-Analysis-of-Clinical-Documents-Course_JR24113-1) | ubc | UBC Hospital Site - Vancouver, BC, Canada | 2026-11-21
-- [Junior Developer Co-op](https://convverge.bamboohr.com/careers/31/) | Convverge | Calgary, AB, Canada | 2026-11-21
-- [Intern Full Stack Developer (C#)](https://careers-kinaxis.icims.com/jobs/35343/intern-full-stack-developer-%28c%23%29/job) | Kinaxis | Ottawa, ON | 2026-11-20
-- [Winter 2027 Intern – AI Program](https://careersen-mackenzieinvestments.icims.com/jobs/6446/winter-2027-intern-%e2%80%93-ai-program/job) | Mackenzie Investments | Greater Toronto Area, ON | 2026-11-20
-- [Software Development Coop](https://builtinvancouver.org/job/software-development-coop/12379443) | Clarius Mobile Health | Vancouver, BC, CAN | 2026-11-20
+- [Intern Full Stack Developer (C#)](https://careers-kinaxis.icims.com/jobs/35343/intern-full-stack-developer-%28c%23%29/job) | Kinaxis | Ottawa, ON | 2026-11-21
+- [Winter 2027 Intern – AI Program](https://careersen-mackenzieinvestments.icims.com/jobs/6446/winter-2027-intern-%e2%80%93-ai-program/job) | Mackenzie Investments | Greater Toronto Area, ON | 2026-11-21
 
-## location_quebec_only: 9
+## location_quebec_only: 14
 
 _every location it lists is in Quebec_
 
+- [Analyst, Credit risk](https://desjardins.wd10.myworkdayjobs.com/desjardins2/job/Montral/Analyste-de-crdit-hypothcaire--Investisseur_R2614366) | desjardins | 3 Locations | 2026-11-27
+- [Analyst, Legal and regulatory compliance](https://desjardins.wd10.myworkdayjobs.com/desjardins2/job/Montral/Analyste--Contrles-internes--Prevention-de-la-fraude_R2614144) | desjardins | 2 Locations | 2026-11-27
+- [Data Scientist, Data valorization](https://desjardins.wd10.myworkdayjobs.com/desjardins2/job/Montral/Scientifique-de-donnes-senior--Services-aux-particuliers_R2614378) | desjardins | 2 Locations | 2026-11-27
+- [Analyst, System and infrastructure operations, maintenance and development](https://desjardins.wd10.myworkdayjobs.com/desjardins2/job/Montral/Administrateur-ou-administratrice--Plateforme---z-OS_R2614492) | desjardins | 2 Locations | 2026-11-27
+- [Post grant analyst, Business](https://desjardins.wd10.myworkdayjobs.com/desjardins/job/Qubec/Analyste---post-octroi-de-financement_R2614424-2) | desjardins | 2 Locations | 2026-11-27
 - [Security advisor](https://desjardins.wd10.myworkdayjobs.com/desjardins/job/Montral/Conseiller-ou-conseillre--Gestion-de-fournisseurs-en-scurit-physique_R2614357-1) | desjardins | 2 Locations | 2026-11-26
 - [Business analyst, Business strategies](https://desjardins.wd10.myworkdayjobs.com/desjardins2/job/Montral/Analyste-d-affaires_R2614328-1) | desjardins | 2 Locations | 2026-11-26
 - [Financial Security Technician B](https://beneva.wd10.myworkdayjobs.com/benevasite_carriere/job/Quebec-Quebec/Technicien-en-scurit-financire_R18234) | beneva | 2 Locations | 2026-11-25
